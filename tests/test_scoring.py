@@ -43,7 +43,6 @@ def test_not_applicable_fno_family_does_not_reduce_coverage(config):
         obs("disclosed_deals", 0.5),
         obs("cash_market", 0.8),
         obs("stock_derivatives", None, status="not_applicable", reason="not F&O eligible"),
-        obs("participant_positioning", 0.6),
         obs("sector_relative_strength", 0.7),
     ]
     result = score_stock("CASHONLY", observations, config)
@@ -58,7 +57,6 @@ def test_unavailable_fno_family_reduces_coverage(config):
         obs("disclosed_deals", 0.5),
         obs("cash_market", 0.8),
         obs("stock_derivatives", None, status="unavailable", reason="source missing"),
-        obs("participant_positioning", 0.6),
         obs("sector_relative_strength", 0.7),
     ]
     result = score_stock("UNKNOWNFNO", observations, config)
@@ -72,7 +70,6 @@ def test_grade_two_requires_three_independent_positive_families(config):
         obs("cash_market", 0.9),
         obs("stock_derivatives", 0.75),
         obs("disclosed_deals", 0.2),
-        obs("participant_positioning", 0.3),
         obs("sector_relative_strength", 0.4),
     ]
     result = score_stock("ABC", observations, config)
