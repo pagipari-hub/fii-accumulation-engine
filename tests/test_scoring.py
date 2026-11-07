@@ -87,7 +87,7 @@ def test_grade_one_requires_explicit_direct_transaction_flag(config):
     assert result["evidence_grade"] == "Grade 1 - Confirmed"
     assert result["direct_fpi_transaction_refs"] == ["nse://verified-fpi-transaction/record-123"]
     assert result["short_term"]["score"] is None
-    unverified = score_stock("XYZ", [], config, direct_fpi_transaction_refs=[])
+    unverified = score_stock("XYZ", [], config)
     assert unverified["evidence_grade"] != "Grade 1 - Confirmed"
 
 
