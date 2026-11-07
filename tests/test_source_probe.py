@@ -92,7 +92,7 @@ def test_keyword_contexts_capture_date_format_helpers():
     from fii_engine.source_probe import extract_keyword_contexts
 
     source = "function getStartEndDate(range) { return formatDate(new Date()); }"
-    contexts = extract_keyword_contexts(source, keywords=("getStartEndDate",), radius=10)
+    contexts = extract_keyword_contexts(source, keywords=("getStartEndDate",), radius=40)
     assert len(contexts) == 1
     assert contexts[0]["keyword"] == "getStartEndDate"
     assert "formatDate" in contexts[0]["context"]
