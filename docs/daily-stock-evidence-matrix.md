@@ -91,3 +91,40 @@ the directional imbalance. A zero gross-turnover denominator yields an
 undefined ratio, not zero. FII/FPI values remain provisional; DII values retain
 their separate exchange-reported status. These market-wide measures never
 establish that a named institution bought or sold an individual stock.
+
+## Rolling historical evidence
+
+`src/fii_engine/historical_features.py` reads immutable daily matrix snapshots and
+creates separate 5-, 20- and 60-session views for the latest Nifty 500
+constituents. It also builds market-wide FII/FPI and DII rolling totals in a
+separate output. The two datasets are never joined as stock-level FII
+attribution.
+
+- Stock snapshots are checked for filename hash, schema, trade-date agreement,
+  unique symbols and ISIN presence.
+- Multiple different stock snapshots for one trade date stop the rolling build;
+  a corrected daily matrix must be resolved explicitly rather than silently
+  choosing one.
+- FII/DII snapshots are selected by highest parser version for each date. Two
+  different snapshots at the same parser version stop the rolling build.
+- Each requested window requires that many distinct committed trade dates.
+  Insufficient history is reported as such, not padded or annualized.
+- Cash returns, volume averages and delivery averages have independent
+  observation statuses. Missing delivery is never treated as zero.
+- Futures buildup is counted as daily market-wide contract classification.
+  Options PCR rolling averages are withheld when the nearest expiry changes.
+- FII/FPI gross buying, gross selling, net flow, gross turnover and the
+  turnover-weighted net-flow ratio are summed/calculated separately from DII.
+  Publication status is retained.
+
+Outputs:
+
+- `data/raw/historical_features/stock_historical_features_current.csv`
+- `data/raw/historical_features/market_flow_history_current.csv`
+- `data/raw/historical_features/historical_features_current_manifest.json`
+- Immutable content-addressed snapshots under
+  `data/snapshots/historical_features/`
+
+The daily pipeline attempts this build after writing the current matrix and
+records an independent `historical_features` status. A history validation
+failure does not erase or mislabel a successfully collected daily matrix.

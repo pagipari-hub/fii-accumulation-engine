@@ -6,7 +6,9 @@ on:
     paths:
       - "src/fii_engine/daily_stock_features.py"
       - "src/fii_engine/daily_pipeline.py"
+      - "src/fii_engine/historical_features.py"
       - "tests/test_daily_stock_features.py"
+      - "tests/test_historical_features.py"
       - "docs/daily-stock-evidence-matrix.md"
       - ".github/workflows/daily-stock-evidence.yml"
   pull_request:
@@ -107,7 +109,7 @@ jobs:
           )
           committed=false
           if [[ -n "$trade_date" ]]; then
-            git add data/raw/daily_stock_features data/snapshots/daily_stock_features
+            git add data/raw/daily_stock_features data/snapshots/daily_stock_features data/raw/historical_features data/snapshots/historical_features
             if ! git diff --cached --quiet; then
               git commit -m "data: record daily Nifty 500 stock evidence matrix"
               committed=true
