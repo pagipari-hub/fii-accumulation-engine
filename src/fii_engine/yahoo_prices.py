@@ -12,6 +12,7 @@ OUTPUT_COLUMNS = (
     "date", "symbol", "open", "high", "low", "close",
     "adj_close", "volume", "dividends", "stock_splits",
 )
+REQUIRED_BAR_FIELDS = ("open", "high", "low", "close", "volume")
 
 
 def read_symbols(path: Path) -> list[str]:
@@ -55,8 +56,44 @@ def _number(value: object):
     return value.item() if hasattr(value, "item") else value
 
 
+def _separate_incomplete_latest_bars(rows: list[dict]) -> tuple[list[dict], list[dict]]:
+    """Quarantine incomplete newest bars; fail on gaps in older historical bars."""
+    latest_by_symbol = {
+        symbol: max(row["date"] for row in rows if row["symbol"] == symbol)
+        for symbol in {row["symbol"] for row in rows}
+    }
+    complete = []
+    quarantined = []
+    for row in rows:
+        missing = [
+            field for field in REQUIRED_BAR_FIELDS
+            if row.get(field) is None or row.get(field) == ""
+        ]
+        if not missing:
+            complete.append(row)
+            continue
+        if row["date"] != latest_by_symbol[row["symbol"]]:
+            raise RuntimeError(
+                f"Incomplete historical bar for {row['symbol']} on {row['date']}: {missing}"
+            )
+        quarantined.append({
+            "symbol": row["symbol"],
+            "date": row["date"],
+            "missing_fields": missing,
+            "reason": "incomplete_latest_bar",
+        })
+
+    complete_symbols = {row["symbol"] for row in complete}
+    missing_symbols = sorted(set(latest_by_symbol) - complete_symbols)
+    if missing_symbols:
+        raise RuntimeError(
+            f"No complete price bars available for requested symbols: {missing_symbols}"
+        )
+    return complete, quarantined
+
+
 def collect_prices(symbols: Iterable[str], *, period: str = "2y", interval: str = "1d"):
-    """Download historical prices and return normalized rows and provenance metadata."""
+    """Download historical prices and return complete rows plus provenance metadata."""
     try:
         import pandas as pd
         import yfinance as yf
@@ -91,7 +128,7 @@ def collect_prices(symbols: Iterable[str], *, period: str = "2y", interval: str 
         for record in part.to_dict(orient="records"):
             date_value = record.get(date_column)
             if pd.isna(date_value):
-                continue
+                raise RuntimeError(f"Yahoo Finance returned a row without a date for {ticker}")
             rows.append({
                 "date": date_value.isoformat() if hasattr(date_value, "isoformat") else str(date_value),
                 "symbol": ticker.removesuffix(".NS").removesuffix(".BO"),
@@ -107,16 +144,28 @@ def collect_prices(symbols: Iterable[str], *, period: str = "2y", interval: str 
     if not rows:
         raise RuntimeError("Yahoo Finance returned no usable rows for requested symbols")
 
+    complete_rows, quarantined_rows = _separate_incomplete_latest_bars(rows)
+    returned_symbols = sorted({row["symbol"] for row in complete_rows})
+    expected_symbols = sorted(ticker.removesuffix(".NS").removesuffix(".BO") for ticker in requested)
+    missing_symbols = sorted(set(expected_symbols) - set(returned_symbols))
+    if missing_symbols:
+        raise RuntimeError(f"No complete price history returned for symbols: {missing_symbols}")
+
     metadata = {
         "provider": "Yahoo Finance via yfinance",
         "retrieved_at_utc": datetime.now(timezone.utc).isoformat(),
         "period": period, "interval": interval, "auto_adjust": False,
         "requested_tickers": requested,
-        "returned_symbols": sorted({row["symbol"] for row in rows}),
-        "row_count": len(rows),
-        "usage_note": "Unofficial interface; price context only, not FII attribution.",
+        "returned_symbols": returned_symbols,
+        "row_count": len(complete_rows),
+        "quarantined_latest_bar_count": len(quarantined_rows),
+        "quarantined_latest_bars": quarantined_rows,
+        "usage_note": (
+            "Unofficial interface; complete price bars only, not FII attribution. "
+            "Incomplete newest bars are excluded and recorded in the manifest."
+        ),
     }
-    return rows, metadata
+    return complete_rows, metadata
 
 
 def write_output(rows: list[dict], metadata: dict, output: Path) -> None:
@@ -137,10 +186,14 @@ def main() -> None:
     parser.add_argument("--period", default="2y")
     parser.add_argument("--interval", default="1d")
     args = parser.parse_args()
-    rows, metadata = collect_prices(read_symbols(args.symbols_file),
-                                    period=args.period, interval=args.interval)
+    rows, metadata = collect_prices(
+        read_symbols(args.symbols_file), period=args.period, interval=args.interval
+    )
     write_output(rows, metadata, args.output)
-    print(f"Wrote {len(rows)} rows for {len(metadata['returned_symbols'])} symbols")
+    print(
+        f"Wrote {len(rows)} complete rows for {len(metadata['returned_symbols'])} symbols; "
+        f"quarantined {metadata['quarantined_latest_bar_count']} incomplete latest bars"
+    )
 
 
 if __name__ == "__main__":
