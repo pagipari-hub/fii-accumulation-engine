@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<xbrli:xbrl xmlns:xbrli="http://www.xbrl.org/2003/instance"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:shp="https://www.sebi.gov.in/xbrl/shareholding">
+ <xbrli:context id="InstitutionsForeignPortfolioInvestorCategoryOne_ContextI">
+  <xbrli:entity><xbrli:identifier scheme="https://www.nseindia.com">INE040A01034</xbrli:identifier></xbrli:entity>
+  <xbrli:period><xbrli:instant>2026-09-30</xbrli:instant></xbrli:period>
+  <xbrli:scenario><xbrli:explicitMember dimension="shp:CategoryOfShareholdersAxis">shp:InstitutionsForeignPortfolioInvestorCategoryOneMember</xbrli:explicitMember></xbrli:scenario>
+ </xbrli:context>
+ <xbrli:context id="InstitutionsForeignPortfolioInvestorCategoryTwo_ContextI">
+  <xbrli:entity><xbrli:identifier scheme="https://www.nseindia.com">INE040A01034</xbrli:identifier></xbrli:entity>
+  <xbrli:period><xbrli:instant>2026-09-30</xbrli:instant></xbrli:period>
+  <xbrli:scenario><xbrli:explicitMember dimension="shp:CategoryOfShareholdersAxis">shp:InstitutionsForeignPortfolioInvestorCategoryTwoMember</xbrli:explicitMember></xbrli:scenario>
+ </xbrli:context>
+ <xbrli:context id="OtherInstitutionsForeign_ContextI">
+  <xbrli:entity><xbrli:identifier scheme="https://www.nseindia.com">INE040A01034</xbrli:identifier></xbrli:entity>
+  <xbrli:period><xbrli:instant>2026-09-30</xbrli:instant></xbrli:period>
+  <xbrli:scenario><xbrli:explicitMember dimension="shp:CategoryOfShareholdersAxis">shp:OtherInstitutionsForeignMember</xbrli:explicitMember></xbrli:scenario>
+ </xbrli:context>
+ <xbrli:context id="InstitutionsForeign_ContextI">
+  <xbrli:entity><xbrli:identifier scheme="https://www.nseindia.com">INE040A01034</xbrli:identifier></xbrli:entity>
+  <xbrli:period><xbrli:instant>2026-09-30</xbrli:instant></xbrli:period>
+  <xbrli:scenario><xbrli:explicitMember dimension="shp:CategoryOfShareholdersAxis">shp:InstitutionsForeignMember</xbrli:explicitMember></xbrli:scenario>
+ </xbrli:context>
+ <xbrli:unit id="shares"><xbrli:measure>xbrli:shares</xbrli:measure></xbrli:unit>
+ <xbrli:unit id="pure"><xbrli:measure>xbrli:pure</xbrli:measure></xbrli:unit>
+ <shp:NumberOfShareholders contextRef="InstitutionsForeignPortfolioInvestorCategoryOne_ContextI" unitRef="pure">1962</shp:NumberOfShareholders>
+ <shp:NumberOfShares contextRef="InstitutionsForeignPortfolioInvestorCategoryOne_ContextI" unitRef="shares">5029099852</shp:NumberOfShares>
+ <shp:ShareholdingAsAPercentageOfTotalNumberOfShares contextRef="InstitutionsForeignPortfolioInvestorCategoryOne_ContextI" unitRef="pure">0.3762</shp:ShareholdingAsAPercentageOfTotalNumberOfShares>
+ <shp:NumberOfShareholders contextRef="InstitutionsForeignPortfolioInvestorCategoryTwo_ContextI" unitRef="pure">167</shp:NumberOfShareholders>
+ <shp:NumberOfShares contextRef="InstitutionsForeignPortfolioInvestorCategoryTwo_ContextI" unitRef="shares">236902500</shp:NumberOfShares>
+ <shp:ShareholdingAsAPercentageOfTotalNumberOfShares contextRef="InstitutionsForeignPortfolioInvestorCategoryTwo_ContextI" unitRef="pure">0.0177</shp:ShareholdingAsAPercentageOfTotalNumberOfShares>
+ <shp:NumberOfShareholders contextRef="OtherInstitutionsForeign_ContextI" unitRef="pure">6</shp:NumberOfShareholders>
+ <shp:NumberOfShares contextRef="OtherInstitutionsForeign_ContextI" unitRef="shares">504060</shp:NumberOfShares>
+ <shp:ShareholdingAsAPercentageOfTotalNumberOfShares contextRef="OtherInstitutionsForeign_ContextI" unitRef="pure">0</shp:ShareholdingAsAPercentageOfTotalNumberOfShares>
+ <shp:NumberOfShareholders contextRef="InstitutionsForeign_ContextI" unitRef="pure">2135</shp:NumberOfShareholders>
+ <shp:NumberOfShares contextRef="InstitutionsForeign_ContextI" unitRef="shares">5266506412</shp:NumberOfShares>
+ <shp:ShareholdingAsAPercentageOfTotalNumberOfShares contextRef="InstitutionsForeign_ContextI" unitRef="pure">0.394</shp:ShareholdingAsAPercentageOfTotalNumberOfShares>
+</xbrli:xbrl>
