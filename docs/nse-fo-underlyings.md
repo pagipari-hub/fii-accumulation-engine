@@ -63,3 +63,25 @@ exclusions are not applied before their effective dates. Any unexplained mismatc
 or unknown effective date is recorded and blocks the scheduled membership refresh.
 
 The 7 November 2026 tracker archive contains 100 introductions and 63 exclusions; 60 exclusions were effective by that date and 3 remained scheduled for later dates. The workbook is small enough to retain in Git without relying on expiring workflow artifacts.
+
+## Nifty 500 F&O classification
+
+**Live validation (7 November 2026):** 501 Nifty 500 constituents classified: 217 present in the official current stock F&O underlying list, 284 absent, and 0 unknown. The source-level reconciliation passed with 0 tracker mismatches.
+
+The validated current 218-stock underlying list is joined to the 501-row Nifty 500
+constituent snapshot. Every Nifty 500 symbol receives one of two evidence-backed
+states:
+
+- `eligible`: present in the official current individual-stock F&O underlying list.
+- `not_eligible`: absent from that official current list.
+
+`unknown` is reserved for missing or unvalidated source data; a failed source
+validation blocks publication rather than turning missing data into a negative.
+The output retains both source retrieval timestamps and the Nifty 500 source's
+monthly freshness statement. Neither source supplies a precise common effective
+date, so the derived file is a point-in-time join, not a historical backfill.
+
+Outputs:
+- `data/raw/fno_universe/nifty500_fno_status_current.csv`
+- `data/snapshots/fno_universe/nifty500_fno_status_<hash>.csv`
+- `data/snapshots/fno_universe/nifty500_fno_status_<hash>.json`

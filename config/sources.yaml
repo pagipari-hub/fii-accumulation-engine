@@ -43,6 +43,13 @@ sources:
     required_fields: [symbol, action, effective_date, circular_link]
     status: "live_validated_effective_dated_change_history"
     archive_policy: "content_addressed_xlsx_and_parsed_event_manifest"
+  nifty500_current_stock_fno_status:
+    description: "Nifty 500 constituents classified by current NSE individual-stock F&O underlying membership"
+    publisher: "NSE Indices + National Stock Exchange of India"
+    inputs: [nifty500_constituents, nse_fo_individual_stock_underlyings, symbol_aliases]
+    required_fields: [symbol, fno_status, fno_evidence, isin]
+    status: "live_validated_current_snapshot"
+    effective_date_semantics: "Nifty 500 exact effective date and F&O API effective date not supplied; source retrieval/freshness metadata retained"
   nse_fii_dii_cash_provisional:
     description: "NSE-exclusive and combined-market FII/FPI and DII cash activity"
     publisher: "National Stock Exchange of India"
