@@ -30,6 +30,13 @@ data/snapshots/*
 !data/raw/.gitkeep
 !data/processed/.gitkeep
 !data/snapshots/.gitkeep
+# Version the small, auditable Nifty 500 source snapshots only.
+!data/raw/universe/
+!data/raw/universe/nifty500_current.csv
+!data/raw/universe/nifty500_source_*.csv
+!data/snapshots/universe/
+!data/snapshots/universe/nifty500_*.csv
+!data/snapshots/universe/nifty500_*.json
 
 # Large files
 *.parquet
