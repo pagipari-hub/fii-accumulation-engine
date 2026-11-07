@@ -80,9 +80,15 @@ def test_grade_two_requires_three_independent_positive_families(config):
 
 
 def test_grade_one_requires_explicit_direct_transaction_flag(config):
-    result = score_stock("ABC", [], config, direct_fpi_transaction=True)
+    result = score_stock(
+        "ABC", [], config,
+        direct_fpi_transaction_refs=["nse://verified-fpi-transaction/record-123"],
+    )
     assert result["evidence_grade"] == "Grade 1 - Confirmed"
+    assert result["direct_fpi_transaction_refs"] == ["nse://verified-fpi-transaction/record-123"]
     assert result["short_term"]["score"] is None
+    unverified = score_stock("XYZ", [], config, direct_fpi_transaction_refs=[])
+    assert unverified["evidence_grade"] != "Grade 1 - Confirmed"
 
 
 def test_observed_zero_is_valid_but_requires_source_provenance(config):
@@ -135,3 +141,8 @@ def test_config_rejects_invalid_weight_totals(config):
     broken["horizons"]["short_term"]["family_weights"]["cash_market"] = 24
     with pytest.raises(ValueError, match="sum to 100"):
         validate_config(broken)
+
+
+def test_grade_one_rejects_missing_transaction_provenance(config):
+    with pytest.raises(ValueError, match="source references"):
+        score_stock("ABC", [], config, direct_fpi_transaction_refs=[])
