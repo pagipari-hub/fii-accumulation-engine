@@ -8,6 +8,7 @@ import io
 import json
 import re
 import zipfile
+import time
 from collections import Counter
 from datetime import date, datetime, timezone
 from http.cookiejar import CookieJar
@@ -69,13 +70,23 @@ def _get(url: str, referer: str, accept: str, timeout: int = 60) -> bytes:
         url,
         headers={**HEADERS, "Accept": accept, "Referer": referer},
     )
-    try:
-        with HTTP.open(request, timeout=timeout) as response:
-            if response.status != 200:
-                raise RuntimeError(f"unexpected HTTP {response.status} for {url}")
-            return response.read()
-    except (HTTPError, URLError, TimeoutError, OSError) as exc:
-        raise RuntimeError(f"NSE request failed for {url}: {exc}") from exc
+    for attempt in range(4):
+        try:
+            with HTTP.open(request, timeout=timeout) as response:
+                if response.status != 200:
+                    raise RuntimeError(f"unexpected HTTP {response.status} for {url}")
+                return response.read()
+        except HTTPError as exc:
+            if exc.code in {403, 429, 500, 502, 503, 504} and attempt < 3:
+                time.sleep(2 ** attempt)
+                continue
+            raise RuntimeError(f"NSE request failed for {url}: {exc}") from exc
+        except (URLError, TimeoutError, OSError) as exc:
+            if attempt < 3:
+                time.sleep(2 ** attempt)
+                continue
+            raise RuntimeError(f"NSE request failed for {url}: {exc}") from exc
+    raise RuntimeError(f"NSE request failed after retries for {url}")
 
 
 def fetch_catalogue() -> dict:
