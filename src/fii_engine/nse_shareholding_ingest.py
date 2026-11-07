@@ -332,7 +332,6 @@ def ingest(root: Path = Path(".")) -> dict:
     master_snapshot_value = {
         "dataset": "nse_shareholding_master_nifty500",
         "publisher": "National Stock Exchange of India",
-        "retrieved_at_utc": retrieved_at,
         "source_url": MASTER_URL,
         "source_master_sha256": master_hash,
         "universe_sha256": universe_hash,
@@ -440,6 +439,9 @@ def ingest(root: Path = Path(".")) -> dict:
     ownership_current.write_bytes(ownership_payload)
     identity_counts = Counter(row["identity_status"] for row in current_records)
     parsed_count = sum(row.get("filing_status") == "parsed" for row in ownership_rows)
+    latest_reporting_date = max(row["reporting_date"] for row in current_records)
+    latest_ownership_rows = [row for row in ownership_rows if row["reporting_date"] == latest_reporting_date]
+    parsed_latest_count = sum(row.get("filing_status") == "parsed" for row in latest_ownership_rows)
     eligible_count = len(eligible_records)
     status = (
         "partial_xbrl_coverage" if fetch_errors
@@ -467,9 +469,13 @@ def ingest(root: Path = Path(".")) -> dict:
         "fetch_errors": fetch_errors,
         "parsed_ownership_row_count": parsed_count,
         "ownership_row_count": len(ownership_rows),
+        "latest_reporting_date": latest_reporting_date,
+        "latest_quarter_parsed_count": parsed_latest_count,
+        "latest_quarter_coverage_pct": round(parsed_latest_count / len(universe) * 100, 2),
         "ownership_current_path": str(ownership_current.relative_to(root)),
         "ownership_snapshot_path": str(ownership_path.relative_to(root)),
         "ownership_snapshot_sha256": ownership_hash,
+        "ownership_current_sha256": ownership_hash,
         "master_snapshot_path": str(master_snapshot_path.relative_to(root)),
         "master_snapshot_sha256": master_snapshot_hash,
         "parser_version": PARSER_VERSION,
