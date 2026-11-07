@@ -9,6 +9,7 @@ on:
       - "config/sources.yaml"
       - "docs/nse-udiff-ingestion.md"
       - ".github/workflows/nse-udiff-fo-bhavcopy.yml"
+      - "scripts/retry_git_push.sh"
   pull_request:
     paths:
       - "src/fii_engine/nse_fo_bhavcopy.py"
@@ -16,6 +17,7 @@ on:
       - "config/sources.yaml"
       - "docs/nse-udiff-ingestion.md"
       - ".github/workflows/nse-udiff-fo-bhavcopy.yml"
+      - "scripts/retry_git_push.sh"
   workflow_dispatch:
   schedule:
     # 21:15 IST, Monday to Friday; source catalogue determines the actual report date.
@@ -98,8 +100,7 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add data/raw/fno_bhavcopy/manifests
             git commit -m "data: record NSE UDiFF derivatives provenance"
-            git pull --rebase origin "$GITHUB_REF_NAME"
-            git push
+            bash scripts/retry_git_push.sh "$GITHUB_REF_NAME"
           else
             echo "No new UDiFF source version; provenance manifest unchanged."
           fi
