@@ -186,3 +186,12 @@ Remarks. The explicit Date field is used for transaction date; the JSON
 `BD_DT_ORDER` UTC timestamp is not substituted. Client names remain
 unclassified disclosures and are not automatically mapped to FII/FPI or
 beneficial-owner identities. See [NSE bulk/block deal source notes](nse-bulk-block-deals.md).
+
+
+Live production capture:
+[GitHub Actions run 42358455417](https://github.com/pagipari-hub/fii-accumulation-engine/actions/runs/42358455417).
+The run produced immutable daily normalized snapshots and per-date manifests for
+six bulk-deal dates and four block-deal dates. It passed 134 project tests.
+The JSON/CSV difference is retained explicitly in each manifest; it is not
+treated as an ingestion failure because the JSON records were verified as a
+subset of the official CSV export.
