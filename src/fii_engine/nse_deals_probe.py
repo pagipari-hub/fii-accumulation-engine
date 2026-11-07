@@ -112,8 +112,10 @@ def _csv_contract(payload: bytes) -> dict:
 
 
 def probe(output_dir: Path) -> dict:
+    # Bootstrap from the actual official report page. NSE may reject the
+    # generic homepage from hosted CI even while report pages remain reachable.
     bootstrap_payload, bootstrap_meta = _get(
-        BASE + "/", BASE + "/", "text/html,*/*"
+        PAGE, BASE + "/", "text/html,*/*"
     )
     if not bootstrap_payload or bootstrap_meta["http_status"] != 200:
         raise RuntimeError("NSE session bootstrap failed")
