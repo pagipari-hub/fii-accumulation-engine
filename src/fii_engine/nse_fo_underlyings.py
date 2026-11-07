@@ -128,7 +128,7 @@ def ingest(root: Path = Path(".")) -> dict:
     raw_path = raw_dir / f"fno_underlyings_source_{raw_hash[:16]}.json"
     current_path = raw_dir / "fno_underlyings_current.csv"
     snapshot_path = snapshot_dir / f"fno_underlyings_{normalized_hash[:16]}.csv"
-    manifest_path = snapshot_dir / f"fno_underlyings_{normalized_hash[:16]}.json"
+    manifest_path = snapshot_dir / f"fno_underlyings_{raw_hash[:16]}_{normalized_hash[:16]}.json"
 
     for path, expected_hash in ((raw_path, raw_hash), (snapshot_path, normalized_hash)):
         if path.exists() and hashlib.sha256(path.read_bytes()).hexdigest() != expected_hash:
@@ -151,6 +151,8 @@ def ingest(root: Path = Path(".")) -> dict:
             "retrieved_at_utc": retrieved_at,
             "index_underlying_count": len(indexes),
             "individual_stock_underlying_count": len(stocks),
+            "raw_file": str(raw_path),
+            "normalized_file": str(snapshot_path),
             "raw_sha256": raw_hash,
             "normalized_sha256": normalized_hash,
             "symbols_unique": True,
