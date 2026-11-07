@@ -21,7 +21,7 @@ DEAL_MANIFEST_DIR = Path("data/raw/bulk_block_deals/manifests")
 EVENT_FIELDS = [
     "event_id", "trade_date", "symbol", "security_name", "deal_type",
     "source_isin", "matched_universe_isin", "universe_join_method",
-    "nifty500_membership_status", "nifty500_member_verified",
+    "nifty500_snapshot_membership_status", "nifty500_snapshot_member_verified",
     "universe_company_name", "universe_industry", "universe_series",
     "client_name", "client_normalized_name", "source_client_names", "source_security_names",
     "side", "quantity", "weighted_average_price", "deal_value",
@@ -44,7 +44,7 @@ STOCK_FIELDS = [
     "temporally_verified_fpi_buy_quantity", "temporally_verified_fpi_sell_quantity",
     "temporally_unverified_fpi_buy_quantity", "temporally_unverified_fpi_sell_quantity",
     "counterparty_identity_coverage_pct", "known_fpi_net_status", "registry_temporal_status",
-    "nifty500_membership_status", "nifty500_member_verified",
+    "nifty500_snapshot_membership_status", "nifty500_snapshot_member_verified",
 ]
 OUTPUT_PATHS = {
     "events": "data/raw/fpi_deal_attribution/fpi_deal_counterparty_current.csv",
@@ -173,8 +173,8 @@ def _universe_membership(
             "source_isin": str(event.get("source_isin", "")),
             "matched_universe_isin": "",
             "universe_join_method": "not_checked",
-            "nifty500_membership_status": "universe_not_checked",
-            "nifty500_member_verified": "false",
+            "nifty500_snapshot_membership_status": "universe_not_checked",
+            "nifty500_snapshot_member_verified": "false",
             "universe_company_name": "",
             "universe_industry": "",
             "universe_series": "",
@@ -246,8 +246,8 @@ def _universe_membership(
         "source_isin": source_isin,
         "matched_universe_isin": universe_row.get("isin", "") if universe_row else "",
         "universe_join_method": method,
-        "nifty500_membership_status": status,
-        "nifty500_member_verified": verified,
+        "nifty500_snapshot_membership_status": status,
+        "nifty500_snapshot_member_verified": verified,
         "universe_company_name": universe_row.get("company_name", "") if universe_row else "",
         "universe_industry": universe_row.get("industry", "") if universe_row else "",
         "universe_series": universe_row.get("series", "") if universe_row else "",
@@ -495,11 +495,11 @@ def _stock_summary(
                 totals[f"ambiguous_{side}_quantity"] += qty
         total_events = len(items)
         membership_statuses = {
-            item.get("nifty500_membership_status", "universe_not_checked")
+            item.get("nifty500_snapshot_membership_status", "universe_not_checked")
             for item in items
         }
         membership_verified = all(
-            item.get("nifty500_member_verified") == "true" for item in items
+            item.get("nifty500_snapshot_member_verified") == "true" for item in items
         )
         identified = (
             counts["current_registry_matched_fpi_client"]
@@ -543,11 +543,11 @@ def _stock_summary(
                 item["temporal_status"] for item in items
                 if item["counterparty_class"] == "current_registry_matched_fpi_client"
             })) or "no_current_registry_matched_fpi_clients",
-            "nifty500_membership_status": (
+            "nifty500_snapshot_membership_status": (
                 next(iter(membership_statuses)) if len(membership_statuses) == 1
                 else "mixed_membership_status"
             ),
-            "nifty500_member_verified": str(membership_verified).lower(),
+            "nifty500_snapshot_member_verified": str(membership_verified).lower(),
         })
     return results
 
@@ -600,12 +600,17 @@ def classify(root: Path = Path("."), lookback_days: int = 7) -> dict:
         "universe_csv_sha256": universe_metadata["sha256"],
         "universe_join_policy": (
             "NSE bulk/block disclosure has no ISIN field in the validated schema; "
-            "Nifty 500 membership therefore requires exact symbol plus exact normalized "
-            "company-name match. The universe ISIN is attached from the official constituent file."
+            "membership in the latest published Nifty 500 snapshot therefore requires exact "
+            "symbol plus exact normalized company-name match. The universe ISIN is attached "
+            "from the official constituent file."
         ),
+        "universe_snapshot_freshness_statement": (
+            "Data as on last trading day of the previous month, as stated by the official source page."
+        ),
+        "universe_effective_date_status": "exact_effective_date_not_supplied_in_current_feed",
         "universe_row_count": universe_metadata["row_count"],
-        "nifty500_verified_event_count": sum(
-            event["nifty500_member_verified"] == "true" for event in events
+        "nifty500_snapshot_verified_event_count": sum(
+            event["nifty500_snapshot_member_verified"] == "true" for event in events
         ),
         "source_isin_supplied_event_count": sum(
             bool(event["source_isin"]) for event in events
@@ -614,21 +619,21 @@ def classify(root: Path = Path("."), lookback_days: int = 7) -> dict:
             method: sum(event["universe_join_method"] == method for event in events)
             for method in sorted({event["universe_join_method"] for event in events})
         },
-        "nifty500_verified_symbol_count": sum(
-            row["nifty500_member_verified"] == "true" for row in stock_rows
+        "nifty500_snapshot_verified_symbol_count": sum(
+            row["nifty500_snapshot_member_verified"] == "true" for row in stock_rows
         ),
-        "nifty500_verified_fpi_client_event_count": sum(
-            event["nifty500_member_verified"] == "true"
+        "nifty500_snapshot_verified_fpi_client_event_count": sum(
+            event["nifty500_snapshot_member_verified"] == "true"
             and event["counterparty_class"] == "current_registry_matched_fpi_client"
             for event in events
         ),
-        "nifty500_verified_odi_issuer_event_count": sum(
-            event["nifty500_member_verified"] == "true"
+        "nifty500_snapshot_verified_odi_issuer_event_count": sum(
+            event["nifty500_snapshot_member_verified"] == "true"
             and event["counterparty_class"] == "current_registry_matched_odi_issuer"
             for event in events
         ),
         "outside_or_unverified_universe_event_count": sum(
-            event["nifty500_member_verified"] != "true" for event in events
+            event["nifty500_snapshot_member_verified"] != "true" for event in events
         ),
         "source_row_count": len(source_rows),
         "deduplicated_event_count": len(events),
