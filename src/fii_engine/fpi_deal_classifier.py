@@ -20,6 +20,7 @@ UNIVERSE_CSV = Path("data/raw/universe/nifty500_current.csv")
 DEAL_MANIFEST_DIR = Path("data/raw/bulk_block_deals/manifests")
 EVENT_FIELDS = [
     "event_id", "trade_date", "symbol", "isin", "security_name", "deal_type",
+    "source_isin", "matched_universe_isin", "universe_join_method",
     "nifty500_membership_status", "nifty500_member_verified",
     "universe_company_name", "universe_industry", "universe_series",
     "client_name", "client_normalized_name", "source_client_names", "source_security_names",
@@ -125,7 +126,9 @@ def _load_registry(root: Path) -> tuple[dict, dict[str, list[dict]]]:
 
 
 
-def _load_universe(root: Path) -> tuple[dict[str, dict], dict[str, dict], dict]:
+def _load_universe(
+    root: Path,
+) -> tuple[dict[str, dict], dict[str, dict], dict[str, list[dict]], dict]:
     path = root / UNIVERSE_CSV
     payload = path.read_bytes()
     rows = _read_csv(path)
@@ -144,51 +147,110 @@ def _load_universe(root: Path) -> tuple[dict[str, dict], dict[str, dict], dict]:
         raise ValueError("duplicate ISINs in current Nifty 500 universe")
     by_symbol = {row["symbol"].strip().upper(): row for row in rows}
     by_isin = {row["isin"].strip().upper(): row for row in rows}
+    by_company_name: dict[str, list[dict]] = defaultdict(list)
+    for row in rows:
+        by_company_name[normalize_registry_name(row["company_name"])].append(row)
     metadata = {
         "path": str(UNIVERSE_CSV),
         "sha256": _sha256(payload),
         "row_count": len(rows),
     }
-    return by_isin, by_symbol, metadata
+    return by_isin, by_symbol, by_company_name, metadata
 
 
 def _universe_membership(
     event: dict,
     universe_by_isin: dict[str, dict] | None,
     universe_by_symbol: dict[str, dict] | None,
+    universe_by_company_name: dict[str, list[dict]] | None = None,
 ) -> dict:
-    if universe_by_isin is None or universe_by_symbol is None:
+    if (
+        universe_by_isin is None
+        or universe_by_symbol is None
+        or universe_by_company_name is None
+    ):
         return {
+            "source_isin": str(event.get("isin", "")),
+            "matched_universe_isin": "",
+            "universe_join_method": "not_checked",
             "nifty500_membership_status": "universe_not_checked",
             "nifty500_member_verified": "false",
             "universe_company_name": "",
             "universe_industry": "",
             "universe_series": "",
         }
+
     symbol = event["symbol"].strip().upper()
-    isin = str(event.get("isin", "")).strip().upper()
-    universe_row = universe_by_isin.get(isin) if isin else None
-    if universe_row:
-        status = (
-            "nifty500_isin_match"
-            if universe_row["symbol"].strip().upper() == symbol
-            else "nifty500_isin_match_symbol_mismatch"
+    source_isin = str(event.get("isin", "")).strip().upper()
+    security_name = str(event.get("security_name", "")).strip()
+    normalized_security_name = normalize_registry_name(security_name)
+    universe_row = None
+    if source_isin and source_isin in universe_by_isin:
+        universe_row = universe_by_isin[source_isin]
+        name_matches = (
+            normalized_security_name
+            == normalize_registry_name(universe_row["company_name"])
         )
-        verified = "true"
+        symbol_matches = universe_row["symbol"].strip().upper() == symbol
+        if symbol_matches and name_matches:
+            status, method, verified = (
+                "nifty500_isin_symbol_company_match",
+                "source_isin_symbol_and_company_name",
+                "true",
+            )
+        elif symbol_matches:
+            status, method, verified = (
+                "nifty500_isin_symbol_match_company_name_mismatch",
+                "source_isin_and_symbol",
+                "true",
+            )
+        elif name_matches:
+            status, method, verified = (
+                "nifty500_isin_company_name_match_symbol_mismatch",
+                "source_isin_and_company_name",
+                "true",
+            )
+        else:
+            status, method, verified = (
+                "nifty500_isin_match_symbol_and_company_mismatch",
+                "source_isin_only_conflict",
+                "false",
+            )
     elif symbol in universe_by_symbol:
         universe_row = universe_by_symbol[symbol]
-        status = "symbol_match_isin_missing" if not isin else "symbol_match_isin_mismatch"
-        verified = "false"
+        universe_name = normalize_registry_name(universe_row["company_name"])
+        if normalized_security_name and normalized_security_name == universe_name:
+            status, method, verified = (
+                "nifty500_symbol_company_name_exact_normalized_match",
+                "symbol_and_company_name_exact_normalized",
+                "true",
+            )
+        else:
+            status, method, verified = (
+                "symbol_match_company_name_mismatch",
+                "symbol_only_not_accepted",
+                "false",
+            )
     else:
-        status = "outside_current_nifty500"
-        verified = "false"
-        universe_row = {}
+        same_name = universe_by_company_name.get(normalized_security_name, [])
+        status = (
+            "company_name_match_symbol_mismatch"
+            if len(same_name) == 1
+            else "ambiguous_company_name_match_symbol_mismatch"
+            if len(same_name) > 1
+            else "outside_current_nifty500"
+        )
+        method, verified = "company_name_only_not_accepted", "false"
+
     return {
+        "source_isin": source_isin,
+        "matched_universe_isin": universe_row.get("isin", "") if universe_row else "",
+        "universe_join_method": method,
         "nifty500_membership_status": status,
         "nifty500_member_verified": verified,
-        "universe_company_name": universe_row.get("company_name", ""),
-        "universe_industry": universe_row.get("industry", ""),
-        "universe_series": universe_row.get("series", ""),
+        "universe_company_name": universe_row.get("company_name", "") if universe_row else "",
+        "universe_industry": universe_row.get("industry", "") if universe_row else "",
+        "universe_series": universe_row.get("series", "") if universe_row else "",
     }
 
 def _load_latest_deal_manifests(root: Path, lookback_days: int) -> tuple[list[dict], date, date]:
@@ -342,8 +404,11 @@ def _classify_event(
     registry_snapshot_date: date,
     universe_by_isin: dict[str, dict] | None = None,
     universe_by_symbol: dict[str, dict] | None = None,
+    universe_by_company_name: dict[str, list[dict]] | None = None,
 ) -> dict:
-    universe_fields = _universe_membership(event, universe_by_isin, universe_by_symbol)
+    universe_fields = _universe_membership(
+        event, universe_by_isin, universe_by_symbol, universe_by_company_name
+    )
     candidates = registry_index.get(event["client_normalized_name"], [])
     if not candidates:
         return {
@@ -492,7 +557,9 @@ def classify(root: Path = Path("."), lookback_days: int = 7) -> dict:
         raise ValueError("lookback_days must be between 1 and 60")
     registry_manifest, registry_index = _load_registry(root)
     registry_snapshot_date = date.fromisoformat(registry_manifest["retrieved_date_ist"])
-    universe_by_isin, universe_by_symbol, universe_metadata = _load_universe(root)
+    (
+        universe_by_isin, universe_by_symbol, universe_by_company_name, universe_metadata
+    ) = _load_universe(root)
     selected_manifests, start_date, end_date = _load_latest_deal_manifests(
         root, lookback_days
     )
@@ -501,7 +568,7 @@ def classify(root: Path = Path("."), lookback_days: int = 7) -> dict:
     events = [
         _classify_event(
             event, registry_index, registry_snapshot_date,
-            universe_by_isin, universe_by_symbol,
+            universe_by_isin, universe_by_symbol, universe_by_company_name,
         )
         for event in events
     ]
@@ -531,6 +598,11 @@ def classify(root: Path = Path("."), lookback_days: int = 7) -> dict:
         "registry_snapshot_sha256": registry_manifest["normalized_csv_sha256"],
         "universe_source_path": universe_metadata["path"],
         "universe_csv_sha256": universe_metadata["sha256"],
+        "universe_join_policy": (
+            "NSE bulk/block disclosure has no ISIN field in the validated schema; "
+            "Nifty 500 membership therefore requires exact symbol plus exact normalized "
+            "company-name match. The universe ISIN is attached from the official constituent file."
+        ),
         "universe_row_count": universe_metadata["row_count"],
         "nifty500_verified_event_count": sum(
             event["nifty500_member_verified"] == "true" for event in events
