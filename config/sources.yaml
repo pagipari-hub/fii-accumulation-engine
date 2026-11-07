@@ -35,6 +35,14 @@ sources:
     required_fields: [symbol, underlying, serialNumber]
     status: "live_validated_current_membership_only"
     source_effective_date: "not_supplied; record retrieval timestamp only"
+  nse_fo_stock_introduction_exclusion_tracker:
+    description: "Effective-dated NSE F&O stock introductions and exclusions with circular references"
+    publisher: "National Stock Exchange of India"
+    reference_url: "https://www.nseindia.com/static/products-services/equity-derivatives-contract-information"
+    frequency: "daily_or_on_change"
+    required_fields: [symbol, action, effective_date, circular_link]
+    status: "live_validated_effective_dated_change_history"
+    archive_policy: "content_addressed_xlsx_and_parsed_event_manifest"
   nse_fii_dii_cash_provisional:
     description: "NSE-exclusive and combined-market FII/FPI and DII cash activity"
     publisher: "National Stock Exchange of India"
