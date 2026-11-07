@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - "src/fii_engine/yahoo_prices.py"
+      - "tests/test_yahoo_prices.py"
       - ".github/workflows/yahoo-price-smoke.yml"
       - "config/samples/yahoo-smoke-symbols.csv"
   workflow_dispatch:
@@ -42,7 +43,7 @@ jobs:
             --interval 1d \
             --output artifacts/market-data/yahoo
 
-      - name: Validate completeness and output schema
+      - name: Validate complete price history and output schema
         run: |
           python - <<'PY'
           import csv
@@ -56,23 +57,26 @@ jobs:
           with (root / "yahoo_prices.csv").open(newline="") as handle:
               rows = list(csv.DictReader(handle))
           if not rows:
-              raise SystemExit("Price CSV contains no rows")
+              raise SystemExit("Price CSV contains no complete rows")
           required = {"date", "symbol", "open", "high", "low", "close", "adj_close", "volume"}
           if not required.issubset(rows[0]):
               raise SystemExit(f"Missing output columns: {sorted(required - set(rows[0]))}")
           rows_by_symbol = {symbol: [row for row in rows if row["symbol"] == symbol] for symbol in expected}
           missing = sorted(symbol for symbol, symbol_rows in rows_by_symbol.items() if not symbol_rows)
           if missing:
-              raise SystemExit(f"Symbols have no actual CSV price rows: {missing}")
+              raise SystemExit(f"Symbols have no complete CSV price rows: {missing}")
           invalid = sorted(
               symbol for symbol, symbol_rows in rows_by_symbol.items()
               if any(not row["date"] or any(not row[column] for column in ("open", "high", "low", "close", "volume"))
                      for row in symbol_rows)
           )
           if invalid:
-              raise SystemExit(f"Symbols have incomplete OHLCV rows: {invalid}")
+              raise SystemExit(f"Symbols have incomplete OHLCV rows in output: {invalid}")
           if returned != expected:
               raise SystemExit(f"Manifest/CSV symbol mismatch: manifest={sorted(returned)}, expected={sorted(expected)}")
+          quarantined = manifest.get("quarantined_latest_bars", [])
+          if manifest.get("quarantined_latest_bar_count") != len(quarantined):
+              raise SystemExit("Manifest quarantine count does not match its detail list")
           print(json.dumps({
               "provider": manifest["provider"],
               "retrieved_at_utc": manifest["retrieved_at_utc"],
@@ -80,7 +84,7 @@ jobs:
               "returned_symbols": manifest["returned_symbols"],
               "rows_per_symbol": {symbol: len(symbol_rows) for symbol, symbol_rows in rows_by_symbol.items()},
               "row_count": manifest["row_count"],
-              "missing_symbols": missing,
+              "quarantined_latest_bars": quarantined,
           }, indent=2))
           PY
 
