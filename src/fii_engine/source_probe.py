@@ -31,7 +31,7 @@ ENDPOINT_WORDS = re.compile(
     r"api|report|download|market|deriv|bhav|participant|historical|fo_eq|fii|dii",
     re.I,
 )
-URL_OR_PATH = re.compile(r"""(?P<value>(?:https?:\\?/\\?/|/)[^"'\\s<>]{2,240})""")
+URL_OR_PATH = re.compile(r"""(?P<value>(?:https?:(?:/|\\/){2}|/)[^"'\s<>]{2,240})""")
 MAX_SCRIPT_COUNT = 20
 MAX_SCRIPT_BYTES = 1_000_000
 
