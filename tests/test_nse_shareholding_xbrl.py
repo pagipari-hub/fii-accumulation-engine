@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 
 from fii_engine.nse_shareholding_xbrl import parse_xbrl
@@ -79,3 +81,14 @@ def test_rejects_non_fractional_percentage_outside_valid_range():
 def test_rejects_invalid_xml():
     with pytest.raises(ValueError, match="valid XML"):
         parse_xbrl(b"<broken>")
+
+def test_actual_nse_filing_sample_reconciles_fpi_components():
+    fixture = Path(__file__).parent / "fixtures" / "nse_shareholding_hdfcbank_xbrl_sample.xml"
+    result = parse_xbrl(fixture.read_bytes())
+    rows = {row["category_key"]: row for row in result["category_records"]}
+    assert rows["fpi_category_i"]["shares"] == 5_029_099_852
+    assert rows["fpi_category_ii"]["shares"] == 236_902_500
+    assert rows["other_foreign_institutions"]["shares"] == 504_060
+    assert rows["foreign_institutions_total"]["shares"] == 5_266_506_412
+    assert rows["fpi_category_i"]["ownership_percentage_points"] == "37.6200"
+    assert result["fpi_reconciliation"][0]["status"] == "matched"
