@@ -77,6 +77,45 @@ def test_includes_reported_overseas_depositories_in_foreign_reconciliation():
     assert reconciliation["status"] == "matched"
 
 
+
+def test_reconciles_reported_fdi_fvc_and_foreign_swf_components():
+    contexts = b""
+    facts = b""
+    members = [
+        ("FDI", "ForeignDirectInvestmentMember", 50),
+        ("FVC", "ForeignVentureCapitalInvestorsMember", 20),
+        ("SWF", "SovereignWealthFundsForeignMember", 30),
+    ]
+    for context_id, member, shares in members:
+        contexts += (
+            f'<xbrli:context id="{context_id}"><xbrli:entity>'
+            f'<xbrli:identifier scheme="test">INE000A01001</xbrli:identifier>'
+            f'</xbrli:entity><xbrli:period><xbrli:instant>2026-09-30</xbrli:instant>'
+            f'</xbrli:period><xbrli:scenario><xbrli:explicitMember '
+            f'dimension="shp:CategoryOfShareholdersAxis">shp:{member}'
+            f'</xbrli:explicitMember></xbrli:scenario></xbrli:context>'
+        ).encode()
+        facts += (
+            f'<shp:NumberOfShares contextRef="{context_id}" unitRef="shares">'
+            f'{shares}</shp:NumberOfShares>'
+        ).encode()
+    payload = XML.replace(
+        b"</xbrli:xbrl>",
+        contexts + facts
+        + b'</xbrli:xbrl>',
+    ).replace(
+        b'<shp:NumberOfShares contextRef="FOREIGN" unitRef="shares">1000</shp:NumberOfShares>',
+        b'<shp:NumberOfShares contextRef="FOREIGN" unitRef="shares">1100</shp:NumberOfShares>',
+    )
+    result = parse_xbrl(payload)
+    reconciliation = result["fpi_reconciliation"][0]
+    assert reconciliation["foreign_direct_investment_shares"] == 50
+    assert reconciliation["foreign_venture_capital_investor_shares"] == 20
+    assert reconciliation["sovereign_wealth_funds_foreign_shares"] == 30
+    assert reconciliation["component_sum_shares"] == 1100
+    assert reconciliation["status"] == "matched"
+
+
 def test_missing_fpi_category_is_not_assumed_to_be_zero():
     payload = XML.replace(
         b'<shp:NumberOfShares contextRef="FPI2" unitRef="shares">200</shp:NumberOfShares>',
