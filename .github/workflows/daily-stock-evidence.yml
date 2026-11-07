@@ -94,9 +94,14 @@ jobs:
             data/snapshots/fno_universe \
             data/raw/fii_dii/manifests \
             data/snapshots/fii_dii \
+            data/raw/fii_dii/current_manifest.json \
+            data/raw/cash_market/nse_cm_cash_current_manifest.json \
             data/raw/cash_market/manifests \
+            data/raw/fno_bhavcopy/nse_fo_udiff_current_manifest.json \
             data/raw/fno_bhavcopy/manifests \
+            data/raw/fno_aggregate_reports/current_manifest.json \
             data/raw/fno_aggregate_reports/manifests \
+            data/raw/bulk_block_deals/current_manifest.json \
             data/raw/bulk_block_deals/manifests \
             data/snapshots/bulk_block_deals; do
             if [[ -e "$path" ]]; then git add "$path"; fi
