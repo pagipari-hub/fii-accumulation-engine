@@ -1,6 +1,11 @@
 name: Official source discovery
 
 on:
+  push:
+    paths:
+      - "src/fii_engine/source_probe.py"
+      - "tests/test_source_probe.py"
+      - ".github/workflows/source-discovery.yml"
   pull_request:
     paths:
       - "src/**"
