@@ -101,30 +101,36 @@ sources:
     publisher: "National Stock Exchange of India"
     reference_url: "https://www.nseindia.com/all-reports-derivatives"
     frequency: "daily"
-    required_fields: [trade_date, participant_category]
-    status: "adapter_implemented_live_validation_pending"
+    required_fields: [trade_date, participant_category, instrument_group, source_side, contracts]
+    status: "live_validated_current_capture"
     catalogue_api: "https://www.nseindia.com/api/daily-reports?key=FO"
     report_key: "FO-PARTICIPANTWISE-OI"
+    parser_version: 2
+    last_live_validated_trade_date: "2026-11-06"
     attribution_scope: "participant_category_aggregate_not_stock_specific"
   nse_fo_participant_volume:
     description: "Participant-category aggregate derivatives trading volume"
     publisher: "National Stock Exchange of India"
     reference_url: "https://www.nseindia.com/all-reports-derivatives"
     frequency: "daily"
-    required_fields: [participant_category, instrument_group, long_positions, short_positions]
-    status: "adapter_implemented_live_validation_pending"
+    required_fields: [trade_date, participant_category, instrument_group, source_side, contracts]
+    status: "live_validated_current_capture"
     catalogue_api: "https://www.nseindia.com/api/daily-reports?key=FO"
     report_key: "FO-PARTICIPANTWISE-TRADING-VOL"
+    parser_version: 2
+    last_live_validated_trade_date: "2026-11-06"
     attribution_scope: "participant_category_aggregate_not_stock_specific"
   nse_fii_derivatives_statistics:
     description: "Aggregate FII derivatives statistics"
     publisher: "National Stock Exchange of India"
     reference_url: "https://www.nseindia.com/all-reports-derivatives"
     frequency: "daily"
-    required_fields: [trade_date]
-    status: "adapter_implemented_live_validation_pending"
+    required_fields: [trade_date, instrument_group, underlying, record_level, buy_contracts, sell_contracts, open_interest_contracts]
+    status: "live_validated_current_capture"
     catalogue_api: "https://www.nseindia.com/api/daily-reports?key=FO"
     report_key: "FO-FII-DERIVATIVE-STAT"
+    parser_version: 2
+    last_live_validated_trade_date: "2026-11-06"
     attribution_scope: "aggregate_fii_derivatives_only"
   nse_stock_mwpl:
     description: "Stock MWPL utilization and ban context reports"
