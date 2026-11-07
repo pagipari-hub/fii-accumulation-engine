@@ -43,7 +43,7 @@ SESSION_BOOTSTRAP = "https://www.nseindia.com/"
 DOWNLOAD_SUFFIXES = (".csv", ".zip", ".xls", ".xlsx", ".pdf", ".gz", ".parquet")
 DOWNLOAD_WORDS = re.compile(r"download|bhavcopy|participant|contract|constituent|report", re.I)
 ENDPOINT_WORDS = re.compile(
-    r"api|report|download|market|deriv|bhav|participant|historical|fo_eq|fii|dii",
+    r"api|report|download|market|deriv|bhav|participant|historical|fo_eq|fii|dii|sharehold|shareholder|holding|xbrl",
     re.I,
 )
 URL_OR_PATH = re.compile(r"""(?P<value>(?:https?:(?:/|\\/){2}|/)[^"'\s<>]{2,240})""")
@@ -181,6 +181,7 @@ def extract_keyword_contexts(
     keywords: tuple[str, ...] = (
         "getStartEndDate", "formatDate", "dateRangeValue",
         "DD-MM-YYYY", "DD-MMM-YYYY", "YYYY-MM-DD",
+        "shareholding", "shareholder", "shareholdingpattern", "xbrl", "getshare",
     ),
     radius: int = 700,
     limit: int = 40,
