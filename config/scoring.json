@@ -1,0 +1,51 @@
+{
+  "model_version": "0.1-provisional",
+  "model_status": "research_provisional_not_backtest_calibrated",
+  "horizons": {
+    "short_term": {
+      "label": "1-4 weeks",
+      "family_weights": {
+        "quarterly_ownership": 5,
+        "disclosed_deals": 10,
+        "cash_market": 25,
+        "stock_derivatives": 30,
+        "participant_positioning": 15,
+        "sector_relative_strength": 15
+      }
+    },
+    "positional": {
+      "label": "1-6 months",
+      "family_weights": {
+        "quarterly_ownership": 25,
+        "disclosed_deals": 10,
+        "cash_market": 25,
+        "stock_derivatives": 15,
+        "participant_positioning": 10,
+        "sector_relative_strength": 15
+      }
+    }
+  },
+  "thresholds": {
+    "minimum_coverage": 0.6,
+    "minimum_observed_families": 3,
+    "grade_2_family_score": 0.6,
+    "grade_2_minimum_positive_families": 3,
+    "watchlist_score": 0.45
+  },
+  "family_semantics": {
+    "quarterly_ownership": "Change in explicitly reported FPI Category I and II holdings; quarterly snapshot, not a transaction date.",
+    "disclosed_deals": "Bulk/block deal evidence. Buyer/seller identity is not automatically classified as FPI.",
+    "cash_market": "Delivery, traded volume and price/relative-strength features; market-wide, not participant attribution.",
+    "stock_derivatives": "Stock-specific futures/options activity; market-wide contract activity, not proof of FII positions.",
+    "participant_positioning": "Participant-category aggregate F&O context; not participant-by-stock positioning.",
+    "sector_relative_strength": "Stock and sector relative performance used as context, not direct FPI attribution."
+  },
+  "correlation_controls": [
+    "Each evidence family contributes at most one normalized family score per stock and horizon.",
+    "Correlated features must be combined inside their family before scoring.",
+    "Market-wide FII cash flows are context and are not treated as stock-specific transactions.",
+    "A Grade 1 result requires separately verified direct FPI transaction evidence."
+  ],
+  "missing_data_policy": "Unavailable families are excluded from the score denominator and reduce coverage; not_applicable families are excluded from both score and applicable coverage denominator; neither is treated as zero.",
+  "calibration_policy": "Weights and thresholds are provisional. Do not publish production rankings until historical backtests, stability checks and source-coverage validation are complete."
+}
