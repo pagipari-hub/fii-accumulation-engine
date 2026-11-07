@@ -20,6 +20,7 @@ on:
       - "docs/daily-stock-evidence-matrix.md"
       - ".github/workflows/daily-stock-evidence.yml"
       - ".gitignore"
+      - "scripts/retry_git_push.sh"
   pull_request:
     paths:
       - "src/fii_engine/daily_stock_features.py"
@@ -36,6 +37,7 @@ on:
       - "docs/daily-stock-evidence-matrix.md"
       - ".github/workflows/daily-stock-evidence.yml"
       - ".gitignore"
+      - "scripts/retry_git_push.sh"
   workflow_dispatch:
   schedule:
     # 23:00 IST, Monday to Friday; after the individual daily collectors.
@@ -148,8 +150,7 @@ jobs:
           git restore --worktree .
           git clean -fdx
           if [[ "$committed" == "true" ]]; then
-            git pull --rebase origin "$GITHUB_REF_NAME"
-            git push origin "HEAD:$GITHUB_REF_NAME"
+            bash scripts/retry_git_push.sh "$GITHUB_REF_NAME"
           else
             echo "No new daily evidence snapshot to push."
           fi
