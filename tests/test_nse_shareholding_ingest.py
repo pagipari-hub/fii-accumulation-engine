@@ -123,7 +123,7 @@ def test_ingests_fpi_categories_and_selects_latest_revision(tmp_path, monkeypatc
     assert rows["ABC"]["fpi_category_i_shares"] == "150"
     assert rows["ABC"]["fpi_category_ii_shares"] == "50"
     assert rows["ABC"]["fpi_total_shares"] == "200"
-    assert rows["ABC"]["fpi_total_ownership_percentage_points"] == "0.2"
+    assert rows["ABC"]["fpi_total_ownership_percentage_points"] == "20.00"
     assert rows["ABC"]["fpi_reconciliation_status"] == "matched"
     assert rows["XYZ"]["identity_join_method"] == "symbol_and_company_name"
     assert rows["XYZ"]["filing_status"] == "parsed"
