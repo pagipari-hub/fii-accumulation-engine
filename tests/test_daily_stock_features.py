@@ -320,3 +320,17 @@ def test_cash_market_series_must_match_nifty500_constituent_series(tmp_path):
     write_json(manifest_path, manifest)
     with pytest.raises(ValueError, match="cash-market series mismatch"):
         build_daily_features(tmp_path)
+
+
+def test_rejects_duplicate_cash_isin_and_series_pair(tmp_path):
+    build_fixture(tmp_path)
+    cash_path = tmp_path / "data/processed/cash_market/cm.csv"
+    rows = list(csv.DictReader(cash_path.open(encoding="utf-8")))
+    rows.append(dict(rows[0]))
+    digest = write_csv(cash_path, list(rows[0]), rows)
+    manifest_path = tmp_path / "data/raw/cash_market/nse_cm_cash_current_manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    manifest["datasets"][0]["parsed_sha256"] = digest
+    write_json(manifest_path, manifest)
+    with pytest.raises(ValueError, match="duplicate cash-market ISIN/series"):
+        build_daily_features(tmp_path)
