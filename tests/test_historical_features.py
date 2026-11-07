@@ -131,8 +131,15 @@ def test_delivery_history_is_partial_when_one_session_is_unreported(tmp_path):
 def test_rejects_multiple_daily_snapshots_for_same_trade_date(tmp_path):
     _build_history(tmp_path)
     original = next((tmp_path / "data/snapshots/daily_stock_features").glob("*.csv"))
-    duplicate = original.with_name(original.stem[:-16] + "0" * 16 + ".csv")
-    duplicate.write_bytes(original.read_bytes())
+    with original.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    rows[0]["cash_close"] = "999"
+    temporary = original.with_name("temporary.csv")
+    digest = _write_snapshot(temporary, rows)
+    duplicate = original.with_name(
+        original.name.rsplit("_", 1)[0] + f"_{digest[:16]}.csv"
+    )
+    temporary.rename(duplicate)
     with pytest.raises(ValueError, match="multiple immutable stock snapshots"):
         build_historical_features(tmp_path)
 
