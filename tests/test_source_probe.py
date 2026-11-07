@@ -104,3 +104,15 @@ def test_official_shareholding_pattern_page_is_probed():
     assert SOURCE_PAGES["nse_shareholding_pattern"] == (
         "https://www.nseindia.com/companies-listing/corporate-filings-shareholding-pattern/"
     )
+
+
+def test_shareholding_and_xbrl_endpoints_are_discovered():
+    from fii_engine.source_probe import extract_endpoint_candidates
+
+    source = (
+        'fetch("/api/shareholding-pattern?symbol=ABC"); '
+        'fetch("/api/xbrl/ABC/2026Q2");'
+    )
+    candidates = extract_endpoint_candidates(source)
+    assert "/api/shareholding-pattern?symbol=ABC" in candidates
+    assert "/api/xbrl/ABC/2026Q2" in candidates
