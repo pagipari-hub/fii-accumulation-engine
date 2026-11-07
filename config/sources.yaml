@@ -1,13 +1,14 @@
 # Register every upstream dataset with provenance before ingestion.
-# URLs and access methods are intentionally not guessed; they are validated
-# as each source adapter is implemented.
+# Source contracts are documented in docs/data-source-register.md.
 sources:
   nse_nifty500_constituents:
-    description: "Official Nifty 500 constituent list and effective dates"
+    description: "Official current Nifty 500 constituent CSV snapshot"
     publisher: "NSE Indices"
+    reference_url: "https://www.nseindia.com/static/products-services/indices-nifty500-index"
     frequency: "monthly_or_on_change"
-    required_fields: [symbol, company_name, effective_from]
-    status: "adapter_pending"
+    required_fields: [symbol, company_name, industry, series, isin]
+    status: "source_verified_adapter_pending"
+    historical_policy: "immutable_snapshots_only"
   nse_security_master:
     description: "NSE security and series reference data"
     publisher: "National Stock Exchange of India"
@@ -17,6 +18,78 @@ sources:
   nse_fo_eligibility:
     description: "Current stock derivatives eligibility and contract reference"
     publisher: "National Stock Exchange of India"
+    reference_url: "https://www.nseindia.com/all-reports-derivatives"
     frequency: "daily_or_on_change"
     required_fields: [symbol, fno_status]
-    status: "adapter_pending"
+    status: "source_verified_adapter_pending"
+  nse_fii_dii_cash_provisional:
+    description: "NSE-exclusive and combined-market FII/FPI and DII cash activity"
+    publisher: "National Stock Exchange of India"
+    reference_url: "https://www.nseindia.com/reports/fii-dii"
+    frequency: "daily"
+    required_fields: [trade_date, investor_category, buy_value, sell_value, net_value]
+    status: "source_verified_adapter_pending"
+    finality: "provisional"
+    dataset_identity: "keep_nse_exclusive_and_combined_separate"
+  nsdl_fpi_final:
+    description: "Final FPI cash data"
+    publisher: "NSDL"
+    reference_url: "https://www.fpi.nsdl.co.in/web/Reports/Latest.aspx"
+    frequency: "daily_or_as_published"
+    required_fields: [trade_date]
+    status: "reference_verified_schema_pending"
+    finality: "final_when_published"
+  cdsl_fpi_final:
+    description: "Final FPI data published by CDSL"
+    publisher: "CDSL"
+    reference_url: "https://www.cdslindia.com/Publications/ForeignPortInvestor.html"
+    frequency: "daily_or_as_published"
+    required_fields: [trade_date]
+    status: "reference_verified_schema_pending"
+    finality: "final_when_published"
+  nse_fo_udiff_bhavcopy:
+    description: "Final UDiFF common derivatives bhavcopy"
+    publisher: "National Stock Exchange of India"
+    reference_url: "https://www.nseindia.com/all-reports-derivatives"
+    frequency: "daily"
+    required_fields: [trade_date, instrument, symbol, expiry, open_interest, traded_volume]
+    status: "source_verified_schema_pending"
+    finality: "final"
+  nse_fo_contract_master:
+    description: "F&O MII contract master"
+    publisher: "National Stock Exchange of India"
+    reference_url: "https://www.nseindia.com/all-reports-derivatives"
+    frequency: "daily_or_on_change"
+    required_fields: [instrument_identifier, symbol, expiry]
+    status: "source_verified_schema_pending"
+  nse_fo_participant_oi:
+    description: "Participant-category aggregate derivatives open interest"
+    publisher: "National Stock Exchange of India"
+    reference_url: "https://www.nseindia.com/all-reports-derivatives"
+    frequency: "daily"
+    required_fields: [trade_date, participant_category]
+    status: "source_verified_schema_pending"
+    attribution_scope: "participant_category_aggregate_not_stock_specific"
+  nse_fo_participant_volume:
+    description: "Participant-category aggregate derivatives trading volume"
+    publisher: "National Stock Exchange of India"
+    reference_url: "https://www.nseindia.com/all-reports-derivatives"
+    frequency: "daily"
+    required_fields: [trade_date, participant_category]
+    status: "source_verified_schema_pending"
+    attribution_scope: "participant_category_aggregate_not_stock_specific"
+  nse_fii_derivatives_statistics:
+    description: "Aggregate FII derivatives statistics"
+    publisher: "National Stock Exchange of India"
+    reference_url: "https://www.nseindia.com/all-reports-derivatives"
+    frequency: "daily"
+    required_fields: [trade_date]
+    status: "source_verified_schema_pending"
+    attribution_scope: "aggregate_fii_derivatives_only"
+  nse_stock_mwpl:
+    description: "Stock MWPL utilization and ban context reports"
+    publisher: "National Stock Exchange of India"
+    reference_url: "https://www.nseindia.com/all-reports-derivatives"
+    frequency: "daily"
+    required_fields: [trade_date, symbol]
+    status: "source_verified_schema_pending"
