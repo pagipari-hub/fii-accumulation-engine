@@ -26,7 +26,7 @@ HEADERS = {
     "Cache-Control": "no-cache",
     "Pragma": "no-cache",
 }
-DEFAULT_DATES = ("2026-11-06", "2026-10-30", "2026-09-01")
+DEFAULT_DATES = ("2026-09-01", "2026-10-30", "2026-11-06")
 SOURCES = {
     "cash_udiff": {
         "url": BASE + "/content/cm/BhavCopy_NSE_CM_0_0_0_{ymd}_F_0000.csv.zip",
