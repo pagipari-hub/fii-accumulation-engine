@@ -1,0 +1,80 @@
+name: Probe official NSE historical archives
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/fii_engine/nse_historical_archive_probe.py"
+      - "tests/test_nse_historical_archive_probe.py"
+      - ".github/workflows/nse-historical-archive-probe.yml"
+  pull_request:
+    paths:
+      - "src/fii_engine/nse_historical_archive_probe.py"
+      - "tests/test_nse_historical_archive_probe.py"
+      - ".github/workflows/nse-historical-archive-probe.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nse-historical-archive-probe
+  cancel-in-progress: false
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install project and test dependencies
+        run: python -m pip install -e ".[dev]"
+
+      - name: Run complete project test suite
+        run: pytest
+
+      - name: Probe official historical archive dates
+        if: github.event_name != 'pull_request'
+        run: python -m fii_engine.nse_historical_archive_probe --repo-root .
+
+      - name: Validate archive probe manifest
+        if: github.event_name != 'pull_request'
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path("data/raw/historical_archive_probe/probe_manifest.json")
+          assert path.is_file(), "historical archive probe manifest missing"
+          result = json.loads(path.read_text(encoding="utf-8"))
+          assert result["result_count"] == len(result["dates_tested"]) * len(result["sources_tested"])
+          for item in result["results"]:
+              raw = Path(item["raw_path"])
+              assert raw.is_file(), f"missing raw archive: {raw}"
+              assert raw.stat().st_size == item["raw_payload_bytes"]
+          print(json.dumps({
+              "dates_tested": result["dates_tested"],
+              "sources_tested": result["sources_tested"],
+              "result_count": result["result_count"],
+              "rows_by_date_source": [
+                  {key: item[key] for key in ("expected_trade_date", "source", "row_count", "raw_payload_bytes", "raw_payload_sha256")}
+                  for item in result["results"]
+              ],
+          }, indent=2))
+          PY
+
+      - name: Upload archive probe evidence
+        if: always() && github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: nse-historical-archive-probe-${{ github.run_id }}
+          path: data/raw/historical_archive_probe/
+          if-no-files-found: warn
+          retention-days: 30
