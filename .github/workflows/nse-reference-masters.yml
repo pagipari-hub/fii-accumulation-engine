@@ -50,6 +50,9 @@ jobs:
           root = Path("artifacts/nse-reference")
           manifest = json.loads((root / "manifest.json").read_text(encoding="utf-8"))
           assert len(manifest["captures"]) == 2
+          if manifest.get("data_quality_status") != "pass":
+              print("QUARANTINED SOURCE DATA:", manifest.get("data_quality_issues"))
+              raise SystemExit("NSE MII source payload failed semantic freshness checks")
           assert {item["dataset"] for item in manifest["captures"]} == {
               "nse_cm_security_master", "nse_fo_contract_master"
           }
