@@ -5,21 +5,19 @@
     "short_term": {
       "label": "1-4 weeks",
       "family_weights": {
-        "quarterly_ownership": 5,
-        "disclosed_deals": 10,
-        "cash_market": 25,
-        "stock_derivatives": 30,
-        "sector_relative_strength": 30
+        "quarterly_ownership": 10,
+        "disclosed_deals": 15,
+        "cash_market": 35,
+        "stock_derivatives": 40
       }
     },
     "positional": {
       "label": "1-6 months",
       "family_weights": {
-        "quarterly_ownership": 25,
-        "disclosed_deals": 10,
-        "cash_market": 25,
-        "stock_derivatives": 15,
-        "sector_relative_strength": 25
+        "quarterly_ownership": 35,
+        "disclosed_deals": 15,
+        "cash_market": 35,
+        "stock_derivatives": 15
       }
     }
   },
@@ -33,9 +31,8 @@
   "family_semantics": {
     "quarterly_ownership": "Change in explicitly reported FPI Category I and II holdings; quarterly snapshot, not a transaction date.",
     "disclosed_deals": "Score only disclosed transactions whose counterparty has been independently verified as an FPI. Unclassified deal records remain event annotations and are unavailable for FPI scoring.",
-    "cash_market": "Delivery, traded volume and price/relative-strength features; market-wide, not participant attribution.",
-    "stock_derivatives": "Stock-specific futures/options activity; market-wide contract activity, not proof of FII positions.",
-    "sector_relative_strength": "Stock and sector relative performance used as context, not direct FPI attribution."
+    "cash_market": "Delivery, traded volume, price trend and peer-relative strength are combined inside this family to avoid double-counting correlated price signals.",
+    "stock_derivatives": "Stock-specific futures/options activity; market-wide contract activity, not proof of FII positions."
   },
   "correlation_controls": [
     "Each evidence family contributes at most one normalized family score per stock and horizon.",
