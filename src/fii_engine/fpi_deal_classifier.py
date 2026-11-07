@@ -19,7 +19,7 @@ REGISTRY_MANIFEST = Path("data/raw/cdsl_fpi_registry/cdsl_fpi_registry_current_m
 DEAL_MANIFEST_DIR = Path("data/raw/bulk_block_deals/manifests")
 EVENT_FIELDS = [
     "event_id", "trade_date", "symbol", "security_name", "deal_type",
-    "client_name", "side", "quantity", "weighted_average_price", "deal_value",
+    "client_name", "client_normalized_name", "side", "quantity", "weighted_average_price", "deal_value",
     "registry_match_status", "name_match_type", "counterparty_class",
     "registration_numbers", "valid_upto_dates", "registry_record_count",
     "registry_snapshot_date", "temporal_status", "cross_report_duplicate",
@@ -29,16 +29,16 @@ EVENT_FIELDS = [
 STOCK_FIELDS = [
     "trade_date_window_start", "trade_date_window_end", "symbol",
     "deal_event_count", "source_record_count", "cross_report_duplicate_event_count",
-    "registered_fpi_client_event_count", "odi_issuer_event_count",
+    "current_registry_matched_fpi_client_event_count", "current_registry_matched_odi_issuer_event_count",
     "ambiguous_registration_event_count", "unmatched_event_count",
-    "registered_fpi_client_buy_quantity", "registered_fpi_client_sell_quantity",
-    "registered_fpi_client_known_net_quantity",
-    "registered_fpi_client_buy_value", "registered_fpi_client_sell_value",
+    "current_registry_matched_fpi_client_buy_quantity", "current_registry_matched_fpi_client_sell_quantity",
+    "current_registry_matched_fpi_client_known_net_quantity",
+    "current_registry_matched_fpi_client_buy_value", "current_registry_matched_fpi_client_sell_value",
     "odi_issuer_buy_quantity", "odi_issuer_sell_quantity",
     "unmatched_buy_quantity", "unmatched_sell_quantity",
     "temporally_verified_fpi_buy_quantity", "temporally_verified_fpi_sell_quantity",
     "temporally_unverified_fpi_buy_quantity", "temporally_unverified_fpi_sell_quantity",
-    "counterparty_identity_coverage_pct", "known_fpi_net_status",
+    "counterparty_identity_coverage_pct", "known_fpi_net_status", "registry_temporal_status",
 ]
 OUTPUT_PATHS = {
     "events": "data/raw/fpi_deal_attribution/fpi_deal_counterparty_current.csv",
@@ -248,14 +248,14 @@ def _temporal_status(
     trade_date: date, snapshot_date: date, validity_dates: list[str]
 ) -> str:
     parsed = [date.fromisoformat(value) for value in validity_dates if value]
-    if parsed and all(value < trade_date for value in parsed):
-        return "validity_end_before_trade_date"
     if snapshot_date == trade_date:
         if parsed and all(value < trade_date for value in parsed):
             return "expired_on_trade_date"
         if parsed:
             return "observed_in_registry_on_trade_date"
         return "observed_on_trade_date_validity_end_unknown"
+    if parsed and all(value < trade_date for value in parsed):
+        return "validity_end_before_trade_date"
     if snapshot_date > trade_date:
         return "post_trade_snapshot_registration_start_unknown"
     return "pre_trade_snapshot_revocation_status_unknown"
@@ -288,12 +288,12 @@ def _classify_event(
     )
     if len(unique_registrations) > 1:
         match_status = "multiple_registration_numbers"
-        counterparty_class = "registered_fpi_client_ambiguous_registration"
+        counterparty_class = "current_registry_match_ambiguous_registration"
     else:
         match_status = "current_registry_match"
         counterparty_class = (
-            "odi_issuer" if re.search(r"\bODI\b", event["client_name"], re.IGNORECASE)
-            else "registered_fpi_client"
+            "current_registry_matched_odi_issuer" if re.search(r"\bODI\b", event["client_name"], re.IGNORECASE)
+            else "current_registry_matched_fpi_client"
         )
     temporal = _temporal_status(
         date.fromisoformat(event["trade_date"]),
@@ -333,27 +333,28 @@ def _stock_summary(
             counterparty = event["counterparty_class"]
             side = event["side"].lower()
             counts[counterparty] += 1
-            if counterparty == "registered_fpi_client":
+            if counterparty == "current_registry_matched_fpi_client":
                 totals[f"fpi_{side}_quantity"] += qty
                 totals[f"fpi_{side}_value"] += value
                 if event["temporal_status"] == "observed_in_registry_on_trade_date":
                     totals[f"verified_fpi_{side}_quantity"] += qty
                 else:
                     totals[f"unverified_fpi_{side}_quantity"] += qty
-            elif counterparty == "odi_issuer":
+            elif counterparty == "current_registry_matched_odi_issuer":
                 totals[f"odi_{side}_quantity"] += qty
             elif counterparty == "unmatched":
                 totals[f"unmatched_{side}_quantity"] += qty
-            elif counterparty == "registered_fpi_client_ambiguous_registration":
+            elif counterparty == "current_registry_match_ambiguous_registration":
                 totals[f"ambiguous_{side}_quantity"] += qty
         total_events = len(items)
         identified = (
-            counts["registered_fpi_client"] + counts["odi_issuer"]
-            + counts["registered_fpi_client_ambiguous_registration"]
+            counts["current_registry_matched_fpi_client"]
+            + counts["current_registry_matched_odi_issuer"]
+            + counts["current_registry_match_ambiguous_registration"]
         )
         unmatched = counts["unmatched"]
-        if unmatched == 0 and counts["registered_fpi_client_ambiguous_registration"] == 0 and counts["odi_issuer"] == 0:
-            net_status = "complete_for_reported_counterparties"
+        if unmatched == 0 and counts["current_registry_match_ambiguous_registration"] == 0 and counts["current_registry_matched_odi_issuer"] == 0:
+            net_status = "complete_for_current_registry_matched_counterparties"
         else:
             net_status = "partial_unmatched_or_odi_counterparties"
         results.append({
@@ -363,17 +364,17 @@ def _stock_summary(
             "deal_event_count": total_events,
             "source_record_count": source_record_count,
             "cross_report_duplicate_event_count": duplicate_count,
-            "registered_fpi_client_event_count": counts["registered_fpi_client"],
-            "odi_issuer_event_count": counts["odi_issuer"],
-            "ambiguous_registration_event_count": counts["registered_fpi_client_ambiguous_registration"],
+            "current_registry_matched_fpi_client_event_count": counts["current_registry_matched_fpi_client"],
+            "current_registry_matched_odi_issuer_event_count": counts["current_registry_matched_odi_issuer"],
+            "ambiguous_registration_event_count": counts["current_registry_match_ambiguous_registration"],
             "unmatched_event_count": unmatched,
-            "registered_fpi_client_buy_quantity": str(int(totals["fpi_buy_quantity"])),
-            "registered_fpi_client_sell_quantity": str(int(totals["fpi_sell_quantity"])),
-            "registered_fpi_client_known_net_quantity": str(int(
+            "current_registry_matched_fpi_client_buy_quantity": str(int(totals["fpi_buy_quantity"])),
+            "current_registry_matched_fpi_client_sell_quantity": str(int(totals["fpi_sell_quantity"])),
+            "current_registry_matched_fpi_client_known_net_quantity": str(int(
                 totals["fpi_buy_quantity"] - totals["fpi_sell_quantity"]
             )),
-            "registered_fpi_client_buy_value": format(totals["fpi_buy_value"], ".2f"),
-            "registered_fpi_client_sell_value": format(totals["fpi_sell_value"], ".2f"),
+            "current_registry_matched_fpi_client_buy_value": format(totals["fpi_buy_value"], ".2f"),
+            "current_registry_matched_fpi_client_sell_value": format(totals["fpi_sell_value"], ".2f"),
             "odi_issuer_buy_quantity": str(int(totals["odi_buy_quantity"])),
             "odi_issuer_sell_quantity": str(int(totals["odi_sell_quantity"])),
             "unmatched_buy_quantity": str(int(totals["unmatched_buy_quantity"])),
@@ -384,6 +385,13 @@ def _stock_summary(
             "temporally_unverified_fpi_sell_quantity": str(int(totals["unverified_fpi_sell_quantity"])),
             "counterparty_identity_coverage_pct": round(identified / total_events * 100, 2) if total_events else 0,
             "known_fpi_net_status": net_status,
+            "registry_temporal_status": (
+                "post_trade_snapshot_registration_start_unknown"
+                if any(item["temporal_status"] == "post_trade_snapshot_registration_start_unknown" for item in items)
+                else "observed_in_registry_on_trade_date"
+                if any(item["temporal_status"] == "observed_in_registry_on_trade_date" for item in items)
+                else "no_temporally_verified_fpi_client"
+            ),
         })
     return results
 
@@ -431,14 +439,14 @@ def classify(root: Path = Path("."), lookback_days: int = 7) -> dict:
         "cross_report_duplicate_event_count": sum(
             event["cross_report_duplicate"] == "true" for event in events
         ),
-        "registered_fpi_client_event_count": sum(
-            event["counterparty_class"] == "registered_fpi_client" for event in events
+        "current_registry_matched_fpi_client_event_count": sum(
+            event["counterparty_class"] == "current_registry_matched_fpi_client" for event in events
         ),
-        "odi_issuer_event_count": sum(
-            event["counterparty_class"] == "odi_issuer" for event in events
+        "current_registry_matched_odi_issuer_event_count": sum(
+            event["counterparty_class"] == "current_registry_matched_odi_issuer" for event in events
         ),
         "ambiguous_registration_event_count": sum(
-            event["counterparty_class"] == "registered_fpi_client_ambiguous_registration"
+            event["counterparty_class"] == "current_registry_match_ambiguous_registration"
             for event in events
         ),
         "unmatched_event_count": sum(
