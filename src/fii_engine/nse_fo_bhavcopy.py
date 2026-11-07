@@ -90,8 +90,8 @@ def _get(url: str, referer: str, accept: str, timeout: int = 60) -> bytes:
 
 
 def fetch_catalogue() -> dict:
-    # Use one cookie session for homepage, report page, API and archive download.
-    _get(BASE_URL + "/", BASE_URL + "/", "text/html,*/*")
+    # Bootstrap cookies on the exact report page and reuse the session
+    # for the catalogue API and archive download.
     _get(REPORT_PAGE, BASE_URL + "/", "text/html,*/*")
     payload = _get(CATALOGUE_URL, REPORT_PAGE, "application/json,*/*")
     try:
