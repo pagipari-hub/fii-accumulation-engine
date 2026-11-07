@@ -35,7 +35,6 @@ from fii_engine.nse_historical_archive_probe import (
     inspect_payload,
 )
 
-USER_AGENT = HEADERS["User-Agent"]
 DEFAULT_SESSIONS = 60
 DEFAULT_MAX_CALENDAR_DAYS = 120
 SNAPSHOT_NAME = re.compile(
@@ -301,7 +300,7 @@ def run_backfill(
         raise ValueError("max_calendar_days must be between sessions and 365")
     root = root.resolve()
     universe, universe_hash = _load_universe(root)
-    existing_snapshots, existing_dates_list = _load_daily_snapshots(root)
+    _, existing_dates_list = _load_daily_snapshots(root)
     existing_dates = set(existing_dates_list)
     if as_of_date:
         as_of = date.fromisoformat(as_of_date)
@@ -430,6 +429,7 @@ def run_backfill(
             "they do not identify FII/FPI ownership or participant-by-stock positions."
         ),
         "created_snapshots": created_snapshots,
+        "source_days": source_days,
         "unavailable_dates": unavailable_days,
         "source_refs": raw_refs,
         "history_build": {
