@@ -98,12 +98,12 @@ def test_stock_summary_keeps_unmatched_and_odi_out_of_direct_fpi_net():
     events = [
         {
             "symbol": "ABC", "side": "BUY", "quantity": "100", "deal_value": "1000.00",
-            "counterparty_class": "registered_fpi_client", "temporal_status": "post_trade_snapshot_registration_start_unknown",
+            "counterparty_class": "current_registry_matched_fpi_client", "temporal_status": "post_trade_snapshot_registration_start_unknown",
             "source_record_count": 1, "cross_report_duplicate": "false",
         },
         {
             "symbol": "ABC", "side": "BUY", "quantity": "50", "deal_value": "500.00",
-            "counterparty_class": "odi_issuer", "temporal_status": "post_trade_snapshot_registration_start_unknown",
+            "counterparty_class": "current_registry_matched_odi_issuer", "temporal_status": "post_trade_snapshot_registration_start_unknown",
             "source_record_count": 1, "cross_report_duplicate": "false",
         },
         {
@@ -114,7 +114,7 @@ def test_stock_summary_keeps_unmatched_and_odi_out_of_direct_fpi_net():
     ]
     result = _stock_summary(events, date(2026, 10, 30), date(2026, 11, 6))[0]
     assert result["current_registry_matched_fpi_client_buy_quantity"] == "100"
-    assert result["odi_issuer_buy_quantity"] == "50"
+    assert result["current_registry_matched_odi_issuer_buy_quantity"] == "50"
     assert result["unmatched_sell_quantity"] == "25"
     assert result["current_registry_matched_fpi_client_known_net_quantity"] == "100"
     assert result["known_fpi_net_status"] == "partial_unmatched_or_odi_counterparties"
