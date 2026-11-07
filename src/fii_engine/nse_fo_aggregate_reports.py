@@ -34,7 +34,7 @@ REPORTS = {
     },
     "participant_volume": {
         "file_key": "FO-PARTICIPANTWISE-TRADING-VOL",
-        "filename_re": re.compile(r"^fao_participant_vol_(?P<date>\\d{8})\\.csv$"),
+        "filename_re": re.compile(r"^fao_participant_vol_(?P<date>\d{8})\.csv$"),
         "extension": ".csv",
         "scope": "participant_category_aggregate_not_stock_specific",
     },
@@ -133,7 +133,7 @@ def inspect_csv(payload: bytes, dataset: str) -> dict:
         "column_count": width,
         "columns": header,
         "header_sha256": hashlib.sha256(
-            (",".join(header) + "\\n").encode("utf-8")
+            (",".join(header) + "\n").encode("utf-8")
         ).hexdigest(),
         "preview_rows": rows[1:4],
     }
@@ -216,7 +216,7 @@ def capture_dataset(dataset: str, catalogue: dict, root: Path) -> dict:
             raise RuntimeError(f"{dataset}: immutable manifest hash mismatch")
     else:
         manifest_path.write_text(
-            json.dumps(manifest, indent=2, default=str) + "\\n", encoding="utf-8"
+            json.dumps(manifest, indent=2, default=str) + "\n", encoding="utf-8"
         )
     return {
         "dataset": dataset,
@@ -246,7 +246,7 @@ def ingest(root: Path = Path(".")) -> dict:
         ),
     }
     current_path = root / "data/raw/fno_aggregate_reports/current_manifest.json"
-    current_path.write_text(json.dumps(current, indent=2, default=str) + "\\n", encoding="utf-8")
+    current_path.write_text(json.dumps(current, indent=2, default=str) + "\n", encoding="utf-8")
     return current
 
 
