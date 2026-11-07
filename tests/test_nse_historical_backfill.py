@@ -150,7 +150,7 @@ def test_backfill_does_not_treat_missing_archive_as_zero(tmp_path, monkeypatch):
     )
     with pytest.raises(RuntimeError, match="historical backfill incomplete"):
         run_backfill(
-            tmp_path, sessions=2, max_calendar_days=1, as_of_date="2026-11-06"
+            tmp_path, sessions=2, max_calendar_days=2, as_of_date="2026-11-06"
         )
     assert not list((tmp_path / "data/snapshots/daily_stock_features").glob(
         "daily_stock_features_2026-11-05_*.csv"
