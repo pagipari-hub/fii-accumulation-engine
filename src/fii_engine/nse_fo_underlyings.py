@@ -281,7 +281,7 @@ def ingest(root: Path = Path(".")) -> dict:
         "snapshot_manifest": str(manifest_path),
     }
     current_manifest_path.write_text(
-        json.dumps(current_manifest, indent=2) + "\\n", encoding="utf-8"
+        json.dumps(current_manifest, indent=2) + "\n", encoding="utf-8"
     )
 
     as_of_date = datetime.now(ZoneInfo("Asia/Kolkata")).date()
