@@ -1,0 +1,30 @@
+{
+  "dataset": "nifty500_current_stock_fno_status",
+  "publisher": "NSE Indices + National Stock Exchange of India",
+  "generated_at_utc": "2026-11-07T07:16:34Z",
+  "nifty500_source_manifest": "data/snapshots/universe/nifty500_68e2eac52f778cb8.json",
+  "nifty500_source_normalized_sha256": "68e2eac52f778cb8b1b63c2dd5617386a942b6313553f58ef2ef7f4260dfa469",
+  "nifty500_source_freshness_statement": "Data as on last trading day of the previous month",
+  "nifty500_source_effective_date": null,
+  "fno_underlying_source_manifest": "data/snapshots/fno_underlyings/fno_underlyings_651a602baba006be_f9326ea63fb3f848.json",
+  "fno_underlying_normalized_sha256": "f9326ea63fb3f8482e66dee5b0c55ed1da02786e9e10f9ac8c9303c33a00be93",
+  "fno_current_retrieval_manifest": "data/raw/fno_underlyings/fno_underlyings_current_manifest.json",
+  "fno_membership_retrieved_at_utc": "2026-11-07T07:16:33Z",
+  "fno_membership_effective_date": null,
+  "tracker_reconciliation_status": "pass",
+  "tracker_reconciliation_mismatch_count": 0,
+  "symbol_aliases_sha256": "d6a72ee7ea05ae3a34e827e4aac262c4d62bbe457a199cf9756db570612d45c8",
+  "output_sha256": "09687cc1daaf830153d927e1b50b636681b8c281cf83ce9d51c914e21dd10e6d",
+  "counts": {
+    "nifty500_count": 501,
+    "eligible_count": 217,
+    "not_eligible_count": 284,
+    "unknown_count": 0,
+    "alias_match_count": 0
+  },
+  "status_semantics": {
+    "eligible": "symbol is present in NSE's current individual-stock F&O underlying list",
+    "not_eligible": "symbol is absent from NSE's current individual-stock F&O underlying list",
+    "unknown": "reserved for missing or unvalidated source data; none in this validated snapshot"
+  }
+}
