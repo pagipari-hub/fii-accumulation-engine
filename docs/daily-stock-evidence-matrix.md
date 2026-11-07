@@ -15,8 +15,9 @@ with no reported activity or unavailable source data.
 - **F&O membership:** current official NSE stock-underlying status joined by symbol
   and checked against the universe ISIN. `not_eligible` is distinct from `unknown`.
 - **Cash market:** official NSE CM UDiFF stock rows (`STK`) joined to the
-  universe by ISIN, with the reported series checked against the constituent
-  series. This preserves BE and REIT/RR constituents as well as EQ.
+  universe by the composite key (ISIN, constituent series). The same ISIN may
+  appear in more than one NSE series, so ISIN alone is not assumed unique in
+  the daily CM file. This preserves BE and REIT/RR constituents as well as EQ.
 - **Delivery:** official NSE delivery file joined by current symbol and the
   constituent's exact series (EQ, BE, RR, etc.). A dash in delivery
   quantity/percentage remains unreported, not zero.
