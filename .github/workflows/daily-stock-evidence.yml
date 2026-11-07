@@ -83,15 +83,10 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # Universe and F&O membership snapshots are committed by their dedicated workflows.
           for path in \
             data/raw/daily_stock_features \
             data/snapshots/daily_stock_features \
-            data/raw/universe \
-            data/snapshots/universe \
-            data/raw/fno_underlyings \
-            data/snapshots/fno_underlyings \
-            data/raw/fno_universe \
-            data/snapshots/fno_universe \
             data/raw/fii_dii/manifests \
             data/snapshots/fii_dii \
             data/raw/fii_dii/current_manifest.json \
