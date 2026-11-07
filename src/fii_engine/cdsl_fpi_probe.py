@@ -47,10 +47,12 @@ class _SummaryParser(HTMLParser):
         elif tag == "a":
             self._anchor = {"href": attributes.get("href") or "", "text": ""}
         elif tag == "input":
-            self.inputs.append({
+            item = {
                 key: str(attributes.get(key) or "")
-                for key in ("name", "value", "type", "id", "checked")
-            })
+                for key in ("name", "value", "type", "id")
+            }
+            item["checked"] = "true" if "checked" in attributes else ""
+            self.inputs.append(item)
 
     def handle_data(self, data: str) -> None:
         text = " ".join(data.split())
