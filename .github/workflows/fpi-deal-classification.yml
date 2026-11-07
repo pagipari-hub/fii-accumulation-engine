@@ -82,8 +82,10 @@ jobs:
           assert manifest["universe_row_count"] == 501
           assert manifest["universe_csv_sha256"]
           assert manifest["universe_join_policy"]
+          assert manifest["universe_snapshot_manifest_path"]
+          assert manifest["universe_snapshot_retrieved_at_utc"]
           assert manifest["universe_snapshot_freshness_statement"]
-          assert manifest["universe_effective_date_status"] == "exact_effective_date_not_supplied_in_current_feed"
+          assert "exact constituent effective date not supplied" in manifest["universe_effective_date_status"]
           assert manifest["event_csv_sha256"]
           assert manifest["stock_summary_csv_sha256"]
           print(json.dumps({k: manifest[k] for k in (
