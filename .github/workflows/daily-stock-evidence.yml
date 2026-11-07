@@ -78,37 +78,6 @@ jobs:
               print(f"  - {name}: {result.get('status', 'unknown')}")
           PY
 
-      - name: Commit normalized evidence snapshots and provenance
-        if: always() && github.event_name != 'pull_request'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          # Universe and F&O membership snapshots are committed by their dedicated workflows.
-          for path in \
-            data/raw/daily_stock_features \
-            data/snapshots/daily_stock_features \
-            data/raw/fii_dii/manifests \
-            data/snapshots/fii_dii \
-            data/raw/fii_dii/current_manifest.json \
-            data/raw/cash_market/nse_cm_cash_current_manifest.json \
-            data/raw/cash_market/manifests \
-            data/raw/fno_bhavcopy/nse_fo_udiff_current_manifest.json \
-            data/raw/fno_bhavcopy/manifests \
-            data/raw/fno_aggregate_reports/current_manifest.json \
-            data/raw/fno_aggregate_reports/manifests \
-            data/raw/bulk_block_deals/current_manifest.json \
-            data/raw/bulk_block_deals/manifests \
-            data/snapshots/bulk_block_deals; do
-            if [[ -e "$path" ]]; then git add "$path"; fi
-          done
-          if ! git diff --cached --quiet; then
-            git commit -m "data: record daily Nifty 500 stock evidence matrix"
-            git pull --rebase origin "$GITHUB_REF_NAME"
-            git push origin "HEAD:$GITHUB_REF_NAME"
-          else
-            echo "No normalized evidence or provenance changes to commit."
-          fi
-
       - name: Upload raw sources, normalized inputs and evidence matrix
         if: always() && github.event_name != 'pull_request'
         uses: actions/upload-artifact@v4
@@ -120,3 +89,41 @@ jobs:
             data/snapshots/**
           if-no-files-found: warn
           retention-days: 90
+
+      - name: Commit daily evidence matrix only
+        if: always() && github.event_name != 'pull_request'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          trade_date=$(python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path("data/raw/daily_stock_features/collector_run_status.json")
+          if path.is_file():
+              report = json.loads(path.read_text(encoding="utf-8"))
+              print(report.get("matrix", {}).get("trade_date") or "")
+          PY
+          )
+          committed=false
+          if [[ -n "$trade_date" ]]; then
+            git add data/raw/daily_stock_features data/snapshots/daily_stock_features
+            if ! git diff --cached --quiet; then
+              git commit -m "data: record daily Nifty 500 stock evidence matrix"
+              committed=true
+            fi
+          else
+            echo "No current market trade date; matrix not committed."
+          fi
+          # Collectors write temporary source files and may refresh tracked
+          # current pointers. Their own workflows persist those source datasets.
+          # The fused matrix has already been committed above and the raw run
+          # inputs have already been uploaded as an artifact.
+          git restore --worktree .
+          git clean -fdx
+          if [[ "$committed" == "true" ]]; then
+            git pull --rebase origin "$GITHUB_REF_NAME"
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          else
+            echo "No new daily evidence snapshot to push."
+          fi
