@@ -84,6 +84,7 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add data/raw/fno_underlyings data/snapshots/fno_underlyings
             git commit -m "data: refresh official NSE F&O underlyings"
+            git pull --rebase origin "$GITHUB_REF_NAME"
             git push
           else
             echo "Official NSE F&O underlying snapshot unchanged; no commit required."
