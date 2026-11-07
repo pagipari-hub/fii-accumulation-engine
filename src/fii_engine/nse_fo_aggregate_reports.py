@@ -41,7 +41,7 @@ REPORTS = {
     "fii_derivatives_statistics": {
         "file_key": "FO-FII-DERIVATIVE-STAT",
         "filename_re": re.compile(
-            r"^fii_stats_(?P<date>\\d{2}-[A-Za-z]{3}-\\d{4})\\.xls$"
+            r"^fii_stats_(?P<date>\d{2}-[A-Za-z]{3}-\d{4})\.xls$"
         ),
         "extension": ".xls",
         "scope": "aggregate_fii_derivatives_only",
