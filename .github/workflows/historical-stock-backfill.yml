@@ -1,0 +1,148 @@
+name: Backfill official NSE stock evidence history
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/fii_engine/nse_historical_backfill.py"
+      - "tests/test_nse_historical_backfill.py"
+      - ".github/workflows/historical-stock-backfill.yml"
+  pull_request:
+    paths:
+      - "src/fii_engine/nse_historical_backfill.py"
+      - "tests/test_nse_historical_backfill.py"
+      - ".github/workflows/historical-stock-backfill.yml"
+  workflow_dispatch:
+    inputs:
+      sessions:
+        description: "Number of trading sessions to retain"
+        required: true
+        default: "60"
+        type: string
+      max_calendar_days:
+        description: "Maximum calendar days to search backward"
+        required: true
+        default: "120"
+        type: string
+      as_of_date:
+        description: "Optional end date (YYYY-MM-DD); defaults to latest existing snapshot"
+        required: false
+        default: ""
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-nifty500-stock-evidence
+  cancel-in-progress: false
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install project and test dependencies
+        run: python -m pip install -e ".[dev]"
+
+      - name: Run complete project test suite
+        run: pytest
+
+      - name: Backfill official NSE historical stock evidence
+        if: github.event_name != 'pull_request'
+        env:
+          REQUESTED_SESSIONS: ${{ github.event.inputs.sessions || '60' }}
+          MAX_CALENDAR_DAYS: ${{ github.event.inputs.max_calendar_days || '120' }}
+          AS_OF_DATE: ${{ github.event.inputs.as_of_date || '' }}
+        run: |
+          args=(--repo-root . --sessions "$REQUESTED_SESSIONS" --max-calendar-days "$MAX_CALENDAR_DAYS")
+          if [[ -n "$AS_OF_DATE" ]]; then
+            args+=(--as-of-date "$AS_OF_DATE")
+          fi
+          python -m fii_engine.nse_historical_backfill "\${args[@]}"
+
+      - name: Validate 60-session history and provenance
+        if: github.event_name != 'pull_request'
+        run: |
+          python - <<'PY'
+          import csv
+          import hashlib
+          import json
+          from pathlib import Path
+
+          manifest_path = Path("data/raw/historical_backfill/backfill_manifest_current.json")
+          assert manifest_path.is_file(), "historical backfill manifest missing"
+          manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+          assert manifest["status"] == "complete"
+          assert manifest["sessions_available"] >= manifest["target_sessions"]
+          assert len(manifest["trade_dates"]) == manifest["sessions_available"]
+          for item in manifest["created_snapshots"]:
+              path = Path(item["snapshot_path"])
+              assert path.is_file(), f"missing normalized snapshot: {path}"
+              assert hashlib.sha256(path.read_bytes()).hexdigest() == item["snapshot_sha256"]
+              with path.open(newline="", encoding="utf-8") as handle:
+                  rows = list(csv.DictReader(handle))
+              assert len(rows) == manifest["current_universe_count"]
+              assert len({row["symbol"] for row in rows}) == len(rows)
+              assert all(row["trade_date"] == item["trade_date"] for row in rows)
+          for source in manifest["source_refs"]:
+              raw = Path(source["raw_path"])
+              assert raw.is_file(), f"missing raw source archive: {raw}"
+              assert hashlib.sha256(raw.read_bytes()).hexdigest() == source["raw_sha256"]
+          history_path = Path("data/raw/historical_features/historical_features_current_manifest.json")
+          history = json.loads(history_path.read_text(encoding="utf-8"))
+          assert history["daily_stock_session_count"] >= manifest["target_sessions"]
+          stock_path = Path("data/raw/historical_features/stock_historical_features_current.csv")
+          with stock_path.open(newline="", encoding="utf-8") as handle:
+              stock_rows = list(csv.DictReader(handle))
+          assert len(stock_rows) == manifest["current_universe_count"]
+          print(json.dumps({
+              "status": manifest["status"],
+              "sessions_available": manifest["sessions_available"],
+              "target_sessions": manifest["target_sessions"],
+              "as_of_date": manifest["as_of_date"],
+              "historical_sessions": manifest["trade_dates"],
+              "new_snapshots": len(manifest["created_snapshots"]),
+              "unavailable_dates": len(manifest["unavailable_dates"]),
+              "stock_history_rows": len(stock_rows),
+              "history_manifest": history_path.as_posix(),
+          }, indent=2))
+          PY
+
+      - name: Upload raw archives and normalized history
+        if: always() && github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: nse-historical-stock-backfill-${{ github.run_id }}
+          path: |
+            data/raw/historical_backfill/
+            data/snapshots/daily_stock_features/*.csv
+            data/raw/historical_features/
+            data/snapshots/historical_features/
+          if-no-files-found: warn
+          retention-days: 90
+
+      - name: Commit immutable daily snapshots and historical outputs
+        if: github.event_name != 'pull_request'
+        run: |
+          if [[ -n "$(git status --porcelain data/snapshots/daily_stock_features data/raw/historical_backfill/backfill_manifest_current.json data/raw/historical_features data/snapshots/historical_features)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add data/snapshots/daily_stock_features data/raw/historical_backfill/backfill_manifest_current.json data/raw/historical_features data/snapshots/historical_features
+            git commit -m "data: backfill official NSE stock evidence history"
+            git pull --rebase origin "$GITHUB_REF_NAME"
+            git push
+          else
+            echo "No new historical snapshots or outputs."
+          fi

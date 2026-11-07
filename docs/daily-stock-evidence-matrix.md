@@ -157,3 +157,33 @@ It records 5-, 20- and 60-session participant-category OI changes and traded
 contract totals for the index/stock futures/options groups. FII, DII, Client and
 Pro remain separate categories. These reports are aggregate positioning data;
 they do not identify which individual stocks a participant traded.
+
+
+## Official 60-session historical backfill
+
+The one-time backfill workflow downloads historical NSE UDiFF cash-market and
+F&O bhavcopies plus the full cash/delivery report. The official archive paths
+were first validated against three dates (1 Sep, 30 Oct and 6 Nov 2026), with
+all nine source files passing embedded-date and schema checks.
+
+The backfill adds up to 60 distinct trading-date snapshots to
+`data/snapshots/daily_stock_features/` using the same matrix schema as the
+daily collector. It then rebuilds the 5-, 20- and 60-session outputs.
+
+Important boundaries:
+
+- The current Nifty 500 constituent snapshot is applied retrospectively to
+  these dates. This is a current-constituent research panel, not point-in-time
+  historical Nifty 500 membership and not suitable for survivorship-bias-free
+  backtesting.
+- Historical F&O membership is marked `unknown`. Actual daily stock futures
+  and options rows are recorded where present; today's F&O list is not projected
+  backward.
+- Historical bulk/block deals, quarterly ownership and market-wide FII/DII
+  history are not fabricated. Their historical fields remain explicitly
+  unavailable or not collected.
+- A missing archive date is recorded as unavailable, never as a zero-activity
+  day. A session is included only when all three official source files validate.
+- Raw source files and hashes are retained in the 90-day workflow artifact;
+  compact normalized daily snapshots and the backfill provenance manifest are
+  committed to the repository.
