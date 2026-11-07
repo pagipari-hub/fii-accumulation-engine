@@ -2,6 +2,7 @@ name: Official NSE individual-stock F&O underlyings
 
 on:
   push:
+    branches: [main]
     paths:
       - "src/fii_engine/nse_fo_underlyings.py"
       - "src/fii_engine/fno_universe.py"

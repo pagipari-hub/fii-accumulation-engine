@@ -55,3 +55,24 @@ The UDiFF bhavcopy contains market-wide contract-level trades, prices, volume an
 - [NSE All Reports – Derivatives](https://www.nseindia.com/all-reports-derivatives)
 - [NSE F&O report catalogue API](https://www.nseindia.com/api/daily-reports?key=FO)
 - [NSE circular on UDiFF format transition](https://nsearchives.nseindia.com/content/circulars/INVG61787.pdf)
+
+
+## First live validation — 6 November 2026
+
+The first successful main-branch capture completed in GitHub Actions run
+[42354484351](https://github.com/pagipari-hub/fii-accumulation-engine/actions/runs/42354484351)
+on 7 November 2026.
+
+- Catalogue report key: `FO-UDIFF-BHAVCOPY-CSV`
+- Official archive: `BhavCopy_NSE_FO_0_0_0_20261106_F_0000.csv.zip`
+- Archive size: 1,282,557 bytes; SHA-256:
+  `9021b35dccd79f13d642bee45dc0fc8660122fadcb673158c6969c43c1fbf8d5`
+- Parsed CSV: 7,381,195 bytes; SHA-256:
+  `03d56ecc6e0436dd55e870f55f7200f0f6b26c0d3a574ae39c33be446837d1df`
+- Rows and distinct contract IDs: 40,471 each
+- Instrument types: 649 `STF`, 33,179 `STO`, 18 `IDF`, 6,625 `IDO`
+- Distinct underlying symbols across index and stock contracts: 224; stock futures/options symbols: 218
+- All 34 observed source columns matched the known UDiFF header; no unrecognized columns.
+- `TradDt` and `BizDt` both matched 2026-11-06.
+
+This is one live date/schema validation, not yet a historical backfill or proof of long-term archive durability. Volume and turnover unit semantics remain intentionally uninterpreted by the ingestion layer.

@@ -80,13 +80,14 @@ sources:
     publisher: "National Stock Exchange of India"
     reference_url: "https://www.nseindia.com/all-reports-derivatives"
     frequency: "daily"
-    required_fields: [trade_date, instrument, symbol, expiry, open_interest, traded_volume]
-    status: "adapter_implemented_live_validation_pending"
+    required_fields: [TradDt, BizDt, Sgmt, Src, FinInstrmTp, FinInstrmId, TckrSymb, XpryDt, StrkPric, OptnTp, OpnIntrst, ChngInOpnIntrst, TtlTradgVol, TtlTrfVal]
+    status: "live_validated_current_capture"
     finality: "final"
     catalogue_api: "https://www.nseindia.com/api/daily-reports?key=FO"
     report_key: "FO-UDIFF-BHAVCOPY-CSV"
     archive_host: "nsearchives.nseindia.com"
-    archive_policy: "content_addressed_raw_archive_and_parsed_csv_as_workflow_artifact; immutable_sha256_manifest_committed"
+    archive_policy: "raw_zip_and_parsed_csv_as_90_day_workflow_artifact; content_addressed_sha256_manifest_committed"
+    last_live_validated_trade_date: "2026-11-06"
   nse_fo_contract_master:
     description: "F&O MII contract master"
     publisher: "National Stock Exchange of India"

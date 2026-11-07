@@ -2,6 +2,7 @@ name: Official source discovery
 
 on:
   push:
+    branches: [main]
     paths:
       - "src/fii_engine/source_probe.py"
       - "tests/test_source_probe.py"
