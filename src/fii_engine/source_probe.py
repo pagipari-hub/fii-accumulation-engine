@@ -153,7 +153,7 @@ def inspect_script(url: str, page_url: str, timeout: int = 15) -> dict[str, obje
     request = Request(
         url,
         headers={
-            "User-Agent": USER_AGENT,
+            **REQUEST_HEADERS,
             "Accept": "application/javascript,text/javascript,*/*",
             "Referer": page_url,
         },
