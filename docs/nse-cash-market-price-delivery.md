@@ -31,7 +31,8 @@ Validation includes:
 - unique symbol/series/date keys;
 - required price and delivery fields are present;
 - deliverable quantity is non-negative and no greater than traded quantity;
-- delivery percentage agrees with deliverable quantity divided by traded quantity within a rounding tolerance.
+- delivery percentage agrees with deliverable quantity divided by traded quantity within a rounding tolerance;
+- NSE `-` sentinels remain unavailable, never zero. A traded row with both delivery fields unavailable is retained for price/volume use and counted as `not_reported_with_trades`, including counts by series. Partial delivery fields remain a validation failure.
 
 Delivery percentage is a market microstructure observation. It is not proof of institutional buying, FII ownership or beneficial ownership. It must be interpreted alongside price/volume context and other independent evidence.
 

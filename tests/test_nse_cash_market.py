@@ -191,6 +191,16 @@ def test_all_dash_delivery_observations_are_not_reported_not_zero():
 def test_rejects_partial_dash_delivery_fields_for_traded_security():
     with pytest.raises(ValueError, match="incomplete delivery quantity/percentage"):
         validate_delivery(
-            _delivery_csv(DELIV_QTY="-", DELIV_PER="-"),
+            _delivery_csv(DELIV_QTY="-", DELIV_PER="30.00"),
             "2026-11-06",
         )
+
+
+def test_positive_traded_quantity_with_both_delivery_fields_unavailable_is_retained():
+    result = validate_delivery(
+        _delivery_csv(DELIV_QTY="-", DELIV_PER="-"),
+        "2026-11-06",
+    )
+    assert result["delivery_observation_counts"]["not_reported_with_trades"] == 1
+    assert result["delivery_observation_counts"]["reported"] == 0
+    assert result["delivery_unreported_by_series"] == {"EQ": 1}
