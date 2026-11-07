@@ -56,9 +56,11 @@ are ignored when their collector did not succeed.
 
 GitHub Actions runs the pipeline on weekdays at 23:00 IST and supports manual
 dispatch. It uploads the raw/normalized run inputs and the evidence matrix as a
-90-day artifact, while committing normalized daily snapshots and provenance
-manifests. A partial run is labelled partial; a run with no current cash or F&O
-market data does not claim a valid market snapshot.
+90-day artifact, then commits only the fused daily matrix. Individual source
+workflows own and persist their respective source snapshots and provenance
+manifests, avoiding concurrent commits to the same paths. A partial run is
+labelled partial; a run with no current cash or F&O market data does not claim a
+valid market snapshot.
 
 ## Output
 
