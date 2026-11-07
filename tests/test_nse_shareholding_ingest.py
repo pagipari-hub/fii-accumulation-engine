@@ -6,13 +6,15 @@ from fii_engine import nse_shareholding_ingest as module
 
 
 def _xbrl(
-    i_shares: int, ii_shares: int, other_shares: int, overseas_shares: int = 0
+    i_shares: int, ii_shares: int, other_shares: int,
+    overseas_shares: int = 0, fdi_shares: int = 0
 ) -> bytes:
-    foreign_total = i_shares + ii_shares + other_shares + overseas_shares
+    foreign_total = i_shares + ii_shares + other_shares + overseas_shares + fdi_shares
     i_pct = i_shares / 1000
     ii_pct = ii_shares / 1000
     other_pct = other_shares / 1000
     overseas_pct = overseas_shares / 1000
+    fdi_pct = fdi_shares / 1000
     foreign_pct = foreign_total / 1000
     contexts = []
     facts = []
@@ -21,6 +23,7 @@ def _xbrl(
         ("II", "InstitutionsForeignPortfolioInvestorCategoryTwoMember", ii_shares, ii_pct),
         ("OTHER", "OtherInstitutionsForeignMember", other_shares, other_pct),
         ("OVERSEAS", "OverseasDepositoriesMember", overseas_shares, overseas_pct),
+        ("FDI", "ForeignDirectInvestmentMember", fdi_shares, fdi_pct),
         ("FOREIGN", "InstitutionsForeignMember", foreign_total, foreign_pct),
     ]
     for context_id, member, shares, pct in members:
@@ -140,6 +143,7 @@ def test_ingests_fpi_categories_and_selects_latest_revision(tmp_path, monkeypatc
     assert rows["ABC"]["fpi_total_ownership_percentage_points"] == "20.00"
     assert rows["ABC"]["fpi_reconciliation_status"] == "matched"
     assert rows["ABC"]["overseas_depositories_shares"] == "0"
+    assert rows["ABC"]["foreign_direct_investment_shares"] == "0"
     assert rows["XYZ"]["identity_join_method"] == "symbol_and_company_name"
     assert rows["XYZ"]["filing_status"] == "parsed"
     assert rows["DEF"]["identity_status"] == "isin_mismatch"
