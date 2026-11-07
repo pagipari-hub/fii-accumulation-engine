@@ -31,6 +31,7 @@ FPI_MEMBERS = {
 FOREIGN_AGGREGATE_MEMBERS = {
     "InstitutionsForeign": "foreign_institutions_total",
     "OtherInstitutionsForeign": "other_foreign_institutions",
+    "OverseasDepositories": "overseas_depositories",
 }
 
 
@@ -206,19 +207,29 @@ def parse_xbrl(payload: bytes) -> dict:
         category_i = shares("InstitutionsForeignPortfolioInvestorCategoryOne")
         category_ii = shares("InstitutionsForeignPortfolioInvestorCategoryTwo")
         other_foreign = shares("OtherInstitutionsForeign")
+        overseas_row = by_date_member.get((reporting_date, "OverseasDepositories"))
+        overseas = None if overseas_row is None else overseas_row["shares"]
         foreign_total = shares("InstitutionsForeign")
-        available = all(
+        base_available = all(
             value is not None
             for value in (category_i, category_ii, other_foreign, foreign_total)
         )
+        # Include overseas-depository holdings only when the issuer explicitly reports
+        # the category. An absent context is not converted to zero; a present nil fact
+        # remains unavailable.
+        overseas_available = overseas_row is None or overseas is not None
+        available = base_available and overseas_available
         component_sum = (
-            category_i + category_ii + other_foreign if available else None
+            category_i + category_ii + other_foreign
+            + (overseas if overseas_row is not None else 0)
+            if available else None
         )
         reconciliation.append({
             "reporting_date": reporting_date,
             "fpi_category_i_shares": category_i,
             "fpi_category_ii_shares": category_ii,
             "other_foreign_institution_shares": other_foreign,
+            "overseas_depositories_shares": overseas,
             "foreign_institutions_total_shares": foreign_total,
             "component_sum_shares": component_sum,
             "difference_shares": (
@@ -229,14 +240,15 @@ def parse_xbrl(payload: bytes) -> dict:
                 else "mismatch" if available else "not_comparable_missing_component"
             ),
             "scope_note": (
-                "FPI Category I and II are distinct from other foreign institutions; "
-                "the aggregate foreign-institutions row also includes other foreign institutions."
+                "FPI Category I and II are separate from other foreign institutions. "
+                "OverseasDepositories is included when explicitly reported; absent or nil "
+                "components are not assumed to be zero."
             ),
         })
 
     return {
         "parser": "nse_shareholding_xbrl",
-        "parser_version": 1,
+        "parser_version": 2,
         "category_axis": CATEGORY_AXIS,
         "reporting_dates": dates,
         "category_record_count": len(category_records),
