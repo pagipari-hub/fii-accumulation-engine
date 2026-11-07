@@ -207,7 +207,7 @@ def inspect_fo_quality(expanded: bytes, trading_date: str) -> dict:
         if not raw_expiry.isdigit() or int(raw_expiry) <= 0:
             continue
         expiry = datetime.fromtimestamp(
-            int(raw_expiry), tz=__import__("datetime").timezone.utc
+            int(raw_expiry), tz=timezone.utc
         ).date()
         expiries.append(expiry)
         if expiry >= report_date and row.get("PrtdToTrad") == "1":
@@ -262,7 +262,7 @@ def _capture(record: dict, page_url: str, output_dir: Path) -> dict:
     raw_path.write_bytes(payload)
     return {
         **record,
-        "retrieved_at_utc": datetime.utcnow().isoformat(timespec="seconds") + "Z",
+        "retrieved_at_utc": datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
         "compressed_bytes": len(payload),
         "decompressed_bytes": len(expanded),
         "raw_sha256": raw_hash,
