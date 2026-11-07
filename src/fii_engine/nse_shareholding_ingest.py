@@ -19,7 +19,7 @@ from fii_engine.nse_shareholding_xbrl import parse_xbrl
 TRUSTED_XBRL_HOST = "nsearchives.nseindia.com"
 TRUSTED_XBRL_PATH = "/corporate/xbrl/"
 UNIVERSE_PATH = "data/raw/universe/nifty500_current.csv"
-PARSER_VERSION = 3
+PARSER_VERSION = 4
 
 OWNERSHIP_FIELDS = [
     "reporting_date", "symbol", "company_name", "isin",
@@ -30,8 +30,9 @@ OWNERSHIP_FIELDS = [
     "fpi_category_ii_ownership_percentage_points",
     "fpi_total_ownership_percentage_points",
     "other_foreign_institution_shares", "overseas_depositories_shares",
-    "foreign_institutions_total_shares", "fpi_reconciliation_status",
-    "xbrl_sha256", "source_master_sha256",
+    "foreign_direct_investment_shares", "foreign_venture_capital_investor_shares",
+    "sovereign_wealth_funds_foreign_shares", "foreign_institutions_total_shares",
+    "fpi_reconciliation_status", "xbrl_sha256", "source_master_sha256",
 ]
 
 
@@ -268,6 +269,9 @@ def _build_ownership_rows(
             fpi_ii = categories.get("fpi_category_ii", {})
             other_foreign = categories.get("other_foreign_institutions", {})
             overseas = categories.get("overseas_depositories", {})
+            foreign_direct = categories.get("foreign_direct_investment", {})
+            foreign_vc = categories.get("foreign_venture_capital_investors", {})
+            foreign_swf = categories.get("sovereign_wealth_funds_foreign", {})
             foreign_total = categories.get("foreign_institutions_total", {})
             reconciliation = next(
                 (item for item in parsed["fpi_reconciliation"] if item["reporting_date"] == reporting_date),
@@ -287,6 +291,9 @@ def _build_ownership_rows(
                 ),
                 "other_foreign_institution_shares": other_foreign.get("shares"),
                 "overseas_depositories_shares": overseas.get("shares"),
+                "foreign_direct_investment_shares": foreign_direct.get("shares"),
+                "foreign_venture_capital_investor_shares": foreign_vc.get("shares"),
+                "sovereign_wealth_funds_foreign_shares": foreign_swf.get("shares"),
                 "foreign_institutions_total_shares": foreign_total.get("shares"),
                 "fpi_reconciliation_status": reconciliation.get("status"),
                 "xbrl_sha256": filing["xbrl_sha256"],
