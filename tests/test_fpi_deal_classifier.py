@@ -75,9 +75,9 @@ def test_registry_match_distinguishes_direct_fpi_from_odi_and_unmatched():
         "event_id": "3", "trade_date": "2026-11-06", "client_name": "TENCENT CLOUD EUROPE B.V.",
         "client_normalized_name": normalize_registry_name("TENCENT CLOUD EUROPE B.V."),
     }, registry, date(2026, 11, 6))
-    assert direct["counterparty_class"] == "registered_fpi_client"
+    assert direct["counterparty_class"] == "current_registry_matched_fpi_client"
     assert direct["temporal_status"] == "observed_in_registry_on_trade_date"
-    assert odi["counterparty_class"] == "odi_issuer"
+    assert odi["counterparty_class"] == "current_registry_matched_odi_issuer"
     assert unknown["counterparty_class"] == "unmatched"
     assert unknown["temporal_status"] == "not_established"
 
@@ -113,8 +113,8 @@ def test_stock_summary_keeps_unmatched_and_odi_out_of_direct_fpi_net():
         },
     ]
     result = _stock_summary(events, date(2026, 10, 30), date(2026, 11, 6))[0]
-    assert result["registered_fpi_client_buy_quantity"] == "100"
+    assert result["current_registry_matched_fpi_client_buy_quantity"] == "100"
     assert result["odi_issuer_buy_quantity"] == "50"
     assert result["unmatched_sell_quantity"] == "25"
-    assert result["registered_fpi_client_known_net_quantity"] == "100"
+    assert result["current_registry_matched_fpi_client_known_net_quantity"] == "100"
     assert result["known_fpi_net_status"] == "partial_unmatched_or_odi_counterparties"
