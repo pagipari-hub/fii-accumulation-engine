@@ -16,7 +16,8 @@ Research checked: 7 November 2026. This register distinguishes source availabili
 | Participant-wise derivatives OI and volume | NSE All Reports – Derivatives, `FO-PARTICIPANTWISE-OI` and `FO-PARTICIPANTWISE-TRADING-VOL` | Live-validated 6 Nov 2026: 48 normalized rows per report, by Client/DII/FII/Pro and index/stock futures/options | Participant-category aggregates, not participant-by-stock positions. OI has observed one-contract source reconciliation differences; volume reconciles exactly. Never allocate these values to individual equities. |
 | FII derivatives statistics | NSE All Reports – Derivatives, `FO-FII-DERIVATIVE-STAT` | Live-validated 6 Nov 2026: 16 normalized rows, including index-underlying detail and aggregate stock groups | FII aggregate only; stock futures/options are all-stock totals, not individual stock positions. Amount definitions and OI basis are documented; keep section totals distinct from details. |
 | Stock MWPL / ban context | NSE All Reports – Derivatives, client position % of stock MWPL and security-in-ban-period reports | Market-wide position-limit context and ban status | Preserve the report date and applicable denominator; do not infer stock-level FII ownership from client/MWPL reports. |
-| Equity daily OHLCV and delivery | NSE equity reports / official bhavcopy archives | Security-level cash-market price, volume and delivery fields where published | Validate current and legacy schemas separately; retain series and ISIN. |
+| Cash-market OHLCV | [NSE All Reports – Equities](https://www.nseindia.com/all-reports), CM UDiFF Common Bhavcopy Final ZIP selected from the official CM catalogue | Adapter implemented; live validation pending. Final cash-market price, turnover, volume, ISIN, symbol and series | Current UDiFF format only; older common bhavcopy formats are discontinued. Preserve all instrument types/series and use ISIN+symbol+series for reconciliation. |
+| Security-wise delivery | [NSE All Reports – Equities](https://www.nseindia.com/all-reports), Full Bhavcopy and Security Deliverable data | Adapter implemented; live validation pending. Traded quantity, deliverable quantity and delivery percentage by symbol/series | Delivery quantity is not participant attribution or beneficial ownership. Validate `DELIV_QTY <= TTL_TRD_QNTY` and the published percentage arithmetic; missing values fail closed. |
 
 ## NSE MII reference-master capture
 
@@ -117,3 +118,27 @@ The NSE-only daily API collector is implemented in
 trade date 6 Nov 2026. The response's net values reconciled exactly to
 buy minus sell for both categories. The combined NSE/BSE/MSEI series and
 final NSDL/CDSL FPI data remain separate sources.
+
+
+## NSE cash-market price and delivery adapter
+
+The cash-market adapter is implemented in `src/fii_engine/nse_cash_market.py`
+with daily automation in `.github/workflows/nse-cash-market-price-delivery.yml`.
+It selects both reports from the official NSE CM daily-report catalogue
+(`/api/daily-reports?key=CM`) using the catalogue's filename, archive path
+and trading date. It does not construct archive URLs or use an unofficial mirror.
+
+The two datasets are kept separate:
+
+- **CM UDiFF Common Bhavcopy Final:** market-wide security-level cash prices,
+  traded volume, turnover, ISIN, symbol and series.
+- **Full Bhavcopy and Security Deliverable data:** security-wise traded quantity,
+  deliverable quantity and delivery percentage.
+
+Both files must report the same trade date. The parsers validate required fields,
+dates, numeric values, duplicate keys and delivery arithmetic. A failed or missing
+source blocks publication; it is never converted to zero. Raw files and parsed
+UDiFF CSV are uploaded as a 90-day workflow artifact. Compact immutable
+provenance manifests are committed to the repository.
+
+Live source validation is pending the first main-branch scheduled/manual run.
