@@ -19,7 +19,8 @@ REGISTRY_MANIFEST = Path("data/raw/cdsl_fpi_registry/cdsl_fpi_registry_current_m
 DEAL_MANIFEST_DIR = Path("data/raw/bulk_block_deals/manifests")
 EVENT_FIELDS = [
     "event_id", "trade_date", "symbol", "security_name", "deal_type",
-    "client_name", "client_normalized_name", "side", "quantity", "weighted_average_price", "deal_value",
+    "client_name", "client_normalized_name", "source_client_names", "source_security_names",
+    "side", "quantity", "weighted_average_price", "deal_value",
     "registry_match_status", "name_match_type", "counterparty_class",
     "registration_numbers", "valid_upto_dates", "registry_record_count",
     "registry_snapshot_date", "temporal_status", "cross_report_duplicate",
@@ -222,6 +223,8 @@ def _deduplicate_cross_report_rows(rows: list[dict]) -> list[dict]:
                 "deal_type": ";".join(sorted({row["deal_type"] for row in source_rows})),
                 "client_name": canonical["client_name"],
                 "client_normalized_name": client_norm,
+                "source_client_names": ";".join(sorted({row["client_name"] for row in source_rows})),
+                "source_security_names": ";".join(sorted({row["security_name"] for row in source_rows})),
                 "side": canonical["side"],
                 "quantity": canonical["quantity"],
                 "weighted_average_price": canonical["weighted_average_price"],
@@ -385,13 +388,10 @@ def _stock_summary(
             "temporally_unverified_fpi_sell_quantity": str(int(totals["unverified_fpi_sell_quantity"])),
             "counterparty_identity_coverage_pct": round(identified / total_events * 100, 2) if total_events else 0,
             "known_fpi_net_status": net_status,
-            "registry_temporal_status": (
-                "post_trade_snapshot_registration_start_unknown"
-                if any(item["temporal_status"] == "post_trade_snapshot_registration_start_unknown" for item in items)
-                else "observed_in_registry_on_trade_date"
-                if any(item["temporal_status"] == "observed_in_registry_on_trade_date" for item in items)
-                else "no_temporally_verified_fpi_client"
-            ),
+            "registry_temporal_status": ";".join(sorted({
+                item["temporal_status"] for item in items
+                if item["counterparty_class"] == "current_registry_matched_fpi_client"
+            })) or "no_current_registry_matched_fpi_clients",
         })
     return results
 
