@@ -6,6 +6,7 @@ import pytest
 
 from fii_engine.nse_cash_market import (
     _select,
+    _capture,
     validate_delivery,
     validate_udiff,
 )
@@ -149,3 +150,16 @@ def test_rejects_missing_delivery_values_instead_of_zero_filling():
 def test_rejects_delivery_quantity_greater_than_traded_quantity():
     with pytest.raises(ValueError, match="invalid traded/delivered quantity"):
         validate_delivery(_delivery_csv(DELIV_QTY="100001"), "2026-11-06")
+
+
+def test_capture_preserves_human_formatted_catalogue_file_size(monkeypatch):
+    import fii_engine.nse_cash_market as module
+
+    record = {
+        "kind": "delivery",
+        "download_url": "https://nsearchives.nseindia.com/products/content/file.csv",
+        "reported_file_size": "203.19 KB",
+    }
+    monkeypatch.setattr(module, "_get", lambda *args, **kwargs: b"csv-data")
+    assert _capture(record) == b"csv-data"
+    assert record["reported_file_size"] == "203.19 KB"
