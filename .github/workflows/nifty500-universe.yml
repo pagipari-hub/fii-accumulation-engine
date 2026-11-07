@@ -1,6 +1,11 @@
 name: Official Nifty 500 universe refresh
 
 on:
+  push:
+    paths:
+      - "src/fii_engine/nifty500_universe.py"
+      - "config/sources.yaml"
+      - ".github/workflows/nifty500-universe.yml"
   workflow_dispatch:
   schedule:
     # Weekly check, Monday 09:47 IST. Commit only when the official snapshot changes.
