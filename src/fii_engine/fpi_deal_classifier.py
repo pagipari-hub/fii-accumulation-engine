@@ -19,7 +19,7 @@ REGISTRY_MANIFEST = Path("data/raw/cdsl_fpi_registry/cdsl_fpi_registry_current_m
 UNIVERSE_CSV = Path("data/raw/universe/nifty500_current.csv")
 DEAL_MANIFEST_DIR = Path("data/raw/bulk_block_deals/manifests")
 EVENT_FIELDS = [
-    "event_id", "trade_date", "symbol", "isin", "security_name", "deal_type",
+    "event_id", "trade_date", "symbol", "security_name", "deal_type",
     "source_isin", "matched_universe_isin", "universe_join_method",
     "nifty500_membership_status", "nifty500_member_verified",
     "universe_company_name", "universe_industry", "universe_series",
@@ -170,7 +170,7 @@ def _universe_membership(
         or universe_by_company_name is None
     ):
         return {
-            "source_isin": str(event.get("isin", "")),
+            "source_isin": str(event.get("source_isin", "")),
             "matched_universe_isin": "",
             "universe_join_method": "not_checked",
             "nifty500_membership_status": "universe_not_checked",
@@ -352,7 +352,7 @@ def _deduplicate_cross_report_rows(rows: list[dict]) -> list[dict]:
                 "event_id": event_id,
                 "trade_date": canonical["trade_date"],
                 "symbol": canonical["symbol"],
-                "isin": canonical.get("isin", ""),
+                "source_isin": canonical.get("isin", ""),
                 "security_name": canonical["security_name"],
                 "deal_type": ";".join(sorted({row["deal_type"] for row in source_rows})),
                 "client_name": canonical["client_name"],
