@@ -26,7 +26,8 @@ def test_read_symbols_uses_symbol_column_and_deduplicates(tmp_path: Path):
     assert read_symbols(source) == ["HDFCBANK", "ICICIBANK"]
 
 
-def test_read_symbols_supports_first_column_without_header(tmp_path: Path):
+def test_read_symbols_rejects_missing_symbol_header(tmp_path: Path):
     source = tmp_path / "symbols.csv"
     source.write_text("HDFCBANK\nICICIBANK\n")
-    assert read_symbols(source) == ["ICICIBANK"]
+    with pytest.raises(ValueError, match="symbol"):
+        read_symbols(source)
