@@ -74,6 +74,8 @@ def parse_xbrl(payload: bytes) -> dict:
                 dimension = child.attrib.get("dimension", "")
                 if _local_name(dimension) == CATEGORY_AXIS:
                     member = _local_name((child.text or "").strip())
+                    if member.endswith("Member"):
+                        member = member[:-6]
                     if member:
                         category_members.append(member)
         if len(category_members) > 1:
@@ -127,6 +129,8 @@ def parse_xbrl(payload: bytes) -> dict:
                 continue
             value, unit_ref = item
             if output_name in {"shares", "fully_paid_shares", "shareholder_count", "voting_rights"}:
+                if value < 0:
+                    raise ValueError(f"negative count in {fact_name}, context {context_id}")
                 if value != value.to_integral_value():
                     raise ValueError(
                         f"fractional count in {fact_name}, context {context_id}"
