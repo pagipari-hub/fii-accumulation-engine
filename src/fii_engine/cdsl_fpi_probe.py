@@ -19,14 +19,13 @@ PAGES = {
     "archive": "https://www.cdslindia.com/Publications/FIITrends.aspx",
     "archive_data_after_2009": "https://www.cdslindia.com/Publications/ArchiveDataAfter2009.aspx",
     "trade_wise_equity": "https://www.cdslindia.com/Publications/EquityDataFII.html",
-    "registry_B": "https://www.cdslindia.com/Publications/RegForeignInstInvstr.aspx?indexname=B",
-    "registry_G": "https://www.cdslindia.com/Publications/RegForeignInstInvstr.aspx?indexname=G",
-    "registry_M": "https://www.cdslindia.com/Publications/RegForeignInstInvstr.aspx?indexname=M",
-    "registry_N": "https://www.cdslindia.com/Publications/RegForeignInstInvstr.aspx?indexname=N",
-    "registry_P": "https://www.cdslindia.com/Publications/RegForeignInstInvstr.aspx?indexname=P",
-    "registry_S": "https://www.cdslindia.com/Publications/RegForeignInstInvstr.aspx?indexname=S",
-    "registry_T": "https://www.cdslindia.com/Publications/RegForeignInstInvstr.aspx?indexname=T",
 }
+for _letter in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
+    PAGES[f"registry_{_letter}"] = (
+        "https://www.cdslindia.com/Publications/RegForeignInstInvstr.aspx"
+        f"?indexname={_letter}"
+    )
+
 USER_AGENT = (
     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
     "(KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36"
@@ -100,6 +99,39 @@ def summarize_html(payload: bytes) -> dict:
         "input_count": len(parser.inputs),
         "inputs": parser.inputs[:500],
     }
+
+
+def parse_registry_html(payload: bytes) -> list[dict[str, str]]:
+    """Extract one registered-FPI record from each CDSL alphabetic table."""
+    parser = _SummaryParser()
+    parser.feed(payload.decode("utf-8", errors="replace"))
+    records = []
+    for table in parser.tables:
+        fields = {}
+        for row in table:
+            if len(row) < 2:
+                continue
+            label = row[0].strip().lower().rstrip(":")
+            value = row[1].strip()
+            if label.endswith("name") and "registration" not in label:
+                fields.setdefault("name", value)
+            elif label.startswith("registration no"):
+                fields.setdefault("registration_no", value)
+            elif label.startswith("registration valid upto"):
+                fields.setdefault("valid_upto", value)
+            elif label.startswith("country name"):
+                fields.setdefault("country", value)
+            elif label == "address":
+                fields.setdefault("address", value)
+        if fields.get("name") and fields.get("registration_no"):
+            records.append({
+                "registered_name": fields["name"],
+                "registration_no": fields["registration_no"],
+                "valid_upto": fields.get("valid_upto", ""),
+                "country": fields.get("country", ""),
+                "address": fields.get("address", ""),
+            })
+    return records
 
 
 def _fetch(opener, url: str) -> tuple[bytes, str]:
@@ -211,6 +243,10 @@ def probe(output_dir: Path = Path("artifacts/cdsl_probe")) -> dict:
                 "raw_path": raw_path.name,
                 **summarize_html(payload),
             })
+            if name.startswith("registry_"):
+                registry_records = parse_registry_html(payload)
+                item["registry_record_count"] = len(registry_records)
+                item["registry_sample"] = registry_records[:10]
         except Exception as exc:  # Keep independent page outcomes visible.
             item.update({"status": "unavailable", "error": str(exc)})
         results.append(item)
