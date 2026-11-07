@@ -4,15 +4,17 @@
 
 - Daily FPI investment and derivatives: https://www.cdslindia.com/eservices/publications/fiidaily
 - Current-month daily FPI investment and derivatives: https://www.cdslindia.com/eservices/publications/FIIMonthly
-- Historical FPI investment archive: https://www.cdslindia.com/Publications/FIITrends.aspx
+- Historical FPI investment archive landing page: https://www.cdslindia.com/Publications/FIITrends.aspx
+- Official archive popup data page discovered in the landing page's own JavaScript: https://www.cdslindia.com/Publications/ArchiveDataAfter2009.aspx
 - Trade-wise equity FPI data: https://www.cdslindia.com/Publications/EquityDataFII.html
+- Registered FPI directory, alphabetic pages: https://www.cdslindia.com/Publications/RegForeignInstInvstr.aspx?indexname=A (replace the index letter with B-Z)
 
 ## What the public pages establish
 
 - The daily/current-month pages expose custodian-reported FPI investment activity, including gross purchases, gross sales and net investment, with investment route and asset class separated.
 - The same daily/current-month pages expose FPI derivative activity by product family, including buy/sell contracts and amounts plus end-of-day open interest.
 - CDSL describes the daily investment figures as based on reports submitted by custodians and covering activity on and up to the previous trading day(s).
-- The historical archive page exposes a date-based archive interface. Its actual request parameters and downloadable response still need capture and validation.
+- The archive landing page opens an official popup data page, `ArchiveDataAfter2009.aspx`, which exposes daily current-month FPI investment and derivative tables plus annual/cumulative totals. The date-picker POST smoke test returned HTTP 200 but did not return the requested date; do not treat it as a historical-date API until the form flow is understood.
 - The trade-wise equity page documents transaction-level fields including custodian code, report date, transaction ID, masked FII/sub-account/broker registration numbers, scrip name, ISIN, transaction date/type, exchange, settlement, rate, quantity, value and reporting/amendment metadata.
 - CDSL documents transaction codes that distinguish secondary-market purchases and sales from primary-market, corporate-action and other non-trading events.
 
