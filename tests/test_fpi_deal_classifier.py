@@ -169,27 +169,27 @@ def test_nifty500_membership_requires_exact_symbol_and_company_name():
     exact = _universe_membership({
         "symbol": "ABC", "security_name": "ABC Ltd.", "source_isin": ""
     }, by_isin, by_symbol, by_name)
-    assert exact["nifty500_membership_status"] == "nifty500_symbol_company_name_exact_normalized_match"
-    assert exact["nifty500_member_verified"] == "true"
+    assert exact["nifty500_snapshot_membership_status"] == "nifty500_symbol_company_name_exact_normalized_match"
+    assert exact["nifty500_snapshot_member_verified"] == "true"
     assert exact["matched_universe_isin"] == "INE000A01001"
     assert exact["universe_join_method"] == "symbol_and_company_name_exact_normalized"
 
     mismatch = _universe_membership({
         "symbol": "ABC", "security_name": "XYZ Industries Limited", "source_isin": ""
     }, by_isin, by_symbol, by_name)
-    assert mismatch["nifty500_membership_status"] == "symbol_match_company_name_mismatch"
-    assert mismatch["nifty500_member_verified"] == "false"
+    assert mismatch["nifty500_snapshot_membership_status"] == "symbol_match_company_name_mismatch"
+    assert mismatch["nifty500_snapshot_member_verified"] == "false"
 
     source_isin = _universe_membership({
         "symbol": "ABC", "security_name": "ABC Limited", "source_isin": "INE000A01001"
     }, by_isin, by_symbol, by_name)
-    assert source_isin["nifty500_membership_status"] == "nifty500_isin_symbol_company_match"
-    assert source_isin["nifty500_member_verified"] == "true"
+    assert source_isin["nifty500_snapshot_membership_status"] == "nifty500_isin_symbol_company_match"
+    assert source_isin["nifty500_snapshot_member_verified"] == "true"
 
     outside = _universe_membership({
         "symbol": "OUTSIDE", "security_name": "Outside Corp", "source_isin": ""
     }, by_isin, by_symbol, by_name)
-    assert outside["nifty500_membership_status"] == "outside_current_nifty500"
+    assert outside["nifty500_snapshot_membership_status"] == "outside_current_nifty500"
 
 def test_same_day_expired_registration_is_not_treated_as_active():
     assert _temporal_status(
@@ -295,10 +295,10 @@ def test_classifier_writes_auditable_outputs_and_deduplicates_cross_report(tmp_p
     with stock_csv.open(encoding="utf-8", newline="") as handle:
         stock_rows = list(csv.DictReader(handle))
     assert stock_rows[0]["current_registry_matched_fpi_client_buy_quantity"] == "100"
-    assert stock_rows[0]["nifty500_member_verified"] == "true"
+    assert stock_rows[0]["nifty500_snapshot_member_verified"] == "true"
     assert event_rows[0]["source_isin"] == ""
     assert event_rows[0]["matched_universe_isin"] == "INE000A01001"
     assert event_rows[0]["universe_join_method"] == "symbol_and_company_name_exact_normalized"
-    assert event_rows[0]["nifty500_membership_status"] == "nifty500_symbol_company_name_exact_normalized_match"
+    assert event_rows[0]["nifty500_snapshot_membership_status"] == "nifty500_symbol_company_name_exact_normalized_match"
     assert result["universe_row_count"] == 501
-    assert result["nifty500_verified_event_count"] == 1
+    assert result["nifty500_snapshot_verified_event_count"] == 1
