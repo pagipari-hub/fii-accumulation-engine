@@ -143,7 +143,7 @@ def test_rejects_delivery_date_mismatch():
 
 
 def test_rejects_missing_delivery_values_instead_of_zero_filling():
-    with pytest.raises(ValueError, match="delivery quantity/percentage missing"):
+    with pytest.raises(ValueError, match="incomplete delivery quantity/percentage"):
         validate_delivery(_delivery_csv(DELIV_QTY=""), "2026-11-06")
 
 
@@ -163,3 +163,34 @@ def test_capture_preserves_human_formatted_catalogue_file_size(monkeypatch):
     monkeypatch.setattr(module, "_get", lambda *args, **kwargs: b"csv-data")
     assert _capture(record) == b"csv-data"
     assert record["reported_file_size"] == "203.19 KB"
+
+
+def test_dash_delivery_fields_remain_unavailable_not_zero():
+    result = validate_delivery(
+        _delivery_csv(
+            TTL_TRD_QNTY="0", DELIV_QTY="-", DELIV_PER="-",
+            OPEN_PRICE="-", HIGH_PRICE="-", LOW_PRICE="-", CLOSE_PRICE="-",
+        ),
+        "2026-11-06",
+    )
+    assert result["delivery_observation_counts"]["no_trades_delivery_not_reported"] == 1
+    assert result["delivery_observation_counts"]["reported"] == 0
+
+
+def test_all_dash_delivery_observations_are_not_reported_not_zero():
+    result = validate_delivery(
+        _delivery_csv(
+            TTL_TRD_QNTY="-", DELIV_QTY="-", DELIV_PER="-",
+            OPEN_PRICE="-", HIGH_PRICE="-", LOW_PRICE="-", CLOSE_PRICE="-",
+        ),
+        "2026-11-06",
+    )
+    assert result["delivery_observation_counts"]["not_reported"] == 1
+
+
+def test_rejects_partial_dash_delivery_fields_for_traded_security():
+    with pytest.raises(ValueError, match="incomplete delivery quantity/percentage"):
+        validate_delivery(
+            _delivery_csv(DELIV_QTY="-", DELIV_PER="-"),
+            "2026-11-06",
+        )
