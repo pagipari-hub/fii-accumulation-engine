@@ -7,11 +7,13 @@ on:
       - "src/fii_engine/nse_historical_backfill.py"
       - "tests/test_nse_historical_backfill.py"
       - ".github/workflows/historical-stock-backfill.yml"
+      - "scripts/retry_git_push.sh"
   pull_request:
     paths:
       - "src/fii_engine/nse_historical_backfill.py"
       - "tests/test_nse_historical_backfill.py"
       - ".github/workflows/historical-stock-backfill.yml"
+      - "scripts/retry_git_push.sh"
   workflow_dispatch:
     inputs:
       sessions:
@@ -141,8 +143,7 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add data/snapshots/daily_stock_features data/raw/historical_backfill/backfill_manifest_current.json data/raw/historical_features data/snapshots/historical_features
             git commit -m "data: backfill official NSE stock evidence history"
-            git pull --rebase origin "$GITHUB_REF_NAME"
-            git push
+            bash scripts/retry_git_push.sh "$GITHUB_REF_NAME"
           else
             echo "No new historical snapshots or outputs."
           fi
