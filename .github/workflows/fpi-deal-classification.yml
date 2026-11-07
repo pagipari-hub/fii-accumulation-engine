@@ -1,0 +1,110 @@
+name: Classify NSE bulk-block deal FPI counterparties
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/fii_engine/fpi_deal_classifier.py"
+      - "src/fii_engine/cdsl_fpi_registry.py"
+      - "tests/test_fpi_deal_classifier.py"
+      - "config/sources.yaml"
+      - "docs/fpi-counterparty-attribution.md"
+      - "data/raw/cdsl_fpi_registry/**"
+      - "data/snapshots/cdsl_fpi_registry/**"
+      - "data/raw/bulk_block_deals/manifests/**"
+      - "data/snapshots/bulk_block_deals/**"
+      - ".github/workflows/fpi-deal-classification.yml"
+      - ".gitignore"
+      - "scripts/retry_git_push.sh"
+  pull_request:
+    paths:
+      - "src/fii_engine/fpi_deal_classifier.py"
+      - "src/fii_engine/cdsl_fpi_registry.py"
+      - "tests/test_fpi_deal_classifier.py"
+      - "config/sources.yaml"
+      - "docs/fpi-counterparty-attribution.md"
+      - "data/raw/cdsl_fpi_registry/**"
+      - "data/snapshots/cdsl_fpi_registry/**"
+      - "data/raw/bulk_block_deals/manifests/**"
+      - "data/snapshots/bulk_block_deals/**"
+      - ".github/workflows/fpi-deal-classification.yml"
+      - ".gitignore"
+      - "scripts/retry_git_push.sh"
+  workflow_dispatch:
+  schedule:
+    # 00:05 IST weekdays, after the CDSL registry snapshot and NSE deal collectors.
+    - cron: "35 18 * * 1-5"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fpi-deal-classification-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  classify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install project and test dependencies
+        run: python -m pip install -e ".[dev]"
+
+      - name: Run project tests
+        run: pytest
+
+      - name: Classify current NSE bulk/block counterparties
+        if: github.event_name != 'pull_request'
+        run: python -m fii_engine.fpi_deal_classifier --root . --lookback-days 7
+
+      - name: Validate classification output
+        if: github.event_name != 'pull_request'
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path("data/raw/fpi_deal_attribution/fpi_deal_attribution_current_manifest.json")
+          manifest = json.loads(path.read_text())
+          assert manifest["status"] in {"complete", "complete_no_deals"}
+          assert manifest["registry_snapshot_sha256"]
+          assert manifest["event_csv_sha256"]
+          assert manifest["stock_summary_csv_sha256"]
+          print(json.dumps({k: manifest[k] for k in (
+              "trade_date_window_start", "trade_date_window_end",
+              "registry_snapshot_date", "source_row_count",
+              "deduplicated_event_count", "current_registry_matched_fpi_client_event_count",
+              "current_registry_matched_odi_issuer_event_count", "unmatched_event_count",
+          )}, indent=2))
+          PY
+
+      - name: Upload classification outputs
+        if: always() && github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: fpi-deal-classification-${{ github.run_id }}
+          path: |
+            data/raw/fpi_deal_attribution/
+            data/snapshots/fpi_deal_attribution/
+          if-no-files-found: warn
+          retention-days: 90
+
+      - name: Commit classification outputs
+        if: github.event_name != 'pull_request'
+        run: |
+          if [[ -n "$(git status --porcelain data/raw/fpi_deal_attribution data/snapshots/fpi_deal_attribution)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add data/raw/fpi_deal_attribution data/snapshots/fpi_deal_attribution
+            git commit -m "data: classify NSE bulk block FPI counterparties"
+            bash scripts/retry_git_push.sh "$GITHUB_REF_NAME"
+          else
+            echo "FPI deal counterparty classification unchanged."
+          fi
