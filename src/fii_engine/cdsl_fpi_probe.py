@@ -13,7 +13,6 @@ from urllib.parse import urlencode
 from urllib.request import HTTPCookieProcessor, Request, build_opener
 from http.cookiejar import CookieJar
 
-from fii_engine.cdsl_fpi_registry import parse_registry_html
 
 PAGES = {
     "daily": "https://www.cdslindia.com/eservices/publications/fiidaily",
@@ -22,11 +21,6 @@ PAGES = {
     "archive_data_after_2009": "https://www.cdslindia.com/Publications/ArchiveDataAfter2009.aspx",
     "trade_wise_equity": "https://www.cdslindia.com/Publications/EquityDataFII.html",
 }
-for _letter in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
-    PAGES[f"registry_{_letter}"] = (
-        "https://www.cdslindia.com/Publications/RegForeignInstInvstr.aspx"
-        f"?indexname={_letter}"
-    )
 
 USER_AGENT = (
     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
@@ -213,10 +207,7 @@ def probe(output_dir: Path = Path("artifacts/cdsl_probe")) -> dict:
                 "raw_path": raw_path.name,
                 **summarize_html(payload),
             })
-            if name.startswith("registry_"):
-                registry_records = parse_registry_html(payload)
-                item["registry_record_count"] = len(registry_records)
-                item["registry_sample"] = registry_records[:10]
+
         except Exception as exc:  # Keep independent page outcomes visible.
             item.update({"status": "unavailable", "error": str(exc)})
         results.append(item)
