@@ -178,3 +178,11 @@ before production ingestion.
 These are named transaction disclosures. A disclosed client name is not
 automatically an FII/FPI or beneficial-owner classification; counterparty
 and client identities must be interpreted conservatively.
+
+
+The first source probe confirmed eight CSV fields: Date, Symbol, Security Name,
+Client Name, Buy / Sell, Quantity Traded, Trade Price / Wght. Avg. Price and
+Remarks. The explicit Date field is used for transaction date; the JSON
+`BD_DT_ORDER` UTC timestamp is not substituted. Client names remain
+unclassified disclosures and are not automatically mapped to FII/FPI or
+beneficial-owner identities. See [NSE bulk/block deal source notes](nse-bulk-block-deals.md).
