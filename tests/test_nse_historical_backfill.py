@@ -174,5 +174,5 @@ def test_rejects_duplicate_delivery_symbol_series(tmp_path, monkeypatch):
     )
     with pytest.raises(ValueError, match="duplicate delivery symbol/series"):
         run_backfill(
-            tmp_path, sessions=2, max_calendar_days=1, as_of_date="2026-11-06"
+            tmp_path, sessions=2, max_calendar_days=2, as_of_date="2026-11-06"
         )
