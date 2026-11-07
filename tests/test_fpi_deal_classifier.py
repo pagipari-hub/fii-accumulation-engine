@@ -252,6 +252,18 @@ def test_classifier_writes_auditable_outputs_and_deduplicates_cross_report(tmp_p
         writer = csv.DictWriter(handle, fieldnames=list(universe_rows[0]))
         writer.writeheader()
         writer.writerows(universe_rows)
+    universe_snapshot_manifest_dir = tmp_path / "data/snapshots/universe"
+    universe_snapshot_manifest_dir.mkdir(parents=True)
+    universe_hash = hashlib.sha256(universe_path.read_bytes()).hexdigest()
+    (universe_snapshot_manifest_dir / "nifty500_test.json").write_text(json.dumps({
+        "normalized_sha256": universe_hash,
+        "retrieved_at_utc": "2026-11-06T18:00:00+00:00",
+        "source_freshness_statement": "Data as on last trading day of the previous month",
+        "source_freshness_semantics": "exact constituent effective date not supplied here",
+        "publisher": "NSE Indices",
+        "source_page": "https://www.niftyindices.com/indices/equity/broad-based-indices/NIFTY-500",
+        "source_download_url": "https://www.niftyindices.com/IndexConstituent/ind_nifty500list.csv",
+    }))
 
     manifest_dir = tmp_path / "data/raw/bulk_block_deals/manifests"
     manifest_dir.mkdir(parents=True)
@@ -302,3 +314,4 @@ def test_classifier_writes_auditable_outputs_and_deduplicates_cross_report(tmp_p
     assert event_rows[0]["nifty500_snapshot_membership_status"] == "nifty500_symbol_company_name_exact_normalized_match"
     assert result["universe_row_count"] == 501
     assert result["nifty500_snapshot_verified_event_count"] == 1
+    assert result["universe_effective_date_status"] == "exact constituent effective date not supplied here"
