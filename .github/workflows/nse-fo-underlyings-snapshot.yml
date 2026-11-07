@@ -25,7 +25,7 @@ permissions:
 
 concurrency:
   group: official-nse-fo-underlyings
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   refresh:
@@ -95,6 +95,14 @@ jobs:
           assert counts["nifty500_count"] == 501
           assert counts["eligible_count"] + counts["not_eligible_count"] == 501
           assert counts["unknown_count"] == 0
+          current_fno_manifest = json.loads(
+              Path("data/raw/fno_underlyings/fno_underlyings_current_manifest.json").read_text(encoding="utf-8")
+          )
+          current_status_manifest_path = Path("data/raw/fno_universe/nifty500_fno_status_current_manifest.json")
+          assert current_status_manifest_path.is_file()
+          current_status_manifest = json.loads(current_status_manifest_path.read_text(encoding="utf-8"))
+          assert current_status_manifest["output_sha256"] == status_hash
+          assert current_status_manifest["fno_membership_retrieved_at_utc"] == current_fno_manifest["retrieved_at_utc"]
           print("Nifty 500 F&O status:", counts)
           print("Validated current NSE individual-stock F&O underlying snapshot.")
           PY
@@ -102,7 +110,7 @@ jobs:
 
       - name: Commit changed official F&O underlying snapshot
         run: |
-          if [[ -n "$(git status --porcelain data/raw/fno_underlyings data/snapshots/fno_underlyings)" ]]; then
+          if [[ -n "$(git status --porcelain data/raw/fno_underlyings data/snapshots/fno_underlyings data/raw/fno_universe data/snapshots/fno_universe)" ]]; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add data/raw/fno_underlyings data/snapshots/fno_underlyings data/raw/fno_universe data/snapshots/fno_universe
