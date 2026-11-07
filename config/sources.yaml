@@ -57,10 +57,13 @@ sources:
     api_url: "https://www.nseindia.com/api/fiidiiTradeReact"
     frequency: "daily"
     required_fields: [trade_date, category, buy_value_crore, sell_value_crore, net_value_crore]
-    status: "adapter_implemented_live_validation_pending"
+    status: "live_validated_current_capture"
     finality: "provisional_for_fii_fpi"
     scope: "NSE_only_capital_market"
     unit: "INR_crore"
+    parser_version: 1
+    last_live_validated_trade_date: "2026-11-06"
+    daily_history_capture: "snapshot_all_dates_in_rolling_api_response"
   nse_fii_dii_combined_cash_provisional:
     description: "Combined NSE, BSE and MSEI FII/FPI and DII capital-market cash activity"
     publisher: "National Stock Exchange of India"
