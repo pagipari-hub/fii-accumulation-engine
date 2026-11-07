@@ -177,10 +177,6 @@ def capture_dataset(dataset: str, catalogue: dict, root: Path) -> dict:
     if not raw:
         raise ValueError(f"{dataset}: NSE report download is empty")
     raw_hash = hashlib.sha256(raw).hexdigest()
-    if selected["filename"].lower().endswith(".csv"):
-        inspection = inspect_csv(raw, dataset)
-    else:
-        inspection = inspect_xls(raw, dataset)
     retrieved_at = (
         datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
     )
@@ -192,8 +188,19 @@ def capture_dataset(dataset: str, catalogue: dict, root: Path) -> dict:
     )
     if raw_path.exists() and hashlib.sha256(raw_path.read_bytes()).hexdigest() != raw_hash:
         raise RuntimeError(f"{dataset}: immutable raw path hash mismatch")
+    # Preserve the original exchange bytes before attempting any inspection.
     if not raw_path.exists():
         raw_path.write_bytes(raw)
+
+    inspection = None
+    inspection_error = None
+    try:
+        if selected["filename"].lower().endswith(".csv"):
+            inspection = inspect_csv(raw, dataset)
+        else:
+            inspection = inspect_xls(raw, dataset)
+    except (ValueError, OSError) as exc:
+        inspection_error = str(exc)
 
     manifest = {
         "dataset": dataset,
@@ -205,6 +212,7 @@ def capture_dataset(dataset: str, catalogue: dict, root: Path) -> dict:
         "raw_bytes": len(raw),
         "raw_sha256": raw_hash,
         "inspection": inspection,
+        "inspection_error": inspection_error,
         "parser_stage": "source_capture_and_schema_discovery",
     }
     manifest_dir = raw_dir / "manifests"
@@ -227,6 +235,7 @@ def capture_dataset(dataset: str, catalogue: dict, root: Path) -> dict:
         "raw_path": str(raw_path),
         "manifest_path": str(manifest_path),
         "inspection": inspection,
+        "inspection_error": inspection_error,
     }
 
 
