@@ -23,7 +23,9 @@ def read_symbols(path: Path) -> list[str]:
         except StopIteration:
             return []
         normalized = [item.strip().lower() for item in header]
-        column = normalized.index("symbol") if "symbol" in normalized else 0
+        if "symbol" not in normalized:
+            raise ValueError("Symbols CSV must contain a 'symbol' column")
+        column = normalized.index("symbol")
         symbols = []
         for row in rows:
             if len(row) > column and row[column].strip():
