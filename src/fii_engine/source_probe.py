@@ -23,9 +23,18 @@ SOURCE_PAGES = {
     "nse_derivatives": "https://www.nseindia.com/all-reports-derivatives",
 }
 USER_AGENT = (
-    "Mozilla/5.0 (compatible; FIIAccumulationResearch/0.1; "
-    "+https://github.com/pagipari-hub/fii-accumulation-engine)"
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36"
 )
+REQUEST_HEADERS = {
+    "User-Agent": USER_AGENT,
+    "Accept-Language": "en-US,en;q=0.9",
+    "Cache-Control": "no-cache",
+    "Pragma": "no-cache",
+}
+HTTP = build_opener(HTTPCookieProcessor(CookieJar()))
+SESSION_BOOTSTRAP = "https://www.nseindia.com/"
+
 DOWNLOAD_SUFFIXES = (".csv", ".zip", ".xls", ".xlsx", ".pdf", ".gz", ".parquet")
 DOWNLOAD_WORDS = re.compile(r"download|bhavcopy|participant|contract|constituent|report", re.I)
 ENDPOINT_WORDS = re.compile(
@@ -178,7 +187,7 @@ def inspect_page(name: str, url: str, timeout: int = 30) -> dict[str, object]:
     request = Request(url, headers={**REQUEST_HEADERS, "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "Referer": SESSION_BOOTSTRAP})
     checked_at = datetime.now(timezone.utc).isoformat()
     try:
-        with urlopen(request, timeout=timeout) as response:
+        with HTTP.open(request, timeout=timeout) as response:
             body = response.read()
             content_type = response.headers.get("Content-Type", "")
             html = body.decode("utf-8", errors="replace")
@@ -223,9 +232,23 @@ def inspect_page(name: str, url: str, timeout: int = 30) -> dict[str, object]:
 
 
 def run_probe(output: Path) -> dict[str, object]:
+    # Reuse cookies issued by NSE's landing page for all source requests.
+    bootstrap = {"url": SESSION_BOOTSTRAP, "checked_at_utc": datetime.now(timezone.utc).isoformat()}
+    try:
+        request = Request(SESSION_BOOTSTRAP, headers={**REQUEST_HEADERS, "Accept": "text/html,*/*"})
+        with HTTP.open(request, timeout=20) as response:
+            bootstrap.update({"status": "ok" if response.status == 200 else "http_error",
+                              "http_status": response.status})
+            response.read(65536)
+    except HTTPError as exc:
+        bootstrap.update({"status": "http_error", "http_status": exc.code, "error": str(exc)})
+    except (URLError, TimeoutError, OSError) as exc:
+        bootstrap.update({"status": "connection_error", "error": str(exc)})
+
     results = [inspect_page(name, url) for name, url in SOURCE_PAGES.items()]
     report = {
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
+        "session_bootstrap": bootstrap,
         "purpose": (
             "source-page and same-origin JavaScript discovery only; "
             "no market data has been ingested and endpoint candidates are not executed"
