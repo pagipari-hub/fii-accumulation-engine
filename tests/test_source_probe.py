@@ -116,3 +116,13 @@ def test_shareholding_and_xbrl_endpoints_are_discovered():
     candidates = extract_endpoint_candidates(source)
     assert "/api/shareholding-pattern?symbol=ABC" in candidates
     assert "/api/xbrl/ABC/2026Q2" in candidates
+
+
+def test_keyword_contexts_reserve_matches_for_later_terms():
+    from fii_engine.source_probe import extract_keyword_contexts
+
+    source = ("shareholder " * 20) + "CFRefresh('ShareholderPattern')"
+    contexts = extract_keyword_contexts(
+        source, keywords=("shareholder", "CFRefresh"), radius=30, limit=20
+    )
+    assert any(item["keyword"] == "CFRefresh" for item in contexts)
