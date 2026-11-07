@@ -1,0 +1,54 @@
+name: NSE bulk block deals API schema probe
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/fii_engine/nse_deals_probe.py"
+      - "tests/test_nse_deals_probe.py"
+      - ".github/workflows/nse-deals-api-probe.yml"
+  pull_request:
+    paths:
+      - "src/fii_engine/nse_deals_probe.py"
+      - "tests/test_nse_deals_probe.py"
+      - ".github/workflows/nse-deals-api-probe.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nse-deals-api-probe
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install -e ".[dev]"
+      - run: pytest
+
+  probe:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install -e .
+      - name: Probe official NSE bulk and block deals endpoints
+        run: python -m fii_engine.nse_deals_probe --output-dir artifacts/nse-deals-probe
+      - name: Upload raw JSON, CSV and schema manifest
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nse-deals-api-probe-${{ github.run_id }}
+          path: artifacts/nse-deals-probe/
+          if-no-files-found: warn
+          retention-days: 14

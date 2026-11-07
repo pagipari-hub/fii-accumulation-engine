@@ -155,3 +155,26 @@ The live capture is [GitHub Actions run 42357169361](https://github.com/pagipari
 - Original source files, parsed UDiFF CSV, current manifest and both immutable source manifests were captured in [artifact 13568266909](https://github.com/pagipari-hub/fii-accumulation-engine/actions/runs/42357169361).
 
 The collector retains price/volume rows even where delivery is unavailable. Delivery-derived signals must exclude those rows rather than imputing a zero delivery quantity or percentage.
+
+
+## NSE bulk and block deal source discovery
+
+The official NSE page is
+https://www.nseindia.com/report-detail/display-bulk-and-block-deals.
+Its same-origin JavaScript identifies the historical data endpoint
+`/api/historicalOR/bulk-block-short-deals`, with `optionType`,
+`from`, `to`, optional `symbol`, and `csv=true` parameters.
+Supported option types on the page are `bulk_deals` and `block_deals`.
+
+The official page's visible one-week range at inspection was 30 Oct 2026
+through 6 Nov 2026. The manual probe
+`src/fii_engine/nse_deals_probe.py` captures both JSON and CSV responses
+for that displayed range, with raw hashes, HTTP metadata, headers/columns,
+row counts and sample rows. The probe is research-only and does not yet
+publish transaction records. The actual response schema, field meanings,
+record date semantics and any pagination/retention limits must be validated
+before production ingestion.
+
+These are named transaction disclosures. A disclosed client name is not
+automatically an FII/FPI or beneficial-owner classification; counterparty
+and client identities must be interpreted conservatively.
