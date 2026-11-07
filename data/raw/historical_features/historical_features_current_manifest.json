@@ -1,6 +1,6 @@
 {
   "dataset": "validated_historical_evidence_features",
-  "generated_at_utc": "2026-11-07T19:22:28.646713+00:00",
+  "generated_at_utc": "2026-11-07T19:26:21.073919+00:00",
   "as_of_trade_date": "2026-11-06",
   "daily_stock_session_count": 1,
   "daily_stock_trade_dates": [
@@ -8,6 +8,14 @@
   ],
   "market_flow_session_count": 1,
   "market_flow_trade_dates": [
+    "2026-11-06"
+  ],
+  "participant_oi_session_count": 1,
+  "participant_oi_trade_dates": [
+    "2026-11-06"
+  ],
+  "participant_volume_session_count": 1,
+  "participant_volume_trade_dates": [
     "2026-11-06"
   ],
   "windows_sessions": [
@@ -20,12 +28,15 @@
   "stock_snapshot_path": "data/snapshots/historical_features/stock_historical_features_2026-11-06_08e94ea59be99ff2.csv",
   "market_output_sha256": "02e1f54decb5620344aea7ae51fbcd0340575225975ffd871af9a0eae6732572",
   "market_snapshot_path": "data/snapshots/historical_features/market_flow_history_2026-11-06_02e1f54decb56203.csv",
+  "participant_output_sha256": "fd4f17bac02f45569ff0699b01295a65a10eb60d2eecce6132e9d70aa9eae60d",
+  "participant_snapshot_path": "data/snapshots/historical_features/participant_derivatives_history_2026-11-06_fd4f17bac02f4556.csv",
   "limitations": [
     "A window is complete only when the requested number of distinct committed trading-date snapshots exists.",
     "Stock cash, delivery and derivatives metrics retain family-specific partial-observation statuses.",
     "Options PCR rolling averages are withheld across expiry changes.",
     "Futures buildup counts describe market-wide contract activity, not FII attribution.",
     "Market-wide FII/FPI and DII aggregates are separate context and never stock-level attribution.",
-    "FII/FPI publication status is preserved; rolling sums are not a final custodial series."
+    "FII/FPI publication status is preserved; rolling sums are not a final custodial series.",
+    "Participant OI and volume are participant-category aggregates, never participant-by-stock positions."
   ]
 }
