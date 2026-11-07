@@ -62,3 +62,13 @@ reuse the same source registry, validators and storage contract; it must not
 create a separate interpretation of the data. A local run can backfill a
 missing session and upload the resulting immutable artifacts to the same
 configured object store.
+
+
+## Concurrent data-workflow commits
+
+Independent NSE collectors can finish at nearly the same time and update the same
+`main` branch. A successful local rebase does not eliminate the small race
+between the final fetch and push. All data-writing workflows therefore use
+`scripts/retry_git_push.sh`: it fetches the latest branch, rebases the workflow
+commit, and retries a rejected push with bounded backoff. It never force-pushes
+or discards a conflicting change; a genuine rebase conflict fails for review.
