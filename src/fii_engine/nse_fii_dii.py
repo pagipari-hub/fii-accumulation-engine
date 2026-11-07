@@ -31,7 +31,7 @@ HEADERS = {
 HTTP = build_opener(HTTPCookieProcessor(CookieJar()))
 REQUIRED_FIELDS = {"date", "category", "buyValue", "sellValue", "netValue"}
 EXPECTED_CATEGORIES = {"FII/FPI", "DII"}
-PARSER_VERSION = 1
+PARSER_VERSION = 2
 
 
 def _get(url: str, referer: str, accept: str, timeout: int = 45) -> bytes:
@@ -127,6 +127,10 @@ def parse_rows(payload: bytes) -> dict:
                 f"NSE FII/DII net arithmetic mismatch for {category} on {trade_date}: "
                 f"reported={net}, buy-sell={buy - sell}"
             )
+        gross_turnover = buy + sell
+        net_flow_ratio = (
+            net / gross_turnover if gross_turnover != 0 else None
+        )
         normalized.append({
             "trade_date": trade_date,
             "category": category,
@@ -138,6 +142,10 @@ def parse_rows(payload: bytes) -> dict:
             "buy_value_crore": format(buy, ".2f"),
             "sell_value_crore": format(sell, ".2f"),
             "net_value_crore": format(net, ".2f"),
+            "gross_turnover_crore": format(gross_turnover, ".2f"),
+            "net_flow_ratio": (
+                format(net_flow_ratio, ".6f") if net_flow_ratio is not None else None
+            ),
             "net_arithmetic_difference_crore": format(arithmetic_difference, ".2f"),
             "publication_status": (
                 "provisional" if category == "FII/FPI" else "exchange_reported"

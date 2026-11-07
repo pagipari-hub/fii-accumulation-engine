@@ -83,4 +83,11 @@ The matrix intentionally does not publish scores yet:
 
 The scoring core will consume normalized family observations only after these
 requirements are met. Market-wide FII/DII cash flows and participant aggregates
-remain separate market context, not stock-specific observations.
+remain separate market context, not stock-specific observations. The NSE-only
+cash-flow series retains gross buying, gross selling, net flow, gross turnover
+(buy + sell) and net-flow ratio (net / gross turnover) for each investor
+category. Gross turnover measures two-way activity, while the ratio describes
+the directional imbalance. A zero gross-turnover denominator yields an
+undefined ratio, not zero. FII/FPI values remain provisional; DII values retain
+their separate exchange-reported status. These market-wide measures never
+establish that a named institution bought or sold an individual stock.

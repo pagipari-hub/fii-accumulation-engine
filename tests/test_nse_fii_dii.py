@@ -49,6 +49,8 @@ def test_parses_nse_only_fii_dii_rows_and_provisional_status():
     dii = next(row for row in result["rows"] if row["trade_date"] == "2026-11-06" and row["category"] == "DII")
     assert fii["buy_value_crore"] == "1000.00"
     assert fii["net_value_crore"] == "200.00"
+    assert fii["gross_turnover_crore"] == "1800.00"
+    assert fii["net_flow_ratio"] == "0.111111"
     assert fii["publication_status"] == "provisional"
     assert dii["publication_status"] == "exchange_reported"
     assert result["scope"] == "NSE_only"
@@ -161,3 +163,38 @@ def test_ingest_writes_content_addressed_daily_snapshots_and_manifests(tmp_path)
         x["snapshot_path"] for x in second["snapshots"]
     ]
     assert len(list((tmp_path / "data/snapshots/fii_dii").glob("*.csv"))) == 2
+
+
+
+def test_gross_flow_context_preserves_high_two_way_activity():
+    rows = [
+        {
+            "date": "06-Nov-2026", "category": "FII/FPI",
+            "buyValue": "20000", "sellValue": "18000", "netValue": "2000",
+        },
+        {
+            "date": "06-Nov-2026", "category": "DII",
+            "buyValue": "10000", "sellValue": "10000", "netValue": "0",
+        },
+    ]
+    result = parse_rows(_payload(rows))
+    fii = next(row for row in result["rows"] if row["category"] == "FII/FPI")
+    assert fii["gross_turnover_crore"] == "38000.00"
+    assert fii["net_flow_ratio"] == "0.052632"
+
+
+def test_zero_gross_turnover_has_undefined_ratio_not_zero():
+    rows = [
+        {
+            "date": "06-Nov-2026", "category": "FII/FPI",
+            "buyValue": "0", "sellValue": "0", "netValue": "0",
+        },
+        {
+            "date": "06-Nov-2026", "category": "DII",
+            "buyValue": "0", "sellValue": "0", "netValue": "0",
+        },
+    ]
+    result = parse_rows(_payload(rows))
+    fii = next(row for row in result["rows"] if row["category"] == "FII/FPI")
+    assert fii["gross_turnover_crore"] == "0.00"
+    assert fii["net_flow_ratio"] is None

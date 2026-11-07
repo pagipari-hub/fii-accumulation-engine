@@ -56,14 +56,16 @@ sources:
     reference_url: "https://www.nseindia.com/reports/fii-dii"
     api_url: "https://www.nseindia.com/api/fiidiiTradeReact"
     frequency: "daily"
-    required_fields: [trade_date, category, buy_value_crore, sell_value_crore, net_value_crore]
+    required_fields: [trade_date, category, buy_value_crore, sell_value_crore, net_value_crore, gross_turnover_crore, net_flow_ratio]
     status: "live_validated_current_capture"
     finality: "provisional_for_fii_fpi"
     scope: "NSE_only_capital_market"
     unit: "INR_crore"
-    parser_version: 1
+    parser_version: 2
     last_live_validated_trade_date: "2026-11-06"
-    daily_history_capture: "snapshot_all_dates_in_rolling_api_response"
+    daily_history_capture: "immutable_per_trade_date_snapshots_for_all_dates_in_rolling_api_response"
+    derived_context: [gross_turnover_crore, net_flow_ratio]
+    attribution_scope: "market_wide_category_aggregate_not_stock_specific"
   nse_fii_dii_combined_cash_provisional:
     description: "Combined NSE, BSE and MSEI FII/FPI and DII capital-market cash activity"
     publisher: "National Stock Exchange of India"
