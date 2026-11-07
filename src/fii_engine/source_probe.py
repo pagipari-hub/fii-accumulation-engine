@@ -22,6 +22,7 @@ SOURCE_PAGES = {
     "nse_fii_dii": "https://www.nseindia.com/reports/fii-dii",
     "nse_equities_reports": "https://www.nseindia.com/all-reports",
     "nse_bulk_block_deals": "https://www.nseindia.com/report-detail/display-bulk-and-block-deals",
+    "nse_shareholding_pattern": "https://www.nseindia.com/companies-listing/corporate-filings-shareholding-pattern/",
     "nse_derivatives": "https://www.nseindia.com/all-reports-derivatives",
     "nse_fo_contract_information": "https://www.nseindia.com/static/products-services/equity-derivatives-contract-information",
     "nse_fo_individual_securities": "https://www.nseindia.com/static/products-services/equity-derivatives-individual-securities",
