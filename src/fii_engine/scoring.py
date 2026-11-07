@@ -262,7 +262,7 @@ def main() -> None:
         source["symbols"],
         source.get("observations_by_symbol", {}),
         config,
-        set(source.get("direct_fpi_transactions", [])),
+        source.get("direct_fpi_transactions", {}),
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps({
