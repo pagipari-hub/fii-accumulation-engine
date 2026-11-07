@@ -1,0 +1,814 @@
+{
+  "dataset": "nse_shareholding_xbrl_filing",
+  "parser_version": 3,
+  "filing": {
+    "record_id": "216206",
+    "symbol": "JSWCEMENT",
+    "company_name": "JSW Cement Limited",
+    "isin": "INE718I01012",
+    "universe_isin": "INE718I01012",
+    "reporting_date": "2026-09-30",
+    "submission_date": "2026-10-21",
+    "broadcast_date": "21-OCT-2026 18:34:57",
+    "system_date": "21-OCT-2026 18:35:01",
+    "revised_data": "N",
+    "revision_date": null,
+    "revision_remark": null,
+    "xbrl_url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1743380_21102026063448_WEB.xml",
+    "identity_status": "verified",
+    "identity_join_method": "isin_exact",
+    "metadata_sha256": "6b0703ac9314952c26e8ea5c53dd143fda358a49ac95196f68838b2c34e9aead",
+    "source_master_sha256": "1ecf54b17994a5305be2606e484362f195c3a8732156995a8641eaf25de46625"
+  },
+  "metadata_sha256": "6b0703ac9314952c26e8ea5c53dd143fda358a49ac95196f68838b2c34e9aead",
+  "source_master_sha256": "1ecf54b17994a5305be2606e484362f195c3a8732156995a8641eaf25de46625",
+  "xbrl_url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1743380_21102026063448_WEB.xml",
+  "xbrl_sha256": "1d1af5daec493f4b9a59d828d5fd0530e4c9fc53b384976f8b5a7bd368c84bb0",
+  "xbrl_raw_path": "data/raw/shareholding/xbrl/216206_1d1af5daec493f4b.xml",
+  "xbrl_content_type": "application/xml",
+  "parsed": {
+    "parser": "nse_shareholding_xbrl",
+    "parser_version": 2,
+    "category_axis": "CategoryOfShareholdersAxis",
+    "reporting_dates": [
+      "2026-09-30"
+    ],
+    "category_record_count": 28,
+    "category_records": [
+      {
+        "context_id": "IndividualsOrHinduUndividedFamily_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "IndividualsOrHinduUndividedFamily",
+        "category_key": "IndividualsOrHinduUndividedFamily",
+        "entity_identifier": "544480",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "IndividualsOrHinduUndividedFamilyMember"
+          }
+        ],
+        "shareholder_count": 13,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 10101916,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 10101916,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0074",
+        "ownership_percentage_points": "0.7400",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 10101916,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0074",
+        "voting_rights_percentage_points": "0.7400",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "OtherIndianShareholders_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "OtherIndianShareholders",
+        "category_key": "OtherIndianShareholders",
+        "entity_identifier": "544480",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "OtherIndianShareholdersMember"
+          }
+        ],
+        "shareholder_count": 9,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 971744724,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 971744724,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.7128",
+        "ownership_percentage_points": "71.2800",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 971744724,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.7128",
+        "voting_rights_percentage_points": "71.2800",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "Indian_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "Indian",
+        "category_key": "Indian",
+        "entity_identifier": "544480",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "IndianMember"
+          }
+        ],
+        "shareholder_count": 22,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 981846640,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 981846640,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.7202",
+        "ownership_percentage_points": "72.0200",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 981846640,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.7202",
+        "voting_rights_percentage_points": "72.0200",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "OtherForeignShareholders_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "OtherForeignShareholders",
+        "category_key": "OtherForeignShareholders",
+        "entity_identifier": "544480",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "OtherForeignShareholdersMember"
+          }
+        ],
+        "shareholder_count": 0,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 0,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 0,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0",
+        "ownership_percentage_points": "0",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 0,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0",
+        "voting_rights_percentage_points": "0",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "Foreign_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "Foreign",
+        "category_key": "Foreign",
+        "entity_identifier": "544480",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "ForeignMember"
+          }
+        ],
+        "shareholder_count": 0,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 0,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 0,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0",
+        "ownership_percentage_points": "0",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 0,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0",
+        "voting_rights_percentage_points": "0",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "ShareholdingOfPromoterAndPromoterGroup_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "ShareholdingOfPromoterAndPromoterGroup",
+        "category_key": "ShareholdingOfPromoterAndPromoterGroup",
+        "entity_identifier": "544480",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "ShareholdingOfPromoterAndPromoterGroupMember"
+          }
+        ],
+        "shareholder_count": 22,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 981846640,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 981846640,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.7202",
+        "ownership_percentage_points": "72.0200",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 981846640,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.7202",
+        "voting_rights_percentage_points": "72.0200",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "MutualFundsOrUTI_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "MutualFundsOrUTI",
+        "category_key": "MutualFundsOrUTI",
+        "entity_identifier": "544480",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "MutualFundsOrUTIMember"
+          }
+        ],
+        "shareholder_count": 25,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 159288915,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 159288915,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.1168",
+        "ownership_percentage_points": "11.6800",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 159288915,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.1168",
+        "voting_rights_percentage_points": "11.6800",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "AlternativeInvestmentFunds_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "AlternativeInvestmentFunds",
+        "category_key": "AlternativeInvestmentFunds",
+        "entity_identifier": "544480",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "AlternativeInvestmentFundsMember"
+          }
+        ],
+        "shareholder_count": 4,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 266843,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 266843,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0002",
+        "ownership_percentage_points": "0.0200",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 266843,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0002",
+        "voting_rights_percentage_points": "0.0200",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "Banks_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "Banks",
+        "category_key": "Banks",
+        "entity_identifier": "544480",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "BanksMember"
+          }
+        ],
+        "shareholder_count": 1,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 6455442,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 6455442,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0047",
+        "ownership_percentage_points": "0.4700",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 6455442,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0047",
+        "voting_rights_percentage_points": "0.4700",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "InsuranceCompanies_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "InsuranceCompanies",
+        "category_key": "InsuranceCompanies",
+        "entity_identifier": "544480",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "InsuranceCompaniesMember"
+          }
+        ],
+        "shareholder_count": 3,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 1257493,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 1257493,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0009",
+        "ownership_percentage_points": "0.0900",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 1257493,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0009",
+        "voting_rights_percentage_points": "0.0900",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "NBFCsRegisteredWithRBI_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "NBFCsRegisteredWithRBI",
+        "category_key": "NBFCsRegisteredWithRBI",
+        "entity_identifier": "544480",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "NBFCsRegisteredWithRBIMember"
+          }
+        ],
+        "shareholder_count": 2,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 110000,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 110000,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0001",
+        "ownership_percentage_points": "0.0100",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 110000,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0001",
+        "voting_rights_percentage_points": "0.0100",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "InstitutionsDomestic_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "InstitutionsDomestic",
+        "category_key": "InstitutionsDomestic",
+        "entity_identifier": "544480",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "InstitutionsDomesticMember"
+          }
+        ],
+        "shareholder_count": 35,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 167378693,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 167378693,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.1228",
+        "ownership_percentage_points": "12.2800",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 167378693,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.1228",
+        "voting_rights_percentage_points": "12.2800",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "InstitutionsForeignPortfolioInvestorCategoryOne_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "InstitutionsForeignPortfolioInvestorCategoryOne",
+        "category_key": "fpi_category_i",
+        "entity_identifier": "544480",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "InstitutionsForeignPortfolioInvestorCategoryOneMember"
+          }
+        ],
+        "shareholder_count": 62,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 60004599,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 60004599,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.044",
+        "ownership_percentage_points": "4.400",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 60004599,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.044",
+        "voting_rights_percentage_points": "4.400",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "InstitutionsForeignPortfolioInvestorCategoryTwo_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "InstitutionsForeignPortfolioInvestorCategoryTwo",
+        "category_key": "fpi_category_ii",
+        "entity_identifier": "544480",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "InstitutionsForeignPortfolioInvestorCategoryTwoMember"
+          }
+        ],
+        "shareholder_count": 9,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 2555323,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 2555323,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0019",
+        "ownership_percentage_points": "0.1900",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 2555323,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0019",
+        "voting_rights_percentage_points": "0.1900",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "InstitutionsForeign_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "InstitutionsForeign",
+        "category_key": "foreign_institutions_total",
+        "entity_identifier": "544480",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "InstitutionsForeignMember"
+          }
+        ],
+        "shareholder_count": 71,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 62559922,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 62559922,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0459",
+        "ownership_percentage_points": "4.5900",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 62559922,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0459",
+        "voting_rights_percentage_points": "4.5900",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "KeyManagerialPersonnel_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "KeyManagerialPersonnel",
+        "category_key": "KeyManagerialPersonnel",
+        "entity_identifier": "544480",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "KeyManagerialPersonnelMember"
+          }
+        ],
+        "shareholder_count": 3,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 473059,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 473059,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0003",
+        "ownership_percentage_points": "0.0300",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 473059,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0003",
+        "voting_rights_percentage_points": "0.0300",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "RelativesOfPromotersOtherThanPromoterGroup_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "RelativesOfPromotersOtherThanPromoterGroup",
+        "category_key": "RelativesOfPromotersOtherThanPromoterGroup",
+        "entity_identifier": "544480",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "RelativesOfPromotersOtherThanPromoterGroupMember"
+          }
+        ],
+        "shareholder_count": 0,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 0,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 0,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0",
+        "ownership_percentage_points": "0",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 0,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0",
+        "voting_rights_percentage_points": "0",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "ResidentIndividualShareholdersHoldingNominalShareCapitalUpToRsTwoLakh_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "ResidentIndividualShareholdersHoldingNominalShareCapitalUpToRsTwoLakh",
+        "category_key": "ResidentIndividualShareholdersHoldingNominalShareCapitalUpToRsTwoLakh",
+        "entity_identifier": "544480",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "ResidentIndividualShareholdersHoldingNominalShareCapitalUpToRsTwoLakhMember"
+          }
+        ],
+        "shareholder_count": 436252,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 80174461,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 80174461,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0588",
+        "ownership_percentage_points": "5.8800",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 80174461,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0588",
+        "voting_rights_percentage_points": "5.8800",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "ResidentIndividualShareholdersHoldingNominalShareCapitalInExcessOfRsTwoLakh_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "ResidentIndividualShareholdersHoldingNominalShareCapitalInExcessOfRsTwoLakh",
+        "category_key": "ResidentIndividualShareholdersHoldingNominalShareCapitalInExcessOfRsTwoLakh",
+        "entity_identifier": "544480",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "ResidentIndividualShareholdersHoldingNominalShareCapitalInExcessOfRsTwoLakhMember"
+          }
+        ],
+        "shareholder_count": 382,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 17050935,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 17050935,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0125",
+        "ownership_percentage_points": "1.2500",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 17050935,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0125",
+        "voting_rights_percentage_points": "1.2500",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "NonResidentIndians_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "NonResidentIndians",
+        "category_key": "NonResidentIndians",
+        "entity_identifier": "544480",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "NonResidentIndiansMember"
+          }
+        ],
+        "shareholder_count": 2609,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 1702025,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 1702025,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0012",
+        "ownership_percentage_points": "0.1200",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 1702025,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0012",
+        "voting_rights_percentage_points": "0.1200",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "ForeignCompanies_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "ForeignCompanies",
+        "category_key": "ForeignCompanies",
+        "entity_identifier": "544480",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "ForeignCompaniesMember"
+          }
+        ],
+        "shareholder_count": 1,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 23090281,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 23090281,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0169",
+        "ownership_percentage_points": "1.6900",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 23090281,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0169",
+        "voting_rights_percentage_points": "1.6900",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "BodiesCorporate_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "BodiesCorporate",
+        "category_key": "BodiesCorporate",
+        "entity_identifier": "544480",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "BodiesCorporateMember"
+          }
+        ],
+        "shareholder_count": 583,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 14218786,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 14218786,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0104",
+        "ownership_percentage_points": "1.0400",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 14218786,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0104",
+        "voting_rights_percentage_points": "1.0400",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "OtherNonInstitutions_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "OtherNonInstitutions",
+        "category_key": "OtherNonInstitutions",
+        "entity_identifier": "544480",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "OtherNonInstitutionsMember"
+          }
+        ],
+        "shareholder_count": 11676,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 4173644,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 4173644,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0031",
+        "ownership_percentage_points": "0.3100",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 4173644,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0031",
+        "voting_rights_percentage_points": "0.3100",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "NonInstitutions_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "NonInstitutions",
+        "category_key": "NonInstitutions",
+        "entity_identifier": "544480",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "NonInstitutionsMember"
+          }
+        ],
+        "shareholder_count": 451506,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 140883191,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 140883191,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.1033",
+        "ownership_percentage_points": "10.3300",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 140883191,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.1033",
+        "voting_rights_percentage_points": "10.3300",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "PublicShareholding_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "PublicShareholding",
+        "category_key": "PublicShareholding",
+        "entity_identifier": "544480",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "PublicShareholdingMember"
+          }
+        ],
+        "shareholder_count": 451612,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 370821806,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 370821806,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.272",
+        "ownership_percentage_points": "27.200",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 370821806,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.272",
+        "voting_rights_percentage_points": "27.200",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "EmployeeBenefitsTrusts_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "EmployeeBenefitsTrusts",
+        "category_key": "EmployeeBenefitsTrusts",
+        "entity_identifier": "544480",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "EmployeeBenefitsTrustsMember"
+          }
+        ],
+        "shareholder_count": 1,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 10696490,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 10696490,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0078",
+        "ownership_percentage_points": "0.7800",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 10696490,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0078",
+        "voting_rights_percentage_points": "0.7800",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "SharesHeldByNonPromoterNonPublicShareholders_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "SharesHeldByNonPromoterNonPublicShareholders",
+        "category_key": "SharesHeldByNonPromoterNonPublicShareholders",
+        "entity_identifier": "544480",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "SharesHeldByNonPromoterNonPublicShareholdersMember"
+          }
+        ],
+        "shareholder_count": 1,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 10696490,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 10696490,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": null,
+        "voting_rights": 10696490,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0078",
+        "voting_rights_percentage_points": "0.7800",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "ShareholdingPattern_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "ShareholdingPattern",
+        "category_key": "ShareholdingPattern",
+        "entity_identifier": "544480",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "ShareholdingPatternMember"
+          }
+        ],
+        "shareholder_count": 451635,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 1363364936,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 1363364936,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "1",
+        "ownership_percentage_points": "100",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 1363364936,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "1",
+        "voting_rights_percentage_points": "100",
+        "voting_rights_fraction_unit_ref": "pure"
+      }
+    ],
+    "fpi_reconciliation": [
+      {
+        "reporting_date": "2026-09-30",
+        "fpi_category_i_shares": 60004599,
+        "fpi_category_ii_shares": 2555323,
+        "other_foreign_institution_shares": null,
+        "overseas_depositories_shares": null,
+        "foreign_institutions_total_shares": 62559922,
+        "component_sum_shares": null,
+        "difference_shares": null,
+        "status": "not_comparable_missing_component",
+        "scope_note": "FPI Category I and II are separate from other foreign institutions. OverseasDepositories is included when explicitly reported; absent or nil components are not assumed to be zero."
+      }
+    ],
+    "semantics": {
+      "ownership_fraction": "XBRL reported decimal fraction; multiply by 100 for percentage points",
+      "shares": "Reported share count from the NumberOfShares fact",
+      "missing": "Absent or nil facts remain null; they are never converted to zero",
+      "attribution": "Quarterly reported ownership, not daily trade flow or purchase date"
+    }
+  }
+}
