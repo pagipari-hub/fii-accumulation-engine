@@ -196,5 +196,10 @@ sources:
     frequency: "daily_and_historical_query"
     option_types: [bulk_deals, block_deals]
     query_parameters: [optionType, from, to, symbol, csv]
-    status: "endpoint_discovered_schema_validation_pending"
+    status: "adapter_implemented_live_validation_pending"
+    finality: "exchange_disclosed_historical_transaction_data"
     attribution_scope: "named_client_transaction_disclosure_not_beneficial_owner_classification"
+    primary_format: "CSV_export"
+    crosscheck_format: "JSON_page_data_subset"
+    history_policy: "immutable_per_trade_date_snapshots_from_overlapping_7_day_queries"
+    max_query_range_days: 365
