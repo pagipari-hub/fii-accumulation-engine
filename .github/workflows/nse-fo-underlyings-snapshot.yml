@@ -16,6 +16,7 @@ on:
       - "data/snapshots/universe/**"
       - ".gitignore"
       - ".github/workflows/nse-fo-underlyings-snapshot.yml"
+      - "scripts/retry_git_push.sh"
   workflow_dispatch:
   schedule:
     # 20:25 IST, Monday to Friday.
@@ -116,8 +117,7 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add data/raw/fno_underlyings data/snapshots/fno_underlyings data/raw/fno_universe data/snapshots/fno_universe
             git commit -m "data: refresh official NSE F&O underlyings"
-            git pull --rebase origin "$GITHUB_REF_NAME"
-            git push
+            bash scripts/retry_git_push.sh "$GITHUB_REF_NAME"
           else
             echo "Official NSE F&O underlying snapshot unchanged; no commit required."
           fi
