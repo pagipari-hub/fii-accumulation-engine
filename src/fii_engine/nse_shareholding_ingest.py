@@ -353,6 +353,7 @@ def ingest(root: Path = Path(".")) -> dict:
     fetched_count = 0
     reused_count = 0
     fetch_errors = []
+    raw_xbrl_refs = []
     eligible_records = [
         row for row in current_records if row["identity_status"] == "verified"
     ]
@@ -389,6 +390,13 @@ def ingest(root: Path = Path(".")) -> dict:
                 raise RuntimeError(f"immutable XBRL raw hash mismatch: {raw_path}")
             if not raw_path.exists():
                 raw_path.write_bytes(payload)
+            raw_xbrl_refs.append({
+                "path": str(raw_path.relative_to(root)),
+                "sha256": xbrl_hash,
+                "bytes": len(payload),
+                "record_id": metadata["record_id"],
+                "symbol": metadata["symbol"],
+            })
             filing_value = {
                 "dataset": "nse_shareholding_xbrl_filing",
                 "parser_version": PARSER_VERSION,
@@ -467,6 +475,15 @@ def ingest(root: Path = Path(".")) -> dict:
         "reused_filing_count": reused_count,
         "fetch_error_count": len(fetch_errors),
         "fetch_errors": fetch_errors,
+        "raw_xbrl_refs": raw_xbrl_refs,
+        "filing_snapshot_paths": [
+            str(
+                root / "data/snapshots/shareholding_filings"
+                / f"filing_{row['record_id']}_{row['metadata_sha256'][:16]}.json"
+            ).replace(str(root) + "/", "")
+            for row in eligible_records
+            if (row["record_id"], row["metadata_sha256"]) in filings_by_key
+        ],
         "parsed_ownership_row_count": parsed_count,
         "ownership_row_count": len(ownership_rows),
         "latest_reporting_date": latest_reporting_date,
