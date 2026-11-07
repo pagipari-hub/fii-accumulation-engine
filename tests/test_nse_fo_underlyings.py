@@ -79,6 +79,7 @@ def test_tracker_reconciliation_applies_official_symbol_alias():
     assert result["status"] == "pass"
     assert result["mismatch_count"] == 0
     assert result["future_event_count"] == 1
+    assert result["future_events"][0]["symbol"] == "IEX"
     assert result["aliases_applied"][0]["new_symbol"] == "ETERNAL"
 
 
