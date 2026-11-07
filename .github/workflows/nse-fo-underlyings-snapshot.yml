@@ -44,15 +44,23 @@ jobs:
       - name: Validate source snapshot and run tests
         run: |
           python - <<'PY'
+          import hashlib
           import json
           from pathlib import Path
 
           current = Path("data/raw/fno_underlyings/fno_underlyings_current.csv")
           assert current.is_file()
           assert len(current.read_text(encoding="utf-8").splitlines()) >= 150
-          manifests = sorted(Path("data/snapshots/fno_underlyings").glob("*.json"))
+          current_hash = hashlib.sha256(current.read_bytes()).hexdigest()
+          manifests = list(Path("data/snapshots/fno_underlyings").glob("*.json"))
           assert manifests
-          latest = json.loads(manifests[-1].read_text(encoding="utf-8"))
+          matching = [
+              json.loads(path.read_text(encoding="utf-8"))
+              for path in manifests
+              if json.loads(path.read_text(encoding="utf-8"))["normalized_sha256"] == current_hash
+          ]
+          assert matching
+          latest = matching[0]
           assert latest["individual_stock_underlying_count"] >= 150
           assert latest["source_effective_date"] is None
           print("Validated current NSE individual-stock F&O underlying snapshot.")
