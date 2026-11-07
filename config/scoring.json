@@ -9,8 +9,7 @@
         "disclosed_deals": 10,
         "cash_market": 25,
         "stock_derivatives": 30,
-        "participant_positioning": 15,
-        "sector_relative_strength": 15
+        "sector_relative_strength": 30
       }
     },
     "positional": {
@@ -20,8 +19,7 @@
         "disclosed_deals": 10,
         "cash_market": 25,
         "stock_derivatives": 15,
-        "participant_positioning": 10,
-        "sector_relative_strength": 15
+        "sector_relative_strength": 25
       }
     }
   },
@@ -44,8 +42,13 @@
     "Each evidence family contributes at most one normalized family score per stock and horizon.",
     "Correlated features must be combined inside their family before scoring.",
     "Market-wide FII cash flows are context and are not treated as stock-specific transactions.",
-    "A Grade 1 result requires separately verified direct FPI transaction evidence."
+    "A Grade 1 result requires separately verified direct FPI transaction evidence.",
+    "Market-wide FII/DII cash flows and participant-category aggregates are reported as non-scoring market context, not repeated across every stock score."
   ],
   "missing_data_policy": "Unavailable families are excluded from the score denominator and reduce coverage; not_applicable families are excluded from both score and applicable coverage denominator; neither is treated as zero.",
-  "calibration_policy": "Weights and thresholds are provisional. Do not publish production rankings until historical backtests, stability checks and source-coverage validation are complete."
+  "calibration_policy": "Weights and thresholds are provisional. Do not publish production rankings until historical backtests, stability checks and source-coverage validation are complete.",
+  "non_scoring_market_context": {
+    "market_wide_fii_dii_cash_flows": "Market-wide regime context only; never allocated to individual stocks or treated as stock-specific FPI transactions.",
+    "participant_positioning": "Participant-category aggregate derivatives positioning only; not participant-by-stock positions and not part of stock-level score."
+  }
 }
