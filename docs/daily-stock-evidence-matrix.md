@@ -128,3 +128,24 @@ Outputs:
 The daily pipeline attempts this build after writing the current matrix and
 records an independent `historical_features` status. A history validation
 failure does not erase or mislabel a successfully collected daily matrix.
+
+## Participant derivatives history
+
+The daily participant/FII derivatives collector also persists compact normalized
+snapshots under `data/snapshots/fno_aggregate_reports/`. Original exchange
+files remain in 90-day workflow artifacts; only normalized, small CSV history
+is committed for reproducibility.
+
+The historical builder writes
+`data/raw/historical_features/participant_derivatives_history_current.csv`
+and an immutable snapshot. It calculates, separately for each participant
+category and instrument family:
+
+- Participant open-interest start/end levels and changes across complete
+  5-, 20- and 60-session windows.
+- Participant traded-contract totals and daily averages over the same windows.
+- Explicit insufficient/partial-history statuses.
+
+These are aggregate participant-category measures, not individual-stock
+positions. FII participant OI must not be interpreted as FII positions in a
+named stock.
