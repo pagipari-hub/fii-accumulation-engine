@@ -162,10 +162,14 @@ sources:
     frequency: "daily"
     report_display_name: "CM-UDiFF Common Bhavcopy Final (zip)"
     required_fields: [TradDt, BizDt, Sgmt, FinInstrmTp, FinInstrmId, ISIN, TckrSymb, SctySrs, OpnPric, HghPric, LwPric, ClsPric, TtlTradgVol, TtlTrfVal]
-    status: "adapter_implemented_live_validation_pending"
+    status: "live_validated_current_capture"
     finality: "final"
     scope: "NSE_capital_market"
     semantic_boundary: "market_wide_price_and_volume_not_participant_attribution"
+    parser_version: 1
+    last_live_validated_trade_date: "2026-11-06"
+    last_live_validated_rows: 3715
+    last_live_validated_distinct_symbols: 3713
   nse_cm_security_delivery:
     description: "Official full bhavcopy with security-wise deliverable quantity and percentage"
     publisher: "National Stock Exchange of India"
@@ -174,7 +178,12 @@ sources:
     frequency: "daily"
     report_display_name: "Full Bhavcopy and Security Deliverable data"
     required_fields: [SYMBOL, SERIES, DATE1, OPEN_PRICE, HIGH_PRICE, LOW_PRICE, CLOSE_PRICE, TTL_TRD_QNTY, DELIV_QTY, DELIV_PER]
-    status: "adapter_implemented_live_validation_pending"
+    status: "live_validated_current_capture"
     finality: "exchange_reported"
     scope: "NSE_security_wise_delivery"
     semantic_boundary: "deliverable_quantity_is_not_fii_ownership_or_beneficial_owner_attribution"
+    parser_version: 1
+    last_live_validated_trade_date: "2026-11-06"
+    last_live_validated_rows: 3559
+    last_live_validated_delivery_reported_rows: 3325
+    last_live_validated_delivery_unreported_rows: 234
