@@ -572,10 +572,39 @@ def capture_dataset(dataset: str, catalogue: dict, root: Path) -> dict:
     try:
         if selected["filename"].lower().endswith(".csv"):
             inspection = inspect_csv(raw, dataset, selected["trading_date"])
+            inspection["normalized_records"] = normalize_participant_report(
+                inspection, dataset, selected["trading_date"]
+            )
         else:
-            inspection = inspect_xls(raw, dataset)
+            preview = inspect_xls(raw, dataset)
+            parsed = parse_fii_stats_xls(raw, selected["trading_date"])
+            inspection = {**preview, **parsed}
     except (ValueError, OSError) as exc:
         inspection_error = str(exc)
+
+    processed_path = None
+    processed_hash = None
+    normalized_row_count = 0
+    if inspection is not None:
+        normalized_records = inspection.get("normalized_records", [])
+        if normalized_records:
+            processed_dir = root / "data/processed/fno_aggregate_reports"
+            processed_dir.mkdir(parents=True, exist_ok=True)
+            processed_path = processed_dir / (
+                f"{dataset}_{selected['trading_date']}_{raw_hash[:16]}.csv"
+            )
+            buffer = io.StringIO(newline="")
+            writer = csv.DictWriter(buffer, fieldnames=list(normalized_records[0]))
+            writer.writeheader()
+            writer.writerows(normalized_records)
+            processed_bytes = buffer.getvalue().encode("utf-8")
+            processed_hash = hashlib.sha256(processed_bytes).hexdigest()
+            if processed_path.exists():
+                if hashlib.sha256(processed_path.read_bytes()).hexdigest() != processed_hash:
+                    raise RuntimeError(f"{dataset}: immutable normalized path hash mismatch")
+            else:
+                processed_path.write_bytes(processed_bytes)
+            normalized_row_count = len(normalized_records)
 
     manifest = {
         "dataset": dataset,
@@ -586,6 +615,9 @@ def capture_dataset(dataset: str, catalogue: dict, root: Path) -> dict:
         "raw_path": str(raw_path),
         "raw_bytes": len(raw),
         "raw_sha256": raw_hash,
+        "processed_path": str(processed_path) if processed_path else None,
+        "processed_sha256": processed_hash,
+        "normalized_row_count": normalized_row_count,
         "inspection": inspection,
         "inspection_error": inspection_error,
         "parser_stage": "source_capture_and_schema_discovery",
@@ -609,6 +641,9 @@ def capture_dataset(dataset: str, catalogue: dict, root: Path) -> dict:
         "raw_sha256": raw_hash,
         "raw_path": str(raw_path),
         "manifest_path": str(manifest_path),
+        "processed_path": str(processed_path) if processed_path else None,
+        "processed_sha256": processed_hash,
+        "normalized_row_count": normalized_row_count,
         "inspection": inspection,
         "inspection_error": inspection_error,
     }
@@ -620,10 +655,16 @@ def ingest(root: Path = Path(".")) -> dict:
         capture_dataset(dataset, catalogue, root)
         for dataset in REPORTS
     ]
+    by_dataset = {item["dataset"]: item for item in results}
+    cross_source_reconciliation = reconcile_fii_oi(
+        by_dataset["participant_oi"]["inspection"],
+        by_dataset["fii_derivatives_statistics"]["inspection"],
+    )
     current = {
         "publisher": "National Stock Exchange of India",
         "retrieved_at_utc": datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
         "datasets": results,
+        "cross_source_reconciliation": cross_source_reconciliation,
         "attribution_boundary": (
             "Participant reports are category aggregates, not participant-by-stock "
             "positions. FII statistics are aggregate FII derivatives data only."
