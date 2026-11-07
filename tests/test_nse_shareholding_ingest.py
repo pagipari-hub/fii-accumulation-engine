@@ -66,6 +66,16 @@ def _setup(tmp_path: Path):
         {"symbol": "XYZ", "company_name": "XYZ Limited", "industry": "Test", "series": "EQ", "isin": "INE000B01001"},
         {"symbol": "DEF", "company_name": "DEF Limited", "industry": "Test", "series": "EQ", "isin": "INE000C01001"},
     ]
+    rows.extend(
+        {
+            "symbol": f"T{index:03d}",
+            "company_name": f"Test Company {index}",
+            "industry": "Test",
+            "series": "EQ",
+            "isin": f"INE999{index:05d}",
+        }
+        for index in range(498)
+    )
     with universe_path.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=list(rows[0]))
         writer.writeheader()
@@ -113,7 +123,7 @@ def test_ingests_fpi_categories_and_selects_latest_revision(tmp_path, monkeypatc
     assert result["fetched_filing_count"] == 3
     assert result["fetch_error_count"] == 0
     assert result["latest_quarter_parsed_count"] == 2
-    assert result["latest_quarter_coverage_pct"] == 66.67
+    assert result["latest_quarter_coverage_pct"] == 0.4
 
     ownership_path = tmp_path / result["ownership_current_path"]
     with ownership_path.open(newline="", encoding="utf-8") as handle:
