@@ -1,0 +1,64 @@
+name: NSE current F&O underlyings probe
+
+on:
+  push:
+    paths:
+      - "src/fii_engine/nse_fo_underlyings_probe.py"
+      - "tests/test_nse_fo_underlyings_probe.py"
+      - ".github/workflows/nse-fo-underlyings.yml"
+  workflow_dispatch:
+  schedule:
+    # 20:20 IST, Monday to Friday.
+    - cron: "50 14 * * 1-5"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nse-fo-underlyings-probe
+  cancel-in-progress: false
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install project
+        run: python -m pip install -e .
+
+      - name: Prepare artifact directory
+        run: mkdir -p artifacts/nse-fo-underlyings
+
+      - name: Capture official NSE underlyings page
+        run: python -m fii_engine.nse_fo_underlyings_probe --output-dir artifacts/nse-fo-underlyings
+
+      - name: Validate raw page capture
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path("artifacts/nse-fo-underlyings")
+          manifest = json.loads((root / "manifest.json").read_text(encoding="utf-8"))
+          path = Path(manifest["raw_html_artifact_path"])
+          assert path.is_file() and path.stat().st_size == manifest["html_bytes"]
+          print("Interpretation:", manifest["interpretation_status"])
+          print("Underlying rows parsed:", manifest["parsed"]["total_underlying_rows"])
+          PY
+
+      - name: Upload raw page and parse manifest
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nse-fo-underlyings-${{ github.run_id }}
+          path: artifacts/nse-fo-underlyings/
+          if-no-files-found: warn
+          retention-days: 90

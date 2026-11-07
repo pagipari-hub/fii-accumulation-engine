@@ -1,0 +1,91 @@
+name: Official NSE individual-stock F&O underlyings
+
+on:
+  push:
+    paths:
+      - "src/fii_engine/nse_fo_underlyings.py"
+      - "tests/test_nse_fo_underlyings.py"
+      - "config/sources.yaml"
+      - ".gitignore"
+      - ".github/workflows/nse-fo-underlyings-snapshot.yml"
+  workflow_dispatch:
+  schedule:
+    # 20:25 IST, Monday to Friday.
+    - cron: "55 14 * * 1-5"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: official-nse-fo-underlyings
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install project and test dependencies
+        run: python -m pip install -e ".[dev]"
+
+      - name: Capture official NSE current F&O underlyings
+        run: python -m fii_engine.nse_fo_underlyings --repo-root .
+
+      - name: Validate source snapshot and run tests
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          current = Path("data/raw/fno_underlyings/fno_underlyings_current.csv")
+          assert current.is_file()
+          assert len(current.read_text(encoding="utf-8").splitlines()) >= 150
+          current_hash = hashlib.sha256(current.read_bytes()).hexdigest()
+          manifests = list(Path("data/snapshots/fno_underlyings").glob("*.json"))
+          assert manifests
+          matching = [
+              json.loads(path.read_text(encoding="utf-8"))
+              for path in manifests
+              if json.loads(path.read_text(encoding="utf-8"))["normalized_sha256"] == current_hash
+          ]
+          assert matching
+          latest = matching[0]
+          assert latest["individual_stock_underlying_count"] >= 150
+          assert latest["source_effective_date"] is None
+          print("Validated current NSE individual-stock F&O underlying snapshot.")
+          PY
+          pytest
+
+      - name: Commit changed official F&O underlying snapshot
+        run: |
+          if [[ -n "$(git status --porcelain data/raw/fno_underlyings data/snapshots/fno_underlyings)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add data/raw/fno_underlyings data/snapshots/fno_underlyings
+            git commit -m "data: refresh official NSE F&O underlyings"
+            git push
+          else
+            echo "Official NSE F&O underlying snapshot unchanged; no commit required."
+          fi
+
+      - name: Upload source snapshot and manifests
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nse-fo-underlyings-${{ github.run_id }}
+          path: |
+            data/raw/fno_underlyings/
+            data/snapshots/fno_underlyings/
+          if-no-files-found: warn
+          retention-days: 90
