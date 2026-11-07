@@ -195,3 +195,18 @@ six bulk-deal dates and four block-deal dates. It passed 134 project tests.
 The JSON/CSV difference is retained explicitly in each manifest; it is not
 treated as an ingestion failure because the JSON records were verified as a
 subset of the official CSV export.
+
+
+## NSE equity shareholding-pattern source discovery
+
+Official page:
+https://www.nseindia.com/companies-listing/corporate-filings-shareholding-pattern/
+
+The page's same-origin JavaScript identifies:
+- schema/config JSON: `/json/CorporateFiling/shareholder/shareholder-equity.json`;
+- equity master endpoint: `/api/corporate-share-holdings-master?index=equities`;
+- RSS change feed: `https://nsearchives.nseindia.com/content/RSS/Shareholding_Pattern.xml`.
+
+The page presents separate Equity and SME tabs, a company selector, date filters, CSV download and filing-level detail. The manual probe `src/fii_engine/nse_shareholding_probe.py` captures the schema JSON, master response and RSS XML with hashes and row samples. This source remains schema-validation-pending until the first live probe confirms actual fields, filing/quarter date semantics, record identifiers and downloadable XBRL structure.
+
+Quarter-end reporting date and filing/submission date must be retained separately. Explicit FPI categories in the filing/XBRL are the relevant ownership evidence; the RSS feed is a discovery aid, not a complete history.
