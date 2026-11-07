@@ -38,6 +38,15 @@ stage, not yet a durable historical archive. Before relying on long-run point-in
 history, move immutable raw files to a durable archive or implement a deliberate
 content-addressed retention policy.
 
+**Observed content-integrity failure (6 Nov 2026 catalogue date):** the captured CM
+security file's maximum `UpdDt` decoded to 6 Nov 2016, ten years before its catalogue
+date. In the FO contract file, non-test individual-stock contracts had expiries only
+through 25 Jan 2017; the only 2026 stock-futures rows were dummy `NSETEST` symbols.
+The collector now marks these payloads quarantined and the workflow fails its
+semantic freshness gate while still uploading the raw evidence and manifest.
+No F&O eligibility is derived from this capture. This discrepancy needs source-side
+resolution or a separately validated feed before production use.
+
 ## Required ingestion rules
 
 1. **Immutable raw first:** store the original downloaded bytes before parsing. Never overwrite a source artifact.
