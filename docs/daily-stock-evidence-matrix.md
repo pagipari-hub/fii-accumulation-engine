@@ -14,11 +14,12 @@ with no reported activity or unavailable source data.
 - **Universe:** official Nifty 500 snapshot; ISIN and symbol uniqueness are required.
 - **F&O membership:** current official NSE stock-underlying status joined by symbol
   and checked against the universe ISIN. `not_eligible` is distinct from `unknown`.
-- **Cash market:** official NSE CM UDiFF equity rows filtered to `STK` / `EQ`,
-  joined to the universe by ISIN.
-- **Delivery:** official NSE delivery file filtered to EQ series and joined by
-  current symbol. A dash in delivery quantity/percentage remains unreported,
-  not zero.
+- **Cash market:** official NSE CM UDiFF stock rows (`STK`) joined to the
+  universe by ISIN, with the reported series checked against the constituent
+  series. This preserves BE and REIT/RR constituents as well as EQ.
+- **Delivery:** official NSE delivery file joined by current symbol and the
+  constituent's exact series (EQ, BE, RR, etc.). A dash in delivery
+  quantity/percentage remains unreported, not zero.
 - **Stock derivatives:** official NSE UDiFF F&O rows. The nearest unexpired
   stock-futures expiry is selected; nearest-expiry stock options are aggregated
   by CE/PE with PCR. Futures price/OI classification is market-wide contract
