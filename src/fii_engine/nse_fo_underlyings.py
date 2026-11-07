@@ -290,9 +290,9 @@ def ingest(root: Path = Path(".")) -> dict:
         f"fno_tracker_reconciliation_{as_of_date:%Y%m%d}_{reconciliation_hash[:12]}.json"
     )
     if not reconciliation_path.exists():
-        reconciliation_path.write_bytes(reconciliation_bytes + b"\\n")
+        reconciliation_path.write_bytes(reconciliation_bytes + b"\n")
     reconciliation_current_path = raw_dir / "fno_tracker_reconciliation_current.json"
-    reconciliation_current_path.write_bytes(reconciliation_bytes + b"\\n")
+    reconciliation_current_path.write_bytes(reconciliation_bytes + b"\n")
     return {
         "retrieved_at_utc": retrieved_at,
         "index_underlying_count": len(indexes),
