@@ -33,7 +33,11 @@ EVENT_FIELDS = [
 ]
 STOCK_FIELDS = [
     "trade_date_window_start", "trade_date_window_end", "symbol",
-    "deal_event_count", "source_record_count", "cross_report_duplicate_event_count",
+    "universe_company_name", "universe_industry", "universe_series", "universe_isin",
+    "nifty500_snapshot_membership_status", "nifty500_snapshot_member_verified",
+    "deal_data_status", "deal_event_count", "unverified_deal_event_count",
+    "total_deal_event_count", "source_record_count", "unverified_source_record_count",
+    "cross_report_duplicate_event_count",
     "current_registry_matched_fpi_client_event_count", "current_registry_matched_odi_issuer_event_count",
     "ambiguous_registration_event_count", "unmatched_event_count",
     "current_registry_matched_fpi_client_buy_quantity", "current_registry_matched_fpi_client_sell_quantity",
@@ -174,7 +178,7 @@ def _load_universe(
         "source_page": snapshot_manifest["source_page"],
         "source_download_url": snapshot_manifest["source_download_url"],
     }
-    return by_isin, by_symbol, by_company_name, metadata
+    return by_isin, by_symbol, by_company_name, rows, metadata
 
 
 def _universe_membership(
@@ -480,17 +484,35 @@ def _classify_event(
 
 
 def _stock_summary(
-    events: list[dict], start_date: date, end_date: date
+    events: list[dict],
+    start_date: date,
+    end_date: date,
+    universe_rows: list[dict],
 ) -> list[dict]:
-    grouped: dict[str, list[dict]] = defaultdict(list)
+    events_by_symbol: dict[str, list[dict]] = defaultdict(list)
     for event in events:
-        grouped[event["symbol"]].append(event)
+        events_by_symbol[event["symbol"]].append(event)
+
     results = []
-    for symbol, items in sorted(grouped.items()):
+    for universe_row in sorted(universe_rows, key=lambda row: row["symbol"]):
+        symbol = universe_row["symbol"]
+        all_items = events_by_symbol.get(symbol, [])
+        items = [
+            event for event in all_items
+            if event.get("nifty500_snapshot_member_verified") == "true"
+        ]
+        unverified_items = [
+            event for event in all_items
+            if event.get("nifty500_snapshot_member_verified") != "true"
+        ]
         totals = defaultdict(Decimal)
         counts = defaultdict(int)
         source_record_count = 0
+        unverified_source_record_count = sum(
+            int(event["source_record_count"]) for event in unverified_items
+        )
         duplicate_count = 0
+
         for event in items:
             qty = Decimal(event["quantity"])
             value = Decimal(event["deal_value"])
@@ -512,30 +534,47 @@ def _stock_summary(
                 totals[f"unmatched_{side}_quantity"] += qty
             elif counterparty == "current_registry_match_ambiguous_registration":
                 totals[f"ambiguous_{side}_quantity"] += qty
+
         total_events = len(items)
-        membership_statuses = {
-            item.get("nifty500_snapshot_membership_status", "universe_not_checked")
-            for item in items
-        }
-        membership_verified = all(
-            item.get("nifty500_snapshot_member_verified") == "true" for item in items
-        )
         identified = (
             counts["current_registry_matched_fpi_client"]
             + counts["current_registry_matched_odi_issuer"]
             + counts["current_registry_match_ambiguous_registration"]
         )
         unmatched = counts["unmatched"]
-        if unmatched == 0 and counts["current_registry_match_ambiguous_registration"] == 0 and counts["current_registry_matched_odi_issuer"] == 0:
-            net_status = "complete_for_current_registry_matched_counterparties"
+        if not all_items:
+            deal_status = "no_disclosed_deal_in_available_snapshots"
+            net_status = "no_disclosed_deal_in_available_snapshots"
+        elif not items:
+            deal_status = "deal_records_present_but_universe_join_unverified"
+            net_status = "deal_records_present_but_universe_join_unverified"
         else:
-            net_status = "partial_unmatched_or_odi_counterparties"
+            deal_status = "observed_disclosed_deals"
+            if (
+                unmatched == 0
+                and counts["current_registry_match_ambiguous_registration"] == 0
+                and counts["current_registry_matched_odi_issuer"] == 0
+            ):
+                net_status = "complete_for_current_registry_matched_counterparties"
+            else:
+                net_status = "partial_unmatched_or_odi_counterparties"
+
         results.append({
             "trade_date_window_start": start_date.isoformat(),
             "trade_date_window_end": end_date.isoformat(),
             "symbol": symbol,
+            "universe_company_name": universe_row["company_name"],
+            "universe_industry": universe_row["industry"],
+            "universe_series": universe_row["series"],
+            "universe_isin": universe_row["isin"],
+            "nifty500_snapshot_membership_status": "member_in_latest_published_snapshot",
+            "nifty500_snapshot_member_verified": "true",
+            "deal_data_status": deal_status,
             "deal_event_count": total_events,
+            "unverified_deal_event_count": len(unverified_items),
+            "total_deal_event_count": len(all_items),
             "source_record_count": source_record_count,
+            "unverified_source_record_count": unverified_source_record_count,
             "cross_report_duplicate_event_count": duplicate_count,
             "current_registry_matched_fpi_client_event_count": counts["current_registry_matched_fpi_client"],
             "current_registry_matched_odi_issuer_event_count": counts["current_registry_matched_odi_issuer"],
@@ -556,17 +595,14 @@ def _stock_summary(
             "temporally_verified_fpi_sell_quantity": str(int(totals["verified_fpi_sell_quantity"])),
             "temporally_unverified_fpi_buy_quantity": str(int(totals["unverified_fpi_buy_quantity"])),
             "temporally_unverified_fpi_sell_quantity": str(int(totals["unverified_fpi_sell_quantity"])),
-            "counterparty_identity_coverage_pct": round(identified / total_events * 100, 2) if total_events else 0,
+            "counterparty_identity_coverage_pct": (
+                round(identified / total_events * 100, 2) if total_events else ""
+            ),
             "known_fpi_net_status": net_status,
             "registry_temporal_status": ";".join(sorted({
                 item["temporal_status"] for item in items
                 if item["counterparty_class"] == "current_registry_matched_fpi_client"
             })) or "no_current_registry_matched_fpi_clients",
-            "nifty500_snapshot_membership_status": (
-                next(iter(membership_statuses)) if len(membership_statuses) == 1
-                else "mixed_membership_status"
-            ),
-            "nifty500_snapshot_member_verified": str(membership_verified).lower(),
         })
     return results
 
@@ -577,7 +613,8 @@ def classify(root: Path = Path("."), lookback_days: int = 7) -> dict:
     registry_manifest, registry_index = _load_registry(root)
     registry_snapshot_date = date.fromisoformat(registry_manifest["retrieved_date_ist"])
     (
-        universe_by_isin, universe_by_symbol, universe_by_company_name, universe_metadata
+        universe_by_isin, universe_by_symbol, universe_by_company_name,
+        universe_rows, universe_metadata
     ) = _load_universe(root)
     selected_manifests, start_date, end_date = _load_latest_deal_manifests(
         root, lookback_days
@@ -594,7 +631,7 @@ def classify(root: Path = Path("."), lookback_days: int = 7) -> dict:
     for event in events:
         for field in EVENT_FIELDS:
             event.setdefault(field, "")
-    stock_rows = _stock_summary(events, start_date, end_date)
+    stock_rows = _stock_summary(events, start_date, end_date, universe_rows)
     event_payload = _csv_bytes(events, EVENT_FIELDS)
     stock_payload = _csv_bytes(stock_rows, STOCK_FIELDS)
     event_sha = _sha256(event_payload)
@@ -656,6 +693,23 @@ def classify(root: Path = Path("."), lookback_days: int = 7) -> dict:
         ),
         "outside_or_unverified_universe_event_count": sum(
             event["nifty500_snapshot_member_verified"] != "true" for event in events
+        ),
+        "stock_summary_row_count": len(stock_rows),
+        "nifty500_symbols_with_verified_deal_events": sum(
+            row["deal_data_status"] == "observed_disclosed_deals" for row in stock_rows
+        ),
+        "nifty500_symbols_with_unverified_deal_records": sum(
+            row["deal_data_status"] == "deal_records_present_but_universe_join_unverified"
+            or int(row["unverified_deal_event_count"]) > 0
+            for row in stock_rows
+        ),
+        "nifty500_symbols_without_disclosed_deals": sum(
+            row["deal_data_status"] == "no_disclosed_deal_in_available_snapshots"
+            for row in stock_rows
+        ),
+        "nifty500_symbols_with_direct_fpi_client_events": sum(
+            int(row["current_registry_matched_fpi_client_event_count"]) > 0
+            for row in stock_rows
         ),
         "source_row_count": len(source_rows),
         "deduplicated_event_count": len(events),
