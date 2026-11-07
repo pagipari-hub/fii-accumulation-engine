@@ -12,6 +12,7 @@ license = { text = "Proprietary research project" }
 dependencies = []
 
 [project.optional-dependencies]
+market-data = ["pandas>=2.2", "yfinance>=0.2.66,<1"]
 dev = ["pytest>=8.0", "ruff>=0.6"]
 
 [tool.setuptools.packages.find]
