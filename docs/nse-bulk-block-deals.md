@@ -32,3 +32,35 @@ Before production ingestion:
 6. Preserve raw disclosures and classify named clients separately from inferred institutional categories.
 
 A bulk/block deal is named transaction evidence, but the disclosed client is not automatically an FII/FPI or beneficial owner.
+
+
+## First live schema probe
+
+GitHub Actions run:
+https://github.com/pagipari-hub/fii-accumulation-engine/actions/runs/42358048713
+
+The official page displayed the range 30 Oct 2026 through 6 Nov 2026. The endpoint returned HTTP 200 for JSON and CSV for both deal types.
+
+**CSV export (primary range dataset):**
+- Bulk deals: 644 rows, 118 symbols, 207 distinct client names.
+- Block deals: 36 rows, 6 symbols, 29 distinct client names.
+- Both CSVs used eight columns: Date, Symbol, Security Name, Client Name, Buy / Sell, Quantity Traded, Trade Price / Wght. Avg. Price, Remarks.
+- No exact duplicate rows were observed in this capture.
+
+**JSON page response (cross-check only):**
+- Bulk deals: 70 rows, all matching a subset of the 644-row CSV.
+- Block deals: 36 rows, matching the 36-row CSV.
+- The bulk JSON response is not complete for the requested range; it must not be used as the primary history source. The CSV download is the page's full-range export and its content-disposition filename explicitly contains the requested date range.
+
+Bulk CSV rows by trade date: 30 Oct (88), 2 Nov (87), 3 Nov (147), 4 Nov (133), 5 Nov (93), 6 Nov (96). Block CSV rows: 30 Oct (12), 3 Nov (2), 4 Nov (2), 6 Nov (20).
+
+The JSON payload includes `BD_DT_DATE` and a `BD_DT_ORDER` UTC timestamp. The CSV's explicit `Date` column is used as the transaction date. Do not substitute the UTC timestamp, which is the prior UTC calendar date for these India-local trade dates.
+
+The raw probe files and schema manifest are preserved in artifact:
+https://github.com/pagipari-hub/fii-accumulation-engine/actions/runs/42358048713
+
+## Production collector
+
+`src/fii_engine/nse_bulk_block_deals.py` uses the official CSV export as the primary dataset and cross-checks the JSON page response as a subset. It stores immutable per-trade-date normalized snapshots, raw-response hashes and provenance manifests. The daily workflow queries an overlapping seven-calendar-day range so a missed run can be recovered on the next run and later source revisions produce new content-addressed snapshots.
+
+A client name is a disclosed counterparty label, not a verified investor classification. No client is automatically labelled FII/FPI, mutual fund, promoter or beneficial owner from its name alone. Bulk and block deals are separate evidence classes and BUY/SELL observations are retained individually; they are not silently netted into FII flows.
