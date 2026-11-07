@@ -2,6 +2,7 @@ from fii_engine.source_probe import (
     discover_links,
     discover_script_urls,
     extract_endpoint_candidates,
+    extract_endpoint_contexts,
 )
 
 
@@ -57,3 +58,12 @@ def test_equities_reports_page_is_in_official_source_probe():
     from fii_engine.source_probe import SOURCE_PAGES
 
     assert SOURCE_PAGES["nse_equities_reports"] == "https://www.nseindia.com/all-reports"
+
+
+def test_endpoint_contexts_capture_bounded_reviewable_source():
+    source = 'const x = "/api/daily-reports?key=" + reportKey + "&date=" + date;'
+    contexts = extract_endpoint_contexts(source, radius=20)
+    assert len(contexts) == 1
+    assert contexts[0]["endpoint"] == "/api/daily-reports?key="
+    assert "reportKey" in contexts[0]["context"]
+    assert len(contexts[0]["context"]) <= len(source)
