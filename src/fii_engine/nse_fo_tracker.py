@@ -4,7 +4,9 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-from datetime import datetime, timezone
+import re
+from datetime import date, datetime, timezone
+from zoneinfo import ZoneInfo
 from html.parser import HTMLParser
 from io import BytesIO
 from pathlib import Path
@@ -79,6 +81,100 @@ def find_tracker_url(html: str, page_url: str = SOURCE_PAGE) -> str:
     return url
 
 
+def _merged_cell_value(worksheet, row: int, column: int):
+    for merged in worksheet.merged_cells.ranges:
+        if (
+            merged.min_row <= row <= merged.max_row
+            and merged.min_col <= column <= merged.max_col
+        ):
+            return worksheet.cell(merged.min_row, merged.min_col).value
+    return worksheet.cell(row, column).value
+
+
+def _parse_effective_date(value) -> date | None:
+    if isinstance(value, datetime):
+        return value.date()
+    if isinstance(value, date):
+        return value
+    if not isinstance(value, str) or not value.strip():
+        return None
+    normalized = re.sub(r"\s+", " ", value).strip()
+    normalized = re.sub(r"\s*,\s*", ", ", normalized)
+    for pattern in ("%B %d, %Y", "%b %d, %Y"):
+        try:
+            return datetime.strptime(normalized, pattern).date()
+        except ValueError:
+            continue
+    raise ValueError(f"unrecognized NSE tracker effective date: {value!r}")
+
+
+def parse_tracker_events(payload: bytes, as_of_date: date) -> dict:
+    if not payload.startswith(b"PK"):
+        raise ValueError("NSE F&O tracker response is not an XLSX file")
+    workbook = load_workbook(BytesIO(payload), read_only=False, data_only=True)
+    required_sheets = {"introduction", "exclusion"}
+    by_name = {name.casefold(): name for name in workbook.sheetnames}
+    if not required_sheets.issubset(by_name):
+        raise ValueError(
+            f"NSE tracker workbook schema drift: expected Introduction and Exclusion sheets, got {workbook.sheetnames}"
+        )
+    events = []
+    summary = {}
+    for action in ("Introduction", "Exclusion"):
+        worksheet = workbook[by_name[action.casefold()]]
+        headers = [str(worksheet.cell(1, column).value or "").strip().casefold() for column in range(1, 7)]
+        expected = ["", "sr no", "symbol", "security name", "effective date", "circular link"]
+        if headers != expected:
+            raise ValueError(f"{action} sheet header schema drift: {headers}")
+        action_events = []
+        for row in range(2, worksheet.max_row + 1):
+            symbol_value = worksheet.cell(row, 3).value
+            name_value = worksheet.cell(row, 4).value
+            if not symbol_value or not name_value:
+                continue
+            symbol = str(symbol_value).strip()
+            security_name = str(name_value).strip()
+            effective_date = _parse_effective_date(_merged_cell_value(worksheet, row, 5))
+            circular_value = _merged_cell_value(worksheet, row, 6)
+            circular_links = (
+                re.findall(r"https?://[^\s]+", str(circular_value))
+                if circular_value else []
+            )
+            circular_links = [link.rstrip(".,;") for link in circular_links]
+            status = (
+                "date_unknown" if effective_date is None
+                else "effective" if effective_date <= as_of_date
+                else "future_scheduled"
+            )
+            event = {
+                "action": action.casefold(),
+                "symbol": symbol,
+                "security_name": security_name,
+                "effective_date": effective_date.isoformat() if effective_date else None,
+                "status_as_of_date": status,
+                "circular_links": circular_links,
+            }
+            events.append(event)
+            action_events.append(event)
+        summary[action.casefold()] = {
+            "total": len(action_events),
+            "effective_as_of_date": sum(e["status_as_of_date"] == "effective" for e in action_events),
+            "future_scheduled": sum(e["status_as_of_date"] == "future_scheduled" for e in action_events),
+            "date_unknown": sum(e["status_as_of_date"] == "date_unknown" for e in action_events),
+        }
+    workbook.close()
+    return {
+        "as_of_date_ist": as_of_date.isoformat(),
+        "summary": summary,
+        "events": events,
+        "baseline_required": True,
+        "note": (
+            "The tracker records introductions and exclusions, not a complete starting "
+            "universe. Do not publish a current eligible list without a verified baseline."
+        ),
+    }
+
+
 def inspect_workbook(payload: bytes) -> dict:
     if not payload.startswith(b"PK"):
         raise ValueError("NSE F&O tracker response is not an XLSX file")
@@ -99,6 +195,7 @@ def inspect_workbook(payload: bytes) -> dict:
             "name": worksheet.title,
             "max_row": worksheet.max_row,
             "max_column": worksheet.max_column,
+            "merged_ranges": [str(value) for value in worksheet.merged_cells.ranges],
             "preview_rows": preview,
         })
     workbook.close()
@@ -132,6 +229,8 @@ def capture(output_dir: Path = Path("artifacts/nse-fo-tracker")) -> dict:
     if not payload:
         raise ValueError("NSE F&O tracker download is empty")
     workbook_info = inspect_workbook(payload)
+    as_of_date = datetime.now(ZoneInfo("Asia/Kolkata")).date()
+    event_history = parse_tracker_events(payload, as_of_date)
     digest = hashlib.sha256(payload).hexdigest()
     raw_dir = output_dir / "raw"
     raw_dir.mkdir(parents=True, exist_ok=True)
@@ -146,7 +245,8 @@ def capture(output_dir: Path = Path("artifacts/nse-fo-tracker")) -> dict:
         "sha256": digest,
         "raw_artifact_path": str(raw_path),
         "workbook": workbook_info,
-        "interpretation_status": "schema_inspected_eligibility_not_yet_derived",
+        "event_history": event_history,
+        "interpretation_status": "effective_dated_change_history_parsed_baseline_required",
     }
     output_dir.mkdir(parents=True, exist_ok=True)
     (output_dir / "manifest.json").write_text(
