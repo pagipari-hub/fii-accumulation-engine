@@ -9,6 +9,7 @@ on:
       - "config/sources.yaml"
       - ".gitignore"
       - ".github/workflows/nifty500-universe.yml"
+      - "scripts/retry_git_push.sh"
   workflow_dispatch:
   schedule:
     # Weekly check, Monday 09:47 IST. Commit only when the official snapshot changes.
@@ -52,8 +53,7 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add data/raw/universe data/snapshots/universe
             git commit -m "data: refresh official Nifty 500 universe"
-            git pull --rebase origin "$GITHUB_REF_NAME"
-            git push
+            bash scripts/retry_git_push.sh "$GITHUB_REF_NAME"
           else
             echo "Official constituent snapshot unchanged; no commit required."
           fi
