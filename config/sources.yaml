@@ -246,3 +246,17 @@ sources:
     record_policy: "all records retained; duplicate names and registration numbers preserved"
     temporal_boundary: "validity_end_date_available; registration_start_date_not_published; historical active status requires same-day registry snapshot"
     attribution_scope: "counterparty_identity_reference_only_not_transaction_flow"
+
+  nse_bulk_block_fpi_counterparty_attribution:
+    description: "Derived current-registry name matching for official NSE bulk/block deal clients"
+    publisher: "Derived from NSE bulk/block deal disclosures and CDSL registered-FPI directory"
+    reference_url: "https://www.nseindia.com/report-detail/display-bulk-and-block-deals"
+    supporting_reference_url: "https://www.cdslindia.com/Publications/RegForeignInstInvstr.aspx"
+    frequency: "daily_weekday_after_source_collectors"
+    status: "implementation_under_validation"
+    parser_version: 1
+    identity_policy: "exact normalized name matching only; no fuzzy match; ODI issuers kept separate; unmatched clients remain unresolved"
+    temporal_boundary: "current registry match does not prove earlier trade-date registration when registry snapshot is after trade date"
+    output_paths:
+      - "data/raw/fpi_deal_attribution/fpi_deal_counterparty_current.csv"
+      - "data/raw/fpi_deal_attribution/fpi_deal_stock_summary_current.csv"
