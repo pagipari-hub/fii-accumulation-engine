@@ -35,3 +35,8 @@ current_registry_matched_fpi_client_known_net_quantity is only the net of curren
 ## Evidence use
 
 A named bulk/block transaction matched to a current CDSL FPI entry is a strong stock-specific disclosed-counterparty signal. It does not alone prove sustained accumulation, beneficial ownership, or a multi-month position. Confirm persistence with subsequent disclosures, quarterly shareholding changes and independent cash/price/delivery/derivatives evidence.
+
+
+## Nifty 500 universe boundary
+
+Every disclosed deal event is joined to the current official Nifty 500 constituent file by exact ISIN. A matching symbol with a missing ISIN is not promoted to verified membership; a symbol/ISIN conflict is explicitly flagged. Events outside the current Nifty 500 remain in the audit output but are not eligible for the Nifty 500 watchlist. The source page states its constituent data is as of the last trading day of the previous month, so the snapshot's stated freshness must be respected rather than inventing a more precise effective date.

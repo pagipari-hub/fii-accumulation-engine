@@ -248,14 +248,14 @@ sources:
     attribution_scope: "counterparty_identity_reference_only_not_transaction_flow"
 
   nse_bulk_block_fpi_counterparty_attribution:
-    description: "Derived current-registry name matching for official NSE bulk/block deal clients"
+    description: "Derived current-registry name matching for official NSE bulk/block deal clients, verified against Nifty 500 by ISIN"
     publisher: "Derived from NSE bulk/block deal disclosures and CDSL registered-FPI directory"
     reference_url: "https://www.nseindia.com/report-detail/display-bulk-and-block-deals"
     supporting_reference_url: "https://www.cdslindia.com/Publications/RegForeignInstInvstr.aspx"
     frequency: "daily_weekday_after_source_collectors"
     status: "implementation_under_validation"
     parser_version: 1
-    identity_policy: "exact normalized name matching only; no fuzzy match; ODI issuers kept separate; unmatched clients remain unresolved"
+    identity_policy: "exact normalized name matching only; no fuzzy match; ODI issuers kept separate; unmatched clients remain unresolved; Nifty 500 membership requires exact ISIN"
     temporal_boundary: "current registry match does not prove earlier trade-date registration when registry snapshot is after trade date"
     output_paths:
       - "data/raw/fpi_deal_attribution/fpi_deal_counterparty_current.csv"

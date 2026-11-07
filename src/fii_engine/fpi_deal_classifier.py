@@ -16,9 +16,12 @@ from fii_engine.cdsl_fpi_registry import normalize_registry_name
 
 PARSER_VERSION = 1
 REGISTRY_MANIFEST = Path("data/raw/cdsl_fpi_registry/cdsl_fpi_registry_current_manifest.json")
+UNIVERSE_CSV = Path("data/raw/universe/nifty500_current.csv")
 DEAL_MANIFEST_DIR = Path("data/raw/bulk_block_deals/manifests")
 EVENT_FIELDS = [
-    "event_id", "trade_date", "symbol", "security_name", "deal_type",
+    "event_id", "trade_date", "symbol", "isin", "security_name", "deal_type",
+    "nifty500_membership_status", "nifty500_member_verified",
+    "universe_company_name", "universe_industry", "universe_series",
     "client_name", "client_normalized_name", "source_client_names", "source_security_names",
     "side", "quantity", "weighted_average_price", "deal_value",
     "registry_match_status", "name_match_type", "counterparty_class",
@@ -40,6 +43,7 @@ STOCK_FIELDS = [
     "temporally_verified_fpi_buy_quantity", "temporally_verified_fpi_sell_quantity",
     "temporally_unverified_fpi_buy_quantity", "temporally_unverified_fpi_sell_quantity",
     "counterparty_identity_coverage_pct", "known_fpi_net_status", "registry_temporal_status",
+    "nifty500_membership_status", "nifty500_member_verified",
 ]
 OUTPUT_PATHS = {
     "events": "data/raw/fpi_deal_attribution/fpi_deal_counterparty_current.csv",
@@ -120,6 +124,73 @@ def _load_registry(root: Path) -> tuple[dict, dict[str, list[dict]]]:
     return manifest, index
 
 
+
+def _load_universe(root: Path) -> tuple[dict[str, dict], dict[str, dict], dict]:
+    path = root / UNIVERSE_CSV
+    payload = path.read_bytes()
+    rows = _read_csv(path)
+    required = {"symbol", "company_name", "industry", "series", "isin"}
+    if not rows or not required.issubset(rows[0]):
+        raise ValueError("current Nifty 500 universe CSV schema is incomplete")
+    if not 480 <= len(rows) <= 520:
+        raise ValueError(f"unexpected Nifty 500 universe row count: {len(rows)}")
+    symbols = [row["symbol"].strip().upper() for row in rows]
+    isins = [row["isin"].strip().upper() for row in rows]
+    if any(not value for value in symbols) or any(not value for value in isins):
+        raise ValueError("blank symbol or ISIN in current Nifty 500 universe")
+    if len(set(symbols)) != len(symbols):
+        raise ValueError("duplicate symbols in current Nifty 500 universe")
+    if len(set(isins)) != len(isins):
+        raise ValueError("duplicate ISINs in current Nifty 500 universe")
+    by_symbol = {row["symbol"].strip().upper(): row for row in rows}
+    by_isin = {row["isin"].strip().upper(): row for row in rows}
+    metadata = {
+        "path": str(UNIVERSE_CSV),
+        "sha256": _sha256(payload),
+        "row_count": len(rows),
+    }
+    return by_isin, by_symbol, metadata
+
+
+def _universe_membership(
+    event: dict,
+    universe_by_isin: dict[str, dict] | None,
+    universe_by_symbol: dict[str, dict] | None,
+) -> dict:
+    if universe_by_isin is None or universe_by_symbol is None:
+        return {
+            "nifty500_membership_status": "universe_not_checked",
+            "nifty500_member_verified": "false",
+            "universe_company_name": "",
+            "universe_industry": "",
+            "universe_series": "",
+        }
+    symbol = event["symbol"].strip().upper()
+    isin = str(event.get("isin", "")).strip().upper()
+    universe_row = universe_by_isin.get(isin) if isin else None
+    if universe_row:
+        status = (
+            "nifty500_isin_match"
+            if universe_row["symbol"].strip().upper() == symbol
+            else "nifty500_isin_match_symbol_mismatch"
+        )
+        verified = "true"
+    elif symbol in universe_by_symbol:
+        universe_row = universe_by_symbol[symbol]
+        status = "symbol_match_isin_missing" if not isin else "symbol_match_isin_mismatch"
+        verified = "false"
+    else:
+        status = "outside_current_nifty500"
+        verified = "false"
+        universe_row = {}
+    return {
+        "nifty500_membership_status": status,
+        "nifty500_member_verified": verified,
+        "universe_company_name": universe_row.get("company_name", ""),
+        "universe_industry": universe_row.get("industry", ""),
+        "universe_series": universe_row.get("series", ""),
+    }
+
 def _load_latest_deal_manifests(root: Path, lookback_days: int) -> tuple[list[dict], date, date]:
     manifest_dir = root / DEAL_MANIFEST_DIR
     if not manifest_dir.exists():
@@ -190,7 +261,7 @@ def _deduplicate_cross_report_rows(rows: list[dict]) -> list[dict]:
     grouped: dict[tuple, dict[str, list[dict]]] = defaultdict(lambda: defaultdict(list))
     for row in rows:
         key = (
-            row["trade_date"], row["symbol"], row["security_name"],
+            row["trade_date"], row["symbol"], row.get("isin", ""), row["security_name"],
             _surface_name(row["client_name"]), row["side"],
             row["quantity"], row["weighted_average_price"],
         )
@@ -219,6 +290,7 @@ def _deduplicate_cross_report_rows(rows: list[dict]) -> list[dict]:
                 "event_id": event_id,
                 "trade_date": canonical["trade_date"],
                 "symbol": canonical["symbol"],
+                "isin": canonical.get("isin", ""),
                 "security_name": canonical["security_name"],
                 "deal_type": ";".join(sorted({row["deal_type"] for row in source_rows})),
                 "client_name": canonical["client_name"],
@@ -265,8 +337,13 @@ def _temporal_status(
 
 
 def _classify_event(
-    event: dict, registry_index: dict[str, list[dict]], registry_snapshot_date: date
+    event: dict,
+    registry_index: dict[str, list[dict]],
+    registry_snapshot_date: date,
+    universe_by_isin: dict[str, dict] | None = None,
+    universe_by_symbol: dict[str, dict] | None = None,
 ) -> dict:
+    universe_fields = _universe_membership(event, universe_by_isin, universe_by_symbol)
     candidates = registry_index.get(event["client_normalized_name"], [])
     if not candidates:
         return {
@@ -279,6 +356,7 @@ def _classify_event(
             "registry_record_count": 0,
             "registry_snapshot_date": registry_snapshot_date.isoformat(),
             "temporal_status": "not_established",
+            **universe_fields,
         }
 
     unique_registrations = sorted({row["registration_no"] for row in candidates})
@@ -313,6 +391,7 @@ def _classify_event(
         "registry_record_count": len(candidates),
         "registry_snapshot_date": registry_snapshot_date.isoformat(),
         "temporal_status": temporal,
+        **universe_fields,
     }
 
 
@@ -350,6 +429,13 @@ def _stock_summary(
             elif counterparty == "current_registry_match_ambiguous_registration":
                 totals[f"ambiguous_{side}_quantity"] += qty
         total_events = len(items)
+        membership_statuses = {
+            item.get("nifty500_membership_status", "universe_not_checked")
+            for item in items
+        }
+        membership_verified = all(
+            item.get("nifty500_member_verified") == "true" for item in items
+        )
         identified = (
             counts["current_registry_matched_fpi_client"]
             + counts["current_registry_matched_odi_issuer"]
@@ -392,6 +478,11 @@ def _stock_summary(
                 item["temporal_status"] for item in items
                 if item["counterparty_class"] == "current_registry_matched_fpi_client"
             })) or "no_current_registry_matched_fpi_clients",
+            "nifty500_membership_status": (
+                next(iter(membership_statuses)) if len(membership_statuses) == 1
+                else "mixed_membership_status"
+            ),
+            "nifty500_member_verified": str(membership_verified).lower(),
         })
     return results
 
@@ -401,13 +492,17 @@ def classify(root: Path = Path("."), lookback_days: int = 7) -> dict:
         raise ValueError("lookback_days must be between 1 and 60")
     registry_manifest, registry_index = _load_registry(root)
     registry_snapshot_date = date.fromisoformat(registry_manifest["retrieved_date_ist"])
+    universe_by_isin, universe_by_symbol, universe_metadata = _load_universe(root)
     selected_manifests, start_date, end_date = _load_latest_deal_manifests(
         root, lookback_days
     )
     source_rows, source_refs = _load_deal_rows(root, selected_manifests)
     events = _deduplicate_cross_report_rows(source_rows)
     events = [
-        _classify_event(event, registry_index, registry_snapshot_date)
+        _classify_event(
+            event, registry_index, registry_snapshot_date,
+            universe_by_isin, universe_by_symbol,
+        )
         for event in events
     ]
     for event in events:
@@ -434,6 +529,28 @@ def classify(root: Path = Path("."), lookback_days: int = 7) -> dict:
         "registry_snapshot_date": registry_snapshot_date.isoformat(),
         "registry_snapshot_path": registry_manifest["normalized_csv_path"],
         "registry_snapshot_sha256": registry_manifest["normalized_csv_sha256"],
+        "universe_source_path": universe_metadata["path"],
+        "universe_csv_sha256": universe_metadata["sha256"],
+        "universe_row_count": universe_metadata["row_count"],
+        "nifty500_verified_event_count": sum(
+            event["nifty500_member_verified"] == "true" for event in events
+        ),
+        "nifty500_verified_symbol_count": sum(
+            row["nifty500_member_verified"] == "true" for row in stock_rows
+        ),
+        "nifty500_verified_fpi_client_event_count": sum(
+            event["nifty500_member_verified"] == "true"
+            and event["counterparty_class"] == "current_registry_matched_fpi_client"
+            for event in events
+        ),
+        "nifty500_verified_odi_issuer_event_count": sum(
+            event["nifty500_member_verified"] == "true"
+            and event["counterparty_class"] == "current_registry_matched_odi_issuer"
+            for event in events
+        ),
+        "outside_or_unverified_universe_event_count": sum(
+            event["nifty500_member_verified"] != "true" for event in events
+        ),
         "source_row_count": len(source_rows),
         "deduplicated_event_count": len(events),
         "cross_report_duplicate_event_count": sum(
