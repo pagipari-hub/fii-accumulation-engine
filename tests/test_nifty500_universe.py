@@ -1,15 +1,15 @@
 import pytest
 
 from fii_engine.nifty500_universe import (
-    discover_csv_link,
-    normalized_csv,
+    CSV_URL,
     parse_constituent_csv,
-    parse_page_updated_on,
+    parse_page_freshness,
+    normalized_csv,
 )
 
 
-def page(link='<a href="https://nsearchives.nseindia.com/content/indices/ind_nifty500list.csv">Download List of Nifty 500 Stocks (.csv)</a>'):
-    return f"<html>{link}<p>Updated on: 28/10/2026</p></html>"
+def page():
+    return "<html><h1>NIFTY 500</h1><p>Data as on last trading day of the previous month</p></html>"
 
 
 def fixture_csv(count=500):
@@ -19,35 +19,33 @@ def fixture_csv(count=500):
     return ("\n".join(rows) + "\n").encode()
 
 
-def test_discovers_official_archive_link():
-    assert discover_csv_link(page()).endswith("/content/indices/ind_nifty500list.csv")
+def test_download_url_is_on_official_nse_indices_domain():
+    assert CSV_URL.startswith("https://www.niftyindices.com/")
 
 
-def test_rejects_unexpected_host():
-    html = page('<a href="https://example.com/list.csv">Download List of Nifty 500 Stocks (.csv)</a>')
-    with pytest.raises(ValueError, match="unexpected"):
-        discover_csv_link(html)
+def test_requires_official_page_freshness_statement():
+    assert parse_page_freshness(page()) == "Data as on last trading day of the previous month"
 
 
-def test_requires_exactly_one_csv_link():
-    with pytest.raises(ValueError, match="exactly one"):
-        discover_csv_link("<html></html>")
+def test_rejects_changed_or_missing_freshness_statement():
+    with pytest.raises(ValueError, match="freshness statement"):
+        parse_page_freshness("<html>NIFTY 500</html>")
 
 
-def test_page_update_date_is_extracted_separately():
-    assert parse_page_updated_on(page()) == "2026-10-28"
-
-
-def test_parses_exactly_500_unique_members():
+def test_parses_500_and_normalizes_columns():
     records = parse_constituent_csv(fixture_csv())
     assert len(records) == 500
     assert records[0]["symbol"] == "SYM000"
     assert b"symbol,company_name,industry,series,isin" in normalized_csv(records)
 
 
-def test_rejects_incomplete_universe():
-    with pytest.raises(ValueError, match="expected 500"):
-        parse_constituent_csv(fixture_csv(499))
+def test_accepts_official_index_constituent_count_above_500():
+    assert len(parse_constituent_csv(fixture_csv(504))) == 504
+
+
+def test_rejects_implausible_or_incomplete_constituent_count():
+    with pytest.raises(ValueError, match="outside safety range"):
+        parse_constituent_csv(fixture_csv(479))
 
 
 def test_rejects_duplicate_symbol():
