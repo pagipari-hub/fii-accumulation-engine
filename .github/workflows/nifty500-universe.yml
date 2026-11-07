@@ -51,6 +51,7 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add data/raw/universe data/snapshots/universe
             git commit -m "data: refresh official Nifty 500 universe"
+            git pull --rebase origin "$GITHUB_REF_NAME"
             git push
           else
             echo "Official constituent snapshot unchanged; no commit required."

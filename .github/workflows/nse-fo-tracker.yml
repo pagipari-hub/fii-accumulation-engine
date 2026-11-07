@@ -13,7 +13,7 @@ on:
     - cron: "45 14 * * 1-5"
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: nse-fo-stock-tracker
@@ -26,6 +26,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -39,7 +41,7 @@ jobs:
         run: mkdir -p artifacts/nse-fo-tracker/raw
 
       - name: Capture and inspect official NSE F&O tracker
-        run: python -m fii_engine.nse_fo_tracker --output-dir artifacts/nse-fo-tracker
+        run: python -m fii_engine.nse_fo_tracker --output-dir artifacts/nse-fo-tracker --repo-root .
 
       - name: Validate tracker artifact
         run: |
@@ -53,10 +55,25 @@ jobs:
           assert manifest["sha256"]
           assert manifest["interpretation_status"] == "effective_dated_change_history_parsed_baseline_required"
           assert manifest["event_history"]["baseline_required"] is True
+          for key in ("persistent_raw_path", "persistent_current_path", "persistent_manifest_path"):
+              assert Path(manifest[key]).is_file()
           path = Path(manifest["raw_artifact_path"])
           assert path.is_file() and path.stat().st_size == manifest["bytes"]
           print("NSE tracker workbook captured and structurally inspected.")
           PY
+
+      - name: Commit changed official tracker archive
+        run: |
+          if [[ -n "$(git status --porcelain data/raw/fno_tracker data/snapshots/fno_tracker)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add data/raw/fno_tracker data/snapshots/fno_tracker
+            git commit -m "data: archive official NSE F&O tracker"
+            git pull --rebase origin "$GITHUB_REF_NAME"
+            git push
+          else
+            echo "Official F&O tracker unchanged; no commit required."
+          fi
 
       - name: Upload tracker workbook and inspection manifest
         if: always()

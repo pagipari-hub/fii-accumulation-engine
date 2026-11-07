@@ -1,8 +1,9 @@
 import json
+from datetime import date
 
 import pytest
 
-from fii_engine.nse_fo_underlyings import normalized_csv, parse_underlying_payload
+from fii_engine.nse_fo_underlyings import normalized_csv, parse_underlying_payload, reconcile_tracker_events
 
 
 def _payload(stock_count=150):
@@ -59,3 +60,50 @@ def test_normalized_csv_contains_index_and_stock_segments():
     assert output.splitlines()[0] == "segment,serial_number,symbol,underlying"
     assert output.count("\n") == 157
     assert "individual_stock,1,M&M,Stock 1" in output
+
+
+def test_tracker_reconciliation_applies_official_symbol_alias():
+    events = [
+        {"action": "introduction", "symbol": "ZOMATO", "effective_date": "2024-11-29"},
+        {"action": "introduction", "symbol": "IEX", "effective_date": "2024-11-29"},
+        {"action": "exclusion", "symbol": "IEX", "effective_date": "2026-11-25"},
+    ]
+    aliases = [{
+        "old_symbol": "ZOMATO",
+        "new_symbol": "ETERNAL",
+        "effective_date": "2025-04-09",
+    }]
+    result = reconcile_tracker_events(
+        events, {"ETERNAL", "IEX"}, aliases, date(2026, 11, 7)
+    )
+    assert result["status"] == "pass"
+    assert result["mismatch_count"] == 0
+    assert result["future_event_count"] == 1
+    assert result["future_events"][0]["symbol"] == "IEX"
+    assert result["aliases_applied"][0]["new_symbol"] == "ETERNAL"
+
+
+def test_tracker_reconciliation_reports_unexplained_membership_mismatch():
+    events = [
+        {"action": "introduction", "symbol": "ABC", "effective_date": "2024-11-29"}
+    ]
+    result = reconcile_tracker_events(events, set(), [], date(2026, 11, 7))
+    assert result["status"] == "mismatch"
+    assert result["mismatch_count"] == 1
+    assert result["mismatches"][0]["symbol"] == "ABC"
+
+
+def test_symbol_alias_is_not_applied_before_its_effective_date():
+    events = [
+        {"action": "introduction", "symbol": "ZOMATO", "effective_date": "2024-11-29"}
+    ]
+    aliases = [{
+        "old_symbol": "ZOMATO",
+        "new_symbol": "ETERNAL",
+        "effective_date": "2025-04-09",
+    }]
+    result = reconcile_tracker_events(
+        events, {"ZOMATO"}, aliases, date(2025, 4, 8)
+    )
+    assert result["status"] == "pass"
+    assert result["aliases_applied"] == []

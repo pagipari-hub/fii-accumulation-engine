@@ -5,12 +5,15 @@ import argparse
 import csv
 import hashlib
 import json
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
+from zoneinfo import ZoneInfo
 from io import StringIO
 from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.request import HTTPCookieProcessor, Request, build_opener
 from http.cookiejar import CookieJar
+
+from fii_engine.nse_fo_tracker import parse_tracker_events
 
 SOURCE_PAGE = (
     "https://www.nseindia.com/products-services/"
@@ -98,6 +101,108 @@ def parse_underlying_payload(payload: bytes) -> tuple[list[dict], list[dict]]:
     return validate(indexes, "index"), validate(stocks, "individual_stock")
 
 
+def reconcile_tracker_events(
+    events: list[dict],
+    current_symbols: set[str],
+    aliases: list[dict],
+    as_of_date: date,
+) -> dict:
+    alias_map = {}
+    aliases_applied = []
+    for alias in aliases:
+        old_symbol = alias.get("old_symbol")
+        new_symbol = alias.get("new_symbol")
+        effective = date.fromisoformat(alias["effective_date"])
+        if not old_symbol or not new_symbol or old_symbol == new_symbol:
+            raise ValueError(f"invalid symbol alias record: {alias!r}")
+        if effective <= as_of_date:
+            if old_symbol in alias_map and alias_map[old_symbol] != new_symbol:
+                raise ValueError(f"conflicting symbol aliases for {old_symbol}")
+            alias_map[old_symbol] = new_symbol
+
+    def canonical(symbol: str) -> str:
+        seen = set()
+        while symbol in alias_map:
+            if symbol in seen:
+                raise ValueError("cycle in symbol alias configuration")
+            seen.add(symbol)
+            symbol = alias_map[symbol]
+        return symbol
+
+    latest_events = {}
+    future_events = []
+    unknown_events = []
+    for event in events:
+        raw_date = event.get("effective_date")
+        if not raw_date:
+            unknown_events.append(event)
+            continue
+        effective = date.fromisoformat(raw_date)
+        symbol = canonical(event["symbol"])
+        if event["symbol"] in alias_map:
+            alias_record = next(
+                item for item in aliases
+                if item["old_symbol"] == event["symbol"]
+                and date.fromisoformat(item["effective_date"]) <= as_of_date
+            )
+            if alias_record not in aliases_applied:
+                aliases_applied.append(alias_record)
+        if effective > as_of_date:
+            future_events.append(event)
+            continue
+        previous = latest_events.get(symbol)
+        if previous is None or effective > previous["effective_date"]:
+            latest_events[symbol] = {
+                "action": event["action"],
+                "effective_date": effective,
+                "source_symbol": event["symbol"],
+            }
+        elif effective == previous["effective_date"] and event["action"] != previous["action"]:
+            raise ValueError(f"conflicting tracker actions for {symbol} on {effective}")
+
+    current_canonical = {canonical(symbol) for symbol in current_symbols}
+    mismatches = []
+    for symbol, event in sorted(latest_events.items()):
+        expected_present = event["action"] == "introduction"
+        actual_present = symbol in current_canonical
+        if expected_present != actual_present:
+            mismatches.append({
+                "symbol": symbol,
+                "latest_tracker_action": event["action"],
+                "effective_date": event["effective_date"].isoformat(),
+                "present_in_current_nse_list": actual_present,
+                "source_symbol": event["source_symbol"],
+            })
+
+    checked_symbols = set(latest_events)
+    status = (
+        "incomplete" if unknown_events
+        else "mismatch" if mismatches
+        else "pass"
+    )
+    return {
+        "status": status,
+        "as_of_date_ist": as_of_date.isoformat(),
+        "current_individual_stock_count": len(current_symbols),
+        "tracker_symbols_checked": len(checked_symbols),
+        "baseline_symbols_without_tracker_events": len(current_canonical - checked_symbols),
+        "latest_introduction_count": sum(e["action"] == "introduction" for e in latest_events.values()),
+        "latest_exclusion_count": sum(e["action"] == "exclusion" for e in latest_events.values()),
+        "future_event_count": len(future_events),
+        "future_events": sorted(
+            [
+                {"symbol": event["symbol"], "action": event["action"], "effective_date": event["effective_date"]}
+                for event in future_events
+            ],
+            key=lambda item: (item["effective_date"], item["symbol"]),
+        ),
+        "unknown_effective_date_event_count": len(unknown_events),
+        "aliases_applied": aliases_applied,
+        "mismatch_count": len(mismatches),
+        "mismatches": mismatches,
+    }
+
+
 def normalized_csv(indexes: list[dict], stocks: list[dict]) -> bytes:
     stream = StringIO(newline="")
     writer = csv.DictWriter(stream, fieldnames=COLUMNS, lineterminator="\n")
@@ -161,6 +266,40 @@ def ingest(root: Path = Path(".")) -> dict:
         }
         manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     current_path.write_bytes(normalized)
+
+    as_of_date = datetime.now(ZoneInfo("Asia/Kolkata")).date()
+    tracker_path = root / "data/raw/fno_tracker/fno_tracker_current.xlsx"
+    aliases_path = root / "config/symbol_aliases.json"
+    if tracker_path.is_file():
+        tracker_bytes = tracker_path.read_bytes()
+        tracker_history = parse_tracker_events(tracker_bytes, as_of_date)
+        alias_data = json.loads(aliases_path.read_text(encoding="utf-8"))
+        reconciliation = reconcile_tracker_events(
+            tracker_history["events"],
+            {row["symbol"] for row in stocks},
+            alias_data.get("aliases", []),
+            as_of_date,
+        )
+        reconciliation["tracker_raw_sha256"] = hashlib.sha256(tracker_bytes).hexdigest()
+        reconciliation["symbol_aliases_sha256"] = hashlib.sha256(aliases_path.read_bytes()).hexdigest()
+    else:
+        reconciliation = {
+            "status": "pending_tracker_archive",
+            "as_of_date_ist": as_of_date.isoformat(),
+            "current_individual_stock_count": len(stocks),
+            "note": "Tracker workbook not yet archived; cross-source reconciliation will run after it is committed.",
+        }
+    reconciliation_bytes = json.dumps(
+        reconciliation, indent=2, ensure_ascii=False, sort_keys=True
+    ).encode("utf-8")
+    reconciliation_hash = hashlib.sha256(reconciliation_bytes).hexdigest()
+    reconciliation_path = snapshot_dir / (
+        f"fno_tracker_reconciliation_{as_of_date:%Y%m%d}_{reconciliation_hash[:12]}.json"
+    )
+    if not reconciliation_path.exists():
+        reconciliation_path.write_bytes(reconciliation_bytes + b"\n")
+    reconciliation_current_path = raw_dir / "fno_tracker_reconciliation_current.json"
+    reconciliation_current_path.write_bytes(reconciliation_bytes + b"\n")
     return {
         "retrieved_at_utc": retrieved_at,
         "index_underlying_count": len(indexes),
@@ -171,6 +310,9 @@ def ingest(root: Path = Path(".")) -> dict:
         "current_path": str(current_path),
         "snapshot_path": str(snapshot_path),
         "manifest_path": str(manifest_path),
+        "reconciliation": reconciliation,
+        "reconciliation_path": str(reconciliation_path),
+        "reconciliation_current_path": str(reconciliation_current_path),
     }
 
 

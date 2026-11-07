@@ -43,3 +43,23 @@ relative to its catalogue trading date.
 - `data/raw/fno_underlyings/fno_underlyings_current.csv`: current normalized index + stock list.
 - `data/snapshots/fno_underlyings/fno_underlyings_<hash>.csv`: immutable normalized snapshot.
 - `data/snapshots/fno_underlyings/fno_underlyings_<hash>.json`: provenance manifest.
+
+## Historical reconciliation
+
+The Introduction/Exclusion workbook is archived in the repository as an immutable
+XLSX plus a content-addressed manifest. Each capture parses merged effective-date and circular
+link cells; the daily F&O underlying snapshot re-parses the archived workbook using
+the current India date and compares the latest effective action for each tracked
+symbol with current membership.
+
+Official symbol aliases are applied only from their NSE-published effective date.
+The current alias registry includes `ZOMATO -> ETERNAL`, effective 9 April 2025,
+from NSE F&O circular 54/2025. This resolves the sole apparent tracker/current-list
+mismatch in the 7 November 2026 validation.
+
+The tracker is not the complete baseline: symbols without tracker events are
+retained as baseline members if present in the current official list. Future-dated
+exclusions are not applied before their effective dates. Any unexplained mismatch
+or unknown effective date is recorded and blocks the scheduled membership refresh.
+
+The 7 November 2026 tracker archive contains 100 introductions and 63 exclusions; 60 exclusions were effective by that date and 3 remained scheduled for later dates. The workbook is small enough to retain in Git without relying on expiring workflow artifacts.

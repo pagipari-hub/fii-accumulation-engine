@@ -6,6 +6,9 @@ on:
       - "src/fii_engine/nse_fo_underlyings.py"
       - "tests/test_nse_fo_underlyings.py"
       - "config/sources.yaml"
+      - "config/symbol_aliases.json"
+      - "data/raw/fno_tracker/**"
+      - "data/snapshots/fno_tracker/**"
       - ".gitignore"
       - ".github/workflows/nse-fo-underlyings-snapshot.yml"
   workflow_dispatch:
@@ -54,15 +57,22 @@ jobs:
           current_hash = hashlib.sha256(current.read_bytes()).hexdigest()
           manifests = list(Path("data/snapshots/fno_underlyings").glob("*.json"))
           assert manifests
-          matching = [
-              json.loads(path.read_text(encoding="utf-8"))
-              for path in manifests
-              if json.loads(path.read_text(encoding="utf-8"))["normalized_sha256"] == current_hash
-          ]
+          matching = []
+          for path in manifests:
+              candidate = json.loads(path.read_text(encoding="utf-8"))
+              if candidate.get("normalized_sha256") == current_hash:
+                  matching.append(candidate)
           assert matching
           latest = matching[0]
           assert latest["individual_stock_underlying_count"] >= 150
           assert latest["source_effective_date"] is None
+          reconciliation_path = Path("data/raw/fno_underlyings/fno_tracker_reconciliation_current.json")
+          assert reconciliation_path.is_file()
+          reconciliation = json.loads(reconciliation_path.read_text(encoding="utf-8"))
+          if reconciliation["status"] not in {"pass", "pending_tracker_archive"}:
+              print("TRACKER RECONCILIATION FAILED:", reconciliation)
+              raise SystemExit("Current F&O list does not reconcile to effective tracker events")
+          print("Tracker reconciliation:", reconciliation["status"])
           print("Validated current NSE individual-stock F&O underlying snapshot.")
           PY
           pytest
@@ -74,6 +84,7 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add data/raw/fno_underlyings data/snapshots/fno_underlyings
             git commit -m "data: refresh official NSE F&O underlyings"
+            git pull --rebase origin "$GITHUB_REF_NAME"
             git push
           else
             echo "Official NSE F&O underlying snapshot unchanged; no commit required."

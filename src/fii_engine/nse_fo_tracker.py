@@ -226,7 +226,7 @@ def _get(url: str, referer: str, accept: str, timeout: int = 45) -> bytes:
         raise RuntimeError(f"NSE request failed for {url}: {exc}") from exc
 
 
-def capture(output_dir: Path = Path("artifacts/nse-fo-tracker")) -> dict:
+def capture(output_dir: Path = Path("artifacts/nse-fo-tracker"), repo_root: Path | None = None) -> dict:
     page = _get(SOURCE_PAGE, "https://www.nseindia.com/", "text/html,*/*")
     tracker_url = find_tracker_url(page.decode("utf-8", errors="replace"))
     payload = _get(
@@ -270,14 +270,52 @@ def capture(output_dir: Path = Path("artifacts/nse-fo-tracker")) -> dict:
         json.dumps(report, indent=2, ensure_ascii=False) + "\n",
         encoding="utf-8",
     )
+
+    if repo_root is not None:
+        persistent_raw_dir = repo_root / "data/raw/fno_tracker"
+        persistent_snapshot_dir = repo_root / "data/snapshots/fno_tracker"
+        persistent_raw_dir.mkdir(parents=True, exist_ok=True)
+        persistent_snapshot_dir.mkdir(parents=True, exist_ok=True)
+        persistent_raw = persistent_raw_dir / f"fno_tracker_source_{digest[:16]}.xlsx"
+        current_raw = persistent_raw_dir / "fno_tracker_current.xlsx"
+        if persistent_raw.exists() and hashlib.sha256(persistent_raw.read_bytes()).hexdigest() != digest:
+            raise RuntimeError("immutable F&O tracker source path collision")
+        if not persistent_raw.exists():
+            persistent_raw.write_bytes(payload)
+        current_raw.write_bytes(payload)
+        persistent_manifest = persistent_snapshot_dir / f"fno_tracker_{digest[:16]}.json"
+        if not persistent_manifest.exists():
+            persistent_record = {
+                "publisher": report["publisher"],
+                "source_page": report["source_page"],
+                "tracker_url": report["tracker_url"],
+                "retrieved_at_utc": report["retrieved_at_utc"],
+                "bytes": report["bytes"],
+                "sha256": digest,
+                "raw_file": str(persistent_raw),
+                "workbook": report["workbook"],
+                "schema_version": 1,
+            }
+            persistent_manifest.write_text(
+                json.dumps(persistent_record, indent=2, ensure_ascii=False) + "\n",
+                encoding="utf-8",
+            )
+        report["persistent_raw_path"] = str(persistent_raw)
+        report["persistent_current_path"] = str(current_raw)
+        report["persistent_manifest_path"] = str(persistent_manifest)
+    (output_dir / "manifest.json").write_text(
+        json.dumps(report, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
     return report
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output-dir", type=Path, default=Path("artifacts/nse-fo-tracker"))
+    parser.add_argument("--repo-root", type=Path)
     args = parser.parse_args()
-    print(json.dumps(capture(args.output_dir), indent=2, ensure_ascii=False))
+    print(json.dumps(capture(args.output_dir, args.repo_root), indent=2, ensure_ascii=False))
 
 
 if __name__ == "__main__":
