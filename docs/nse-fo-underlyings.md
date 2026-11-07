@@ -66,6 +66,8 @@ The 7 November 2026 tracker archive contains 100 introductions and 63 exclusions
 
 ## Nifty 500 F&O classification
 
+**Live validation (7 November 2026):** 501 Nifty 500 constituents classified: 217 present in the official current stock F&O underlying list, 284 absent, and 0 unknown. The source-level reconciliation passed with 0 tracker mismatches.
+
 The validated current 218-stock underlying list is joined to the 501-row Nifty 500
 constituent snapshot. Every Nifty 500 symbol receives one of two evidence-backed
 states:
