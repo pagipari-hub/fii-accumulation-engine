@@ -147,3 +147,9 @@ Thumbs.db
 # Preserve compact normalized participant/FII derivatives history.
 !data/snapshots/fno_aggregate_reports/
 !data/snapshots/fno_aggregate_reports/*.csv
+
+
+# Preserve the small historical backfill provenance manifest only.
+!data/raw/historical_backfill/
+data/raw/historical_backfill/*
+!data/raw/historical_backfill/backfill_manifest_current.json
