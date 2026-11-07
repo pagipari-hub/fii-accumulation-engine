@@ -87,3 +87,18 @@ Trade date: 6 November 2026.
 These datasets are useful for market-wide participant positioning and aggregate FII derivatives exposure. They do not contain FII positions for each individual stock. Participant-wise OI/volume is reported by participant category and instrument group, while the FII workbook provides index-underlying detail and aggregate stock futures/options totals. Do not infer stock-specific FII accumulation from either source.
 
 For stock-level F&O activity, combine UDiFF contract data with these aggregate reports only as market context. For stock-specific FII evidence, use named cash-market transactions or periodic FPI shareholding disclosures, and grade indirect evidence separately.
+
+
+## Persistent normalized history
+
+The collector now writes compact content-addressed normalized snapshots for
+participant open interest, participant trading volume and aggregate FII
+derivatives statistics under `data/snapshots/fno_aggregate_reports/`. The
+original exchange files remain in the 90-day workflow artifact; normalized
+snapshots are committed with source manifests so historical analysis is not
+limited to artifact retention.
+
+The rolling history builder currently derives participant-category OI changes
+and traded-contract totals for Client, DII, FII and Pro categories across
+index/stock futures/options families. These remain aggregate participant
+statistics and cannot be assigned to individual stocks.

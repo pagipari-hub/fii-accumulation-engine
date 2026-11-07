@@ -297,10 +297,142 @@ def _window_market(
     return {"status": "complete", "sessions_available": expected_sessions, "categories": categories}
 
 
+PARTICIPANT_REQUIRED = {
+    "trade_date", "dataset", "metric", "unit", "participant_category",
+    "instrument_group", "option_type", "source_side", "contracts",
+}
+PARTICIPANT_FILENAME = re.compile(
+    r"^(participant_oi|participant_volume)_(\d{4}-\d{2}-\d{2})_([0-9a-f]{16})_p(\d+)\.csv$"
+)
+
+
+def _load_participant_snapshots(root: Path) -> dict[str, list[dict]]:
+    directory = root / "data/snapshots/fno_aggregate_reports"
+    candidates: dict[str, dict[str, list[dict]]] = {
+        "participant_oi": defaultdict(list),
+        "participant_volume": defaultdict(list),
+    }
+    for path in directory.glob("participant_*.csv"):
+        match = PARTICIPANT_FILENAME.fullmatch(path.name)
+        if not match:
+            continue
+        dataset, snapshot_date, expected_prefix, parser_version = match.groups()
+        date.fromisoformat(snapshot_date)
+        rows, digest = _read_csv(path)
+        if digest[:16] != expected_prefix:
+            raise ValueError(f"participant snapshot filename hash mismatch: {path}")
+        if not rows or not PARTICIPANT_REQUIRED.issubset(rows[0]):
+            raise ValueError(f"participant snapshot schema drift: {path}")
+        keys = set()
+        for row in rows:
+            if row["trade_date"] != snapshot_date or row["dataset"] != dataset:
+                raise ValueError(f"participant snapshot date/dataset mismatch: {path}")
+            if row["unit"] != "contracts":
+                raise ValueError(f"unexpected participant derivative unit in {path}")
+            key = (
+                row["participant_category"], row["instrument_group"],
+                row["option_type"], row["source_side"],
+            )
+            if key in keys:
+                raise ValueError(f"duplicate participant derivative series in {path}: {key}")
+            keys.add(key)
+        candidates[dataset][snapshot_date].append({
+            "date": snapshot_date,
+            "rows": {
+                (
+                    row["participant_category"], row["instrument_group"],
+                    row["option_type"], row["source_side"],
+                ): row
+                for row in rows
+            },
+            "parser_version": int(parser_version),
+            "path": str(path.relative_to(root)),
+            "sha256": digest,
+            "row_count": len(rows),
+        })
+
+    result = {}
+    for dataset, by_date in candidates.items():
+        selected = []
+        for snapshot_date in sorted(by_date):
+            versions = by_date[snapshot_date]
+            highest = max(item["parser_version"] for item in versions)
+            latest = [item for item in versions if item["parser_version"] == highest]
+            if len({item["sha256"] for item in latest}) != 1:
+                raise ValueError(
+                    f"multiple {dataset} snapshots at parser version {highest} "
+                    f"for {snapshot_date}; resolve revision before rolling analysis"
+                )
+            selected.append(latest[0])
+        result[dataset] = selected
+    return result
+
+
+def _participant_window(
+    snapshots: list[dict],
+    expected_sessions: int,
+    dataset: str,
+) -> list[dict]:
+    if not snapshots:
+        return []
+    latest_keys = sorted(snapshots[-1]["rows"])
+    selected = snapshots[-expected_sessions:]
+    output = []
+    for key in latest_keys:
+        category, instrument_group, option_type, source_side = key
+        base = {
+            "dataset": dataset,
+            "participant_category": category,
+            "instrument_group": instrument_group,
+            "option_type": option_type,
+            "source_side": source_side,
+            "window_sessions": expected_sessions,
+            "sessions_available": len(selected),
+            "scope": "participant_category_aggregate_not_stock_specific",
+        }
+        if len(selected) < expected_sessions:
+            output.append({**base, "status": "insufficient_history"})
+            continue
+        series = [snapshot["rows"].get(key) for snapshot in selected]
+        if any(row is None for row in series):
+            output.append({**base, "status": "partial_observations"})
+            continue
+        values = [_decimal(row["contracts"]) for row in series]
+        if any(value is None for value in values):
+            output.append({**base, "status": "partial_observations"})
+            continue
+        if dataset == "participant_oi":
+            start, end = values[0], values[-1]
+            change = end - start
+            output.append({
+                **base,
+                "status": "complete",
+                "start_contracts": format(start, ".0f"),
+                "end_contracts": format(end, ".0f"),
+                "change_contracts": format(change, ".0f"),
+                "change_pct": (
+                    format(change / start * Decimal(100), ".4f")
+                    if start != 0 else None
+                ),
+            })
+        else:
+            total = sum(values, Decimal(0))
+            output.append({
+                **base,
+                "status": "complete",
+                "total_traded_contracts": format(total, ".0f"),
+                "average_daily_contracts": format(
+                    total / Decimal(expected_sessions), ".2f"
+                ),
+            })
+    return output
+
+
 def build_historical_features(root: Path = Path(".")) -> dict:
     root = root.resolve()
     daily, daily_dates = _load_daily_snapshots(root)
     fii, fii_dates = _load_fii_snapshots(root)
+    participant_history = _load_participant_snapshots(root)
     latest = daily[-1]
     latest_rows = [latest["rows"][symbol] for symbol in sorted(latest["symbols"])]
 
@@ -333,6 +465,13 @@ def build_historical_features(root: Path = Path(".")) -> dict:
                 **category_values,
             })
 
+    participant_rows = []
+    for dataset in ("participant_oi", "participant_volume"):
+        for window in WINDOWS:
+            participant_rows.extend(
+                _participant_window(participant_history[dataset], window, dataset)
+            )
+
     stock_fields = list(output_rows[0]) if output_rows else []
     market_fields = list(market_rows[0]) if market_rows else [
         "as_of_trade_date", "category", "window_sessions", "status", "sessions_available",
@@ -354,13 +493,26 @@ def build_historical_features(root: Path = Path(".")) -> dict:
         path.write_bytes(payload)
         return _sha256(payload)
 
+    participant_fields = [
+        "dataset", "participant_category", "instrument_group", "option_type",
+        "source_side", "window_sessions", "sessions_available", "scope", "status",
+        "start_contracts", "end_contracts", "change_contracts", "change_pct",
+        "total_traded_contracts", "average_daily_contracts",
+    ]
     stock_current = output_dir / "stock_historical_features_current.csv"
     market_current = output_dir / "market_flow_history_current.csv"
+    participant_current = output_dir / "participant_derivatives_history_current.csv"
     stock_hash = write_csv(stock_current, output_rows, stock_fields)
     market_hash = write_csv(market_current, market_rows, market_fields)
+    participant_hash = write_csv(participant_current, participant_rows, participant_fields)
     stock_snapshot = snapshot_dir / f"stock_historical_features_{latest['date']}_{stock_hash[:16]}.csv"
     market_snapshot = snapshot_dir / f"market_flow_history_{latest['date']}_{market_hash[:16]}.csv"
-    for current, snapshot in ((stock_current, stock_snapshot), (market_current, market_snapshot)):
+    participant_snapshot = snapshot_dir / f"participant_derivatives_history_{latest['date']}_{participant_hash[:16]}.csv"
+    for current, snapshot in (
+        (stock_current, stock_snapshot),
+        (market_current, market_snapshot),
+        (participant_current, participant_snapshot),
+    ):
         payload = current.read_bytes()
         if snapshot.exists() and snapshot.read_bytes() != payload:
             raise RuntimeError(f"immutable historical snapshot collision: {snapshot}")
@@ -375,12 +527,18 @@ def build_historical_features(root: Path = Path(".")) -> dict:
         "daily_stock_trade_dates": daily_dates,
         "market_flow_session_count": len(fii),
         "market_flow_trade_dates": fii_dates,
+        "participant_oi_session_count": len(participant_history["participant_oi"]),
+        "participant_oi_trade_dates": [item["date"] for item in participant_history["participant_oi"]],
+        "participant_volume_session_count": len(participant_history["participant_volume"]),
+        "participant_volume_trade_dates": [item["date"] for item in participant_history["participant_volume"]],
         "windows_sessions": list(WINDOWS),
         "stock_universe_count": len(latest_rows),
         "stock_output_sha256": stock_hash,
         "stock_snapshot_path": str(stock_snapshot.relative_to(root)),
         "market_output_sha256": market_hash,
         "market_snapshot_path": str(market_snapshot.relative_to(root)),
+        "participant_output_sha256": participant_hash,
+        "participant_snapshot_path": str(participant_snapshot.relative_to(root)),
         "limitations": [
             "A window is complete only when the requested number of distinct committed trading-date snapshots exists.",
             "Stock cash, delivery and derivatives metrics retain family-specific partial-observation statuses.",
@@ -388,6 +546,7 @@ def build_historical_features(root: Path = Path(".")) -> dict:
             "Futures buildup counts describe market-wide contract activity, not FII attribution.",
             "Market-wide FII/FPI and DII aggregates are separate context and never stock-level attribution.",
             "FII/FPI publication status is preserved; rolling sums are not a final custodial series.",
+            "Participant OI and volume are participant-category aggregates, never participant-by-stock positions.",
         ],
     }
     manifest_path = output_dir / "historical_features_current_manifest.json"

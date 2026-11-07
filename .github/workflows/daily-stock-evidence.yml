@@ -79,6 +79,12 @@ jobs:
           print(f"- Trade date: {matrix.get('trade_date', 'unavailable')}")
           print(f"- Rows: {matrix.get('row_count', 0)}")
           print(f"- Scoring: {matrix.get('scoring_status', 'not produced')}")
+          history = report.get("historical_features", {})
+          print(f"- Historical evidence: {history.get('status', 'not produced')}")
+          print(f"  - Stock sessions: {history.get('daily_stock_session_count', 0)}")
+          print(f"  - FII/DII sessions: {history.get('market_flow_session_count', 0)}")
+          print(f"  - Participant OI sessions: {history.get('participant_oi_session_count', 0)}")
+          print(f"  - Participant volume sessions: {history.get('participant_volume_session_count', 0)}")
           print("- Collector status:")
           for name, result in report.get("collectors", {}).items():
               print(f"  - {name}: {result.get('status', 'unknown')}")
