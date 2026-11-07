@@ -48,7 +48,6 @@ STOCK_FIELDS = [
     "temporally_verified_fpi_buy_quantity", "temporally_verified_fpi_sell_quantity",
     "temporally_unverified_fpi_buy_quantity", "temporally_unverified_fpi_sell_quantity",
     "counterparty_identity_coverage_pct", "known_fpi_net_status", "registry_temporal_status",
-    "nifty500_snapshot_membership_status", "nifty500_snapshot_member_verified",
 ]
 OUTPUT_PATHS = {
     "events": "data/raw/fpi_deal_attribution/fpi_deal_counterparty_current.csv",
