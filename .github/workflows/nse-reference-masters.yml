@@ -1,0 +1,72 @@
+name: Official NSE MII reference masters
+
+on:
+  push:
+    paths:
+      - "src/fii_engine/nse_reference.py"
+      - "tests/test_nse_reference.py"
+      - "config/sources.yaml"
+      - ".github/workflows/nse-reference-masters.yml"
+  workflow_dispatch:
+  schedule:
+    # 20:05 IST, Monday to Friday, after the daily report catalogue is published.
+    - cron: "35 14 * * 1-5"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: official-nse-reference-masters
+  cancel-in-progress: false
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install project
+        run: python -m pip install -e .
+
+      - name: Prepare artifact directory
+        run: mkdir -p artifacts/nse-reference/raw
+
+      - name: Capture official NSE MII security and contract masters
+        run: python -m fii_engine.nse_reference --output-dir artifacts/nse-reference
+
+      - name: Validate capture manifest and source files
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path("artifacts/nse-reference")
+          manifest = json.loads((root / "manifest.json").read_text(encoding="utf-8"))
+          assert len(manifest["captures"]) == 2
+          assert {item["dataset"] for item in manifest["captures"]} == {
+              "nse_cm_security_master", "nse_fo_contract_master"
+          }
+          for item in manifest["captures"]:
+              path = Path(item["raw_artifact_path"])
+              assert path.is_file() and path.stat().st_size > 0
+              assert item["compressed_bytes"] == path.stat().st_size
+              assert item["raw_sha256"]
+              assert item["decompressed_bytes"] > 0
+          print("Validated two NSE MII source captures.")
+          PY
+
+      - name: Upload immutable source captures and manifest
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nse-mii-reference-\${{ github.run_id }}
+          path: artifacts/nse-reference/
+          if-no-files-found: warn
+          retention-days: 90
