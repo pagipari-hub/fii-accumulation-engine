@@ -96,6 +96,10 @@ jobs:
               assert len(rows) == manifest["current_universe_count"]
               assert len({row["symbol"] for row in rows}) == len(rows)
               assert all(row["trade_date"] == item["trade_date"] for row in rows)
+          for source in manifest["source_refs"]:
+              raw = Path(source["raw_path"])
+              assert raw.is_file(), f"missing raw source archive: {raw}"
+              assert hashlib.sha256(raw.read_bytes()).hexdigest() == source["raw_sha256"]
           history_path = Path("data/raw/historical_features/historical_features_current_manifest.json")
           history = json.loads(history_path.read_text(encoding="utf-8"))
           assert history["daily_stock_session_count"] >= manifest["target_sessions"]
