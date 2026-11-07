@@ -1,0 +1,817 @@
+{
+  "dataset": "nse_shareholding_xbrl_filing",
+  "parser_version": 4,
+  "filing": {
+    "record_id": "214727",
+    "symbol": "SUNDARMFIN",
+    "company_name": "Sundaram Finance Limited",
+    "isin": "INE660A01013",
+    "universe_isin": "INE660A01013",
+    "reporting_date": "2026-09-30",
+    "submission_date": "2026-10-15",
+    "broadcast_date": "15-OCT-2026 18:24:34",
+    "system_date": "15-OCT-2026 18:24:43",
+    "revised_data": "N",
+    "revision_date": null,
+    "revision_remark": null,
+    "xbrl_url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1739250_15102026062428_WEB.xml",
+    "identity_status": "verified",
+    "identity_join_method": "isin_exact",
+    "metadata_sha256": "937820773fae3ef1489b76f21747fac1ab3fc1c67fcc07ad9597ee805e195be7",
+    "source_master_sha256": "1ecf54b17994a5305be2606e484362f195c3a8732156995a8641eaf25de46625"
+  },
+  "metadata_sha256": "937820773fae3ef1489b76f21747fac1ab3fc1c67fcc07ad9597ee805e195be7",
+  "source_master_sha256": "1ecf54b17994a5305be2606e484362f195c3a8732156995a8641eaf25de46625",
+  "xbrl_url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1739250_15102026062428_WEB.xml",
+  "xbrl_sha256": "74569660298217d9c501cfd911b6b83756bde5a2b1ad1e76c6d0270a05413fc4",
+  "xbrl_raw_path": "data/raw/shareholding/xbrl/214727_74569660298217d9.xml",
+  "xbrl_content_type": "application/xml",
+  "parsed": {
+    "parser": "nse_shareholding_xbrl",
+    "parser_version": 3,
+    "category_axis": "CategoryOfShareholdersAxis",
+    "reporting_dates": [
+      "2026-09-30"
+    ],
+    "category_record_count": 28,
+    "category_records": [
+      {
+        "context_id": "IndividualsOrHinduUndividedFamily_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "IndividualsOrHinduUndividedFamily",
+        "category_key": "IndividualsOrHinduUndividedFamily",
+        "entity_identifier": "SUNDARMFIN",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "IndividualsOrHinduUndividedFamilyMember"
+          }
+        ],
+        "shareholder_count": 84,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 26403382,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 26403382,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.2376",
+        "ownership_percentage_points": "23.7600",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 26403382,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.2395",
+        "voting_rights_percentage_points": "23.9500",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "OtherIndianShareholders_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "OtherIndianShareholders",
+        "category_key": "OtherIndianShareholders",
+        "entity_identifier": "SUNDARMFIN",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "OtherIndianShareholdersMember"
+          }
+        ],
+        "shareholder_count": 10,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 14084338,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 14084338,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.1268",
+        "ownership_percentage_points": "12.6800",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 14084338,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.1278",
+        "voting_rights_percentage_points": "12.7800",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "Indian_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "Indian",
+        "category_key": "Indian",
+        "entity_identifier": "SUNDARMFIN",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "IndianMember"
+          }
+        ],
+        "shareholder_count": 94,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 40487720,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 40487720,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.3644",
+        "ownership_percentage_points": "36.4400",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 40487720,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.3673",
+        "voting_rights_percentage_points": "36.7300",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "NonResidentIndividualsOrForeignIndividuals_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "NonResidentIndividualsOrForeignIndividuals",
+        "category_key": "NonResidentIndividualsOrForeignIndividuals",
+        "entity_identifier": "SUNDARMFIN",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "NonResidentIndividualsOrForeignIndividualsMember"
+          }
+        ],
+        "shareholder_count": 6,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 832563,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 832563,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0075",
+        "ownership_percentage_points": "0.7500",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 832563,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0076",
+        "voting_rights_percentage_points": "0.7600",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "Foreign_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "Foreign",
+        "category_key": "Foreign",
+        "entity_identifier": "SUNDARMFIN",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "ForeignMember"
+          }
+        ],
+        "shareholder_count": 6,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 832563,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 832563,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0075",
+        "ownership_percentage_points": "0.7500",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 832563,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0076",
+        "voting_rights_percentage_points": "0.7600",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "ShareholdingOfPromoterAndPromoterGroup_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "ShareholdingOfPromoterAndPromoterGroup",
+        "category_key": "ShareholdingOfPromoterAndPromoterGroup",
+        "entity_identifier": "SUNDARMFIN",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "ShareholdingOfPromoterAndPromoterGroupMember"
+          }
+        ],
+        "shareholder_count": 100,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 41320283,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 41320283,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.3719",
+        "ownership_percentage_points": "37.1900",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 41320283,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.3748",
+        "voting_rights_percentage_points": "37.4800",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "MutualFundsOrUTI_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "MutualFundsOrUTI",
+        "category_key": "MutualFundsOrUTI",
+        "entity_identifier": "SUNDARMFIN",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "MutualFundsOrUTIMember"
+          }
+        ],
+        "shareholder_count": 33,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 7424958,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 7424958,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0668",
+        "ownership_percentage_points": "6.6800",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 7424958,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0674",
+        "voting_rights_percentage_points": "6.7400",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "AlternativeInvestmentFunds_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "AlternativeInvestmentFunds",
+        "category_key": "AlternativeInvestmentFunds",
+        "entity_identifier": "SUNDARMFIN",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "AlternativeInvestmentFundsMember"
+          }
+        ],
+        "shareholder_count": 9,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 301887,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 301887,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0027",
+        "ownership_percentage_points": "0.2700",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 301887,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0027",
+        "voting_rights_percentage_points": "0.2700",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "Banks_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "Banks",
+        "category_key": "Banks",
+        "entity_identifier": "SUNDARMFIN",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "BanksMember"
+          }
+        ],
+        "shareholder_count": 2,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 800,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 800,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0",
+        "ownership_percentage_points": "0",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 800,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0",
+        "voting_rights_percentage_points": "0",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "InsuranceCompanies_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "InsuranceCompanies",
+        "category_key": "InsuranceCompanies",
+        "entity_identifier": "SUNDARMFIN",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "InsuranceCompaniesMember"
+          }
+        ],
+        "shareholder_count": 10,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 2143232,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 2143232,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0193",
+        "ownership_percentage_points": "1.9300",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 2143232,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0194",
+        "voting_rights_percentage_points": "1.9400",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "InstitutionsDomestic_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "InstitutionsDomestic",
+        "category_key": "InstitutionsDomestic",
+        "entity_identifier": "SUNDARMFIN",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "InstitutionsDomesticMember"
+          }
+        ],
+        "shareholder_count": 54,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 9870877,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 9870877,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0888",
+        "ownership_percentage_points": "8.8800",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 9870877,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0895",
+        "voting_rights_percentage_points": "8.9500",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "InstitutionsForeignPortfolioInvestorCategoryOne_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "InstitutionsForeignPortfolioInvestorCategoryOne",
+        "category_key": "fpi_category_i",
+        "entity_identifier": "SUNDARMFIN",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "InstitutionsForeignPortfolioInvestorCategoryOneMember"
+          }
+        ],
+        "shareholder_count": 470,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 19524657,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 19524657,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.1757",
+        "ownership_percentage_points": "17.5700",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 19524657,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.1771",
+        "voting_rights_percentage_points": "17.7100",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "InstitutionsForeignPortfolioInvestorCategoryTwo_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "InstitutionsForeignPortfolioInvestorCategoryTwo",
+        "category_key": "fpi_category_ii",
+        "entity_identifier": "SUNDARMFIN",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "InstitutionsForeignPortfolioInvestorCategoryTwoMember"
+          }
+        ],
+        "shareholder_count": 17,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 466063,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 466063,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0042",
+        "ownership_percentage_points": "0.4200",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 466063,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0042",
+        "voting_rights_percentage_points": "0.4200",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "InstitutionsForeign_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "InstitutionsForeign",
+        "category_key": "foreign_institutions_total",
+        "entity_identifier": "SUNDARMFIN",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "InstitutionsForeignMember"
+          }
+        ],
+        "shareholder_count": 487,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 19990720,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 19990720,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.1799",
+        "ownership_percentage_points": "17.9900",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 19990720,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.1813",
+        "voting_rights_percentage_points": "18.1300",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "DirectorsAndDirectorsRelatives_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "DirectorsAndDirectorsRelatives",
+        "category_key": "DirectorsAndDirectorsRelatives",
+        "entity_identifier": "SUNDARMFIN",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "DirectorsAndDirectorsRelativesMember"
+          }
+        ],
+        "shareholder_count": 2,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 62598,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 62598,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0006",
+        "ownership_percentage_points": "0.0600",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 62598,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0006",
+        "voting_rights_percentage_points": "0.0600",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "KeyManagerialPersonnel_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "KeyManagerialPersonnel",
+        "category_key": "KeyManagerialPersonnel",
+        "entity_identifier": "SUNDARMFIN",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "KeyManagerialPersonnelMember"
+          }
+        ],
+        "shareholder_count": 2,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 37953,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 37953,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0003",
+        "ownership_percentage_points": "0.0300",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 37953,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0003",
+        "voting_rights_percentage_points": "0.0300",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "InvestorEducationAndProtectionFund_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "InvestorEducationAndProtectionFund",
+        "category_key": "InvestorEducationAndProtectionFund",
+        "entity_identifier": "SUNDARMFIN",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "InvestorEducationAndProtectionFundMember"
+          }
+        ],
+        "shareholder_count": 1,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 108053,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 108053,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.001",
+        "ownership_percentage_points": "0.100",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 108053,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.001",
+        "voting_rights_percentage_points": "0.100",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "ResidentIndividualShareholdersHoldingNominalShareCapitalUpToRsTwoLakh_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "ResidentIndividualShareholdersHoldingNominalShareCapitalUpToRsTwoLakh",
+        "category_key": "ResidentIndividualShareholdersHoldingNominalShareCapitalUpToRsTwoLakh",
+        "entity_identifier": "SUNDARMFIN",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "ResidentIndividualShareholdersHoldingNominalShareCapitalUpToRsTwoLakhMember"
+          }
+        ],
+        "shareholder_count": 50172,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 10057011,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 10057011,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0905",
+        "ownership_percentage_points": "9.0500",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 10057011,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0912",
+        "voting_rights_percentage_points": "9.1200",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "ResidentIndividualShareholdersHoldingNominalShareCapitalInExcessOfRsTwoLakh_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "ResidentIndividualShareholdersHoldingNominalShareCapitalInExcessOfRsTwoLakh",
+        "category_key": "ResidentIndividualShareholdersHoldingNominalShareCapitalInExcessOfRsTwoLakh",
+        "entity_identifier": "SUNDARMFIN",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "ResidentIndividualShareholdersHoldingNominalShareCapitalInExcessOfRsTwoLakhMember"
+          }
+        ],
+        "shareholder_count": 208,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 19071742,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 19071742,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.1717",
+        "ownership_percentage_points": "17.1700",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 19071742,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.173",
+        "voting_rights_percentage_points": "17.300",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "NonResidentIndians_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "NonResidentIndians",
+        "category_key": "NonResidentIndians",
+        "entity_identifier": "SUNDARMFIN",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "NonResidentIndiansMember"
+          }
+        ],
+        "shareholder_count": 2062,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 4168369,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 4168369,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0375",
+        "ownership_percentage_points": "3.7500",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 4168369,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0378",
+        "voting_rights_percentage_points": "3.7800",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "ForeignNationals_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "ForeignNationals",
+        "category_key": "ForeignNationals",
+        "entity_identifier": "SUNDARMFIN",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "ForeignNationalsMember"
+          }
+        ],
+        "shareholder_count": 2,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 23520,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 23520,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0002",
+        "ownership_percentage_points": "0.0200",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 23520,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0002",
+        "voting_rights_percentage_points": "0.0200",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "BodiesCorporate_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "BodiesCorporate",
+        "category_key": "BodiesCorporate",
+        "entity_identifier": "SUNDARMFIN",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "BodiesCorporateMember"
+          }
+        ],
+        "shareholder_count": 538,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 4969702,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 4969702,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0447",
+        "ownership_percentage_points": "4.4700",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 4969702,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0451",
+        "voting_rights_percentage_points": "4.5100",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "OtherNonInstitutions_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "OtherNonInstitutions",
+        "category_key": "OtherNonInstitutions",
+        "entity_identifier": "SUNDARMFIN",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "OtherNonInstitutionsMember"
+          }
+        ],
+        "shareholder_count": 809,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 558171,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 558171,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.005",
+        "ownership_percentage_points": "0.500",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 558171,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0051",
+        "voting_rights_percentage_points": "0.5100",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "NonInstitutions_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "NonInstitutions",
+        "category_key": "NonInstitutions",
+        "entity_identifier": "SUNDARMFIN",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "NonInstitutionsMember"
+          }
+        ],
+        "shareholder_count": 53796,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 39057119,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 39057119,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.3515",
+        "ownership_percentage_points": "35.1500",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 39057119,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.3543",
+        "voting_rights_percentage_points": "35.4300",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "PublicShareholding_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "PublicShareholding",
+        "category_key": "PublicShareholding",
+        "entity_identifier": "SUNDARMFIN",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "PublicShareholdingMember"
+          }
+        ],
+        "shareholder_count": 54337,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 68918716,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 68918716,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.6203",
+        "ownership_percentage_points": "62.0300",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 68918716,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.6252",
+        "voting_rights_percentage_points": "62.5200",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "EmployeeBenefitsTrusts_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "EmployeeBenefitsTrusts",
+        "category_key": "EmployeeBenefitsTrusts",
+        "entity_identifier": "SUNDARMFIN",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "EmployeeBenefitsTrustsMember"
+          }
+        ],
+        "shareholder_count": 1,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 864861,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 864861,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0078",
+        "ownership_percentage_points": "0.7800",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 0,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0",
+        "voting_rights_percentage_points": "0",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "SharesHeldByNonPromoterNonPublicShareholders_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "SharesHeldByNonPromoterNonPublicShareholders",
+        "category_key": "SharesHeldByNonPromoterNonPublicShareholders",
+        "entity_identifier": "SUNDARMFIN",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "SharesHeldByNonPromoterNonPublicShareholdersMember"
+          }
+        ],
+        "shareholder_count": 1,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 864861,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 864861,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": null,
+        "voting_rights": 0,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0",
+        "voting_rights_percentage_points": "0",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "ShareholdingPattern_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "ShareholdingPattern",
+        "category_key": "ShareholdingPattern",
+        "entity_identifier": "SUNDARMFIN",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "ShareholdingPatternMember"
+          }
+        ],
+        "shareholder_count": 54438,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 111103860,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 111103860,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "1",
+        "ownership_percentage_points": "100",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 110238999,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "1",
+        "voting_rights_percentage_points": "100",
+        "voting_rights_fraction_unit_ref": "pure"
+      }
+    ],
+    "fpi_reconciliation": [
+      {
+        "reporting_date": "2026-09-30",
+        "fpi_category_i_shares": 19524657,
+        "fpi_category_ii_shares": 466063,
+        "other_foreign_institution_shares": null,
+        "overseas_depositories_shares": null,
+        "foreign_direct_investment_shares": null,
+        "foreign_venture_capital_investor_shares": null,
+        "sovereign_wealth_funds_foreign_shares": null,
+        "foreign_institutions_total_shares": 19990720,
+        "component_sum_shares": null,
+        "difference_shares": null,
+        "status": "not_comparable_missing_component",
+        "scope_note": "FPI Category I and II remain distinct from FDI, foreign venture capital, foreign sovereign wealth funds, other foreign institutions and overseas depositories. Additional categories are included only when explicitly reported; absent or nil components are not assumed to be zero."
+      }
+    ],
+    "semantics": {
+      "ownership_fraction": "XBRL reported decimal fraction; multiply by 100 for percentage points",
+      "shares": "Reported share count from the NumberOfShares fact",
+      "missing": "Absent or nil facts remain null; they are never converted to zero",
+      "attribution": "Quarterly reported ownership, not daily trade flow or purchase date"
+    }
+  }
+}

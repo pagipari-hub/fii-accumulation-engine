@@ -1,0 +1,792 @@
+{
+  "dataset": "nse_shareholding_xbrl_filing",
+  "parser_version": 4,
+  "filing": {
+    "record_id": "215491",
+    "symbol": "GODREJIND",
+    "company_name": "Godrej Industries Limited",
+    "isin": "INE233A01035",
+    "universe_isin": "INE233A01035",
+    "reporting_date": "2026-09-30",
+    "submission_date": "2026-10-19",
+    "broadcast_date": "19-OCT-2026 15:47:30",
+    "system_date": "19-OCT-2026 15:47:35",
+    "revised_data": "N",
+    "revision_date": null,
+    "revision_remark": null,
+    "xbrl_url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1741484_19102026034723_WEB.xml",
+    "identity_status": "verified",
+    "identity_join_method": "isin_exact",
+    "metadata_sha256": "85f948917b42ed77d0cb76f0bb84018e0b5f214416554b80b02eeb63331591df",
+    "source_master_sha256": "1ecf54b17994a5305be2606e484362f195c3a8732156995a8641eaf25de46625"
+  },
+  "metadata_sha256": "85f948917b42ed77d0cb76f0bb84018e0b5f214416554b80b02eeb63331591df",
+  "source_master_sha256": "1ecf54b17994a5305be2606e484362f195c3a8732156995a8641eaf25de46625",
+  "xbrl_url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1741484_19102026034723_WEB.xml",
+  "xbrl_sha256": "a2c7ccd79ece2e77998314450d12eef4e3a79ff5d6fb72f06a79b94e39c57682",
+  "xbrl_raw_path": "data/raw/shareholding/xbrl/215491_a2c7ccd79ece2e77.xml",
+  "xbrl_content_type": "application/xml",
+  "parsed": {
+    "parser": "nse_shareholding_xbrl",
+    "parser_version": 3,
+    "category_axis": "CategoryOfShareholdersAxis",
+    "reporting_dates": [
+      "2026-09-30"
+    ],
+    "category_record_count": 27,
+    "category_records": [
+      {
+        "context_id": "IndividualsOrHinduUndividedFamily_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "IndividualsOrHinduUndividedFamily",
+        "category_key": "IndividualsOrHinduUndividedFamily",
+        "entity_identifier": "GODREJIND",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "IndividualsOrHinduUndividedFamilyMember"
+          }
+        ],
+        "shareholder_count": 10,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 124335735,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 124335735,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.3691",
+        "ownership_percentage_points": "36.9100",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 129618382,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.3848",
+        "voting_rights_percentage_points": "38.4800",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "OtherIndianShareholders_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "OtherIndianShareholders",
+        "category_key": "OtherIndianShareholders",
+        "entity_identifier": "GODREJIND",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "OtherIndianShareholdersMember"
+          }
+        ],
+        "shareholder_count": 19,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 121757830,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 121757830,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.3615",
+        "ownership_percentage_points": "36.1500",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 121757830,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.3615",
+        "voting_rights_percentage_points": "36.1500",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "Indian_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "Indian",
+        "category_key": "Indian",
+        "entity_identifier": "GODREJIND",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "IndianMember"
+          }
+        ],
+        "shareholder_count": 29,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 246093565,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 246093565,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.7306",
+        "ownership_percentage_points": "73.0600",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 251376212,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.7463",
+        "voting_rights_percentage_points": "74.6300",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "NonResidentIndividualsOrForeignIndividuals_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "NonResidentIndividualsOrForeignIndividuals",
+        "category_key": "NonResidentIndividualsOrForeignIndividuals",
+        "entity_identifier": "GODREJIND",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "NonResidentIndividualsOrForeignIndividualsMember"
+          }
+        ],
+        "shareholder_count": 1,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 5282647,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 5282647,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0157",
+        "ownership_percentage_points": "1.5700",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 0,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0",
+        "voting_rights_percentage_points": "0",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "Foreign_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "Foreign",
+        "category_key": "Foreign",
+        "entity_identifier": "GODREJIND",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "ForeignMember"
+          }
+        ],
+        "shareholder_count": 1,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 5282647,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 5282647,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0157",
+        "ownership_percentage_points": "1.5700",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 0,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0",
+        "voting_rights_percentage_points": "0",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "ShareholdingOfPromoterAndPromoterGroup_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "ShareholdingOfPromoterAndPromoterGroup",
+        "category_key": "ShareholdingOfPromoterAndPromoterGroup",
+        "entity_identifier": "GODREJIND",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "ShareholdingOfPromoterAndPromoterGroupMember"
+          }
+        ],
+        "shareholder_count": 30,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 251376212,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 251376212,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.7463",
+        "ownership_percentage_points": "74.6300",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 251376212,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.7463",
+        "voting_rights_percentage_points": "74.6300",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "MutualFundsOrUTI_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "MutualFundsOrUTI",
+        "category_key": "MutualFundsOrUTI",
+        "entity_identifier": "GODREJIND",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "MutualFundsOrUTIMember"
+          }
+        ],
+        "shareholder_count": 23,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 10282084,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 10282084,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0305",
+        "ownership_percentage_points": "3.0500",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 10282084,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0305",
+        "voting_rights_percentage_points": "3.0500",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "AlternativeInvestmentFunds_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "AlternativeInvestmentFunds",
+        "category_key": "AlternativeInvestmentFunds",
+        "entity_identifier": "GODREJIND",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "AlternativeInvestmentFundsMember"
+          }
+        ],
+        "shareholder_count": 10,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 282977,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 282977,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0008",
+        "ownership_percentage_points": "0.0800",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 282977,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0008",
+        "voting_rights_percentage_points": "0.0800",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "Banks_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "Banks",
+        "category_key": "Banks",
+        "entity_identifier": "GODREJIND",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "BanksMember"
+          }
+        ],
+        "shareholder_count": 5,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 7677,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 7677,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0",
+        "ownership_percentage_points": "0",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 7677,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0",
+        "voting_rights_percentage_points": "0",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "OtherInstitutionsDomestic_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "OtherInstitutionsDomestic",
+        "category_key": "OtherInstitutionsDomestic",
+        "entity_identifier": "GODREJIND",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "OtherInstitutionsDomesticMember"
+          }
+        ],
+        "shareholder_count": 7,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 1866721,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 1866721,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0055",
+        "ownership_percentage_points": "0.5500",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 1866721,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0055",
+        "voting_rights_percentage_points": "0.5500",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "InstitutionsDomestic_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "InstitutionsDomestic",
+        "category_key": "InstitutionsDomestic",
+        "entity_identifier": "GODREJIND",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "InstitutionsDomesticMember"
+          }
+        ],
+        "shareholder_count": 45,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 12439459,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 12439459,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0369",
+        "ownership_percentage_points": "3.6900",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 12439459,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0369",
+        "voting_rights_percentage_points": "3.6900",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "InstitutionsForeignPortfolioInvestorCategoryOne_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "InstitutionsForeignPortfolioInvestorCategoryOne",
+        "category_key": "fpi_category_i",
+        "entity_identifier": "GODREJIND",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "InstitutionsForeignPortfolioInvestorCategoryOneMember"
+          }
+        ],
+        "shareholder_count": 97,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 14471905,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 14471905,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.043",
+        "ownership_percentage_points": "4.300",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 14471905,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.043",
+        "voting_rights_percentage_points": "4.300",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "InstitutionsForeignPortfolioInvestorCategoryTwo_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "InstitutionsForeignPortfolioInvestorCategoryTwo",
+        "category_key": "fpi_category_ii",
+        "entity_identifier": "GODREJIND",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "InstitutionsForeignPortfolioInvestorCategoryTwoMember"
+          }
+        ],
+        "shareholder_count": 5,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 621692,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 621692,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0018",
+        "ownership_percentage_points": "0.1800",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 621692,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0018",
+        "voting_rights_percentage_points": "0.1800",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "OtherInstitutionsForeign_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "OtherInstitutionsForeign",
+        "category_key": "other_foreign_institutions",
+        "entity_identifier": "GODREJIND",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "OtherInstitutionsForeignMember"
+          }
+        ],
+        "shareholder_count": 2,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 4802,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 4802,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0",
+        "ownership_percentage_points": "0",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 4802,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0",
+        "voting_rights_percentage_points": "0",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "InstitutionsForeign_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "InstitutionsForeign",
+        "category_key": "foreign_institutions_total",
+        "entity_identifier": "GODREJIND",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "InstitutionsForeignMember"
+          }
+        ],
+        "shareholder_count": 104,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 15098399,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 15098399,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0448",
+        "ownership_percentage_points": "4.4800",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 15098399,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0448",
+        "voting_rights_percentage_points": "4.4800",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "DirectorsAndDirectorsRelatives_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "DirectorsAndDirectorsRelatives",
+        "category_key": "DirectorsAndDirectorsRelatives",
+        "entity_identifier": "GODREJIND",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "DirectorsAndDirectorsRelativesMember"
+          }
+        ],
+        "shareholder_count": 1,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 26104,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 26104,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0001",
+        "ownership_percentage_points": "0.0100",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 26104,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0001",
+        "voting_rights_percentage_points": "0.0100",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "KeyManagerialPersonnel_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "KeyManagerialPersonnel",
+        "category_key": "KeyManagerialPersonnel",
+        "entity_identifier": "GODREJIND",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "KeyManagerialPersonnelMember"
+          }
+        ],
+        "shareholder_count": 2,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 36814,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 36814,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0001",
+        "ownership_percentage_points": "0.0100",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 36814,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0001",
+        "voting_rights_percentage_points": "0.0100",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "TrustsWhereAnyPersonBelongingToPromoterAndPromoterGroupIsTrusteeOrBeneficiaryOrAuthorOfTrust_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "TrustsWhereAnyPersonBelongingToPromoterAndPromoterGroupIsTrusteeOrBeneficiaryOrAuthorOfTrust",
+        "category_key": "TrustsWhereAnyPersonBelongingToPromoterAndPromoterGroupIsTrusteeOrBeneficiaryOrAuthorOfTrust",
+        "entity_identifier": "GODREJIND",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "TrustsWhereAnyPersonBelongingToPromoterAndPromoterGroupIsTrusteeOrBeneficiaryOrAuthorOfTrustMember"
+          }
+        ],
+        "shareholder_count": 1,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 33801212,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 33801212,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.1003",
+        "ownership_percentage_points": "10.0300",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 33801212,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.1003",
+        "voting_rights_percentage_points": "10.0300",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "InvestorEducationAndProtectionFund_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "InvestorEducationAndProtectionFund",
+        "category_key": "InvestorEducationAndProtectionFund",
+        "entity_identifier": "GODREJIND",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "InvestorEducationAndProtectionFundMember"
+          }
+        ],
+        "shareholder_count": 1,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 116012,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 116012,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0003",
+        "ownership_percentage_points": "0.0300",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 116012,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0003",
+        "voting_rights_percentage_points": "0.0300",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "ResidentIndividualShareholdersHoldingNominalShareCapitalUpToRsTwoLakh_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "ResidentIndividualShareholdersHoldingNominalShareCapitalUpToRsTwoLakh",
+        "category_key": "ResidentIndividualShareholdersHoldingNominalShareCapitalUpToRsTwoLakh",
+        "entity_identifier": "GODREJIND",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "ResidentIndividualShareholdersHoldingNominalShareCapitalUpToRsTwoLakhMember"
+          }
+        ],
+        "shareholder_count": 78131,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 11839624,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 11839624,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0351",
+        "ownership_percentage_points": "3.5100",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 11839624,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0351",
+        "voting_rights_percentage_points": "3.5100",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "ResidentIndividualShareholdersHoldingNominalShareCapitalInExcessOfRsTwoLakh_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "ResidentIndividualShareholdersHoldingNominalShareCapitalInExcessOfRsTwoLakh",
+        "category_key": "ResidentIndividualShareholdersHoldingNominalShareCapitalInExcessOfRsTwoLakh",
+        "entity_identifier": "GODREJIND",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "ResidentIndividualShareholdersHoldingNominalShareCapitalInExcessOfRsTwoLakhMember"
+          }
+        ],
+        "shareholder_count": 2,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 828502,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 828502,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0025",
+        "ownership_percentage_points": "0.2500",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 828502,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0025",
+        "voting_rights_percentage_points": "0.2500",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "NonResidentIndians_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "NonResidentIndians",
+        "category_key": "NonResidentIndians",
+        "entity_identifier": "GODREJIND",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "NonResidentIndiansMember"
+          }
+        ],
+        "shareholder_count": 2337,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 839992,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 839992,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0025",
+        "ownership_percentage_points": "0.2500",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 839992,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0025",
+        "voting_rights_percentage_points": "0.2500",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "BodiesCorporate_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "BodiesCorporate",
+        "category_key": "BodiesCorporate",
+        "entity_identifier": "GODREJIND",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "BodiesCorporateMember"
+          }
+        ],
+        "shareholder_count": 384,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 854465,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 854465,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0025",
+        "ownership_percentage_points": "0.2500",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 854465,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0025",
+        "voting_rights_percentage_points": "0.2500",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "OtherNonInstitutions_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "OtherNonInstitutions",
+        "category_key": "OtherNonInstitutions",
+        "entity_identifier": "GODREJIND",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "OtherNonInstitutionsMember"
+          }
+        ],
+        "shareholder_count": 750,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 9594260,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 9594260,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0285",
+        "ownership_percentage_points": "2.8500",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 9594260,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0285",
+        "voting_rights_percentage_points": "2.8500",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "NonInstitutions_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "NonInstitutions",
+        "category_key": "NonInstitutions",
+        "entity_identifier": "GODREJIND",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "NonInstitutionsMember"
+          }
+        ],
+        "shareholder_count": 81609,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 57936985,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 57936985,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.172",
+        "ownership_percentage_points": "17.200",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 57936985,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.172",
+        "voting_rights_percentage_points": "17.200",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "PublicShareholding_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "PublicShareholding",
+        "category_key": "PublicShareholding",
+        "entity_identifier": "GODREJIND",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "PublicShareholdingMember"
+          }
+        ],
+        "shareholder_count": 81758,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 85474843,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 85474843,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.2537",
+        "ownership_percentage_points": "25.3700",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 85474843,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.2537",
+        "voting_rights_percentage_points": "25.3700",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "ShareholdingPattern_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "ShareholdingPattern",
+        "category_key": "ShareholdingPattern",
+        "entity_identifier": "GODREJIND",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "ShareholdingPatternMember"
+          }
+        ],
+        "shareholder_count": 81788,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 336851055,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 336851055,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "1",
+        "ownership_percentage_points": "100",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 336851055,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "1",
+        "voting_rights_percentage_points": "100",
+        "voting_rights_fraction_unit_ref": "pure"
+      }
+    ],
+    "fpi_reconciliation": [
+      {
+        "reporting_date": "2026-09-30",
+        "fpi_category_i_shares": 14471905,
+        "fpi_category_ii_shares": 621692,
+        "other_foreign_institution_shares": 4802,
+        "overseas_depositories_shares": null,
+        "foreign_direct_investment_shares": null,
+        "foreign_venture_capital_investor_shares": null,
+        "sovereign_wealth_funds_foreign_shares": null,
+        "foreign_institutions_total_shares": 15098399,
+        "component_sum_shares": 15098399,
+        "difference_shares": 0,
+        "status": "matched",
+        "scope_note": "FPI Category I and II remain distinct from FDI, foreign venture capital, foreign sovereign wealth funds, other foreign institutions and overseas depositories. Additional categories are included only when explicitly reported; absent or nil components are not assumed to be zero."
+      }
+    ],
+    "semantics": {
+      "ownership_fraction": "XBRL reported decimal fraction; multiply by 100 for percentage points",
+      "shares": "Reported share count from the NumberOfShares fact",
+      "missing": "Absent or nil facts remain null; they are never converted to zero",
+      "attribution": "Quarterly reported ownership, not daily trade flow or purchase date"
+    }
+  }
+}
