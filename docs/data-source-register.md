@@ -17,6 +17,36 @@ Research checked: 7 November 2026. This register distinguishes source availabili
 | Stock MWPL / ban context | NSE All Reports – Derivatives, client position % of stock MWPL and security-in-ban-period reports | Market-wide position-limit context and ban status | Preserve the report date and applicable denominator; do not infer stock-level FII ownership from client/MWPL reports. |
 | Equity daily OHLCV and delivery | NSE equity reports / official bhavcopy archives | Security-level cash-market price, volume and delivery fields where published | Validate current and legacy schemas separately; retain series and ISIN. |
 
+## NSE MII reference-master capture
+
+NSE's daily report catalogue exposes the official CM and FO report lists through
+`/api/daily-reports?key=CM` and `/api/daily-reports?key=FO`. The report records
+carry the actual filename, archive directory, trading date, report key and reported
+file size. The collector selects only the NSE-listed CM MII security file and the
+NSE-exclusive FO MII contract file; it excludes the combined NSE/BSE CM file and
+the NSE/BSE interop FO contract file.
+
+The security and contract masters are separate datasets. The CM file is used for
+symbol/series/ISIN reference reconciliation. The FO contract file describes listed
+derivative contracts; stock F&O eligibility must be determined from active
+individual-stock underlying contracts and their effective/expiry status, not from
+the CM file or from a broad display label.
+
+The first capture workflow stores compressed source files and a provenance manifest
+as a GitHub Actions artifact (90-day retention). This is a validation/collection
+stage, not yet a durable historical archive. Before relying on long-run point-in-time
+history, move immutable raw files to a durable archive or implement a deliberate
+content-addressed retention policy.
+
+**Observed content-integrity failure (6 Nov 2026 catalogue date):** the captured CM
+security file's maximum `UpdDt` decoded to 6 Nov 2016, ten years before its catalogue
+date. In the FO contract file, non-test individual-stock contracts had expiries only
+through 25 Jan 2017; the only 2026 stock-futures rows were dummy `NSETEST` symbols.
+The collector now marks these payloads quarantined and the workflow fails its
+semantic freshness gate while still uploading the raw evidence and manifest.
+No F&O eligibility is derived from this capture. This discrepancy needs source-side
+resolution or a separately validated feed before production use.
+
 ## Required ingestion rules
 
 1. **Immutable raw first:** store the original downloaded bytes before parsing. Never overwrite a source artifact.
