@@ -60,6 +60,11 @@ jobs:
           assert current_path.is_file(), "aggregate report current manifest missing"
           current = json.loads(current_path.read_text(encoding="utf-8"))
           assert len(current["datasets"]) == 3
+          cross = current["cross_source_reconciliation"]
+          assert cross["comparison"]
+          assert set(cross["comparisons"]) == {
+              "index_futures", "stock_futures", "index_options", "stock_options"
+          }
           for dataset in current["datasets"]:
               raw_path = Path(dataset["raw_path"])
               assert raw_path.is_file(), f"missing raw file: {raw_path}"
