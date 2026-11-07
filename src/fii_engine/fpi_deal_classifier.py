@@ -678,9 +678,7 @@ def classify(root: Path = Path("."), lookback_days: int = 7) -> dict:
             method: sum(event["universe_join_method"] == method for event in events)
             for method in sorted({event["universe_join_method"] for event in events})
         },
-        "nifty500_snapshot_verified_symbol_count": sum(
-            row["nifty500_snapshot_member_verified"] == "true" for row in stock_rows
-        ),
+        "nifty500_snapshot_member_count": len(stock_rows),
         "nifty500_snapshot_verified_fpi_client_event_count": sum(
             event["nifty500_snapshot_member_verified"] == "true"
             and event["counterparty_class"] == "current_registry_matched_fpi_client"
