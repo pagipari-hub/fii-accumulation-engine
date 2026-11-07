@@ -401,11 +401,25 @@ def _capture_range(root: Path, option_type: str, from_date: date, to_date: date,
     }
 
 
+
+def _default_query_range(today: date) -> tuple[date, date]:
+    # The NSE page's one-week default ends on the previous weekday when
+    # inspected over a weekend. This keeps Friday's transactions in a
+    # Saturday/Sunday manual run instead of shifting the window forward.
+    if today.weekday() == 5:
+        to_date = today - timedelta(days=1)
+    elif today.weekday() == 6:
+        to_date = today - timedelta(days=2)
+    else:
+        to_date = today
+    return to_date - timedelta(days=7), to_date
+
 def ingest(root: Path = Path("."), from_value: str | None = None,
            to_value: str | None = None) -> dict:
     today = datetime.now(ZoneInfo("Asia/Kolkata")).date()
-    to_date = _parse_query_date(to_value) if to_value else today
-    from_date = _parse_query_date(from_value) if from_value else to_date - timedelta(days=7)
+    default_from, default_to = _default_query_range(today)
+    to_date = _parse_query_date(to_value) if to_value else default_to
+    from_date = _parse_query_date(from_value) if from_value else default_from
     if from_date > to_date:
         raise ValueError("NSE deals from-date must not be after to-date")
     if (to_date - from_date).days > 365:

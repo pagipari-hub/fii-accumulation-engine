@@ -61,6 +61,6 @@ https://github.com/pagipari-hub/fii-accumulation-engine/actions/runs/42358048713
 
 ## Production collector
 
-`src/fii_engine/nse_bulk_block_deals.py` uses the official CSV export as the primary dataset and cross-checks the JSON page response as a subset. It stores immutable per-trade-date normalized snapshots, raw-response hashes and provenance manifests. The daily workflow queries an overlapping seven-calendar-day range so a missed run can be recovered on the next run and later source revisions produce new content-addressed snapshots.
+`src/fii_engine/nse_bulk_block_deals.py` uses the official CSV export as the primary dataset and cross-checks the JSON page response as a subset. It stores immutable per-trade-date normalized snapshots, raw-response hashes and provenance manifests. The daily workflow queries an overlapping seven-calendar-day range so a missed run can be recovered on the next run and later source revisions produce new content-addressed snapshots. On Saturday/Sunday manual runs, the default range ends on the previous Friday (rather than the weekend date) so the latest completed weekday remains inside the query.
 
 A client name is a disclosed counterparty label, not a verified investor classification. No client is automatically labelled FII/FPI, mutual fund, promoter or beneficial owner from its name alone. Bulk and block deals are separate evidence classes and BUY/SELL observations are retained individually; they are not silently netted into FII flows.

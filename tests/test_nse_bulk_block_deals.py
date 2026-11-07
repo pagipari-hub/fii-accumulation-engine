@@ -7,6 +7,7 @@ from fii_engine.nse_bulk_block_deals import (
     _crosscheck_json_csv,
     _parse_csv,
     _parse_json,
+    _default_query_range,
     _parse_query_date,
 )
 
@@ -143,3 +144,21 @@ def test_parses_date_query_format_exactly():
     assert _parse_query_date("30-10-2026") == date(2026, 10, 30)
     with pytest.raises(ValueError, match="DD-MM-YYYY"):
         _parse_query_date("2026-10-30")
+
+
+def test_weekend_default_range_ends_on_previous_friday():
+    start, end = _default_query_range(date(2026, 11, 7))
+    assert start == date(2026, 10, 30)
+    assert end == date(2026, 11, 6)
+
+
+def test_sunday_default_range_ends_on_previous_friday():
+    start, end = _default_query_range(date(2026, 11, 8))
+    assert start == date(2026, 10, 30)
+    assert end == date(2026, 11, 6)
+
+
+def test_weekday_default_range_ends_on_current_date():
+    start, end = _default_query_range(date(2026, 11, 9))
+    assert start == date(2026, 11, 2)
+    assert end == date(2026, 11, 9)
