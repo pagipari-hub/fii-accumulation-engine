@@ -71,7 +71,7 @@ def collect_prices(symbols: Iterable[str], *, period: str = "2y", interval: str 
     frame = yf.download(
         tickers=requested, period=period, interval=interval,
         auto_adjust=False, actions=True, group_by="ticker",
-        multi_level_index=True, threads=True, progress=False,
+        multi_level_index=True, threads=False, progress=False,
     )
     if frame.empty:
         raise RuntimeError("Yahoo Finance returned no price rows")
