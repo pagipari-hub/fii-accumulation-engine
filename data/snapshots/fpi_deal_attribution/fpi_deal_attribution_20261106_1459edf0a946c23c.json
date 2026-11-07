@@ -1,0 +1,116 @@
+{
+  "dataset": "nse_bulk_block_deal_fpi_counterparty_classification",
+  "parser_version": 1,
+  "status": "complete",
+  "lookback_calendar_days": 7,
+  "trade_date_window_start": "2026-10-30",
+  "trade_date_window_end": "2026-11-06",
+  "registry_snapshot_date": "2026-11-08",
+  "registry_snapshot_path": "data/snapshots/cdsl_fpi_registry/cdsl_fpi_registry_20261108_70e5136b0acdbc67.csv",
+  "registry_snapshot_sha256": "70e5136b0acdbc67bee762a695433f1b7d82ce56665534f72b36e15025c7fd58",
+  "source_row_count": 680,
+  "deduplicated_event_count": 669,
+  "cross_report_duplicate_event_count": 11,
+  "current_registry_matched_fpi_client_event_count": 17,
+  "current_registry_matched_odi_issuer_event_count": 2,
+  "ambiguous_registration_event_count": 1,
+  "unmatched_event_count": 649,
+  "event_csv_sha256": "d000e17d6c7a6c3aea135d30b7bd9961f0b3a9946f92f6b35f95d589dcfe0279",
+  "stock_summary_csv_sha256": "c8991df4b8e8bbb6deb429d44f7bb2416500a574aaa23483205d6bae2a92e7e6",
+  "event_snapshot_path": "data/snapshots/fpi_deal_attribution/fpi_deal_attribution_20261106_1459edf0a946c23c_events.csv",
+  "stock_summary_snapshot_path": "data/snapshots/fpi_deal_attribution/fpi_deal_attribution_20261106_1459edf0a946c23c_stocks.csv",
+  "snapshot_manifest_path": "data/snapshots/fpi_deal_attribution/fpi_deal_attribution_20261106_1459edf0a946c23c.json",
+  "source_deal_manifests": [
+    {
+      "manifest_path": "data/raw/bulk_block_deals/manifests/block_2026-10-30_c058ba94f64a7bac.json",
+      "manifest_sha256": "df6485f5d8102ab548e0d7d0e96b22f9b716469c0648d44c457fdf348ba68c76",
+      "snapshot_path": "data/snapshots/bulk_block_deals/block_2026-10-30_f93ef6b5e5d7f24a_p1.csv",
+      "snapshot_sha256": "f93ef6b5e5d7f24a8a98865d55827cf34a51934377e645d62f93cd15952e0a74",
+      "deal_type": "block",
+      "trade_date": "2026-10-30",
+      "retrieved_at_utc": "2026-11-07T23:34:56Z"
+    },
+    {
+      "manifest_path": "data/raw/bulk_block_deals/manifests/bulk_2026-10-30_5c3b16c19c905a5d.json",
+      "manifest_sha256": "e91289557dc19ec89d4277e3a97ff180b25da6368b91ab1a79a3a4efc2c70573",
+      "snapshot_path": "data/snapshots/bulk_block_deals/bulk_2026-10-30_8c4b9f6ed9147794_p1.csv",
+      "snapshot_sha256": "8c4b9f6ed9147794ce6f3f25b2a6fe6743903256e7547196fc87c5dde80f30bc",
+      "deal_type": "bulk",
+      "trade_date": "2026-10-30",
+      "retrieved_at_utc": "2026-11-07T23:34:56Z"
+    },
+    {
+      "manifest_path": "data/raw/bulk_block_deals/manifests/bulk_2026-11-02_cfcf299fe5605efd.json",
+      "manifest_sha256": "975fc79d1af3bcabaedfe2d05701e49a87de7e2198d930d52f29507d0a8bca8f",
+      "snapshot_path": "data/snapshots/bulk_block_deals/bulk_2026-11-02_b70ec75185a70949_p1.csv",
+      "snapshot_sha256": "b70ec75185a70949dcf4ebdfe666961da4377e649aeb5d9b5e7fca476b852d6f",
+      "deal_type": "bulk",
+      "trade_date": "2026-11-02",
+      "retrieved_at_utc": "2026-11-07T23:34:56Z"
+    },
+    {
+      "manifest_path": "data/raw/bulk_block_deals/manifests/block_2026-11-03_0483b2ccd75a3c22.json",
+      "manifest_sha256": "b939bf8f54239c6a8cae5a5ffbfa256df4ae76628d63364929898b40c709d134",
+      "snapshot_path": "data/snapshots/bulk_block_deals/block_2026-11-03_c67aabd6c37ca4cf_p1.csv",
+      "snapshot_sha256": "c67aabd6c37ca4cfb1f49ea5373bbbffe4b79966c34636e284e44763c3187982",
+      "deal_type": "block",
+      "trade_date": "2026-11-03",
+      "retrieved_at_utc": "2026-11-07T23:34:56Z"
+    },
+    {
+      "manifest_path": "data/raw/bulk_block_deals/manifests/bulk_2026-11-03_57ea872a93fcf1d6.json",
+      "manifest_sha256": "20f405c0806141681b3b4579a9bbb094928a1da69dd7bf6aec44225e9ea643f8",
+      "snapshot_path": "data/snapshots/bulk_block_deals/bulk_2026-11-03_f4e3db3d6cf9a983_p1.csv",
+      "snapshot_sha256": "f4e3db3d6cf9a98373d6acee69007977fb6aeb985db8c924352cd5163aea1c68",
+      "deal_type": "bulk",
+      "trade_date": "2026-11-03",
+      "retrieved_at_utc": "2026-11-07T23:34:56Z"
+    },
+    {
+      "manifest_path": "data/raw/bulk_block_deals/manifests/block_2026-11-04_6aa548212447b564.json",
+      "manifest_sha256": "c9bb777b61608b7e68572dc0300b55e05c0512b2c6138e5be240be8c7ae0b9b0",
+      "snapshot_path": "data/snapshots/bulk_block_deals/block_2026-11-04_4682a110dc21e811_p1.csv",
+      "snapshot_sha256": "4682a110dc21e8119df42e3b0da23eab54f0110e270bc35050f22f55768a7053",
+      "deal_type": "block",
+      "trade_date": "2026-11-04",
+      "retrieved_at_utc": "2026-11-07T23:34:56Z"
+    },
+    {
+      "manifest_path": "data/raw/bulk_block_deals/manifests/bulk_2026-11-04_cd94bb135cd0f24f.json",
+      "manifest_sha256": "7fbe17a2d8885851c1b5f29c1170a0c5a25120b06c996d409cfcb1d4aa82df44",
+      "snapshot_path": "data/snapshots/bulk_block_deals/bulk_2026-11-04_9e98c7aa81126a24_p1.csv",
+      "snapshot_sha256": "9e98c7aa81126a24b4014ba5486aa170eec9e43766d9d95912289ea378e0613b",
+      "deal_type": "bulk",
+      "trade_date": "2026-11-04",
+      "retrieved_at_utc": "2026-11-07T23:34:56Z"
+    },
+    {
+      "manifest_path": "data/raw/bulk_block_deals/manifests/bulk_2026-11-05_761fcee961f99525.json",
+      "manifest_sha256": "9665e5fafc7f29d8276885ad81ba22ce7967bf14298350f359e1a8a7f4d3584c",
+      "snapshot_path": "data/snapshots/bulk_block_deals/bulk_2026-11-05_e98dd901d58baf4b_p1.csv",
+      "snapshot_sha256": "e98dd901d58baf4bdeb9e0ad155c3cd65e4f8a988220f58c674433395690a8cc",
+      "deal_type": "bulk",
+      "trade_date": "2026-11-05",
+      "retrieved_at_utc": "2026-11-07T23:34:56Z"
+    },
+    {
+      "manifest_path": "data/raw/bulk_block_deals/manifests/block_2026-11-06_07938400dcfec304.json",
+      "manifest_sha256": "43222555a897dfc7649390dd73fa43e417a4314ffa1f933ed4235922539a29b8",
+      "snapshot_path": "data/snapshots/bulk_block_deals/block_2026-11-06_51e3f9a57c071871_p1.csv",
+      "snapshot_sha256": "51e3f9a57c0718716386f99c5c0e2a3462a4fe9a5151e0155e361172a49818d1",
+      "deal_type": "block",
+      "trade_date": "2026-11-06",
+      "retrieved_at_utc": "2026-11-07T23:34:56Z"
+    },
+    {
+      "manifest_path": "data/raw/bulk_block_deals/manifests/bulk_2026-11-06_acf9b1c20c98f39d.json",
+      "manifest_sha256": "436e9641ee671c249c9d6609d6e92ae4b64efda7862fcc5a26c2cc5f614ae750",
+      "snapshot_path": "data/snapshots/bulk_block_deals/bulk_2026-11-06_9bb708b1a8347a72_p1.csv",
+      "snapshot_sha256": "9bb708b1a8347a72510d2a4bca7938db91f93e20a69d4ce136d33c322d0ea206",
+      "deal_type": "bulk",
+      "trade_date": "2026-11-06",
+      "retrieved_at_utc": "2026-11-07T23:34:56Z"
+    }
+  ],
+  "temporal_boundary": "A current registry match does not prove FPI registration on an earlier trade date because the CDSL directory does not publish registration start dates. Same-day registry presence is reported separately. ODI issuers are not counted as beneficial FPI investors; unmatched counterparties remain unresolved, not non-FPI."
+}
