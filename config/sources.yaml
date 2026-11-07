@@ -19,12 +19,12 @@ sources:
     status: "captured_quarantined_freshness_mismatch"
     download_catalogue_api: "https://www.nseindia.com/api/daily-reports?key=CM"
   nse_fo_eligibility:
-    description: "Current stock derivatives eligibility and contract reference"
+    description: "Current individual-stock F&O membership; contract-level fields are maintained separately"
     publisher: "National Stock Exchange of India"
     reference_url: "https://www.nseindia.com/all-reports-derivatives"
     frequency: "daily_or_on_change"
     required_fields: [symbol, fno_status]
-    status: "source_data_quarantined_eligibility_not_derived"
+    status: "current_membership_live_validated_contract_master_quarantined"
     download_catalogue_api: "https://www.nseindia.com/api/daily-reports?key=FO"
   nse_fo_individual_stock_underlyings:
     description: "Official current list of individual securities underlying NSE equity derivatives"
@@ -33,7 +33,7 @@ sources:
     download_url: "https://www.nseindia.com/api/underlying-information"
     frequency: "daily_or_on_change"
     required_fields: [symbol, underlying, serialNumber]
-    status: "adapter_implemented_live_validation_pending"
+    status: "live_validated_current_membership_only"
     source_effective_date: "not_supplied; record retrieval timestamp only"
   nse_fii_dii_cash_provisional:
     description: "NSE-exclusive and combined-market FII/FPI and DII cash activity"
