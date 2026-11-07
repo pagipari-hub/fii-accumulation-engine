@@ -199,7 +199,7 @@ def inspect_script(url: str, page_url: str, timeout: int = 15) -> dict[str, obje
                 "truncated": truncated,
                 "sha256_prefix": hashlib.sha256(body).hexdigest(),
                 "endpoint_candidates": extract_endpoint_candidates(text_body),
-                "endpoint_contexts": extract_endpoint_contexts(text_body),
+                "endpoint_contexts": extract_endpoint_contexts(text_body, radius=1600, limit=50),
                 "status": "ok" if response.status == 200 else "http_error",
             }
     except HTTPError as exc:
