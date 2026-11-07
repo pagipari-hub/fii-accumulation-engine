@@ -1,4 +1,4 @@
-"""Inspect official source pages and discover linked downloadable resources.
+"""Inspect official source pages and discover linked resources and JS endpoints.
 
 This is a discovery/health-check stage, not a market-data parser. It deliberately
 does not guess file schemas or treat a source page response as a data observation.
@@ -8,11 +8,12 @@ from __future__ import annotations
 import hashlib
 import json
 import re
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.error import HTTPError, URLError
+from urllib.parse import urljoin, urlparse
 from urllib.request import Request, urlopen
 
 SOURCE_PAGES = {
@@ -26,6 +27,13 @@ USER_AGENT = (
 )
 DOWNLOAD_SUFFIXES = (".csv", ".zip", ".xls", ".xlsx", ".pdf", ".gz", ".parquet")
 DOWNLOAD_WORDS = re.compile(r"download|bhavcopy|participant|contract|constituent|report", re.I)
+ENDPOINT_WORDS = re.compile(
+    r"api|report|download|market|deriv|bhav|participant|historical|fo_eq|fii|dii",
+    re.I,
+)
+URL_OR_PATH = re.compile(r"""(?P<value>(?:https?:\\?/\\?/|/)[^"'\\s<>]{2,240})""")
+MAX_SCRIPT_COUNT = 20
+MAX_SCRIPT_BYTES = 1_000_000
 
 
 @dataclass(frozen=True)
@@ -38,29 +46,54 @@ class AnchorParser(HTMLParser):
     def __init__(self) -> None:
         super().__init__()
         self.links: list[Link] = []
+        self.script_urls: list[str] = []
+        self.inline_scripts: list[str] = []
         self._href: str | None = None
         self._text: list[str] = []
+        self._inside_script = False
+        self._script_src: str | None = None
+        self._script_text: list[str] = []
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        attributes = dict(attrs)
         if tag.lower() == "a":
-            self._href = dict(attrs).get("href")
+            self._href = attributes.get("href")
             self._text = []
+        elif tag.lower() == "script":
+            self._inside_script = True
+            self._script_src = attributes.get("src")
+            self._script_text = []
+            if self._script_src:
+                self.script_urls.append(self._script_src)
 
     def handle_data(self, data: str) -> None:
         if self._href is not None:
             self._text.append(data)
+        if self._inside_script and self._script_src is None:
+            self._script_text.append(data)
 
     def handle_endtag(self, tag: str) -> None:
         if tag.lower() == "a" and self._href is not None:
             self.links.append(Link(" ".join(" ".join(self._text).split()), self._href))
             self._href = None
             self._text = []
+        elif tag.lower() == "script" and self._inside_script:
+            if self._script_src is None and self._script_text:
+                self.inline_scripts.append("\n".join(self._script_text))
+            self._inside_script = False
+            self._script_src = None
+            self._script_text = []
+
+
+def parse_html(html: str) -> AnchorParser:
+    parser = AnchorParser()
+    parser.feed(html)
+    return parser
 
 
 def discover_links(html: str) -> list[dict[str, str]]:
     """Return likely download links from HTML; preserve the original href."""
-    parser = AnchorParser()
-    parser.feed(html)
+    parser = parse_html(html)
     found: list[dict[str, str]] = []
     seen: set[str] = set()
     for link in parser.links:
@@ -73,6 +106,73 @@ def discover_links(html: str) -> list[dict[str, str]]:
     return found
 
 
+def discover_script_urls(html: str, page_url: str) -> list[str]:
+    """Resolve same-origin script assets only; do not fetch third-party scripts."""
+    parser = parse_html(html)
+    page_origin = urlparse(page_url).netloc.lower()
+    found: list[str] = []
+    seen: set[str] = set()
+    for raw_url in parser.script_urls:
+        absolute = urljoin(page_url, raw_url)
+        parsed = urlparse(absolute)
+        if parsed.scheme not in {"http", "https"} or parsed.netloc.lower() != page_origin:
+            continue
+        if absolute not in seen:
+            found.append(absolute)
+            seen.add(absolute)
+    return found[:MAX_SCRIPT_COUNT]
+
+
+def extract_endpoint_candidates(text: str) -> list[str]:
+    """Extract endpoint-like URL/path strings for inspection, not execution."""
+    candidates: list[str] = []
+    seen: set[str] = set()
+    for match in URL_OR_PATH.finditer(text):
+        value = match.group("value").replace("\\/", "/")
+        if not ENDPOINT_WORDS.search(value):
+            continue
+        value = value.rstrip("),;]")
+        if value not in seen:
+            candidates.append(value)
+            seen.add(value)
+    return candidates
+
+
+def inspect_script(url: str, page_url: str, timeout: int = 15) -> dict[str, object]:
+    checked_at = datetime.now(timezone.utc).isoformat()
+    request = Request(
+        url,
+        headers={
+            "User-Agent": USER_AGENT,
+            "Accept": "application/javascript,text/javascript,*/*",
+            "Referer": page_url,
+        },
+    )
+    try:
+        with urlopen(request, timeout=timeout) as response:
+            body = response.read(MAX_SCRIPT_BYTES + 1)
+            truncated = len(body) > MAX_SCRIPT_BYTES
+            body = body[:MAX_SCRIPT_BYTES]
+            text_body = body.decode("utf-8", errors="replace")
+            return {
+                "url": url,
+                "checked_at_utc": checked_at,
+                "http_status": response.status,
+                "content_type": response.headers.get("Content-Type", ""),
+                "bytes_inspected": len(body),
+                "truncated": truncated,
+                "sha256_prefix": hashlib.sha256(body).hexdigest(),
+                "endpoint_candidates": extract_endpoint_candidates(text_body),
+                "status": "ok" if response.status == 200 else "http_error",
+            }
+    except HTTPError as exc:
+        return {"url": url, "checked_at_utc": checked_at,
+                "http_status": exc.code, "status": "http_error", "error": str(exc)}
+    except (URLError, TimeoutError, OSError) as exc:
+        return {"url": url, "checked_at_utc": checked_at,
+                "status": "connection_error", "error": str(exc)}
+
+
 def inspect_page(name: str, url: str, timeout: int = 30) -> dict[str, object]:
     request = Request(url, headers={"User-Agent": USER_AGENT, "Accept": "text/html,*/*"})
     checked_at = datetime.now(timezone.utc).isoformat()
@@ -81,6 +181,24 @@ def inspect_page(name: str, url: str, timeout: int = 30) -> dict[str, object]:
             body = response.read()
             content_type = response.headers.get("Content-Type", "")
             html = body.decode("utf-8", errors="replace")
+            parser = parse_html(html)
+            scripts = [
+                inspect_script(script_url, url)
+                for script_url in discover_script_urls(html, url)
+            ]
+            inline_candidates = []
+            for inline_script in parser.inline_scripts:
+                inline_candidates.extend(extract_endpoint_candidates(inline_script))
+            all_candidates = []
+            seen_candidates: set[str] = set()
+            for candidate in inline_candidates + [
+                endpoint
+                for script in scripts
+                for endpoint in script.get("endpoint_candidates", [])
+            ]:
+                if candidate not in seen_candidates:
+                    all_candidates.append(candidate)
+                    seen_candidates.add(candidate)
             return {
                 "source": name,
                 "page_url": url,
@@ -90,6 +208,9 @@ def inspect_page(name: str, url: str, timeout: int = 30) -> dict[str, object]:
                 "page_sha256": hashlib.sha256(body).hexdigest(),
                 "page_bytes": len(body),
                 "candidate_download_links": discover_links(html),
+                "same_origin_script_count": len(scripts),
+                "script_inspections": scripts,
+                "endpoint_candidates": all_candidates,
                 "status": "ok" if response.status == 200 else "http_error",
             }
     except HTTPError as exc:
@@ -104,7 +225,10 @@ def run_probe(output: Path) -> dict[str, object]:
     results = [inspect_page(name, url) for name, url in SOURCE_PAGES.items()]
     report = {
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
-        "purpose": "source-page discovery only; no market data has been ingested",
+        "purpose": (
+            "source-page and same-origin JavaScript discovery only; "
+            "no market data has been ingested and endpoint candidates are not executed"
+        ),
         "results": results,
     }
     output.parent.mkdir(parents=True, exist_ok=True)
