@@ -17,6 +17,7 @@ from fii_engine import (
     nse_fo_underlyings,
 )
 from fii_engine.daily_stock_features import build_daily_features
+from fii_engine.historical_features import build_historical_features
 
 
 def _utc_now() -> str:
@@ -120,8 +121,25 @@ def run_pipeline(root: Path) -> dict:
         )
         raise
 
+    try:
+        history = build_historical_features(root)
+        history_status = {
+            "status": "success",
+            "as_of_trade_date": history["as_of_trade_date"],
+            "daily_stock_session_count": history["daily_stock_session_count"],
+            "market_flow_session_count": history["market_flow_session_count"],
+            "windows_sessions": history["windows_sessions"],
+        }
+    except Exception as exc:
+        history_status = {
+            "status": "failure",
+            "error_type": type(exc).__name__,
+            "error": str(exc),
+        }
+
     status_payload = {
         "pipeline_status": pipeline_status,
+        "historical_features": history_status,
         "generated_at_utc": _utc_now(),
         "collectors": statuses,
         "matrix": {
