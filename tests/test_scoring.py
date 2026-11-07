@@ -115,7 +115,6 @@ def test_universe_keeps_every_symbol_and_only_ranks_eligible_rows(config):
             obs("disclosed_deals", 0.7),
             obs("cash_market", 0.9),
             obs("stock_derivatives", 0.8),
-            obs("participant_positioning", 0.7),
             obs("sector_relative_strength", 0.8),
         ],
         "XYZ": [
@@ -123,7 +122,6 @@ def test_universe_keeps_every_symbol_and_only_ranks_eligible_rows(config):
             obs("disclosed_deals", 0.2),
             obs("cash_market", 0.4),
             obs("stock_derivatives", 0.3),
-            obs("participant_positioning", 0.2),
             obs("sector_relative_strength", 0.2),
         ],
     }
@@ -146,3 +144,7 @@ def test_config_rejects_invalid_weight_totals(config):
 def test_grade_one_rejects_missing_transaction_provenance(config):
     with pytest.raises(ValueError, match="source references"):
         score_stock("ABC", [], config, direct_fpi_transaction_refs=[])
+
+def test_market_wide_participant_positioning_is_not_a_stock_score_family(config):
+    with pytest.raises(ValueError, match="unknown evidence family"):
+        score_stock("ABC", [obs("participant_positioning", 0.9)], config)
