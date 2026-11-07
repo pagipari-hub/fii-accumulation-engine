@@ -44,7 +44,16 @@ def _canonical_hash(value: dict) -> str:
 
 
 def _normal_name(value: object) -> str:
-    return re.sub(r"[^A-Z0-9]", "", str(value or "").upper())
+    tokens = re.findall(r"[A-Z0-9]+", str(value or "").upper())
+    # Deterministically normalize common legal suffix variants; do not use fuzzy matching.
+    suffix_aliases = {
+        "LIMITED": "LTD",
+        "PRIVATE": "PVT",
+        "CORPORATION": "CORP",
+        "COMPANY": "CO",
+        "INCORPORATED": "INC",
+    }
+    return "".join(suffix_aliases.get(token, token) for token in tokens)
 
 
 def _parse_nse_date(value: object, *, field: str) -> str | None:
