@@ -149,6 +149,28 @@ def extract_endpoint_candidates(text: str) -> list[str]:
     return candidates
 
 
+def extract_endpoint_contexts(text: str, radius: int = 320, limit: int = 20) -> list[dict[str, object]]:
+    """Capture bounded source context around discovered API paths for human review.
+
+    Context is evidence for endpoint discovery only; it is never executed.
+    """
+    contexts: list[dict[str, object]] = []
+    pattern = re.compile(r"/api/[A-Za-z0-9_./-]+(?:\\?[^\\s\"'<>]{0,100})?")
+    for match in pattern.finditer(text):
+        value = match.group(0)
+        if not ENDPOINT_WORDS.search(value):
+            continue
+        start, end = max(0, match.start() - radius), min(len(text), match.end() + radius)
+        contexts.append({
+            "endpoint": value,
+            "context_start": start,
+            "context": text[start:end],
+        })
+        if len(contexts) >= limit:
+            break
+    return contexts
+
+
 def inspect_script(url: str, page_url: str, timeout: int = 15) -> dict[str, object]:
     checked_at = datetime.now(timezone.utc).isoformat()
     request = Request(
@@ -174,6 +196,7 @@ def inspect_script(url: str, page_url: str, timeout: int = 15) -> dict[str, obje
                 "truncated": truncated,
                 "sha256_prefix": hashlib.sha256(body).hexdigest(),
                 "endpoint_candidates": extract_endpoint_candidates(text_body),
+                "endpoint_contexts": extract_endpoint_contexts(text_body),
                 "status": "ok" if response.status == 200 else "http_error",
             }
     except HTTPError as exc:
