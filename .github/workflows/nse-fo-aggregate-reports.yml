@@ -84,6 +84,9 @@ jobs:
               snapshot = Path(dataset["snapshot_path"])
               assert snapshot.is_file(), f"missing immutable normalized snapshot: {snapshot}"
               assert hashlib.sha256(snapshot.read_bytes()).hexdigest() == dataset["snapshot_sha256"]
+              snapshot = Path(dataset["snapshot_path"])
+              assert snapshot.is_file(), f"missing immutable normalized snapshot: {snapshot}"
+              assert hashlib.sha256(snapshot.read_bytes()).hexdigest() == dataset["snapshot_sha256"]
               print(json.dumps({
                   "dataset": dataset["dataset"],
                   "trade_date": dataset["trading_date"],
@@ -105,7 +108,7 @@ jobs:
           if [[ -n "$(git status --porcelain data/raw/fno_aggregate_reports/manifests data/snapshots/fno_aggregate_reports)" ]]; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add data/raw/fno_aggregate_reports/manifests data/snapshots/fno_aggregate_reports
+            git add data/raw/fno_aggregate_reports/manifests data/snapshots/fno_aggregate_reports data/snapshots/fno_aggregate_reports
             git commit -m "data: record NSE participant and FII report provenance"
             git pull --rebase origin "$GITHUB_REF_NAME"
             git push
@@ -123,6 +126,7 @@ jobs:
             data/raw/fno_aggregate_reports/*.xls
             data/raw/fno_aggregate_reports/current_manifest.json
             data/processed/fno_aggregate_reports/*.csv
+            data/snapshots/fno_aggregate_reports/*.csv
             data/snapshots/fno_aggregate_reports/*.csv
             data/raw/fno_aggregate_reports/manifests/*.json
           if-no-files-found: warn
