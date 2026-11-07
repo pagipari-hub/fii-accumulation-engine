@@ -70,7 +70,7 @@ jobs:
           if [[ -n "$AS_OF_DATE" ]]; then
             args+=(--as-of-date "$AS_OF_DATE")
           fi
-          python -m fii_engine.nse_historical_backfill "\${args[@]}"
+          python -m fii_engine.nse_historical_backfill "${args[@]}"
 
       - name: Validate 60-session history and provenance
         if: github.event_name != 'pull_request'
