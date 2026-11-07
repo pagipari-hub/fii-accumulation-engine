@@ -1,0 +1,842 @@
+{
+  "dataset": "nse_shareholding_xbrl_filing",
+  "parser_version": 2,
+  "filing": {
+    "record_id": "213554",
+    "symbol": "HONAUT",
+    "company_name": "Honeywell Automation India Limited",
+    "isin": "INE671A01010",
+    "universe_isin": "INE671A01010",
+    "reporting_date": "2026-09-30",
+    "submission_date": "2026-10-09",
+    "broadcast_date": "09-OCT-2026 12:28:01",
+    "system_date": "09-OCT-2026 12:28:07",
+    "revised_data": "N",
+    "revision_date": null,
+    "revision_remark": null,
+    "xbrl_url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1734704_09102026122756_WEB.xml",
+    "identity_status": "verified",
+    "identity_join_method": "isin_exact",
+    "metadata_sha256": "2f62c4389b8092a93a095304cd4f0972beefab0dbc4fd35900f33a9a3d07ee10",
+    "source_master_sha256": "1ecf54b17994a5305be2606e484362f195c3a8732156995a8641eaf25de46625"
+  },
+  "metadata_sha256": "2f62c4389b8092a93a095304cd4f0972beefab0dbc4fd35900f33a9a3d07ee10",
+  "source_master_sha256": "1ecf54b17994a5305be2606e484362f195c3a8732156995a8641eaf25de46625",
+  "xbrl_url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1734704_09102026122756_WEB.xml",
+  "xbrl_sha256": "fe23224888fdcad6b670e99e3c3e23e304c4a2c2e686ac789188f2c728a6f8cf",
+  "xbrl_raw_path": "data/raw/shareholding/xbrl/213554_fe23224888fdcad6.xml",
+  "xbrl_content_type": "application/xml",
+  "parsed": {
+    "parser": "nse_shareholding_xbrl",
+    "parser_version": 1,
+    "category_axis": "CategoryOfShareholdersAxis",
+    "reporting_dates": [
+      "2026-09-30"
+    ],
+    "category_record_count": 29,
+    "category_records": [
+      {
+        "context_id": "OtherForeignShareholders_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "OtherForeignShareholders",
+        "category_key": "OtherForeignShareholders",
+        "entity_identifier": "HONAUT",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "OtherForeignShareholdersMember"
+          }
+        ],
+        "shareholder_count": 1,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 6631142,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 6631142,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.75",
+        "ownership_percentage_points": "75.00",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 6631142,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.75",
+        "voting_rights_percentage_points": "75.00",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "Foreign_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "Foreign",
+        "category_key": "Foreign",
+        "entity_identifier": "HONAUT",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "ForeignMember"
+          }
+        ],
+        "shareholder_count": 1,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 6631142,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 6631142,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.75",
+        "ownership_percentage_points": "75.00",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 6631142,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.75",
+        "voting_rights_percentage_points": "75.00",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "ShareholdingOfPromoterAndPromoterGroup_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "ShareholdingOfPromoterAndPromoterGroup",
+        "category_key": "ShareholdingOfPromoterAndPromoterGroup",
+        "entity_identifier": "HONAUT",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "ShareholdingOfPromoterAndPromoterGroupMember"
+          }
+        ],
+        "shareholder_count": 1,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 6631142,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 6631142,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.75",
+        "ownership_percentage_points": "75.00",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 6631142,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.75",
+        "voting_rights_percentage_points": "75.00",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "MutualFundsOrUTI_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "MutualFundsOrUTI",
+        "category_key": "MutualFundsOrUTI",
+        "entity_identifier": "HONAUT",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "MutualFundsOrUTIMember"
+          }
+        ],
+        "shareholder_count": 24,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 926384,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 926384,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.1048",
+        "ownership_percentage_points": "10.4800",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 926384,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.1048",
+        "voting_rights_percentage_points": "10.4800",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "VentureCapitalFunds_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "VentureCapitalFunds",
+        "category_key": "VentureCapitalFunds",
+        "entity_identifier": "HONAUT",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "VentureCapitalFundsMember"
+          }
+        ],
+        "shareholder_count": 0,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 0,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 0,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0",
+        "ownership_percentage_points": "0",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 0,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0",
+        "voting_rights_percentage_points": "0",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "AlternativeInvestmentFunds_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "AlternativeInvestmentFunds",
+        "category_key": "AlternativeInvestmentFunds",
+        "entity_identifier": "HONAUT",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "AlternativeInvestmentFundsMember"
+          }
+        ],
+        "shareholder_count": 2,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 3744,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 3744,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0004",
+        "ownership_percentage_points": "0.0400",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 3744,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0004",
+        "voting_rights_percentage_points": "0.0400",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "Banks_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "Banks",
+        "category_key": "Banks",
+        "entity_identifier": "HONAUT",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "BanksMember"
+          }
+        ],
+        "shareholder_count": 0,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 0,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 0,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0",
+        "ownership_percentage_points": "0",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 0,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0",
+        "voting_rights_percentage_points": "0",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "InsuranceCompanies_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "InsuranceCompanies",
+        "category_key": "InsuranceCompanies",
+        "entity_identifier": "HONAUT",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "InsuranceCompaniesMember"
+          }
+        ],
+        "shareholder_count": 8,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 86069,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 86069,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0097",
+        "ownership_percentage_points": "0.9700",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 86069,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0097",
+        "voting_rights_percentage_points": "0.9700",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "ProvidentFundsOrPensionFunds_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "ProvidentFundsOrPensionFunds",
+        "category_key": "ProvidentFundsOrPensionFunds",
+        "entity_identifier": "HONAUT",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "ProvidentFundsOrPensionFundsMember"
+          }
+        ],
+        "shareholder_count": 0,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 0,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 0,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0",
+        "ownership_percentage_points": "0",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 0,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0",
+        "voting_rights_percentage_points": "0",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "AssetReconstructionCompanies_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "AssetReconstructionCompanies",
+        "category_key": "AssetReconstructionCompanies",
+        "entity_identifier": "HONAUT",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "AssetReconstructionCompaniesMember"
+          }
+        ],
+        "shareholder_count": 0,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 0,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 0,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0",
+        "ownership_percentage_points": "0",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 0,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0",
+        "voting_rights_percentage_points": "0",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "SovereignWealthFundsDomestic_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "SovereignWealthFundsDomestic",
+        "category_key": "SovereignWealthFundsDomestic",
+        "entity_identifier": "HONAUT",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "SovereignWealthFundsDomesticMember"
+          }
+        ],
+        "shareholder_count": 0,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 0,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 0,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0",
+        "ownership_percentage_points": "0",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 0,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0",
+        "voting_rights_percentage_points": "0",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "NBFCsRegisteredWithRBI_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "NBFCsRegisteredWithRBI",
+        "category_key": "NBFCsRegisteredWithRBI",
+        "entity_identifier": "HONAUT",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "NBFCsRegisteredWithRBIMember"
+          }
+        ],
+        "shareholder_count": 0,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 0,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 0,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0",
+        "ownership_percentage_points": "0",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 0,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0",
+        "voting_rights_percentage_points": "0",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "OtherFinancialInstitutions_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "OtherFinancialInstitutions",
+        "category_key": "OtherFinancialInstitutions",
+        "entity_identifier": "HONAUT",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "OtherFinancialInstitutionsMember"
+          }
+        ],
+        "shareholder_count": 1,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 100,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 100,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0",
+        "ownership_percentage_points": "0",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 100,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0",
+        "voting_rights_percentage_points": "0",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "OtherInstitutionsDomestic_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "OtherInstitutionsDomestic",
+        "category_key": "OtherInstitutionsDomestic",
+        "entity_identifier": "HONAUT",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "OtherInstitutionsDomesticMember"
+          }
+        ],
+        "shareholder_count": 0,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 0,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 0,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0",
+        "ownership_percentage_points": "0",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 0,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0",
+        "voting_rights_percentage_points": "0",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "InstitutionsDomestic_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "InstitutionsDomestic",
+        "category_key": "InstitutionsDomestic",
+        "entity_identifier": "HONAUT",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "InstitutionsDomesticMember"
+          }
+        ],
+        "shareholder_count": 35,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 1016297,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 1016297,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.1149",
+        "ownership_percentage_points": "11.4900",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 1016297,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.1149",
+        "voting_rights_percentage_points": "11.4900",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "InstitutionsForeignPortfolioInvestorCategoryOne_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "InstitutionsForeignPortfolioInvestorCategoryOne",
+        "category_key": "fpi_category_i",
+        "entity_identifier": "HONAUT",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "InstitutionsForeignPortfolioInvestorCategoryOneMember"
+          }
+        ],
+        "shareholder_count": 134,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 346285,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 346285,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0392",
+        "ownership_percentage_points": "3.9200",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 346285,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0392",
+        "voting_rights_percentage_points": "3.9200",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "InstitutionsForeignPortfolioInvestorCategoryTwo_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "InstitutionsForeignPortfolioInvestorCategoryTwo",
+        "category_key": "fpi_category_ii",
+        "entity_identifier": "HONAUT",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "InstitutionsForeignPortfolioInvestorCategoryTwoMember"
+          }
+        ],
+        "shareholder_count": 9,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 6639,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 6639,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0008",
+        "ownership_percentage_points": "0.0800",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 6639,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0008",
+        "voting_rights_percentage_points": "0.0800",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "InstitutionsForeign_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "InstitutionsForeign",
+        "category_key": "foreign_institutions_total",
+        "entity_identifier": "HONAUT",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "InstitutionsForeignMember"
+          }
+        ],
+        "shareholder_count": 143,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 352924,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 352924,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0399",
+        "ownership_percentage_points": "3.9900",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 352924,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0399",
+        "voting_rights_percentage_points": "3.9900",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "CentralGovernmentOrPresidentOfIndia_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "CentralGovernmentOrPresidentOfIndia",
+        "category_key": "CentralGovernmentOrPresidentOfIndia",
+        "entity_identifier": "HONAUT",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "CentralGovernmentOrPresidentOfIndiaMember"
+          }
+        ],
+        "shareholder_count": 1,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 285,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 285,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0",
+        "ownership_percentage_points": "0",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 285,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0",
+        "voting_rights_percentage_points": "0",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "Governments_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "Governments",
+        "category_key": "Governments",
+        "entity_identifier": "HONAUT",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "GovernmentsMember"
+          }
+        ],
+        "shareholder_count": 1,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 285,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 285,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0",
+        "ownership_percentage_points": "0",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 285,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0",
+        "voting_rights_percentage_points": "0",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "InvestorEducationAndProtectionFund_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "InvestorEducationAndProtectionFund",
+        "category_key": "InvestorEducationAndProtectionFund",
+        "entity_identifier": "HONAUT",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "InvestorEducationAndProtectionFundMember"
+          }
+        ],
+        "shareholder_count": 1,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 12486,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 12486,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0014",
+        "ownership_percentage_points": "0.1400",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 12486,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0014",
+        "voting_rights_percentage_points": "0.1400",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "ResidentIndividualShareholdersHoldingNominalShareCapitalUpToRsTwoLakh_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "ResidentIndividualShareholdersHoldingNominalShareCapitalUpToRsTwoLakh",
+        "category_key": "ResidentIndividualShareholdersHoldingNominalShareCapitalUpToRsTwoLakh",
+        "entity_identifier": "HONAUT",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "ResidentIndividualShareholdersHoldingNominalShareCapitalUpToRsTwoLakhMember"
+          }
+        ],
+        "shareholder_count": 29694,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 674667,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 674667,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0763",
+        "ownership_percentage_points": "7.6300",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 674667,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0763",
+        "voting_rights_percentage_points": "7.6300",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "ResidentIndividualShareholdersHoldingNominalShareCapitalInExcessOfRsTwoLakh_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "ResidentIndividualShareholdersHoldingNominalShareCapitalInExcessOfRsTwoLakh",
+        "category_key": "ResidentIndividualShareholdersHoldingNominalShareCapitalInExcessOfRsTwoLakh",
+        "entity_identifier": "HONAUT",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "ResidentIndividualShareholdersHoldingNominalShareCapitalInExcessOfRsTwoLakhMember"
+          }
+        ],
+        "shareholder_count": 1,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 22286,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 22286,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0025",
+        "ownership_percentage_points": "0.2500",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 22286,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0025",
+        "voting_rights_percentage_points": "0.2500",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "NonResidentIndians_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "NonResidentIndians",
+        "category_key": "NonResidentIndians",
+        "entity_identifier": "HONAUT",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "NonResidentIndiansMember"
+          }
+        ],
+        "shareholder_count": 1330,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 32609,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 32609,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0037",
+        "ownership_percentage_points": "0.3700",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 32609,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0037",
+        "voting_rights_percentage_points": "0.3700",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "BodiesCorporate_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "BodiesCorporate",
+        "category_key": "BodiesCorporate",
+        "entity_identifier": "HONAUT",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "BodiesCorporateMember"
+          }
+        ],
+        "shareholder_count": 330,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 43407,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 43407,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0049",
+        "ownership_percentage_points": "0.4900",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 43407,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0049",
+        "voting_rights_percentage_points": "0.4900",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "OtherNonInstitutions_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "OtherNonInstitutions",
+        "category_key": "OtherNonInstitutions",
+        "entity_identifier": "HONAUT",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "OtherNonInstitutionsMember"
+          }
+        ],
+        "shareholder_count": 1062,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 55420,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 55420,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0063",
+        "ownership_percentage_points": "0.6300",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 55420,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0063",
+        "voting_rights_percentage_points": "0.6300",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "NonInstitutions_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "NonInstitutions",
+        "category_key": "NonInstitutions",
+        "entity_identifier": "HONAUT",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "NonInstitutionsMember"
+          }
+        ],
+        "shareholder_count": 32418,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 840875,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 840875,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0951",
+        "ownership_percentage_points": "9.5100",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 840875,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0951",
+        "voting_rights_percentage_points": "9.5100",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "PublicShareholding_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "PublicShareholding",
+        "category_key": "PublicShareholding",
+        "entity_identifier": "HONAUT",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "PublicShareholdingMember"
+          }
+        ],
+        "shareholder_count": 32597,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 2210381,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 2210381,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.25",
+        "ownership_percentage_points": "25.00",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 2210381,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.25",
+        "voting_rights_percentage_points": "25.00",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "ShareholdingPattern_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "ShareholdingPattern",
+        "category_key": "ShareholdingPattern",
+        "entity_identifier": "HONAUT",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "ShareholdingPatternMember"
+          }
+        ],
+        "shareholder_count": 32598,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 8841523,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 8841523,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "1",
+        "ownership_percentage_points": "100",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 8841523,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "1",
+        "voting_rights_percentage_points": "100",
+        "voting_rights_fraction_unit_ref": "pure"
+      }
+    ],
+    "fpi_reconciliation": [
+      {
+        "reporting_date": "2026-09-30",
+        "fpi_category_i_shares": 346285,
+        "fpi_category_ii_shares": 6639,
+        "other_foreign_institution_shares": null,
+        "foreign_institutions_total_shares": 352924,
+        "component_sum_shares": null,
+        "difference_shares": null,
+        "status": "not_comparable_missing_component",
+        "scope_note": "FPI Category I and II are distinct from other foreign institutions; the aggregate foreign-institutions row also includes other foreign institutions."
+      }
+    ],
+    "semantics": {
+      "ownership_fraction": "XBRL reported decimal fraction; multiply by 100 for percentage points",
+      "shares": "Reported share count from the NumberOfShares fact",
+      "missing": "Absent or nil facts remain null; they are never converted to zero",
+      "attribution": "Quarterly reported ownership, not daily trade flow or purchase date"
+    }
+  }
+}
