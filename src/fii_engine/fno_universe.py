@@ -155,7 +155,7 @@ def ingest(root: Path = Path(".")) -> dict:
         nifty_rows, fno_symbols, aliases, fno_retrieved.date()
     )
     for row in rows:
-        row["fno_snapshot_retrieved_at_utc"] = fno_manifest["retrieved_at_utc"]
+        row["fno_snapshot_retrieved_at_utc"] = fno_current_manifest["retrieved_at_utc"]
         row["nifty500_snapshot_retrieved_at_utc"] = nifty_manifest["retrieved_at_utc"]
         row["nifty500_source_freshness_statement"] = nifty_manifest.get(
             "source_freshness_statement", "not supplied"
