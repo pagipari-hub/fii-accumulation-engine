@@ -51,6 +51,32 @@ def test_extracts_fpi_categories_and_reconciles_foreign_institutions():
     assert result["fpi_reconciliation"][0]["component_sum_shares"] == 1000
 
 
+
+def test_includes_reported_overseas_depositories_in_foreign_reconciliation():
+    context = (
+        b'<xbrli:context id="OVERSEAS"><xbrli:entity><xbrli:identifier scheme="test">'
+        b'INE000A01001</xbrli:identifier></xbrli:entity>'
+        b'<xbrli:period><xbrli:instant>2026-09-30</xbrli:instant></xbrli:period>'
+        b'<xbrli:scenario><xbrli:explicitMember dimension="shp:CategoryOfShareholdersAxis">'
+        b'shp:OverseasDepositoriesMember</xbrli:explicitMember></xbrli:scenario>'
+        b'</xbrli:context>'
+    )
+    payload = XML.replace(
+        b"</xbrli:xbrl>",
+        context
+        + b'<shp:NumberOfShares contextRef="OVERSEAS" unitRef="shares">50</shp:NumberOfShares>'
+        + b'</xbrli:xbrl>',
+    ).replace(
+        b'<shp:NumberOfShares contextRef="FOREIGN" unitRef="shares">1000</shp:NumberOfShares>',
+        b'<shp:NumberOfShares contextRef="FOREIGN" unitRef="shares">1050</shp:NumberOfShares>',
+    )
+    result = parse_xbrl(payload)
+    reconciliation = result["fpi_reconciliation"][0]
+    assert reconciliation["overseas_depositories_shares"] == 50
+    assert reconciliation["component_sum_shares"] == 1050
+    assert reconciliation["status"] == "matched"
+
+
 def test_missing_fpi_category_is_not_assumed_to_be_zero():
     payload = XML.replace(
         b'<shp:NumberOfShares contextRef="FPI2" unitRef="shares">200</shp:NumberOfShares>',
