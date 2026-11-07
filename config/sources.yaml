@@ -209,3 +209,14 @@ sources:
     last_live_validated_bulk_json_rows: 70
     last_live_validated_block_csv_rows: 36
     last_live_validated_block_json_rows: 36
+
+  nse_equity_shareholding_pattern:
+    description: "Official NSE company-level quarterly equity shareholding pattern"
+    publisher: "National Stock Exchange of India"
+    reference_url: "https://www.nseindia.com/companies-listing/corporate-filings-shareholding-pattern/"
+    schema_url: "https://www.nseindia.com/json/CorporateFiling/shareholder/shareholder-equity.json"
+    master_api_url: "https://www.nseindia.com/api/corporate-share-holdings-master?index=equities"
+    rss_url: "https://nsearchives.nseindia.com/content/RSS/Shareholding_Pattern.xml"
+    frequency: "quarterly_filing_and_revision"
+    status: "endpoint_discovered_schema_probe_pending"
+    attribution_scope: "explicit_reported_shareholding_categories_not_inferred_client_identity"
