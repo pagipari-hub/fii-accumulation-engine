@@ -7,11 +7,13 @@ on:
       - "src/fii_engine/nse_fii_dii.py"
       - "tests/test_nse_fii_dii.py"
       - ".github/workflows/nse-fii-dii-cash-flows.yml"
+      - "scripts/retry_git_push.sh"
   pull_request:
     paths:
       - "src/fii_engine/nse_fii_dii.py"
       - "tests/test_nse_fii_dii.py"
       - ".github/workflows/nse-fii-dii-cash-flows.yml"
+      - "scripts/retry_git_push.sh"
   workflow_dispatch:
   schedule:
     # 19:45 IST, Monday to Friday, after the NSE capital-market FII/DII release.
@@ -101,8 +103,7 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add data/snapshots/fii_dii data/raw/fii_dii/manifests
             git commit -m "data: record official NSE FII DII cash flows"
-            git pull --rebase origin "$GITHUB_REF_NAME"
-            git push
+            bash scripts/retry_git_push.sh "$GITHUB_REF_NAME"
           else
             echo "No new NSE FII/DII daily snapshot versions."
           fi

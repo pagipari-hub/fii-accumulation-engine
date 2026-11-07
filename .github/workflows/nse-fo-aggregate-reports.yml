@@ -9,6 +9,7 @@ on:
       - "pyproject.toml"
       - ".github/workflows/nse-fo-aggregate-reports.yml"
       - ".gitignore"
+      - "scripts/retry_git_push.sh"
   pull_request:
     paths:
       - "src/fii_engine/nse_fo_aggregate_reports.py"
@@ -18,6 +19,7 @@ on:
       - ".gitignore"
       - "src/fii_engine/historical_features.py"
       - "tests/test_historical_features.py"
+      - "scripts/retry_git_push.sh"
   workflow_dispatch:
   schedule:
     # 21:35 IST, Monday to Friday, after the derivatives reports are published.
@@ -113,8 +115,7 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add data/raw/fno_aggregate_reports/manifests data/snapshots/fno_aggregate_reports
             git commit -m "data: record NSE participant and FII report provenance"
-            git pull --rebase origin "$GITHUB_REF_NAME"
-            git push
+            bash scripts/retry_git_push.sh "$GITHUB_REF_NAME"
           else
             echo "No new participant/FII report versions; manifests unchanged."
           fi

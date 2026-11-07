@@ -8,6 +8,7 @@ on:
       - "tests/test_nse_fo_tracker.py"
       - "pyproject.toml"
       - ".github/workflows/nse-fo-tracker.yml"
+      - "scripts/retry_git_push.sh"
   workflow_dispatch:
   schedule:
     # 20:15 IST, Monday to Friday.
@@ -70,8 +71,7 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add data/raw/fno_tracker data/snapshots/fno_tracker
             git commit -m "data: archive official NSE F&O tracker"
-            git pull --rebase origin "$GITHUB_REF_NAME"
-            git push
+            bash scripts/retry_git_push.sh "$GITHUB_REF_NAME"
           else
             echo "Official F&O tracker unchanged; no commit required."
           fi
