@@ -4,7 +4,10 @@ from pathlib import Path
 
 import pytest
 
-from fii_engine.historical_features import build_historical_features
+from fii_engine.historical_features import (
+    _participant_window,
+    build_historical_features,
+)
 
 
 def _write_snapshot(path: Path, rows: list[dict]) -> str:
@@ -150,3 +153,47 @@ def test_rejects_fii_snapshot_hash_mismatch(tmp_path):
     path.write_text(path.read_text() + "\n", encoding="utf-8")
     with pytest.raises(ValueError, match="FII/DII snapshot filename hash mismatch"):
         build_historical_features(tmp_path)
+
+
+def test_participant_oi_and_volume_history_remain_category_aggregates():
+    oi_snapshots = []
+    volume_snapshots = []
+    key = ("FII", "stock_futures", "", "long")
+    for index in range(5):
+        day = f"2026-11-0{index + 2}"
+        oi_snapshots.append({
+            "date": day,
+            "rows": {key: {"contracts": str(100 + index * 10)}},
+        })
+        volume_snapshots.append({
+            "date": day,
+            "rows": {key: {"contracts": "100"}},
+        })
+
+    oi = _participant_window(oi_snapshots, 5, "participant_oi")[0]
+    volume = _participant_window(volume_snapshots, 5, "participant_volume")[0]
+
+    assert oi["status"] == "complete"
+    assert oi["start_contracts"] == "100"
+    assert oi["end_contracts"] == "140"
+    assert oi["change_contracts"] == "40"
+    assert oi["change_pct"] == "40.0000"
+    assert volume["status"] == "complete"
+    assert volume["total_traded_contracts"] == "500"
+    assert volume["average_daily_contracts"] == "100.00"
+    assert oi["scope"] == "participant_category_aggregate_not_stock_specific"
+
+
+def test_participant_history_reports_insufficient_sessions_and_partial_series():
+    key = ("DII", "index_options", "put", "short")
+    short_history = [{"date": "2026-11-06", "rows": {key: {"contracts": "10"}}}]
+    insufficient = _participant_window(short_history, 5, "participant_oi")[0]
+    assert insufficient["status"] == "insufficient_history"
+
+    complete_dates = [
+        {"date": f"2026-11-0{day}", "rows": {key: {"contracts": "10"}}}
+        for day in range(2, 7)
+    ]
+    complete_dates[2]["rows"] = {}
+    partial = _participant_window(complete_dates, 5, "participant_oi")[0]
+    assert partial["status"] == "partial_observations"
