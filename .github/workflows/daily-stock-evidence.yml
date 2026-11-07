@@ -21,6 +21,7 @@ on:
       - ".github/workflows/daily-stock-evidence.yml"
       - ".gitignore"
       - "scripts/retry_git_push.sh"
+      - "tests/test_retry_git_push.py"
   pull_request:
     paths:
       - "src/fii_engine/daily_stock_features.py"
