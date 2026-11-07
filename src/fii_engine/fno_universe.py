@@ -5,7 +5,8 @@ import argparse
 import csv
 import hashlib
 import json
-from datetime import date, datetime
+from datetime import date, datetime, timezone
+from zoneinfo import ZoneInfo
 from io import StringIO
 from pathlib import Path
 
@@ -131,6 +132,12 @@ def ingest(root: Path = Path(".")) -> dict:
     fno_manifest_path, fno_manifest = _find_manifest(
         root / "data/snapshots/fno_underlyings", fno_hash
     )
+    fno_current_manifest_path = root / "data/raw/fno_underlyings/fno_underlyings_current_manifest.json"
+    if not fno_current_manifest_path.is_file():
+        raise FileNotFoundError("current F&O retrieval manifest is required")
+    fno_current_manifest = json.loads(fno_current_manifest_path.read_text(encoding="utf-8"))
+    if fno_current_manifest.get("normalized_sha256") != fno_hash:
+        raise ValueError("current F&O retrieval manifest does not match current normalized CSV")
     if not reconciliation_path.is_file():
         raise FileNotFoundError("effective tracker reconciliation status is required")
     reconciliation = json.loads(reconciliation_path.read_text(encoding="utf-8"))
@@ -142,8 +149,8 @@ def ingest(root: Path = Path(".")) -> dict:
         row["symbol"] for row in fno_rows if row["segment"] == "individual_stock"
     }
     fno_retrieved = datetime.fromisoformat(
-        fno_manifest["retrieved_at_utc"].replace("Z", "+00:00")
-    )
+        fno_current_manifest["retrieved_at_utc"].replace("Z", "+00:00")
+    ).astimezone(ZoneInfo("Asia/Kolkata"))
     rows, summary = build_status_rows(
         nifty_rows, fno_symbols, aliases, fno_retrieved.date()
     )
@@ -183,14 +190,15 @@ def ingest(root: Path = Path(".")) -> dict:
     manifest = {
         "dataset": "nifty500_current_stock_fno_status",
         "publisher": "NSE Indices + National Stock Exchange of India",
-        "generated_at_utc": datetime.utcnow().isoformat(timespec="seconds") + "Z",
+        "generated_at_utc": datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
         "nifty500_source_manifest": str(nifty_manifest_path),
         "nifty500_source_normalized_sha256": nifty_hash,
         "nifty500_source_freshness_statement": nifty_manifest.get("source_freshness_statement"),
         "nifty500_source_effective_date": None,
         "fno_underlying_source_manifest": str(fno_manifest_path),
         "fno_underlying_normalized_sha256": fno_hash,
-        "fno_membership_retrieved_at_utc": fno_manifest["retrieved_at_utc"],
+        "fno_current_retrieval_manifest": str(fno_current_manifest_path),
+        "fno_membership_retrieved_at_utc": fno_current_manifest["retrieved_at_utc"],
         "fno_membership_effective_date": None,
         "tracker_reconciliation_status": reconciliation["status"],
         "tracker_reconciliation_mismatch_count": reconciliation["mismatch_count"],
