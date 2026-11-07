@@ -64,3 +64,27 @@ https://github.com/pagipari-hub/fii-accumulation-engine/actions/runs/42358048713
 `src/fii_engine/nse_bulk_block_deals.py` uses the official CSV export as the primary dataset and cross-checks the JSON page response as a subset. It stores immutable per-trade-date normalized snapshots, raw-response hashes and provenance manifests. The daily workflow queries an overlapping seven-calendar-day range so a missed run can be recovered on the next run and later source revisions produce new content-addressed snapshots. On Saturday/Sunday manual runs, the default range ends on the previous Friday (rather than the weekend date) so the latest completed weekday remains inside the query.
 
 A client name is a disclosed counterparty label, not a verified investor classification. No client is automatically labelled FII/FPI, mutual fund, promoter or beneficial owner from its name alone. Bulk and block deals are separate evidence classes and BUY/SELL observations are retained individually; they are not silently netted into FII flows.
+
+
+## First live production capture
+
+The production workflow succeeded:
+https://github.com/pagipari-hub/fii-accumulation-engine/actions/runs/42358455417
+
+The Saturday run correctly used the previous Friday (6 Nov) as the end date and queried 30 Oct–6 Nov 2026.
+
+| Deal type | CSV rows | JSON rows | JSON complete for range |
+|---|---:|---:|---|
+| Bulk | 644 | 70 | No — JSON is a matching subset only |
+| Block | 36 | 36 | Yes for this capture |
+
+Bulk CSV date counts: 30 Oct 88, 2 Nov 87, 3 Nov 147, 4 Nov 133, 5 Nov 93, 6 Nov 96. The 644 rows covered 118 symbols and 207 distinct client names, with 332 BUY and 312 SELL disclosures.
+
+Block CSV date counts: 30 Oct 12, 3 Nov 2, 4 Nov 2, 6 Nov 20. The 36 rows covered 6 symbols and 29 distinct client names, with 29 BUY and 7 SELL disclosures.
+
+No exact duplicate rows were observed in either CSV export. The source does not provide a transaction identifier, so the normalized record fingerprint is an evidence hash, not a claimed exchange transaction ID. Rows are retained individually; BUY and SELL records are not netted.
+
+The run wrote six bulk and four block per-date snapshots, with content-addressed manifests and raw response hashes. The full project suite passed 134 tests. Artifact:
+https://github.com/pagipari-hub/fii-accumulation-engine/actions/runs/42358455417
+
+The source is now marked live-validated for this capture. This is a current-range validation, not a one-year historical backfill; scheduled daily collection will extend the series.
