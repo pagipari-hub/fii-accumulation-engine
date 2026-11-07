@@ -512,7 +512,7 @@ def build_daily_features(root: Path, collector_status: dict | None = None) -> di
     if cash_meta.get("trade_date") and fo_meta.get("trade_date") and cash_meta["trade_date"] != fo_meta["trade_date"]:
         fo_meta = {**fo_meta, "status": "unavailable", "reason": "cash and F&O trading dates do not match"}
         fo_by_symbol = {}
-    if deals_meta.get("status") == "available" and trade_date:
+    if deals_meta.get("status") == "available" and trade_date and deals_meta.get("requested_to") != trade_date:
         deals_by_symbol, deals_meta = _load_deal_sources(root, trade_date)
 
     output_rows = []
