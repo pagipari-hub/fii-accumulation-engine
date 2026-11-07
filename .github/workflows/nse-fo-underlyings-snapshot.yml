@@ -4,11 +4,15 @@ on:
   push:
     paths:
       - "src/fii_engine/nse_fo_underlyings.py"
+      - "src/fii_engine/fno_universe.py"
       - "tests/test_nse_fo_underlyings.py"
+      - "tests/test_fno_universe.py"
       - "config/sources.yaml"
       - "config/symbol_aliases.json"
       - "data/raw/fno_tracker/**"
       - "data/snapshots/fno_tracker/**"
+      - "data/raw/universe/nifty500_current.csv"
+      - "data/snapshots/universe/**"
       - ".gitignore"
       - ".github/workflows/nse-fo-underlyings-snapshot.yml"
   workflow_dispatch:
@@ -44,6 +48,9 @@ jobs:
       - name: Capture official NSE current F&O underlyings
         run: python -m fii_engine.nse_fo_underlyings --repo-root .
 
+      - name: Build full Nifty 500 F&O status
+        run: python -m fii_engine.fno_universe --repo-root .
+
       - name: Validate source snapshot and run tests
         run: |
           python - <<'PY'
@@ -73,6 +80,22 @@ jobs:
               print("TRACKER RECONCILIATION FAILED:", reconciliation)
               raise SystemExit("Current F&O list does not reconcile to effective tracker events")
           print("Tracker reconciliation:", reconciliation["status"])
+          status_csv = Path("data/raw/fno_universe/nifty500_fno_status_current.csv")
+          assert status_csv.is_file()
+          status_manifests = list(Path("data/snapshots/fno_universe").glob("*.json"))
+          assert status_manifests
+          import hashlib
+          status_hash = hashlib.sha256(status_csv.read_bytes()).hexdigest()
+          status_manifest = next(
+              json.loads(path.read_text(encoding="utf-8"))
+              for path in status_manifests
+              if json.loads(path.read_text(encoding="utf-8")).get("output_sha256") == status_hash
+          )
+          counts = status_manifest["counts"]
+          assert counts["nifty500_count"] == 501
+          assert counts["eligible_count"] + counts["not_eligible_count"] == 501
+          assert counts["unknown_count"] == 0
+          print("Nifty 500 F&O status:", counts)
           print("Validated current NSE individual-stock F&O underlying snapshot.")
           PY
           pytest
@@ -82,7 +105,7 @@ jobs:
           if [[ -n "$(git status --porcelain data/raw/fno_underlyings data/snapshots/fno_underlyings)" ]]; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add data/raw/fno_underlyings data/snapshots/fno_underlyings
+            git add data/raw/fno_underlyings data/snapshots/fno_underlyings data/raw/fno_universe data/snapshots/fno_universe
             git commit -m "data: refresh official NSE F&O underlyings"
             git pull --rebase origin "$GITHUB_REF_NAME"
             git push
@@ -98,5 +121,7 @@ jobs:
           path: |
             data/raw/fno_underlyings/
             data/snapshots/fno_underlyings/
+            data/raw/fno_universe/
+            data/snapshots/fno_universe/
           if-no-files-found: warn
           retention-days: 90
