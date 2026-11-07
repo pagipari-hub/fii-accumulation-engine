@@ -96,3 +96,11 @@ def test_keyword_contexts_capture_date_format_helpers():
     assert len(contexts) == 1
     assert contexts[0]["keyword"] == "getStartEndDate"
     assert "formatDate" in contexts[0]["context"]
+
+
+def test_official_shareholding_pattern_page_is_probed():
+    from fii_engine.source_probe import SOURCE_PAGES
+
+    assert SOURCE_PAGES["nse_shareholding_pattern"] == (
+        "https://www.nseindia.com/companies-listing/corporate-filings-shareholding-pattern/"
+    )
