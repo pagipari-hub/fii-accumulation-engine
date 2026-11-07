@@ -154,23 +154,7 @@ def ingest(root: Path = Path(".")) -> dict:
     rows, summary = build_status_rows(
         nifty_rows, fno_symbols, aliases, fno_retrieved.date()
     )
-    for row in rows:
-        row["fno_snapshot_retrieved_at_utc"] = fno_manifest["retrieved_at_utc"]
-        row["nifty500_snapshot_retrieved_at_utc"] = nifty_manifest["retrieved_at_utc"]
-        row["nifty500_source_freshness_statement"] = nifty_manifest.get(
-            "source_freshness_statement", "not supplied"
-        )
-    columns = [
-        "symbol", "company_name", "industry", "series", "isin",
-        "fno_status", "fno_evidence", "matched_fno_symbol", "symbol_alias_applied",
-        "fno_snapshot_retrieved_at_utc", "nifty500_snapshot_retrieved_at_utc",
-        "nifty500_source_freshness_statement",
-    ]
-    stream = StringIO(newline="")
-    writer = csv.DictWriter(stream, fieldnames=columns, lineterminator="\n")
-    writer.writeheader()
-    writer.writerows(rows)
-    output = stream.getvalue().encode("utf-8")
+    output = _csv_bytes(rows)
     output_hash = hashlib.sha256(output).hexdigest()
 
     raw_dir = root / "data/raw/fno_universe"
@@ -213,11 +197,29 @@ def ingest(root: Path = Path(".")) -> dict:
     }
     if not manifest_path.exists():
         manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    current_manifest_path = raw_dir / "nifty500_fno_status_current_manifest.json"
+    current_manifest = {
+        "dataset": "nifty500_current_stock_fno_status",
+        "generated_at_utc": manifest["generated_at_utc"],
+        "nifty500_source_retrieved_at_utc": nifty_manifest["retrieved_at_utc"],
+        "nifty500_source_freshness_statement": nifty_manifest.get("source_freshness_statement"),
+        "nifty500_source_effective_date": None,
+        "fno_membership_retrieved_at_utc": fno_current_manifest["retrieved_at_utc"],
+        "fno_membership_effective_date": None,
+        "tracker_reconciliation_status": reconciliation["status"],
+        "counts": summary,
+        "output_sha256": output_hash,
+        "snapshot_manifest": str(manifest_path),
+    }
+    current_manifest_path.write_text(
+        json.dumps(current_manifest, indent=2) + "\n", encoding="utf-8"
+    )
     return {
         "counts": summary,
         "current_path": str(current_path),
         "snapshot_path": str(snapshot_path),
         "manifest_path": str(manifest_path),
+        "current_manifest_path": str(current_manifest_path),
         "output_sha256": output_hash,
     }
 
