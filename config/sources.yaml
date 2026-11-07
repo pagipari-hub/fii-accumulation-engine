@@ -248,7 +248,7 @@ sources:
     attribution_scope: "counterparty_identity_reference_only_not_transaction_flow"
 
   nse_bulk_block_fpi_counterparty_attribution:
-    description: "Derived current-registry name matching for official NSE bulk/block deal clients, verified against Nifty 500 by ISIN"
+    description: "Derived current-registry name matching for official NSE bulk/block deal clients, joined to Nifty 500 by exact symbol and normalized company name"
     publisher: "Derived from NSE bulk/block deal disclosures and CDSL registered-FPI directory"
     reference_url: "https://www.nseindia.com/report-detail/display-bulk-and-block-deals"
     supporting_reference_url: "https://www.cdslindia.com/Publications/RegForeignInstInvstr.aspx"
