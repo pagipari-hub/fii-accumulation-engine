@@ -299,3 +299,19 @@ def test_failed_fno_universe_refresh_makes_membership_unknown(tmp_path):
     assert abc["fno_status"] == "unknown"
     assert abc["futures_data_status"] == "unavailable"
     assert manifest["sources"]["fno_status"]["status"] == "unavailable"
+
+
+def test_cash_market_series_must_match_nifty500_constituent_series(tmp_path):
+    build_fixture(tmp_path)
+    cash_path = tmp_path / "data/processed/cash_market/cm.csv"
+    rows = list(csv.DictReader(cash_path.open(encoding="utf-8")))
+    for row in rows:
+        if row["TckrSymb"] == "XYZ":
+            row["SctySrs"] = "EQ"
+    digest = write_csv(cash_path, list(rows[0]), rows)
+    manifest_path = tmp_path / "data/raw/cash_market/nse_cm_cash_current_manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    manifest["datasets"][0]["parsed_sha256"] = digest
+    write_json(manifest_path, manifest)
+    with pytest.raises(ValueError, match="cash-market series mismatch"):
+        build_daily_features(tmp_path)
