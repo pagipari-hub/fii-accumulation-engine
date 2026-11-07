@@ -105,14 +105,11 @@ def test_preserves_entity_identifier_and_all_context_dimensions():
 
 
 def test_rejects_multiple_contexts_for_same_category_and_reporting_date():
+    fragment = XML.split(b'<xbrli:context id="FPI1">', 1)[1].split(b'</xbrli:context>', 1)[0]
     duplicate_context = XML.replace(
-        b'<xbrli:context id="FPI2">',
-        b'<xbrli:context id="FPI1_DUP">',
-        1,
-    ).replace(
-        b'<shp:NumberOfShares contextRef="FPI2" unitRef="shares">200</shp:NumberOfShares>',
-        b'<shp:NumberOfShares contextRef="FPI1_DUP" unitRef="shares">200</shp:NumberOfShares>',
-        1,
+        b'</xbrli:xbrl>',
+        b'<xbrli:context id="FPI1_DUP">' + fragment
+        + b'</xbrli:context><shp:NumberOfShares contextRef="FPI1_DUP" unitRef="shares">701</shp:NumberOfShares></xbrli:xbrl>',
     )
     with pytest.raises(ValueError, match="multiple contexts for shareholder category"):
         parse_xbrl(duplicate_context)
