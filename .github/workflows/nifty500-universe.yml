@@ -33,13 +33,14 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Install project and test dependencies
+        run: python -m pip install -e ".[dev]"
+
       - name: Ingest official NSE Nifty 500 constituents
         run: python -m fii_engine.nifty500_universe --repo-root .
 
       - name: Validate project tests
-        run: |
-          python -m pip install -e ".[dev]"
-          pytest
+        run: pytest
 
       - name: Commit changed official snapshot
         run: |
