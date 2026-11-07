@@ -1,0 +1,50 @@
+name: Official source discovery
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 17:23 and 20:23 IST, Monday to Friday.
+    # Staggered away from the top of the hour to reduce schedule contention.
+    - cron: "53 11 * * 1-5"
+    - cron: "53 14 * * 1-5"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: official-source-discovery
+  cancel-in-progress: false
+
+jobs:
+  inspect-source-pages:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install project and test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+
+      - name: Run source discovery tests
+        run: pytest
+
+      - name: Inspect official source pages
+        run: python -m fii_engine.source_probe --output artifacts/source-probe/report.json
+
+      - name: Upload source discovery report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: source-discovery-${{ github.run_id }}
+          path: artifacts/source-probe/
+          if-no-files-found: warn
+          retention-days: 14
