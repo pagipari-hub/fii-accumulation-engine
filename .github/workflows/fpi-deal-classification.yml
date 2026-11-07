@@ -81,6 +81,7 @@ jobs:
           assert manifest["registry_snapshot_sha256"]
           assert manifest["universe_row_count"] == 501
           assert manifest["universe_csv_sha256"]
+          assert manifest["universe_join_policy"]
           assert manifest["event_csv_sha256"]
           assert manifest["stock_summary_csv_sha256"]
           print(json.dumps({k: manifest[k] for k in (
@@ -90,6 +91,7 @@ jobs:
               "current_registry_matched_odi_issuer_event_count", "unmatched_event_count",
               "universe_row_count", "nifty500_verified_event_count",
               "nifty500_verified_symbol_count", "nifty500_verified_fpi_client_event_count",
+              "source_isin_supplied_event_count", "universe_join_method_counts",
           )}, indent=2))
           PY
 
