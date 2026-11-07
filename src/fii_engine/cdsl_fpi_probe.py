@@ -13,6 +13,8 @@ from urllib.parse import urlencode
 from urllib.request import HTTPCookieProcessor, Request, build_opener
 from http.cookiejar import CookieJar
 
+from fii_engine.cdsl_fpi_registry import parse_registry_html
+
 PAGES = {
     "daily": "https://www.cdslindia.com/eservices/publications/fiidaily",
     "monthly": "https://www.cdslindia.com/eservices/publications/FIIMonthly",
@@ -100,38 +102,6 @@ def summarize_html(payload: bytes) -> dict:
         "inputs": parser.inputs[:500],
     }
 
-
-def parse_registry_html(payload: bytes) -> list[dict[str, str]]:
-    """Extract one registered-FPI record from each CDSL alphabetic table."""
-    parser = _SummaryParser()
-    parser.feed(payload.decode("utf-8", errors="replace"))
-    records = []
-    for table in parser.tables:
-        fields = {}
-        for row in table:
-            if len(row) < 2:
-                continue
-            label = row[0].strip().lower().rstrip(":")
-            value = row[1].strip()
-            if label.startswith("country name"):
-                fields.setdefault("country", value)
-            elif label.endswith("name") and "registration" not in label:
-                fields.setdefault("name", value)
-            elif label.startswith("registration no"):
-                fields.setdefault("registration_no", value)
-            elif label.startswith("registration valid upto"):
-                fields.setdefault("valid_upto", value)
-            elif label == "address":
-                fields.setdefault("address", value)
-        if fields.get("name") and fields.get("registration_no"):
-            records.append({
-                "registered_name": fields["name"],
-                "registration_no": fields["registration_no"],
-                "valid_upto": fields.get("valid_upto", ""),
-                "country": fields.get("country", ""),
-                "address": fields.get("address", ""),
-            })
-    return records
 
 
 def _fetch(opener, url: str) -> tuple[bytes, str]:
