@@ -16,14 +16,15 @@ sources:
     reference_url: "https://www.nseindia.com/all-reports"
     frequency: "daily_or_on_change"
     required_fields: [symbol, series, isin]
-    status: "source_page_verified_adapter_pending"
+    status: "captured_quarantined_freshness_mismatch"
+    download_catalogue_api: "https://www.nseindia.com/api/daily-reports?key=CM"
   nse_fo_eligibility:
     description: "Current stock derivatives eligibility and contract reference"
     publisher: "National Stock Exchange of India"
     reference_url: "https://www.nseindia.com/all-reports-derivatives"
     frequency: "daily_or_on_change"
     required_fields: [symbol, fno_status]
-    status: "raw_capture_implemented_live_validation_pending"
+    status: "source_data_quarantined_eligibility_not_derived"
     download_catalogue_api: "https://www.nseindia.com/api/daily-reports?key=FO"
   nse_fii_dii_cash_provisional:
     description: "NSE-exclusive and combined-market FII/FPI and DII cash activity"
@@ -64,7 +65,8 @@ sources:
     reference_url: "https://www.nseindia.com/all-reports-derivatives"
     frequency: "daily_or_on_change"
     required_fields: [instrument_identifier, symbol, expiry]
-    status: "source_verified_schema_pending"
+    status: "captured_quarantined_freshness_mismatch"
+    download_catalogue_api: "https://www.nseindia.com/api/daily-reports?key=FO"
   nse_fo_participant_oi:
     description: "Participant-category aggregate derivatives open interest"
     publisher: "National Stock Exchange of India"
