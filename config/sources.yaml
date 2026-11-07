@@ -23,7 +23,8 @@ sources:
     reference_url: "https://www.nseindia.com/all-reports-derivatives"
     frequency: "daily_or_on_change"
     required_fields: [symbol, fno_status]
-    status: "source_verified_adapter_pending"
+    status: "raw_capture_implemented_live_validation_pending"
+    download_catalogue_api: "https://www.nseindia.com/api/daily-reports?key=FO"
   nse_fii_dii_cash_provisional:
     description: "NSE-exclusive and combined-market FII/FPI and DII cash activity"
     publisher: "National Stock Exchange of India"
