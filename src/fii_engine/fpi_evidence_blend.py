@@ -431,8 +431,12 @@ def build(root: Path = Path(".")) -> dict:
             summary_parts.append("mixed_or_weak_positional_price_trend")
         if row["delivery_context"] == "5s_delivery_strengthening_vs_20s":
             summary_parts.append("delivery_strengthening_vs_20s")
-        if row["options_context"] != "unavailable" and "complete_same_expiry" in row["options_context"]:
+        if row["options_context"].startswith("5s_same_expiry_pcr_available"):
             summary_parts.append("5_session_options_pcr_same_expiry_available")
+        if row["ownership_context"] != "2026_quarterly_fpi_ownership_baseline_available;no_prior_quarter_change_series":
+            summary_parts.append("quarterly_fpi_ownership_baseline_unavailable_or_unverified")
+        if deal_data_status == "observed_disclosed_deals" and not direct_buy:
+            summary_parts.append("bulk_block_deals_disclosed_without_direct_fpi_client_buy_match")
         row["evidence_summary"] = ";".join(summary_parts) if summary_parts else "no_positive_stock_specific_fpi_deal_evidence_in_available_sources"
         row["composite_score_status"] = "not_scored_independent_evidence_dimensions_only"
         output_rows.append(row)
@@ -440,14 +444,29 @@ def build(root: Path = Path(".")) -> dict:
     if len(output_rows) != expected_count:
         raise ValueError("blended evidence matrix does not cover the full Nifty 500 universe")
 
-    market_statuses = {
-        f"{row['category']}_{row['window_sessions']}s": row["status"]
+    market_statuses = [
+        {
+            "category": row["category"],
+            "window_sessions": int(row["window_sessions"]),
+            "sessions_available": int(row["sessions_available"]),
+            "status": row["status"],
+        }
         for row in market_rows
-    }
-    participant_statuses = {
-        f"{row['dataset']}_{row['instrument_group']}_{row['window_sessions']}s": row["status"]
+    ]
+    participant_statuses = [
+        {
+            "dataset": row["dataset"],
+            "participant_category": row["participant_category"],
+            "instrument_group": row["instrument_group"],
+            "option_type": row["option_type"],
+            "source_side": row["source_side"],
+            "window_sessions": int(row["window_sessions"]),
+            "sessions_available": int(row["sessions_available"]),
+            "scope": row["scope"],
+            "status": row["status"],
+        }
         for row in participant_rows
-    }
+    ]
     output_payload = _csv_bytes(output_rows, OUTPUT_FIELDS)
     output_sha = _sha256(output_payload)
     as_of = as_of_trade_date.replace("-", "")
