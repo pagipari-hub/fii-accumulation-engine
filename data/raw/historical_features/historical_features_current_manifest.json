@@ -1,0 +1,31 @@
+{
+  "dataset": "validated_historical_evidence_features",
+  "generated_at_utc": "2026-11-07T19:22:28.646713+00:00",
+  "as_of_trade_date": "2026-11-06",
+  "daily_stock_session_count": 1,
+  "daily_stock_trade_dates": [
+    "2026-11-06"
+  ],
+  "market_flow_session_count": 1,
+  "market_flow_trade_dates": [
+    "2026-11-06"
+  ],
+  "windows_sessions": [
+    5,
+    20,
+    60
+  ],
+  "stock_universe_count": 501,
+  "stock_output_sha256": "08e94ea59be99ff22d51468d53b48f59c05875ef1a42493dd9e6303f39c21058",
+  "stock_snapshot_path": "data/snapshots/historical_features/stock_historical_features_2026-11-06_08e94ea59be99ff2.csv",
+  "market_output_sha256": "02e1f54decb5620344aea7ae51fbcd0340575225975ffd871af9a0eae6732572",
+  "market_snapshot_path": "data/snapshots/historical_features/market_flow_history_2026-11-06_02e1f54decb56203.csv",
+  "limitations": [
+    "A window is complete only when the requested number of distinct committed trading-date snapshots exists.",
+    "Stock cash, delivery and derivatives metrics retain family-specific partial-observation statuses.",
+    "Options PCR rolling averages are withheld across expiry changes.",
+    "Futures buildup counts describe market-wide contract activity, not FII attribution.",
+    "Market-wide FII/FPI and DII aggregates are separate context and never stock-level attribution.",
+    "FII/FPI publication status is preserved; rolling sums are not a final custodial series."
+  ]
+}
