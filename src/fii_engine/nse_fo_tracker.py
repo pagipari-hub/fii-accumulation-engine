@@ -122,12 +122,20 @@ def parse_tracker_events(payload: bytes, as_of_date: date) -> dict:
     summary = {}
     for action in ("Introduction", "Exclusion"):
         worksheet = workbook[by_name[action.casefold()]]
-        headers = [str(worksheet.cell(1, column).value or "").strip().casefold() for column in range(1, 7)]
-        expected = ["", "sr no", "symbol", "security name", "effective date", "circular link"]
-        if headers != expected:
-            raise ValueError(f"{action} sheet header schema drift: {headers}")
+        expected = ["sr no", "symbol", "security name", "effective date", "circular link"]
+        header_row = None
+        for candidate in range(1, min(10, worksheet.max_row) + 1):
+            headers = [
+                str(worksheet.cell(candidate, column).value or "").strip().casefold()
+                for column in range(2, 7)
+            ]
+            if headers == expected:
+                header_row = candidate
+                break
+        if header_row is None:
+            raise ValueError(f"{action} sheet header schema drift; expected columns {expected}")
         action_events = []
-        for row in range(2, worksheet.max_row + 1):
+        for row in range(header_row + 1, worksheet.max_row + 1):
             symbol_value = worksheet.cell(row, 3).value
             name_value = worksheet.cell(row, 4).value
             if not symbol_value or not name_value:
