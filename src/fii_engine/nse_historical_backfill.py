@@ -84,6 +84,7 @@ def _download_archive(opener, source: str, trade_date: date) -> tuple[bytes | No
                 payload = response.read()
                 if not payload:
                     raise ValueError(f"{source}: empty archive payload")
+                time.sleep(0.12)
                 return payload, url
         except HTTPError as exc:
             if exc.code == 404:
