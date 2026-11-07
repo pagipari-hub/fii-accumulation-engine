@@ -157,7 +157,7 @@ def _csv(payload: bytes, dataset: str) -> tuple[list[str], list[dict]]:
 
 
 def _number(value: str, field: str, line: int) -> Decimal | None:
-    if value == "":
+    if value in {"", "-"}:
         return None
     try:
         number = Decimal(value.replace(",", ""))
@@ -225,6 +225,11 @@ def validate_delivery(payload: bytes, trade_date: str) -> dict:
     parsed_date = datetime.strptime(trade_date, "%Y-%m-%d").date()
     seen = set()
     symbols = set()
+    observation_counts = {
+        "reported": 0,
+        "no_trades_delivery_not_reported": 0,
+        "not_reported": 0,
+    }
     for line, row in enumerate(rows, start=2):
         try:
             row_date = datetime.strptime(row["DATE1"], "%d-%b-%Y").date()
@@ -243,16 +248,26 @@ def validate_delivery(payload: bytes, trade_date: str) -> dict:
         traded = values["TTL_TRD_QNTY"]
         delivered = values["DELIV_QTY"]
         pct = values["DELIV_PER"]
+        price_fields = ("OPEN_PRICE", "HIGH_PRICE", "LOW_PRICE", "CLOSE_PRICE")
+
+        if traded is None and delivered is None and pct is None:
+            if any(values[field] is not None for field in price_fields):
+                raise ValueError(f"delivery row has prices but no quantity observations at line {line}")
+            observation_counts["not_reported"] += 1
+            continue
+        if traded == Decimal(0) and delivered is None and pct is None:
+            observation_counts["no_trades_delivery_not_reported"] += 1
+            continue
         if traded is None or delivered is None or pct is None:
-            raise ValueError(f"delivery quantity/percentage missing at line {line}")
+            raise ValueError(f"incomplete delivery quantity/percentage fields at line {line}")
         if traded < 0 or delivered < 0 or delivered > traded:
             raise ValueError(f"invalid traded/delivered quantity at line {line}")
         expected = (delivered / traded * 100) if traded else Decimal(0)
         if abs(expected - pct) > Decimal("0.11"):
             raise ValueError(f"delivery percentage mismatch at line {line}")
-        for field in ("OPEN_PRICE", "HIGH_PRICE", "LOW_PRICE", "CLOSE_PRICE"):
-            if values[field] is None:
-                raise ValueError(f"missing {field} at line {line}")
+        if any(values[field] is None for field in price_fields):
+            raise ValueError(f"missing OHLC price on traded security at line {line}")
+        observation_counts["reported"] += 1
     return {
         "row_count": len(rows), "column_count": len(headers),
         "columns": headers, "schema_sha256": hashlib.sha256(
@@ -261,8 +276,8 @@ def validate_delivery(payload: bytes, trade_date: str) -> dict:
         "distinct_symbols": len(symbols),
         "series_counts": {s: sum(1 for r in rows if r["SERIES"] == s)
                           for s in sorted({r["SERIES"] for r in rows})},
+        "delivery_observation_counts": observation_counts,
     }
-
 
 def _capture(record: dict) -> bytes:
     payload = _get(record["download_url"], PAGE, "application/zip,text/csv,application/octet-stream,*/*")
