@@ -70,6 +70,11 @@ def build_fixture(root: Path, *, include_sources: bool = True) -> None:
         "PrvsClsgPric": "100.00", "TtlTradgVol": "1000",
         "TtlTrfVal": "105000", "TtlNbOfTxsExctd": "100",
     }, {
+        "TradDt": TRADE_DATE, "FinInstrmTp": "STK", "ISIN": "INE000A01001",
+        "TckrSymb": "ABC", "SctySrs": "BE", "ClsPric": "999.00",
+        "PrvsClsgPric": "900.00", "TtlTradgVol": "10",
+        "TtlTrfVal": "9990", "TtlNbOfTxsExctd": "1",
+    }, {
         "TradDt": TRADE_DATE, "FinInstrmTp": "STK", "ISIN": "INE000B01001",
         "TckrSymb": "XYZ", "SctySrs": "BE", "ClsPric": "210.00",
         "PrvsClsgPric": "200.00", "TtlTradgVol": "500",
@@ -314,4 +319,18 @@ def test_cash_market_series_must_match_nifty500_constituent_series(tmp_path):
     manifest["datasets"][0]["parsed_sha256"] = digest
     write_json(manifest_path, manifest)
     with pytest.raises(ValueError, match="cash-market series mismatch"):
+        build_daily_features(tmp_path)
+
+
+def test_rejects_duplicate_cash_isin_and_series_pair(tmp_path):
+    build_fixture(tmp_path)
+    cash_path = tmp_path / "data/processed/cash_market/cm.csv"
+    rows = list(csv.DictReader(cash_path.open(encoding="utf-8")))
+    rows.append(dict(rows[0]))
+    digest = write_csv(cash_path, list(rows[0]), rows)
+    manifest_path = tmp_path / "data/raw/cash_market/nse_cm_cash_current_manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    manifest["datasets"][0]["parsed_sha256"] = digest
+    write_json(manifest_path, manifest)
+    with pytest.raises(ValueError, match="duplicate cash-market ISIN/series"):
         build_daily_features(tmp_path)
