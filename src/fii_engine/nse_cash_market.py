@@ -268,9 +268,9 @@ def _capture(record: dict) -> bytes:
     payload = _get(record["download_url"], PAGE, "application/zip,text/csv,application/octet-stream,*/*")
     if not payload:
         raise ValueError(f"NSE {record['kind']} source returned an empty file")
-    if record["reported_file_size"] and len(payload) != int(record["reported_file_size"]):
-        # Catalogue sizes may be rounded or stale; preserve discrepancy for manifest.
-        record["reported_size_mismatch"] = True
+    # NSE catalogue fileSize is human-formatted (for example, "203.19 KB"),
+    # not a byte integer. Preserve it verbatim; actual byte count is recorded
+    # independently in the source manifest. Never parse rounded display text as bytes.
     return payload
 
 
