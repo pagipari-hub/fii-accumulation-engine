@@ -172,6 +172,10 @@ def _load_fno_status(root: Path, universe: list[dict]) -> tuple[dict, dict]:
             raise ValueError(f"duplicate F&O status symbol: {row['symbol']}")
         by_symbol[row["symbol"]] = row
     expected = {row["symbol"] for row in universe}
+    expected_isins = {row["symbol"]: row["isin"] for row in universe}
+    for symbol, row in by_symbol.items():
+        if row["isin"] != expected_isins.get(symbol):
+            raise ValueError(f"F&O status ISIN mismatch for {symbol}")
     if set(by_symbol) != expected:
         raise ValueError(
             f"F&O status universe mismatch: missing={sorted(expected - set(by_symbol))[:10]}, "
@@ -191,6 +195,8 @@ def _load_cash_sources(root: Path) -> tuple[dict, dict, dict]:
     manifest = _read_manifest(manifest_path)
     if not manifest:
         return {}, {}, {"status": "unavailable", "reason": "cash-market current manifest missing"}
+    if manifest.get("finality") != "final":
+        return {}, {}, {"status": "unavailable", "reason": f"cash-market source is not final: {manifest.get('finality')}"}
     datasets = manifest.get("datasets", [])
     udiff = next((item for item in datasets if item.get("parsed_path")), None)
     delivery = next((item for item in datasets if item.get("parsed_path") is None), None)
@@ -319,16 +325,19 @@ def _load_deal_sources(root: Path, trade_date: str | None) -> tuple[dict, dict]:
                 symbol = row["symbol"]
                 if symbol:
                     events_by_symbol[symbol].append(row)
+    requested_from = manifest.get("requested_from")
     requested_to = manifest.get("requested_to")
     target_date = trade_date or requested_to
     for symbol, events in list(events_by_symbol.items()):
         events_by_symbol[symbol] = [
             row for row in events
-            if row.get("trade_date") and (not target_date or row["trade_date"] <= target_date)
+            if row.get("trade_date")
+            and (not requested_from or row["trade_date"] >= requested_from)
+            and (not target_date or row["trade_date"] <= target_date)
         ]
     return events_by_symbol, {
         "status": "available",
-        "requested_from": manifest.get("requested_from"),
+        "requested_from": requested_from,
         "requested_to": requested_to,
         "current_for_trade_date": bool(target_date and requested_to == target_date),
         "retrieved_at_utc": manifest.get("retrieved_at_utc"),
@@ -364,6 +373,8 @@ def _aggregate_futures(rows: list[dict], trade_date: str) -> dict | None:
     oi_change = _number(row["ChngInOpnIntrst"], field="futures OI change", integer=True)
     volume = _number(row["TtlTradgVol"], field="futures volume", integer=True)
     previous_oi = oi - oi_change if oi is not None and oi_change is not None else None
+    if previous_oi is not None and previous_oi < 0:
+        raise ValueError("futures OI change implies a negative previous open interest")
     oi_change_pct = (
         oi_change / previous_oi * Decimal(100)
         if oi_change is not None and previous_oi is not None and previous_oi > 0
@@ -419,7 +430,7 @@ def _aggregate_options(rows: list[dict], trade_date: str) -> dict | None:
     for row in selected:
         option_type = row.get("OptnTp")
         if option_type not in sums:
-            continue
+            raise ValueError(f"unknown stock option type: {option_type!r}")
         present.add(option_type)
         for key, field in (
             ("oi", "OpnIntrst"),
@@ -529,9 +540,15 @@ def build_daily_features(root: Path) -> dict:
         events = deals_by_symbol.get(symbol, [])
         deal_summary = _deal_summary(events)
         if events:
-            deal_status = "observed_events"
+            deal_status = (
+                "observed_events" if deals_meta.get("current_for_trade_date")
+                else "stale_window_observed_events"
+            )
         elif deals_meta.get("status") == "available":
-            deal_status = "no_record_in_available_snapshots"
+            deal_status = (
+                "no_record_in_available_snapshots" if deals_meta.get("current_for_trade_date")
+                else "stale_window_no_record"
+            )
         else:
             deal_status = "unavailable"
 
