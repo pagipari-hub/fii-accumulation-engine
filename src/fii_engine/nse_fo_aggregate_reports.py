@@ -26,6 +26,8 @@ from fii_engine.nse_fo_bhavcopy import (
     fetch_catalogue,
 )
 
+PARSER_VERSION = 2
+
 REPORTS = {
     "participant_oi": {
         "file_key": "FO-PARTICIPANTWISE-OI",
@@ -374,9 +376,6 @@ def parse_fii_stats_xls(payload: bytes, expected_trade_date: str) -> dict:
             if not label:
                 continue
             if label == "NOTES:" or row_index >= 26:
-                note = " ".join(str(value).strip() for value in values if value not in ("", None))
-                if note and note.upper() != "NOTES:":
-                    notes.append(note)
                 continue
             if label in section_map:
                 current_section = section_map[label]
@@ -591,7 +590,7 @@ def capture_dataset(dataset: str, catalogue: dict, root: Path) -> dict:
             processed_dir = root / "data/processed/fno_aggregate_reports"
             processed_dir.mkdir(parents=True, exist_ok=True)
             processed_path = processed_dir / (
-                f"{dataset}_{selected['trading_date']}_{raw_hash[:16]}.csv"
+                f"{dataset}_{selected['trading_date']}_{raw_hash[:16]}_p{PARSER_VERSION}.csv"
             )
             buffer = io.StringIO(newline="")
             writer = csv.DictWriter(buffer, fieldnames=list(normalized_records[0]))
@@ -620,11 +619,12 @@ def capture_dataset(dataset: str, catalogue: dict, root: Path) -> dict:
         "normalized_row_count": normalized_row_count,
         "inspection": inspection,
         "inspection_error": inspection_error,
-        "parser_stage": "source_capture_and_schema_discovery",
+        "parser_stage": "normalized_contract_activity",
+        "parser_version": PARSER_VERSION,
     }
     manifest_dir = raw_dir / "manifests"
     manifest_dir.mkdir(parents=True, exist_ok=True)
-    manifest_path = manifest_dir / f"{dataset}_{selected['trading_date']}_{raw_hash[:16]}.json"
+    manifest_path = manifest_dir / f"{dataset}_{selected['trading_date']}_{raw_hash[:16]}_p{PARSER_VERSION}.json"
     if manifest_path.exists():
         previous = json.loads(manifest_path.read_text(encoding="utf-8"))
         if previous.get("raw_sha256") != raw_hash:
@@ -655,11 +655,17 @@ def ingest(root: Path = Path(".")) -> dict:
         capture_dataset(dataset, catalogue, root)
         for dataset in REPORTS
     ]
-    by_dataset = {item["dataset"]: item for item in results}
-    cross_source_reconciliation = reconcile_fii_oi(
-        by_dataset["participant_oi"]["inspection"],
-        by_dataset["fii_derivatives_statistics"]["inspection"],
-    )
+    errors = [
+        f"{item['dataset']}: {item['inspection_error']}"
+        for item in results if item.get("inspection_error")
+    ]
+    cross_source_reconciliation = None
+    if not errors:
+        by_dataset = {item["dataset"]: item for item in results}
+        cross_source_reconciliation = reconcile_fii_oi(
+            by_dataset["participant_oi"]["inspection"],
+            by_dataset["fii_derivatives_statistics"]["inspection"],
+        )
     current = {
         "publisher": "National Stock Exchange of India",
         "retrieved_at_utc": datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
@@ -672,10 +678,6 @@ def ingest(root: Path = Path(".")) -> dict:
     }
     current_path = root / "data/raw/fno_aggregate_reports/current_manifest.json"
     current_path.write_text(json.dumps(current, indent=2, default=str) + "\n", encoding="utf-8")
-    errors = [
-        f"{item['dataset']}: {item['inspection_error']}"
-        for item in results if item.get("inspection_error")
-    ]
     if errors:
         raise ValueError(
             "NSE aggregate report schema inspection needs review: " + "; ".join(errors)
