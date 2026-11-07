@@ -91,6 +91,14 @@ jobs:
               for path in status_manifests
               if json.loads(path.read_text(encoding="utf-8")).get("output_sha256") == status_hash
           )
+          current_fno_manifest = json.loads(
+              Path("data/raw/fno_underlyings/fno_underlyings_current_manifest.json").read_text(encoding="utf-8")
+          )
+          import csv
+          with status_csv.open(encoding="utf-8", newline="") as handle:
+              status_rows = list(csv.DictReader(handle))
+          assert len({row["fno_snapshot_retrieved_at_utc"] for row in status_rows}) == 1
+          assert status_rows[0]["fno_snapshot_retrieved_at_utc"] == current_fno_manifest["retrieved_at_utc"]
           counts = status_manifest["counts"]
           assert counts["nifty500_count"] == 501
           assert counts["eligible_count"] + counts["not_eligible_count"] == 501
