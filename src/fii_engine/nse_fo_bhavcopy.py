@@ -22,7 +22,7 @@ CATALOGUE_URL = f"{BASE_URL}/api/daily-reports?key=FO"
 ARCHIVE_HOST = "nsearchives.nseindia.com"
 REPORT_KEY = "FO-UDIFF-BHAVCOPY-CSV"
 FILENAME_RE = re.compile(
-    r"^BhavCopy_NSE_FO_0_0_0_(?P<date>\\d{8})_F_0000\\.csv\\.zip$"
+    r"^BhavCopy_NSE_FO_0_0_0_(?P<date>\d{8})_F_0000\.csv\.zip$"
 )
 USER_AGENT = (
     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
@@ -53,6 +53,15 @@ NUMERIC_COLUMNS = {
     "TtlNbOfTxsExctd", "NewBrdLotQty",
 }
 ALLOWED_INSTRUMENT_TYPES = {"STF", "STO", "IDF", "IDO"}
+KNOWN_COLUMNS = {
+    "TradDt", "BizDt", "Sgmt", "Src", "FinInstrmTp", "FinInstrmId",
+    "ISIN", "TckrSymb", "SctySrs", "XpryDt", "FininstrmActlXpryDt",
+    "StrkPric", "OptnTp", "FinInstrmNm", "OpnPric", "HghPric", "LwPric",
+    "ClsPric", "LastPric", "PrvsClsgPric", "UndrlygPric", "SttlmPric",
+    "OpnIntrst", "ChngInOpnIntrst", "TtlTradgVol", "TtlTrfVal",
+    "TtlNbOfTxsExctd", "SsnId", "NewBrdLotQty", "Rmks",
+    "Rsvd1", "Rsvd2", "Rsvd3", "Rsvd4",
+}
 
 
 def _get(url: str, referer: str, accept: str, timeout: int = 60) -> bytes:
@@ -263,7 +272,7 @@ def validate_udiff_csv(payload: bytes, expected_trade_date: str) -> dict:
         "instrument_type_counts": dict(sorted(counts.items())),
         "distinct_contract_ids": len(seen_ids),
         "columns": headers,
-        "unknown_columns": sorted(set(headers) - REQUIRED_COLUMNS),
+        "unrecognized_columns": sorted(set(headers) - KNOWN_COLUMNS),
         "schema_sha256": hashlib.sha256(
             (",".join(headers) + "\n").encode("utf-8")
         ).hexdigest(),
@@ -290,8 +299,12 @@ def ingest(root: Path = Path(".")) -> dict:
     processed_dir = root / "data/processed/fno_bhavcopy"
     raw_dir.mkdir(parents=True, exist_ok=True)
     processed_dir.mkdir(parents=True, exist_ok=True)
-    zip_path = raw_dir / selected["filename"]
-    csv_path = processed_dir / f"nse_fo_udiff_{selected['trading_date']}.csv"
+    zip_path = raw_dir / (
+        f"{selected['trading_date']}_{zip_hash[:16]}_{selected['filename']}"
+    )
+    csv_path = processed_dir / (
+        f"nse_fo_udiff_{selected['trading_date']}_{zip_hash[:16]}.csv"
+    )
     manifest = {
         "dataset": "nse_fo_udiff_final_bhavcopy",
         "publisher": "National Stock Exchange of India",
@@ -299,6 +312,8 @@ def ingest(root: Path = Path(".")) -> dict:
         **selected,
         "retrieved_at_utc": retrieved_at,
         "archive_member": member_name,
+        "raw_archive_path": str(zip_path),
+        "parsed_csv_path": str(csv_path),
         "raw_zip_bytes": len(raw_zip),
         "raw_zip_sha256": zip_hash,
         "csv_bytes": len(csv_bytes),
@@ -321,7 +336,12 @@ def ingest(root: Path = Path(".")) -> dict:
     manifest_dir = raw_dir / "manifests"
     manifest_dir.mkdir(parents=True, exist_ok=True)
     manifest_path = manifest_dir / f"{selected['trading_date']}_{zip_hash[:16]}.json"
-    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    if manifest_path.exists():
+        previous = json.loads(manifest_path.read_text(encoding="utf-8"))
+        if previous.get("raw_zip_sha256") != zip_hash:
+            raise RuntimeError(f"immutable manifest hash mismatch: {manifest_path}")
+    else:
+        manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     current_manifest = raw_dir / "nse_fo_udiff_current_manifest.json"
     current_manifest.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     return {
