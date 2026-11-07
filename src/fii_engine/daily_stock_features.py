@@ -478,17 +478,42 @@ def _deal_summary(events: list[dict]) -> dict:
     }
 
 
-def build_daily_features(root: Path) -> dict:
+def build_daily_features(root: Path, collector_status: dict | None = None) -> dict:
     root = root.resolve()
     universe, universe_hash = _read_universe(root)
-    fno_status, fno_meta = _load_fno_status(root, universe)
-    cash_by_isin, delivery_by_symbol, cash_meta = _load_cash_sources(root)
-    fo_by_symbol, fo_meta = _load_fo_sources(root)
+    if collector_status is None:
+        fno_status, fno_meta = _load_fno_status(root, universe)
+        cash_by_isin, delivery_by_symbol, cash_meta = _load_cash_sources(root)
+        fo_by_symbol, fo_meta = _load_fo_sources(root)
+        deals_by_symbol, deals_meta = _load_deal_sources(root, None)
+    else:
+        fno_prerequisites = ("nifty500_universe", "nse_fo_underlyings", "nifty500_fno_status")
+        if all(collector_status.get(name, {}).get("status") == "success" for name in fno_prerequisites):
+            fno_status, fno_meta = _load_fno_status(root, universe)
+        else:
+            fno_status = {}
+            fno_meta = {"status": "unavailable", "reason": "one or more F&O universe collectors failed"}
+        if collector_status.get("nse_cash_market", {}).get("status") == "success":
+            cash_by_isin, delivery_by_symbol, cash_meta = _load_cash_sources(root)
+        else:
+            cash_by_isin, delivery_by_symbol = {}, {}
+            cash_meta = {"status": "unavailable", "reason": "NSE cash-market collector did not succeed"}
+        if collector_status.get("nse_fo_bhavcopy", {}).get("status") == "success":
+            fo_by_symbol, fo_meta = _load_fo_sources(root)
+        else:
+            fo_by_symbol = {}
+            fo_meta = {"status": "unavailable", "reason": "NSE F&O bhavcopy collector did not succeed"}
+        if collector_status.get("nse_bulk_block_deals", {}).get("status") == "success":
+            deals_by_symbol, deals_meta = _load_deal_sources(root, None)
+        else:
+            deals_by_symbol = {}
+            deals_meta = {"status": "unavailable", "reason": "NSE bulk/block deals collector did not succeed"}
     trade_date = cash_meta.get("trade_date") or fo_meta.get("trade_date")
     if cash_meta.get("trade_date") and fo_meta.get("trade_date") and cash_meta["trade_date"] != fo_meta["trade_date"]:
         fo_meta = {**fo_meta, "status": "unavailable", "reason": "cash and F&O trading dates do not match"}
         fo_by_symbol = {}
-    deals_by_symbol, deals_meta = _load_deal_sources(root, trade_date)
+    if deals_meta.get("status") == "available" and trade_date:
+        deals_by_symbol, deals_meta = _load_deal_sources(root, trade_date)
 
     output_rows = []
     counts = defaultdict(int)
@@ -634,10 +659,15 @@ def build_daily_features(root: Path) -> dict:
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "trade_date": trade_date,
         "universe_count": len(universe),
+        "universe_collection_status": (
+            collector_status.get("nifty500_universe", {}).get("status", "not_run")
+            if collector_status is not None else "not_run"
+        ),
         "output_row_count": len(output_rows),
         "output_sha256": output_hash,
         "snapshot_path": str(snapshot_path.relative_to(root)),
         "current_path": str(current_path.relative_to(root)),
+        "collector_run_status": collector_status or {},
         "sources": {
             "nifty500_universe": {
                 "path": "data/raw/universe/nifty500_current.csv",
