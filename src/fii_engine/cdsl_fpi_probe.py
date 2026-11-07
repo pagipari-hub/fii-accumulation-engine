@@ -18,6 +18,13 @@ PAGES = {
     "monthly": "https://www.cdslindia.com/eservices/publications/FIIMonthly",
     "archive": "https://www.cdslindia.com/Publications/FIITrends.aspx",
     "trade_wise_equity": "https://www.cdslindia.com/Publications/EquityDataFII.html",
+    "registry_B": "https://www.cdslindia.com/Publications/RegForeignInstInvstr.aspx?indexname=B",
+    "registry_G": "https://www.cdslindia.com/Publications/RegForeignInstInvstr.aspx?indexname=G",
+    "registry_M": "https://www.cdslindia.com/Publications/RegForeignInstInvstr.aspx?indexname=M",
+    "registry_N": "https://www.cdslindia.com/Publications/RegForeignInstInvstr.aspx?indexname=N",
+    "registry_P": "https://www.cdslindia.com/Publications/RegForeignInstInvstr.aspx?indexname=P",
+    "registry_S": "https://www.cdslindia.com/Publications/RegForeignInstInvstr.aspx?indexname=S",
+    "registry_T": "https://www.cdslindia.com/Publications/RegForeignInstInvstr.aspx?indexname=T",
 }
 USER_AGENT = (
     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
