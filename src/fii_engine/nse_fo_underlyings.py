@@ -291,6 +291,8 @@ def ingest(root: Path = Path(".")) -> dict:
     )
     if not reconciliation_path.exists():
         reconciliation_path.write_bytes(reconciliation_bytes + b"\\n")
+    reconciliation_current_path = raw_dir / "fno_tracker_reconciliation_current.json"
+    reconciliation_current_path.write_bytes(reconciliation_bytes + b"\\n")
     return {
         "retrieved_at_utc": retrieved_at,
         "index_underlying_count": len(indexes),
@@ -303,6 +305,7 @@ def ingest(root: Path = Path(".")) -> dict:
         "manifest_path": str(manifest_path),
         "reconciliation": reconciliation,
         "reconciliation_path": str(reconciliation_path),
+        "reconciliation_current_path": str(reconciliation_current_path),
     }
 
 
