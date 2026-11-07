@@ -16,8 +16,8 @@ Research checked: 7 November 2026. This register distinguishes source availabili
 | Participant-wise derivatives OI and volume | NSE All Reports – Derivatives, `FO-PARTICIPANTWISE-OI` and `FO-PARTICIPANTWISE-TRADING-VOL` | Live-validated 6 Nov 2026: 48 normalized rows per report, by Client/DII/FII/Pro and index/stock futures/options | Participant-category aggregates, not participant-by-stock positions. OI has observed one-contract source reconciliation differences; volume reconciles exactly. Never allocate these values to individual equities. |
 | FII derivatives statistics | NSE All Reports – Derivatives, `FO-FII-DERIVATIVE-STAT` | Live-validated 6 Nov 2026: 16 normalized rows, including index-underlying detail and aggregate stock groups | FII aggregate only; stock futures/options are all-stock totals, not individual stock positions. Amount definitions and OI basis are documented; keep section totals distinct from details. |
 | Stock MWPL / ban context | NSE All Reports – Derivatives, client position % of stock MWPL and security-in-ban-period reports | Market-wide position-limit context and ban status | Preserve the report date and applicable denominator; do not infer stock-level FII ownership from client/MWPL reports. |
-| Cash-market OHLCV | [NSE All Reports – Equities](https://www.nseindia.com/all-reports), CM UDiFF Common Bhavcopy Final ZIP selected from the official CM catalogue | Adapter implemented; live validation pending. Final cash-market price, turnover, volume, ISIN, symbol and series | Current UDiFF format only; older common bhavcopy formats are discontinued. Preserve all instrument types/series and use ISIN+symbol+series for reconciliation. |
-| Security-wise delivery | [NSE All Reports – Equities](https://www.nseindia.com/all-reports), Full Bhavcopy and Security Deliverable data | Adapter implemented; live validation pending. Traded quantity, deliverable quantity and delivery percentage by symbol/series | Delivery quantity is not participant attribution or beneficial ownership. Validate `DELIV_QTY <= TTL_TRD_QNTY` and the published percentage arithmetic; missing values fail closed. |
+| Cash-market OHLCV | [NSE All Reports – Equities](https://www.nseindia.com/all-reports), CM UDiFF Common Bhavcopy Final ZIP selected from the official CM catalogue | Live-validated 6 Nov 2026: 3,715 rows, 3,713 distinct symbols, 34 columns; all 3,715 rows are `STK` | Final UDiFF cash-market prices/volume, not participant attribution. Preserve ISIN, symbol and series; 2 duplicate symbols are distinct security/series records, not duplicate instrument keys. |
+| Security-wise delivery | [NSE All Reports – Equities](https://www.nseindia.com/all-reports), Full Bhavcopy and Security Deliverable data | Live-validated 6 Nov 2026: 3,559 rows across 11 series; 3,325 rows have delivery observations and 234 rows have unavailable delivery fields | All 234 unavailable rows were BE (201) and BZ (33); all 2,746 EQ rows had reported delivery observations. Missing delivery is N/A, never zero. Delivery is not participant attribution or beneficial ownership. |
 
 ## NSE MII reference-master capture
 
@@ -142,3 +142,16 @@ UDiFF CSV are uploaded as a 90-day workflow artifact. Compact immutable
 provenance manifests are committed to the repository.
 
 Live source validation is pending the first main-branch scheduled/manual run.
+
+
+## NSE cash-market price/delivery live-validation record
+
+The live capture is [GitHub Actions run 42357169361](https://github.com/pagipari-hub/fii-accumulation-engine/actions/runs/42357169361), trade date 6 Nov 2026. Both reports were selected from the official CM catalogue and had matching trade dates.
+
+- **CM UDiFF:** 3,715 rows, 34 columns, 3,713 distinct symbols, all rows instrument type `STK`. The source contained 2 additional rows because two symbols had multiple series/instrument records; unique instrument keys passed.
+- **Full Bhavcopy/Security Deliverable:** 3,559 rows and 15 columns across 11 series. Delivery observations were present for 3,325 rows. The remaining 234 rows had `-` for both delivery fields: 201 BE-series and 33 BZ-series records. These are explicitly counted as unavailable, not zero.
+- The standard EQ series contained 2,746 rows; all 2,746 had reported delivery observations in this capture.
+- Full project tests: 115 passed.
+- Original source files, parsed UDiFF CSV, current manifest and both immutable source manifests were captured in [artifact 13568266909](https://github.com/pagipari-hub/fii-accumulation-engine/actions/runs/42357169361).
+
+The collector retains price/volume rows even where delivery is unavailable. Delivery-derived signals must exclude those rows rather than imputing a zero delivery quantity or percentage.
