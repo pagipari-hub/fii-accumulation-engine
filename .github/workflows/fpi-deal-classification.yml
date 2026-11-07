@@ -76,8 +76,8 @@ jobs:
           print(json.dumps({k: manifest[k] for k in (
               "trade_date_window_start", "trade_date_window_end",
               "registry_snapshot_date", "source_row_count",
-              "deduplicated_event_count", "registered_fpi_client_event_count",
-              "odi_issuer_event_count", "unmatched_event_count",
+              "deduplicated_event_count", "current_registry_matched_fpi_client_event_count",
+              "current_registry_matched_odi_issuer_event_count", "unmatched_event_count",
           )}, indent=2))
           PY
 
