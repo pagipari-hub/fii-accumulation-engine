@@ -3,7 +3,9 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import io
 import json
+import re
 import time
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
@@ -101,6 +103,77 @@ def _rss_contract(payload: bytes) -> dict:
     }
 
 
+
+def _local_name(tag: str) -> str:
+    return tag.rsplit("}", 1)[-1]
+
+
+def _xbrl_contract(payload: bytes) -> dict:
+    try:
+        root = ET.fromstring(payload)
+    except ET.ParseError as exc:
+        raise ValueError("NSE shareholding XBRL link did not return valid XML") from exc
+    namespaces = []
+    for _, namespace in ET.iterparse(io.BytesIO(payload), events=("start-ns",)):
+        if namespace not in namespaces:
+            namespaces.append(namespace)
+    contexts = []
+    for element in root.iter():
+        if _local_name(element.tag).lower() != "context":
+            continue
+        context = {
+            "id": element.attrib.get("id"),
+            "identifier": None,
+            "period": {},
+            "dimensions": [],
+        }
+        for child in element.iter():
+            local = _local_name(child.tag).lower()
+            if local == "identifier":
+                context["identifier"] = (child.text or "").strip()
+            elif local in {"instant", "startdate", "enddate", "forever"}:
+                context["period"][local] = (child.text or "").strip()
+            elif local in {"explicitmember", "typedmember"}:
+                context["dimensions"].append({
+                    "dimension": child.attrib.get("dimension"),
+                    "member": (child.text or "").strip(),
+                })
+        contexts.append(context)
+    facts = []
+    for element in root.iter():
+        if not element.attrib.get("contextRef"):
+            continue
+        value = (element.text or "").strip()
+        if value == "":
+            continue
+        facts.append({
+            "name": _local_name(element.tag),
+            "value": value,
+            "context_ref": element.attrib.get("contextRef"),
+            "unit_ref": element.attrib.get("unitRef"),
+            "decimals": element.attrib.get("decimals"),
+        })
+    interesting = re.compile(
+        r"foreign|portfolio|fpi|fii|promoter|public|shareholding|shareholder|total|shares|category",
+        re.I,
+    )
+    schema_refs = [
+        element.attrib.get("{http://www.w3.org/1999/xlink}href")
+        for element in root.iter()
+        if _local_name(element.tag).lower() == "schemaref"
+    ]
+    return {
+        "root_tag": _local_name(root.tag),
+        "namespace_count": len(namespaces),
+        "namespaces": namespaces[:30],
+        "schema_refs": [x for x in schema_refs if x],
+        "context_count": len(contexts),
+        "context_sample": contexts[:10],
+        "unit_count": sum(1 for x in root.iter() if _local_name(x.tag).lower() == "unit"),
+        "fact_count": len(facts),
+        "facts_of_interest": [x for x in facts if interesting.search(x["name"])][:200],
+    }
+
 def _save(output: Path, name: str, payload: bytes, metadata: dict, contract: dict) -> dict:
     digest = hashlib.sha256(payload).hexdigest()
     path = output / f"{name}_{digest[:16]}.bin"
@@ -138,6 +211,44 @@ def probe(output_dir: Path) -> dict:
         _save(output_dir, "shareholding_rss", rss_payload, rss_meta,
               _rss_contract(rss_payload)),
     ]
+
+    master_rows = json.loads(master_payload.decode("utf-8-sig"))
+    rss_info = _rss_contract(rss_payload)
+    sample_records = []
+    if isinstance(master_rows, list):
+        hdfc = next((row for row in master_rows if row.get("symbol") == "HDFCBANK"), None)
+        revised = next((row for row in master_rows if row.get("revisedData") == "Revised"), None)
+        sample_records.extend(row for row in (hdfc, revised) if row)
+    for item in rss_info["sample_items"][:2]:
+        if item.get("link"):
+            sample_records.append({"xbrl": item["link"], "symbol": None, "source": "rss"})
+    seen_xbrl = set()
+    xbrl_samples = []
+    for index, record in enumerate(sample_records):
+        url = record.get("xbrl")
+        if not url or url in seen_xbrl or len(xbrl_samples) >= 4:
+            continue
+        seen_xbrl.add(url)
+        if not url.startswith("https://nsearchives.nseindia.com/corporate/xbrl/"):
+            xbrl_samples.append({"url": url, "status": "untrusted_xbrl_url"})
+            continue
+        try:
+            xbrl_payload, xbrl_meta = _get(url, PAGE, "application/xml,text/xml,*/*")
+            xbrl_saved = _save(
+                output_dir, f"shareholding_xbrl_{index}", xbrl_payload,
+                xbrl_meta, _xbrl_contract(xbrl_payload),
+            )
+            xbrl_samples.append({
+                **xbrl_saved,
+                "symbol": record.get("symbol"),
+                "record_id": record.get("recordId"),
+                "as_of_date": record.get("date"),
+                "submission_date": record.get("submissionDate"),
+                "revision_status": record.get("revisedData"),
+            })
+        except Exception as exc:
+            xbrl_samples.append({"url": url, "status": "fetch_or_parse_error", "error": str(exc)})
+
     report = {
         "publisher": "National Stock Exchange of India",
         "page_url": PAGE,
@@ -147,6 +258,7 @@ def probe(output_dir: Path) -> dict:
             "bytes": len(bootstrap),
         },
         "observations": observations,
+        "xbrl_samples": xbrl_samples,
         "source_boundaries": [
             "The master endpoint is the official equity shareholding-pattern table source.",
             "Quarter-end date and filing/submission date must be kept as separate fields.",
