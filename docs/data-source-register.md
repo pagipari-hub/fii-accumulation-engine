@@ -10,7 +10,7 @@ Research checked: 7 November 2026. This register distinguishes source availabili
 | Nifty 500 methodology | [Nifty Indices Nifty 500 page](https://www.niftyindices.com/indices/equity/broad-based-indices/nifty-500) | Index selection and methodology context | Version methodology documents and record effective dates when rules change. |
 | Daily FII/FPI and DII cash activity | [NSE FII/DII reports](https://www.nseindia.com/reports/fii-dii) | NSE-exclusive and combined NSE/BSE/MSEI market-level cash activity | NSE labels FII/FPI data provisional and subject to custodial confirmation and modifications. Preserve provisional/final state; never interpret market-wide net flow as buying in a named stock. |
 | Final FPI cash data | [NSDL FPI reports](https://www.fpi.nsdl.co.in/web/Reports/Latest.aspx) and [CDSL foreign portfolio investor data](https://www.cdslindia.com/Publications/ForeignPortInvestor.html) | Final FPI data where available | Separate finalization source and publication date from trade date. Check field definitions before reconciling with NSE provisional data. |
-| Stock/index futures and options daily contracts | [NSE All Reports – Derivatives](https://www.nseindia.com/all-reports-derivatives), UDiFF Common Bhavcopy Final ZIP | Contract-level daily price, volume and open-interest fields, subject to schema validation | Use UDiFF final format; NSE marks older common bhavcopy formats discontinued from 8 July 2024. Retain contract identifiers and expiry/strike/option type. |
+| Stock/index futures and options daily contracts | [NSE All Reports – Derivatives](https://www.nseindia.com/all-reports-derivatives), UDiFF Common Bhavcopy Final ZIP | Live-validated 7 Nov 2026 for trade date 6 Nov: 40,471 rows, 34 source columns, 218 stock symbols and four recognized instrument types | Use UDiFF final format; NSE marks older common bhavcopy formats discontinued from 8 July 2024. Retain contract identifiers and expiry/strike/option type. Volume/turnover units still require explicit semantic validation before scoring. |
 | Derivatives contract master | NSE All Reports – Derivatives, F&O MII contract file | Contract metadata needed to decode instruments and expiries | Version daily files; validate schema and effective date. |
 | Participant-wise derivatives OI and volume | NSE All Reports – Derivatives, F&O Participant-wise Open Interest and Trading Volumes | Aggregate positioning/volume by participant category | These are participant-category totals, not participant-by-stock positions. They must never be allocated to individual equities or used as proof of FII buying in a named stock. |
 | FII derivatives statistics | NSE All Reports – Derivatives, F&O FII derivatives statistics | Aggregate FII derivatives statistics as defined by the report | Keep separate from stock-level contract OI. Inspect workbook definitions before mapping metrics. |
@@ -75,3 +75,17 @@ resolution or a separately validated feed before production use.
 - NSDL FPI reports: https://www.fpi.nsdl.co.in/web/Reports/Latest.aspx
 - CDSL foreign portfolio investor data: https://www.cdslindia.com/Publications/ForeignPortInvestor.html
 - NSE Indices Nifty 500: https://www.niftyindices.com/indices/equity/broad-based-indices/nifty-500
+
+
+## UDiFF derivatives live-validation record
+
+The official final UDiFF collector and workflow are implemented in
+`src/fii_engine/nse_fo_bhavcopy.py` and
+`.github/workflows/nse-udiff-fo-bhavcopy.yml`. The first live capture on
+7 Nov 2026 validated the 6 Nov 2026 trade-date archive: 40,471 rows,
+40,471 distinct contract IDs, all 34 observed columns recognized, 218
+individual-stock underlyings and 6 index symbols. The immutable provenance
+manifest is committed at
+`data/raw/fno_bhavcopy/manifests/2026-11-06_9021b35dccd79f13.json`.
+The original ZIP and parsed CSV are retained as a 90-day workflow artifact
+while the long-term archive strategy is evaluated.
