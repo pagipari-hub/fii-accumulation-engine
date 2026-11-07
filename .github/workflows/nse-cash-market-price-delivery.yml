@@ -8,12 +8,14 @@ on:
       - "tests/test_nse_cash_market.py"
       - "config/sources.yaml"
       - ".github/workflows/nse-cash-market-price-delivery.yml"
+      - "scripts/retry_git_push.sh"
   pull_request:
     paths:
       - "src/fii_engine/nse_cash_market.py"
       - "tests/test_nse_cash_market.py"
       - "config/sources.yaml"
       - ".github/workflows/nse-cash-market-price-delivery.yml"
+      - "scripts/retry_git_push.sh"
   workflow_dispatch:
   schedule:
     - cron: "0 16 * * 1-5"
@@ -89,8 +91,7 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add data/raw/cash_market/manifests
             git commit -m "data: record NSE cash market source provenance"
-            git pull --rebase origin "$GITHUB_REF_NAME"
-            git push
+            bash scripts/retry_git_push.sh "$GITHUB_REF_NAME"
           else
             echo "No new cash-market source versions."
           fi
