@@ -20,6 +20,7 @@ from urllib.request import HTTPCookieProcessor, Request, build_opener
 SOURCE_PAGES = {
     "nse_nifty500": "https://www.nseindia.com/static/products-services/indices-nifty500-index",
     "nse_fii_dii": "https://www.nseindia.com/reports/fii-dii",
+    "nse_equities_reports": "https://www.nseindia.com/all-reports",
     "nse_derivatives": "https://www.nseindia.com/all-reports-derivatives",
 }
 USER_AGENT = (
