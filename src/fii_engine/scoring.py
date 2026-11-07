@@ -8,7 +8,6 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
-from typing import Any
 
 
 HORIZONS = ("short_term", "positional")
@@ -36,12 +35,21 @@ def validate_config(config: dict) -> None:
         if abs(sum(weights.values()) - 100.0) > 1e-9:
             raise ValueError(f"{horizon}: family weights must sum to 100")
     thresholds = config.get("thresholds", {})
-    if not 0 <= thresholds.get("minimum_coverage", -1) <= 1:
-        raise ValueError("minimum_coverage must be between 0 and 1")
-    if not 0 <= thresholds.get("grade_2_family_score", -1) <= 1:
-        raise ValueError("grade_2_family_score must be between 0 and 1")
-    if not 0 <= thresholds.get("watchlist_score", -1) <= 1:
-        raise ValueError("watchlist_score must be between 0 and 1")
+    required_thresholds = {
+        "minimum_coverage", "minimum_observed_families",
+        "grade_2_family_score", "grade_2_minimum_positive_families",
+        "watchlist_score",
+    }
+    if not required_thresholds.issubset(thresholds):
+        raise ValueError("scoring config is missing one or more required thresholds")
+    for key in ("minimum_coverage", "grade_2_family_score", "watchlist_score"):
+        value = thresholds[key]
+        if not isinstance(value, (int, float)) or not 0 <= value <= 1:
+            raise ValueError(f"{key} must be between 0 and 1")
+    for key in ("minimum_observed_families", "grade_2_minimum_positive_families"):
+        value = thresholds[key]
+        if not isinstance(value, int) or value < 1:
+            raise ValueError(f"{key} must be a positive integer")
 
 
 def _validate_observations(observations: list[dict], families: set[str]) -> dict[str, dict]:
@@ -59,11 +67,16 @@ def _validate_observations(observations: list[dict], families: set[str]) -> dict
         if status == "observed":
             if not isinstance(score, (int, float)) or not 0 <= score <= 1:
                 raise ValueError(f"{family}: observed score must be between 0 and 1")
-            if not item.get("source_refs"):
-                raise ValueError(f"{family}: observed evidence requires source_refs")
+            refs = item.get("source_refs")
+            if not isinstance(refs, list) or not refs or not all(
+                isinstance(ref, str) and ref.strip() for ref in refs
+            ):
+                raise ValueError(f"{family}: observed evidence requires non-empty string source_refs")
         elif score is not None:
             raise ValueError(f"{family}: non-observed status must have score=null")
-        if status in {"unavailable", "not_applicable"} and not item.get("reason"):
+        if status in {"unavailable", "not_applicable"} and not (
+            isinstance(item.get("reason"), str) and item["reason"].strip()
+        ):
             raise ValueError(f"{family}: {status} observation requires a reason")
         by_family[family] = item
     return by_family
@@ -146,13 +159,21 @@ def score_stock(
     observations: list[dict],
     config: dict,
     *,
-    direct_fpi_transaction: bool = False,
+    direct_fpi_transaction_refs: list[str] | None = None,
 ) -> dict:
     """Score one stock for both horizons without converting missing data to zero."""
     validate_config(config)
     all_families = set().union(
         *(set(definition["family_weights"]) for definition in config["horizons"].values())
     )
+    if not symbol or symbol.strip() != symbol:
+        raise ValueError("symbol must be non-empty and have no surrounding whitespace")
+    if direct_fpi_transaction_refs is not None and (
+        not isinstance(direct_fpi_transaction_refs, list)
+        or not direct_fpi_transaction_refs
+        or not all(isinstance(ref, str) and ref.strip() for ref in direct_fpi_transaction_refs)
+    ):
+        raise ValueError("Grade 1 transaction evidence requires non-empty source references")
     by_family = _validate_observations(observations, all_families)
     results = {
         horizon: _score_horizon(
@@ -168,7 +189,7 @@ def score_stock(
         (result["positive_family_count"] for result in results.values()),
         default=0,
     )
-    if direct_fpi_transaction:
+    if direct_fpi_transaction_refs:
         grade = "Grade 1 - Confirmed"
     elif positive_count >= config["thresholds"]["grade_2_minimum_positive_families"]:
         grade = "Grade 2 - Corroborated"
@@ -180,7 +201,8 @@ def score_stock(
     return {
         "symbol": symbol,
         "evidence_grade": grade,
-        "direct_fpi_transaction": direct_fpi_transaction,
+        "direct_fpi_transaction": bool(direct_fpi_transaction_refs),
+        "direct_fpi_transaction_refs": direct_fpi_transaction_refs or [],
         "short_term": results["short_term"],
         "positional": results["positional"],
         "model_version": config["model_version"],
@@ -195,21 +217,23 @@ def score_universe(
     symbols: list[str],
     observations_by_symbol: dict[str, list[dict]],
     config: dict,
-    direct_transactions: set[str] | None = None,
+    direct_transactions: dict[str, list[str]] | None = None,
 ) -> list[dict]:
     """Return every universe symbol, including those with no usable observations."""
     if len(symbols) != len(set(symbols)):
         raise ValueError("universe contains duplicate symbols")
-    direct_transactions = direct_transactions or set()
-    unknown = set(observations_by_symbol) - set(symbols)
+    direct_transactions = direct_transactions or {}
+    if any(not symbol or symbol.strip() != symbol for symbol in symbols):
+        raise ValueError("universe symbols must be non-empty and have no surrounding whitespace")
+    unknown = (set(observations_by_symbol) | set(direct_transactions)) - set(symbols)
     if unknown:
-        raise ValueError(f"observations contain symbols outside universe: {sorted(unknown)}")
+        raise ValueError(f"evidence contains symbols outside universe: {sorted(unknown)}")
     rows = [
         score_stock(
             symbol,
             observations_by_symbol.get(symbol, []),
             config,
-            direct_fpi_transaction=symbol in direct_transactions,
+            direct_fpi_transaction_refs=direct_transactions.get(symbol),
         )
         for symbol in symbols
     ]
