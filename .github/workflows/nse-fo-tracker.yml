@@ -51,7 +51,8 @@ jobs:
           manifest = json.loads((root / "manifest.json").read_text(encoding="utf-8"))
           assert manifest["bytes"] > 0
           assert manifest["sha256"]
-          assert manifest["workbook"]["sheet_names"]
+          assert manifest["interpretation_status"] == "effective_dated_change_history_parsed_baseline_required"
+          assert manifest["event_history"]["baseline_required"] is True
           path = Path(manifest["raw_artifact_path"])
           assert path.is_file() and path.stat().st_size == manifest["bytes"]
           print("NSE tracker workbook captured and structurally inspected.")
