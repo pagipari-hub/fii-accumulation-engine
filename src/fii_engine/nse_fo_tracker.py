@@ -179,7 +179,7 @@ def inspect_workbook(payload: bytes) -> dict:
     if not payload.startswith(b"PK"):
         raise ValueError("NSE F&O tracker response is not an XLSX file")
     try:
-        workbook = load_workbook(BytesIO(payload), read_only=True, data_only=True)
+        workbook = load_workbook(BytesIO(payload), read_only=False, data_only=True)
     except Exception as exc:
         raise ValueError(f"unable to parse NSE F&O tracker workbook: {exc}") from exc
     if not workbook.sheetnames:
