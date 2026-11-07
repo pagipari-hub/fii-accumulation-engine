@@ -6,6 +6,9 @@ on:
       - "src/fii_engine/nse_fo_underlyings.py"
       - "tests/test_nse_fo_underlyings.py"
       - "config/sources.yaml"
+      - "config/symbol_aliases.json"
+      - "data/raw/fno_tracker/**"
+      - "data/snapshots/fno_tracker/**"
       - ".gitignore"
       - ".github/workflows/nse-fo-underlyings-snapshot.yml"
   workflow_dispatch:
@@ -63,6 +66,13 @@ jobs:
           latest = matching[0]
           assert latest["individual_stock_underlying_count"] >= 150
           assert latest["source_effective_date"] is None
+          reconciliation_path = Path("data/raw/fno_underlyings/fno_tracker_reconciliation_current.json")
+          assert reconciliation_path.is_file()
+          reconciliation = json.loads(reconciliation_path.read_text(encoding="utf-8"))
+          if reconciliation["status"] not in {"pass", "pending_tracker_archive"}:
+              print("TRACKER RECONCILIATION FAILED:", reconciliation)
+              raise SystemExit("Current F&O list does not reconcile to effective tracker events")
+          print("Tracker reconciliation:", reconciliation["status"])
           print("Validated current NSE individual-stock F&O underlying snapshot.")
           PY
           pytest
