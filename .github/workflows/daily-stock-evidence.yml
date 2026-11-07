@@ -1,0 +1,122 @@
+name: Daily Nifty 500 stock evidence matrix
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/fii_engine/daily_stock_features.py"
+      - "src/fii_engine/daily_pipeline.py"
+      - "tests/test_daily_stock_features.py"
+      - "docs/daily-stock-evidence-matrix.md"
+      - ".github/workflows/daily-stock-evidence.yml"
+  pull_request:
+    paths:
+      - "src/fii_engine/daily_stock_features.py"
+      - "src/fii_engine/daily_pipeline.py"
+      - "tests/test_daily_stock_features.py"
+      - "docs/daily-stock-evidence-matrix.md"
+      - ".github/workflows/daily-stock-evidence.yml"
+  workflow_dispatch:
+  schedule:
+    # 23:00 IST, Monday to Friday; after the individual daily collectors.
+    - cron: "30 17 * * 1-5"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-nifty500-stock-evidence
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install project and test dependencies
+        run: python -m pip install -e ".[dev]"
+
+      - name: Run complete project test suite
+        run: pytest
+
+      - name: Collect official sources and build daily matrix
+        if: github.event_name != 'pull_request'
+        run: python -m fii_engine.daily_pipeline --repo-root .
+
+      - name: Summarize source coverage
+        if: always() && github.event_name != 'pull_request'
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path("data/raw/daily_stock_features/collector_run_status.json")
+          if not path.is_file():
+              print("### Daily stock evidence")
+              print("No collector status file was produced.")
+              raise SystemExit(0)
+          report = json.loads(path.read_text(encoding="utf-8"))
+          print("### Daily Nifty 500 stock evidence")
+          print(f"- Pipeline status: **{report.get('pipeline_status', 'unknown')}**")
+          matrix = report.get("matrix", {})
+          print(f"- Trade date: {matrix.get('trade_date', 'unavailable')}")
+          print(f"- Rows: {matrix.get('row_count', 0)}")
+          print(f"- Scoring: {matrix.get('scoring_status', 'not produced')}")
+          print("- Collector status:")
+          for name, result in report.get("collectors", {}).items():
+              print(f"  - {name}: {result.get('status', 'unknown')}")
+          PY
+
+      - name: Commit normalized evidence snapshots and provenance
+        if: always() && github.event_name != 'pull_request'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for path in \
+            data/raw/daily_stock_features \
+            data/snapshots/daily_stock_features \
+            data/raw/universe \
+            data/snapshots/universe \
+            data/raw/fno_underlyings \
+            data/snapshots/fno_underlyings \
+            data/raw/fno_universe \
+            data/snapshots/fno_universe \
+            data/raw/fii_dii/manifests \
+            data/snapshots/fii_dii \
+            data/raw/cash_market/manifests \
+            data/raw/fno_bhavcopy/manifests \
+            data/raw/fno_aggregate_reports/manifests \
+            data/raw/bulk_block_deals/manifests \
+            data/snapshots/bulk_block_deals; do
+            if [[ -e "$path" ]]; then git add "$path"; fi
+          done
+          if ! git diff --cached --quiet; then
+            git commit -m "data: record daily Nifty 500 stock evidence matrix"
+            git pull --rebase origin "$GITHUB_REF_NAME"
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          else
+            echo "No normalized evidence or provenance changes to commit."
+          fi
+
+      - name: Upload raw sources, normalized inputs and evidence matrix
+        if: always() && github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: daily-stock-evidence-${{ github.run_id }}
+          path: |
+            data/raw/**
+            data/processed/**
+            data/snapshots/**
+          if-no-files-found: warn
+          retention-days: 90
