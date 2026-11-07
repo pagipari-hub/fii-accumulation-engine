@@ -220,6 +220,25 @@ def _parse_json(
     return {"rows": rows, "row_count": len(rows)}
 
 
+
+def _crosscheck_json_csv(json_rows: list[dict], csv_rows: list[dict]) -> dict:
+    json_keys = Counter(_row_key(row) for row in json_rows)
+    csv_keys = Counter(_row_key(row) for row in csv_rows)
+    unmatched = json_keys - csv_keys
+    if unmatched:
+        raise ValueError(
+            f"NSE JSON contains {sum(unmatched.values())} records absent from CSV export"
+        )
+    return {
+        "json_is_subset_of_csv": True,
+        "json_complete_for_range": json_keys == csv_keys,
+        "json_row_count": len(json_rows),
+        "csv_row_count": len(csv_rows),
+        "json_coverage_ratio": (
+            round(len(json_rows) / len(csv_rows), 6) if csv_rows else 1.0
+        ),
+    }
+
 def _write_csv(rows: list[dict]) -> bytes:
     buffer = io.StringIO(newline="")
     writer = csv.DictWriter(buffer, fieldnames=OUTPUT_FIELDS, lineterminator="\n")
@@ -255,13 +274,8 @@ def _persist_date_snapshots(
     snapshot_dir.mkdir(parents=True, exist_ok=True)
     manifest_dir.mkdir(parents=True, exist_ok=True)
     results = []
-    json_keys = Counter(_row_key(row) for row in json_summary["rows"])
-    csv_keys = Counter(_row_key(row) for row in csv_summary["rows"])
-    if json_keys - csv_keys:
-        raise ValueError(
-            f"NSE {deal_type} JSON rows are not a subset of the official CSV export"
-        )
-    json_complete = json_keys == csv_keys
+    crosscheck = _crosscheck_json_csv(json_summary["rows"], csv_summary["rows"])
+    json_complete = crosscheck["json_complete_for_range"]
     for trade_date, rows in sorted(grouped.items()):
         rows = sorted(rows, key=lambda row: (
             row["symbol"], row["client_name"], row["side"],
@@ -358,12 +372,7 @@ def _capture_range(root: Path, option_type: str, from_date: date, to_date: date,
     json_raw = _save_raw(root, deal_type, from_date, to_date, "json", json_payload)
     csv_summary = _parse_csv(csv_payload, deal_type, from_date, to_date)
     json_summary = _parse_json(json_payload, deal_type, from_date, to_date)
-    json_keys = Counter(_row_key(row) for row in json_summary["rows"])
-    csv_keys = Counter(_row_key(row) for row in csv_summary["rows"])
-    if json_keys - csv_keys:
-        raise ValueError(
-            f"NSE {deal_type} JSON rows are not a subset of the CSV export"
-        )
+    crosscheck = _crosscheck_json_csv(json_summary["rows"], csv_summary["rows"])
     grouped: dict[str, list[dict]] = {}
     for row in csv_summary["rows"]:
         grouped.setdefault(row["trade_date"], []).append(row)
@@ -384,12 +393,7 @@ def _capture_range(root: Path, option_type: str, from_date: date, to_date: date,
         "raw_csv": csv_raw,
         "json_row_count": json_summary["row_count"],
         "csv_row_count": csv_summary["row_count"],
-        "json_is_subset_of_csv": True,
-        "json_complete_for_range": json_keys == csv_keys,
-        "json_coverage_ratio": (
-            round(json_summary["row_count"] / csv_summary["row_count"], 6)
-            if csv_summary["row_count"] else 1.0
-        ),
+        **crosscheck,
         "csv_validation": {
             k: v for k, v in csv_summary.items() if k != "rows"
         },
