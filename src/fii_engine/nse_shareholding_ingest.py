@@ -498,7 +498,7 @@ def ingest(root: Path = Path(".")) -> dict:
                 / f"filing_{row['record_id']}_{row['metadata_sha256'][:16]}_p{PARSER_VERSION}.json"
             ).replace(str(root) + "/", "")
             for row in eligible_records
-            if (row["record_id"], row["metadata_sha256"]) in filings_by_key
+            if (row["record_id"], row["metadata_sha256"], PARSER_VERSION) in filings_by_key
         ],
         "parsed_ownership_row_count": parsed_count,
         "ownership_row_count": len(ownership_rows),
