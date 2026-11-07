@@ -28,7 +28,7 @@ from fii_engine.nse_fo_bhavcopy import (
 REPORTS = {
     "participant_oi": {
         "file_key": "FO-PARTICIPANTWISE-OI",
-        "filename_re": re.compile(r"^fao_participant_oi_(?P<date>\\d{8})\\.csv$"),
+        "filename_re": re.compile(r"^fao_participant_oi_(?P<date>\d{8})\.csv$"),
         "extension": ".csv",
         "scope": "participant_category_aggregate_not_stock_specific",
     },
