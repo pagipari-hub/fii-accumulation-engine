@@ -70,6 +70,11 @@ def build_fixture(root: Path, *, include_sources: bool = True) -> None:
         "PrvsClsgPric": "100.00", "TtlTradgVol": "1000",
         "TtlTrfVal": "105000", "TtlNbOfTxsExctd": "100",
     }, {
+        "TradDt": TRADE_DATE, "FinInstrmTp": "STK", "ISIN": "INE000A01001",
+        "TckrSymb": "ABC", "SctySrs": "BE", "ClsPric": "999.00",
+        "PrvsClsgPric": "900.00", "TtlTradgVol": "10",
+        "TtlTrfVal": "9990", "TtlNbOfTxsExctd": "1",
+    }, {
         "TradDt": TRADE_DATE, "FinInstrmTp": "STK", "ISIN": "INE000B01001",
         "TckrSymb": "XYZ", "SctySrs": "BE", "ClsPric": "210.00",
         "PrvsClsgPric": "200.00", "TtlTradgVol": "500",
