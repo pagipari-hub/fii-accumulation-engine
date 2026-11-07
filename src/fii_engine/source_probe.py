@@ -180,6 +180,7 @@ def extract_keyword_contexts(
     text: str,
     keywords: tuple[str, ...] = (
         "getStartEndDate", "formatDate", "dateRangeValue",
+        "CFRefresh", "ShareholderPattern", "shareHolderPopup", "recordId",
         "DD-MM-YYYY", "DD-MMM-YYYY", "YYYY-MM-DD",
         "shareholding", "shareholder", "shareholdingpattern", "xbrl", "getshare",
     ),
@@ -193,7 +194,8 @@ def extract_keyword_contexts(
     for keyword in keywords:
         needle = keyword.lower()
         start = 0
-        while len(contexts) < limit:
+        keyword_matches = 0
+        while len(contexts) < limit and keyword_matches < 5:
             position = lowered.find(needle, start)
             if position < 0:
                 break
@@ -207,6 +209,7 @@ def extract_keyword_contexts(
                     "context": text[left:right],
                 })
                 seen.add(key)
+                keyword_matches += 1
             start = position + len(needle)
     return contexts
 
@@ -282,6 +285,12 @@ def inspect_page(name: str, url: str, timeout: int = 30) -> dict[str, object]:
                 "page_sha256": hashlib.sha256(body).hexdigest(),
                 "page_bytes": len(body),
                 "candidate_download_links": discover_links(html),
+                "page_keyword_contexts": extract_keyword_contexts(
+                    html,
+                    keywords=("ShareholderPattern", "shareholding", "shareholder", "recordId", "xbrl", "data-args"),
+                    radius=1000,
+                    limit=30,
+                ),
                 "same_origin_script_count": len(scripts),
                 "script_inspections": scripts,
                 "endpoint_candidates": all_candidates,
