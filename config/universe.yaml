@@ -1,0 +1,20 @@
+# Universe policy. The actual constituent file must be sourced and timestamped;
+# never treat this policy file as a current Nifty 500 constituent list.
+universe:
+  name: "NIFTY 500"
+  exchange: "NSE"
+  refresh_frequency: "monthly"
+  preserve_historical_snapshots: true
+  effective_date_required: true
+  include_all_sectors: true
+  include_banks: true
+  include_cash_only_stocks: true
+  fno_eligibility_values:
+    - eligible
+    - not_eligible
+    - unknown
+
+files:
+  current_constituents: "data/raw/universe/nifty500_current.csv"
+  historical_snapshots: "data/snapshots/universe/"
+  schema_version: 1
