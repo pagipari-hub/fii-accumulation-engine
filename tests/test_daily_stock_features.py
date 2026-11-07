@@ -82,6 +82,7 @@ def build_fixture(root: Path, *, include_sources: bool = True) -> None:
     ])
     write_json(root / "data/raw/cash_market/nse_cm_cash_current_manifest.json", {
         "trade_date": TRADE_DATE,
+        "finality": "final",
         "retrieved_at_utc": "2026-11-06T16:30:00Z",
         "datasets": [
             {"parsed_path": "data/processed/cash_market/cm.csv",
@@ -167,7 +168,7 @@ def test_builds_full_universe_and_stock_specific_daily_metrics(tmp_path):
     assert abc["delivery_percentage"] == "40.00"
     assert abc["futures_expiry"] == "2026-11-23"
     assert abc["futures_buildup"] == "long_buildup"
-    assert abc["futures_oi_change_pct"] == "20"
+    assert abc["futures_oi_change_pct"] == "20.0"
     assert abc["options_pcr_oi"] == "2"
     assert abc["options_pcr_volume"] == "2"
     assert abc["deal_event_count"] == "1"
