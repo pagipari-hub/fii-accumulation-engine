@@ -44,6 +44,20 @@ with no reported activity or unavailable source data.
 - The current F&O membership retrieval time is retained; the NSE feed does not
   provide an exact effective date, so none is invented.
 
+## Automation
+
+`src/fii_engine/daily_pipeline.py` runs the official Nifty 500, current F&O
+membership, FII/DII, cash-market, UDiFF derivatives, participant/FII derivatives
+reports and bulk/block deal collectors. A failure in one collector does not
+suppress independent sources; the run status is retained and stale source files
+are ignored when their collector did not succeed.
+
+GitHub Actions runs the pipeline on weekdays at 23:00 IST and supports manual
+dispatch. It uploads the raw/normalized run inputs and the evidence matrix as a
+90-day artifact, while committing normalized daily snapshots and provenance
+manifests. A partial run is labelled partial; a run with no current cash or F&O
+market data does not claim a valid market snapshot.
+
 ## Output
 
 - `data/snapshots/daily_stock_features/daily_stock_features_<date>_<hash>.csv`
