@@ -15,7 +15,7 @@ from pathlib import Path
 
 
 FEATURE_COLUMNS = (
-    "trade_date", "symbol", "company_name", "industry", "isin", "fno_status",
+    "trade_date", "symbol", "company_name", "industry", "series", "isin", "fno_status",
     "cash_data_status", "cash_close", "cash_previous_close", "cash_return_pct",
     "cash_volume", "cash_turnover", "cash_trade_count",
     "delivery_status", "delivery_quantity", "delivery_percentage",
@@ -210,7 +210,7 @@ def _load_cash_sources(root: Path) -> tuple[dict, dict, dict]:
         raise ValueError("cash UDiFF schema is missing required columns")
     cash_by_isin = {}
     for row in cash_rows:
-        if row.get("FinInstrmTp") != "STK" or row.get("SctySrs") != "EQ":
+        if row.get("FinInstrmTp") != "STK":
             continue
         isin = row.get("ISIN", "")
         if not isin:
@@ -221,14 +221,14 @@ def _load_cash_sources(root: Path) -> tuple[dict, dict, dict]:
 
     delivery_by_symbol = {}
     for row in delivery_rows:
-        if row.get("SERIES", "").strip() != "EQ":
-            continue
+        series = row.get("SERIES", "").strip()
         symbol = row.get("SYMBOL", "").strip()
-        if not symbol:
+        if not symbol or not series:
             continue
-        if symbol in delivery_by_symbol:
-            raise ValueError(f"duplicate EQ delivery symbol: {symbol}")
-        delivery_by_symbol[symbol] = row
+        key = (symbol, series)
+        if key in delivery_by_symbol:
+            raise ValueError(f"duplicate delivery symbol/series: {symbol}/{series}")
+        delivery_by_symbol[key] = row
 
     trade_date = manifest["trade_date"]
     for row in cash_by_isin.values():
@@ -248,8 +248,8 @@ def _load_cash_sources(root: Path) -> tuple[dict, dict, dict]:
         "delivery_sha256": delivery_hash,
         "manifest_path": str(manifest_path.relative_to(root)),
         "manifest_sha256": _sha256(manifest_path.read_bytes()),
-        "cash_eq_rows": len(cash_by_isin),
-        "delivery_eq_rows": len(delivery_by_symbol),
+        "cash_stock_rows": len(cash_by_isin),
+        "delivery_symbol_series_rows": len(delivery_by_symbol),
     }
 
 
@@ -522,7 +522,12 @@ def build_daily_features(root: Path, collector_status: dict | None = None) -> di
         fno_row = fno_status.get(symbol)
         fno_state = fno_row["fno_status"] if fno_row else "unknown"
         cash = cash_by_isin.get(isin)
-        delivery = delivery_by_symbol.get(symbol)
+        if cash and cash.get("SctySrs") != stock["series"]:
+            raise ValueError(
+                f"cash-market series mismatch for {symbol}: "
+                f"universe={stock['series']} source={cash.get('SctySrs')}"
+            )
+        delivery = delivery_by_symbol.get((symbol, stock["series"]))
         if cash:
             cash_status = "observed"
             cash_close = _number(cash.get("ClsPric"), field="cash close")
@@ -582,6 +587,7 @@ def build_daily_features(root: Path, collector_status: dict | None = None) -> di
             "symbol": symbol,
             "company_name": stock["company_name"],
             "industry": stock["industry"],
+            "series": stock["series"],
             "isin": isin,
             "fno_status": fno_state,
             "cash_data_status": cash_status,

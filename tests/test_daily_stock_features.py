@@ -29,9 +29,10 @@ def build_fixture(root: Path, *, include_sources: bool = True) -> None:
     universe_fields = ["symbol", "company_name", "industry", "series", "isin"]
     universe = [
         {"symbol": "ABC", "company_name": "ABC Ltd", "industry": "Banks", "series": "EQ", "isin": "INE000A01001"},
-        {"symbol": "XYZ", "company_name": "XYZ Ltd", "industry": "IT", "series": "EQ", "isin": "INE000B01001"},
+        {"symbol": "XYZ", "company_name": "XYZ Ltd", "industry": "IT", "series": "BE", "isin": "INE000B01001"},
     ]
-    for index in range(478):
+    universe.append({"symbol": "REIT", "company_name": "REIT Trust", "industry": "Realty", "series": "RR", "isin": "INE000C01001"})
+    for index in range(477):
         universe.append({
             "symbol": f"STOCK{index:03d}",
             "company_name": f"Stock {index}",
@@ -68,6 +69,16 @@ def build_fixture(root: Path, *, include_sources: bool = True) -> None:
         "TckrSymb": "ABC", "SctySrs": "EQ", "ClsPric": "105.00",
         "PrvsClsgPric": "100.00", "TtlTradgVol": "1000",
         "TtlTrfVal": "105000", "TtlNbOfTxsExctd": "100",
+    }, {
+        "TradDt": TRADE_DATE, "FinInstrmTp": "STK", "ISIN": "INE000B01001",
+        "TckrSymb": "XYZ", "SctySrs": "BE", "ClsPric": "210.00",
+        "PrvsClsgPric": "200.00", "TtlTradgVol": "500",
+        "TtlTrfVal": "105000", "TtlNbOfTxsExctd": "50",
+    }, {
+        "TradDt": TRADE_DATE, "FinInstrmTp": "STK", "ISIN": "INE000C01001",
+        "TckrSymb": "REIT", "SctySrs": "RR", "ClsPric": "110.00",
+        "PrvsClsgPric": "100.00", "TtlTradgVol": "300",
+        "TtlTrfVal": "33000", "TtlNbOfTxsExctd": "30",
     }])
     delivery_fields = [
         "SYMBOL", "SERIES", "DATE1", "DELIV_QTY", "DELIV_PER",
@@ -77,8 +88,10 @@ def build_fixture(root: Path, *, include_sources: bool = True) -> None:
     delivery_hash = write_csv(delivery_path, delivery_fields, [
         {"SYMBOL": "ABC", "SERIES": "EQ", "DATE1": "06-Nov-2026",
          "DELIV_QTY": "400", "DELIV_PER": "40.00", "TTL_TRD_QNTY": "1000"},
-        {"SYMBOL": "XYZ", "SERIES": "EQ", "DATE1": "06-Nov-2026",
+        {"SYMBOL": "XYZ", "SERIES": "BE", "DATE1": "06-Nov-2026",
          "DELIV_QTY": "-", "DELIV_PER": "-", "TTL_TRD_QNTY": "1000"},
+        {"SYMBOL": "REIT", "SERIES": "RR", "DATE1": "06-Nov-2026",
+         "DELIV_QTY": "555", "DELIV_PER": "55.50", "TTL_TRD_QNTY": "1000"},
     ])
     write_json(root / "data/raw/cash_market/nse_cm_cash_current_manifest.json", {
         "trade_date": TRADE_DATE,
@@ -174,8 +187,14 @@ def test_builds_full_universe_and_stock_specific_daily_metrics(tmp_path):
     assert abc["deal_event_count"] == "1"
     assert abc["deal_counterparty_classification"] == "unclassified_not_FPI_attributed"
     assert abc["disclosed_deals_score_status"] == "unavailable"
+    assert xyz["cash_data_status"] == "observed"
+    assert xyz["series"] == "BE"
     assert xyz["delivery_status"] == "not_reported"
     assert xyz["delivery_percentage"] == ""
+    reit = next(row for row in rows if row["symbol"] == "REIT")
+    assert reit["cash_data_status"] == "observed"
+    assert reit["series"] == "RR"
+    assert reit["delivery_percentage"] == "55.50"
     assert xyz["futures_data_status"] == "not_applicable"
     assert xyz["stock_derivatives_score_status"] == "not_applicable"
     assert manifest["counts"]["universe"] == 480
@@ -280,3 +299,19 @@ def test_failed_fno_universe_refresh_makes_membership_unknown(tmp_path):
     assert abc["fno_status"] == "unknown"
     assert abc["futures_data_status"] == "unavailable"
     assert manifest["sources"]["fno_status"]["status"] == "unavailable"
+
+
+def test_cash_market_series_must_match_nifty500_constituent_series(tmp_path):
+    build_fixture(tmp_path)
+    cash_path = tmp_path / "data/processed/cash_market/cm.csv"
+    rows = list(csv.DictReader(cash_path.open(encoding="utf-8")))
+    for row in rows:
+        if row["TckrSymb"] == "XYZ":
+            row["SctySrs"] = "EQ"
+    digest = write_csv(cash_path, list(rows[0]), rows)
+    manifest_path = tmp_path / "data/raw/cash_market/nse_cm_cash_current_manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    manifest["datasets"][0]["parsed_sha256"] = digest
+    write_json(manifest_path, manifest)
+    with pytest.raises(ValueError, match="cash-market series mismatch"):
+        build_daily_features(tmp_path)
