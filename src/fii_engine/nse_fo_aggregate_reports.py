@@ -256,6 +256,14 @@ def ingest(root: Path = Path(".")) -> dict:
     }
     current_path = root / "data/raw/fno_aggregate_reports/current_manifest.json"
     current_path.write_text(json.dumps(current, indent=2, default=str) + "\n", encoding="utf-8")
+    errors = [
+        f"{item['dataset']}: {item['inspection_error']}"
+        for item in results if item.get("inspection_error")
+    ]
+    if errors:
+        raise ValueError(
+            "NSE aggregate report schema inspection needs review: " + "; ".join(errors)
+        )
     return current
 
 
