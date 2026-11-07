@@ -399,9 +399,7 @@ def run_backfill(
 
     sorted_dates = sorted(included_dates)
     status = "complete" if len(included_dates) >= sessions else "insufficient_archive_coverage"
-    history = None
-    if created_snapshots:
-        history = build_historical_features(root)
+    history = build_historical_features(root)
 
     manifest = {
         "dataset": "nse_official_historical_stock_evidence_backfill",
