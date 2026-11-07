@@ -583,6 +583,7 @@ def capture_dataset(dataset: str, catalogue: dict, root: Path) -> dict:
 
     processed_path = None
     processed_hash = None
+    snapshot_path = None
     normalized_row_count = 0
     if inspection is not None:
         normalized_records = inspection.get("normalized_records", [])
@@ -603,6 +604,19 @@ def capture_dataset(dataset: str, catalogue: dict, root: Path) -> dict:
                     raise RuntimeError(f"{dataset}: immutable normalized path hash mismatch")
             else:
                 processed_path.write_bytes(processed_bytes)
+
+            # Persist only the compact normalized series in Git. Original exchange
+            # workbooks/CSVs remain in the run artifact with their raw hashes.
+            snapshot_dir = root / "data/snapshots/fno_aggregate_reports"
+            snapshot_dir.mkdir(parents=True, exist_ok=True)
+            snapshot_path = snapshot_dir / (
+                f"{dataset}_{selected['trading_date']}_{processed_hash[:16]}_p{PARSER_VERSION}.csv"
+            )
+            if snapshot_path.exists():
+                if hashlib.sha256(snapshot_path.read_bytes()).hexdigest() != processed_hash:
+                    raise RuntimeError(f"{dataset}: immutable history snapshot hash mismatch")
+            else:
+                snapshot_path.write_bytes(processed_bytes)
             normalized_row_count = len(normalized_records)
 
     manifest = {
@@ -616,6 +630,8 @@ def capture_dataset(dataset: str, catalogue: dict, root: Path) -> dict:
         "raw_sha256": raw_hash,
         "processed_path": str(processed_path) if processed_path else None,
         "processed_sha256": processed_hash,
+        "snapshot_path": str(snapshot_path) if snapshot_path else None,
+        "snapshot_sha256": processed_hash if snapshot_path else None,
         "normalized_row_count": normalized_row_count,
         "inspection": inspection,
         "inspection_error": inspection_error,
@@ -643,6 +659,8 @@ def capture_dataset(dataset: str, catalogue: dict, root: Path) -> dict:
         "manifest_path": str(manifest_path),
         "processed_path": str(processed_path) if processed_path else None,
         "processed_sha256": processed_hash,
+        "snapshot_path": str(snapshot_path) if snapshot_path else None,
+        "snapshot_sha256": processed_hash if snapshot_path else None,
         "normalized_row_count": normalized_row_count,
         "inspection": inspection,
         "inspection_error": inspection_error,
