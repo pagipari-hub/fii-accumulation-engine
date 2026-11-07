@@ -149,3 +149,11 @@ category and instrument family:
 These are aggregate participant-category measures, not individual-stock
 positions. FII participant OI must not be interpreted as FII positions in a
 named stock.
+
+
+The historical output also includes
+`data/raw/historical_features/participant_derivatives_history_current.csv`.
+It records 5-, 20- and 60-session participant-category OI changes and traded
+contract totals for the index/stock futures/options groups. FII, DII, Client and
+Pro remain separate categories. These reports are aggregate positioning data;
+they do not identify which individual stocks a participant traded.
