@@ -6,6 +6,7 @@
 - Current-month daily FPI investment and derivatives: https://www.cdslindia.com/eservices/publications/FIIMonthly
 - Historical FPI investment archive: https://www.cdslindia.com/Publications/FIITrends.aspx
 - Trade-wise equity FPI data: https://www.cdslindia.com/Publications/EquityDataFII.html
+- Registered FPI directory, alphabetic pages: https://www.cdslindia.com/Publications/RegForeignInstInvstr.aspx?indexname=A (replace the index letter with B-Z)
 
 ## What the public pages establish
 
