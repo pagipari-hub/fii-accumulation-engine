@@ -154,7 +154,8 @@ def test_alias_match_and_multiple_registration_matches_are_explicit():
 
 
 
-def test_nifty500_membership_requires_exact_isin():
+
+def test_nifty500_membership_requires_exact_symbol_and_company_name():
     row = {
         "symbol": "ABC",
         "company_name": "ABC Limited",
@@ -164,15 +165,30 @@ def test_nifty500_membership_requires_exact_isin():
     }
     by_isin = {"INE000A01001": row}
     by_symbol = {"ABC": row}
-    exact = _universe_membership({"symbol": "ABC", "isin": "INE000A01001"}, by_isin, by_symbol)
-    assert exact["nifty500_membership_status"] == "nifty500_isin_match"
+    by_name = {normalize_registry_name("ABC Limited"): [row]}
+    exact = _universe_membership({
+        "symbol": "ABC", "security_name": "ABC Ltd.", "source_isin": ""
+    }, by_isin, by_symbol, by_name)
+    assert exact["nifty500_membership_status"] == "nifty500_symbol_company_name_exact_normalized_match"
     assert exact["nifty500_member_verified"] == "true"
-    mismatch = _universe_membership({"symbol": "ABC", "isin": "INE999A01001"}, by_isin, by_symbol)
-    assert mismatch["nifty500_membership_status"] == "symbol_match_isin_mismatch"
+    assert exact["matched_universe_isin"] == "INE000A01001"
+    assert exact["universe_join_method"] == "symbol_and_company_name_exact_normalized"
+
+    mismatch = _universe_membership({
+        "symbol": "ABC", "security_name": "XYZ Industries Limited", "source_isin": ""
+    }, by_isin, by_symbol, by_name)
+    assert mismatch["nifty500_membership_status"] == "symbol_match_company_name_mismatch"
     assert mismatch["nifty500_member_verified"] == "false"
-    missing = _universe_membership({"symbol": "ABC", "isin": ""}, by_isin, by_symbol)
-    assert missing["nifty500_membership_status"] == "symbol_match_isin_missing"
-    outside = _universe_membership({"symbol": "OUTSIDE", "isin": "INE999A01001"}, by_isin, by_symbol)
+
+    source_isin = _universe_membership({
+        "symbol": "ABC", "security_name": "ABC Limited", "source_isin": "INE000A01001"
+    }, by_isin, by_symbol, by_name)
+    assert source_isin["nifty500_membership_status"] == "nifty500_isin_symbol_company_match"
+    assert source_isin["nifty500_member_verified"] == "true"
+
+    outside = _universe_membership({
+        "symbol": "OUTSIDE", "security_name": "Outside Corp", "source_isin": ""
+    }, by_isin, by_symbol, by_name)
     assert outside["nifty500_membership_status"] == "outside_current_nifty500"
 
 def test_same_day_expired_registration_is_not_treated_as_active():
@@ -242,14 +258,13 @@ def test_classifier_writes_auditable_outputs_and_deduplicates_cross_report(tmp_p
     snapshots_dir = tmp_path / "data/snapshots/bulk_block_deals"
     snapshots_dir.mkdir(parents=True)
     fields = [
-        "trade_date", "deal_type", "symbol", "isin", "security_name", "client_name",
+        "trade_date", "deal_type", "symbol", "security_name", "client_name",
         "side", "quantity", "weighted_average_price", "remarks", "record_fingerprint",
     ]
     for deal_type, remarks in [("bulk", "-"), ("block", "")]:
         snapshot = snapshots_dir / f"{deal_type}_2026-11-06.csv"
         row = {
             "trade_date": "2026-11-06", "deal_type": deal_type, "symbol": "ABC",
-            "isin": "INE000A01001",
             "security_name": "ABC LIMITED", "client_name": "SOCIETE GENERALE",
             "side": "BUY", "quantity": "100", "weighted_average_price": "10.00",
             "remarks": remarks, "record_fingerprint": f"{deal_type}-fingerprint",
@@ -281,6 +296,9 @@ def test_classifier_writes_auditable_outputs_and_deduplicates_cross_report(tmp_p
         stock_rows = list(csv.DictReader(handle))
     assert stock_rows[0]["current_registry_matched_fpi_client_buy_quantity"] == "100"
     assert stock_rows[0]["nifty500_member_verified"] == "true"
-    assert event_rows[0]["nifty500_membership_status"] == "nifty500_isin_match"
+    assert event_rows[0]["source_isin"] == ""
+    assert event_rows[0]["matched_universe_isin"] == "INE000A01001"
+    assert event_rows[0]["universe_join_method"] == "symbol_and_company_name_exact_normalized"
+    assert event_rows[0]["nifty500_membership_status"] == "nifty500_symbol_company_name_exact_normalized_match"
     assert result["universe_row_count"] == 501
     assert result["nifty500_verified_event_count"] == 1
