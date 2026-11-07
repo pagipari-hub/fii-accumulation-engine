@@ -100,7 +100,7 @@ def test_registry_parser_extracts_registration_identity_and_validity():
     assert records == [{
         "registered_name": "BNP PARIBAS FINANCIAL MARKETS",
         "registration_no": "INFRFP085515",
-        "valid_upto": "05-05-2027 00:00:00",
+        "valid_upto_raw": "05-05-2027 00:00:00",
         "country": "FRANCE",
         "address": "PARIS",
     }]
