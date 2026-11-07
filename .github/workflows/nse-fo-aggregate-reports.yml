@@ -60,6 +60,11 @@ jobs:
           assert current_path.is_file(), "aggregate report current manifest missing"
           current = json.loads(current_path.read_text(encoding="utf-8"))
           assert len(current["datasets"]) == 3
+          cross = current["cross_source_reconciliation"]
+          assert cross["comparison"]
+          assert set(cross["comparisons"]) == {
+              "index_futures", "stock_futures", "index_options", "stock_options"
+          }
           for dataset in current["datasets"]:
               raw_path = Path(dataset["raw_path"])
               assert raw_path.is_file(), f"missing raw file: {raw_path}"
@@ -69,12 +74,20 @@ jobs:
               assert manifest_path.is_file(), f"missing provenance: {manifest_path}"
               manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
               assert manifest["raw_sha256"] == raw_hash
+              assert manifest["inspection_error"] is None
+              processed = Path(dataset["processed_path"])
+              assert processed.is_file(), f"missing normalized CSV: {processed}"
+              processed_hash = hashlib.sha256(processed.read_bytes()).hexdigest()
+              assert processed_hash == dataset["processed_sha256"]
+              assert dataset["normalized_row_count"] > 0
               print(json.dumps({
                   "dataset": dataset["dataset"],
                   "trade_date": dataset["trading_date"],
                   "filename": dataset["filename"],
                   "bytes": dataset["raw_bytes"],
                   "sha256": raw_hash,
+                  "normalized_rows": dataset["normalized_row_count"],
+                  "normalized_sha256": processed_hash,
                   "inspection": dataset["inspection"],
               }, indent=2, default=str))
           PY
@@ -105,6 +118,7 @@ jobs:
             data/raw/fno_aggregate_reports/*.csv
             data/raw/fno_aggregate_reports/*.xls
             data/raw/fno_aggregate_reports/current_manifest.json
+            data/processed/fno_aggregate_reports/*.csv
             data/raw/fno_aggregate_reports/manifests/*.json
           if-no-files-found: warn
           retention-days: 90

@@ -5,6 +5,9 @@ from fii_engine.nse_fo_aggregate_reports import (
     capture_dataset,
     inspect_csv,
     inspect_xls,
+    normalize_participant_report,
+    parse_fii_stats_xls,
+    reconcile_fii_oi,
     select_report,
 )
 
@@ -219,3 +222,111 @@ def test_preserves_original_csv_before_schema_inspection_failure(tmp_path, monke
     assert result["inspection"] is None
     assert result["inspection_error"] == "unrecognized preamble"
     assert manifest_path.is_file()
+
+
+
+def test_normalizes_participant_csv_to_48_category_contract_rows():
+    inspection = inspect_csv(_participant_csv(), "participant_oi", "2026-11-06")
+    normalized = normalize_participant_report(inspection, "participant_oi", "2026-11-06")
+    assert len(normalized) == 48
+    assert {row["participant_category"] for row in normalized} == {"Client", "DII", "FII", "Pro"}
+    assert {row["instrument_group"] for row in normalized} == {
+        "index_futures", "stock_futures", "index_options", "stock_options"
+    }
+    assert {row["metric"] for row in normalized} == {"open_interest_contracts"}
+    assert all(row["unit"] == "contracts" for row in normalized)
+
+
+def _fake_fii_workbook_rows():
+    rows = [[""] * 7 for _ in range(35)]
+    rows[0] = ["FII DERIVATIVES STATISTICS FOR 06-Nov-2026", "", "", "", "", "", ""]
+    rows[1] = ["", "BUY", "BUY", "SELL", "SELL", "OPEN INTEREST AT THE END OF THE DAY", ""]
+    rows[2] = ["", "No. of contracts", "Amt in Crores", "No. of contracts", "Amt in Crores", "No. of contracts", "Amt in Crores"]
+    rows[3] = ["INDEX FUTURES", 100, 10.00, 80, 8.00, 50, 5.00]
+    rows[4] = ["BANKNIFTY FUTURES", 60, 6.00, 50, 5.00, 30, 3.00]
+    rows[5] = ["NIFTY FUTURES", 40, 4.00, 30, 3.00, 20, 2.00]
+    rows[11] = ["INDEX OPTIONS", 200, 20.00, 180, 18.00, 100, 10.00]
+    rows[12] = ["BANKNIFTY OPTIONS", 120, 12.00, 100, 10.00, 60, 6.00]
+    rows[13] = ["NIFTY OPTIONS", 80, 8.00, 80, 8.00, 40, 4.00]
+    rows[19] = ["STOCK FUTURES", 300, 30.00, 250, 25.00, 150, 15.00]
+    rows[21] = ["STOCK OPTIONS", 400, 40.00, 350, 35.00, 200, 20.00]
+    rows[26] = ["Notes:", "", "", "", "", "", ""]
+    rows[28] = ["Both buy and sell positions have been considered", "", "", "", "", "", ""]
+    rows[29] = ["Options Value (Buy/Sell) = Strike price * Qty", "", "", "", "", "", ""]
+    rows[30] = ["Futures Value (Buy/Sell) = Traded Price * Qty", "", "", "", "", "", ""]
+    return rows
+
+
+def test_parses_fii_statistics_xls_and_reconciles_index_details(monkeypatch):
+    class Sheet:
+        name = "sheet1"
+        nrows = 35
+        ncols = 7
+        rows = _fake_fii_workbook_rows()
+
+        @classmethod
+        def cell_value(cls, row, col):
+            return cls.rows[row][col]
+
+        @classmethod
+        def row_values(cls, row):
+            return cls.rows[row]
+
+    class Book:
+        nsheets = 1
+
+        @staticmethod
+        def sheet_by_index(index):
+            assert index == 0
+            return Sheet()
+
+        @staticmethod
+        def release_resources():
+            return None
+
+    monkeypatch.setattr(
+        "fii_engine.nse_fo_aggregate_reports.xlrd.open_workbook",
+        lambda **kwargs: Book(),
+    )
+    payload = bytes.fromhex("D0CF11E0A1B11AE1") + b"fake workbook"
+    result = parse_fii_stats_xls(payload, "2026-11-06")
+    assert len(result["normalized_records"]) == 8
+    assert result["trade_date_in_title"] == "2026-11-06"
+    assert result["section_reconciliation"]["index_futures"]["buy_contracts"] == "0"
+    assert result["section_reconciliation"]["index_options"]["open_interest_contracts"] == "0"
+    assert any("Both buy and sell positions" in note for note in result["notes"])
+
+
+def test_cross_checks_fii_participant_oi_against_fii_statistics():
+    participant = {
+        "trade_date_in_title": "2026-11-06",
+        "participant_rows": [{
+            "participant_category": "FII",
+            "Future Index Long": 20, "Future Index Short": 30,
+            "Future Stock Long": 60, "Future Stock Short": 40,
+            "Option Index Call Long": 10, "Option Index Put Long": 20,
+            "Option Index Call Short": 30, "Option Index Put Short": 40,
+            "Option Stock Call Long": 50, "Option Stock Put Long": 60,
+            "Option Stock Call Short": 70, "Option Stock Put Short": 80,
+        }],
+    }
+    groups = {
+        "index_futures": 50,
+        "stock_futures": 100,
+        "index_options": 100,
+        "stock_options": 260,
+    }
+    stats = {
+        "normalized_records": [
+            {
+                "instrument_group": group,
+                "record_level": "section_total",
+                "open_interest_contracts": value + (1 if group == "index_options" else 0),
+            }
+            for group, value in groups.items()
+        ]
+    }
+    result = reconcile_fii_oi(participant, stats)
+    assert result["comparisons"]["index_futures"]["status"] == "exact_match"
+    assert result["comparisons"]["index_options"]["difference"] == 1
+    assert result["max_absolute_difference"] == 1
