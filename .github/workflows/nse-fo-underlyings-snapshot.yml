@@ -57,11 +57,11 @@ jobs:
           current_hash = hashlib.sha256(current.read_bytes()).hexdigest()
           manifests = list(Path("data/snapshots/fno_underlyings").glob("*.json"))
           assert manifests
-          matching = [
-              json.loads(path.read_text(encoding="utf-8"))
-              for path in manifests
-              if json.loads(path.read_text(encoding="utf-8"))["normalized_sha256"] == current_hash
-          ]
+          matching = []
+          for path in manifests:
+              candidate = json.loads(path.read_text(encoding="utf-8"))
+              if candidate.get("normalized_sha256") == current_hash:
+                  matching.append(candidate)
           assert matching
           latest = matching[0]
           assert latest["individual_stock_underlying_count"] >= 150
