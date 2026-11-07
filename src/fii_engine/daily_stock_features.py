@@ -208,16 +208,17 @@ def _load_cash_sources(root: Path) -> tuple[dict, dict, dict]:
     delivery_rows, delivery_hash = _load_source_csv(root, delivery["raw_path"], delivery.get("raw_sha256"))
     if not REQUIRED_CASH_COLUMNS.issubset(cash_rows[0] if cash_rows else {}):
         raise ValueError("cash UDiFF schema is missing required columns")
-    cash_by_isin = {}
+    cash_by_isin = defaultdict(dict)
     for row in cash_rows:
         if row.get("FinInstrmTp") != "STK":
             continue
         isin = row.get("ISIN", "")
-        if not isin:
+        series = row.get("SctySrs", "")
+        if not isin or not series:
             continue
-        if isin in cash_by_isin:
-            raise ValueError(f"duplicate EQ cash-market ISIN: {isin}")
-        cash_by_isin[isin] = row
+        if series in cash_by_isin[isin]:
+            raise ValueError(f"duplicate cash-market ISIN/series: {isin}/{series}")
+        cash_by_isin[isin][series] = row
 
     delivery_by_symbol = {}
     for row in delivery_rows:
@@ -248,7 +249,7 @@ def _load_cash_sources(root: Path) -> tuple[dict, dict, dict]:
         "delivery_sha256": delivery_hash,
         "manifest_path": str(manifest_path.relative_to(root)),
         "manifest_sha256": _sha256(manifest_path.read_bytes()),
-        "cash_stock_rows": len(cash_by_isin),
+        "cash_stock_rows": sum(len(series_rows) for series_rows in cash_by_isin.values()),
         "delivery_symbol_series_rows": len(delivery_by_symbol),
     }
 
@@ -521,11 +522,12 @@ def build_daily_features(root: Path, collector_status: dict | None = None) -> di
         symbol, isin = stock["symbol"], stock["isin"]
         fno_row = fno_status.get(symbol)
         fno_state = fno_row["fno_status"] if fno_row else "unknown"
-        cash = cash_by_isin.get(isin)
-        if cash and cash.get("SctySrs") != stock["series"]:
+        cash_series_rows = cash_by_isin.get(isin, {})
+        cash = cash_series_rows.get(stock["series"])
+        if cash_series_rows and cash is None:
             raise ValueError(
                 f"cash-market series mismatch for {symbol}: "
-                f"universe={stock['series']} source={cash.get('SctySrs')}"
+                f"universe={stock['series']} source_series={sorted(cash_series_rows)}"
             )
         delivery = delivery_by_symbol.get((symbol, stock["series"]))
         if cash:
