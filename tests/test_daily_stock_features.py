@@ -241,3 +241,42 @@ def test_rejects_fno_status_universe_mismatch(tmp_path):
     write_json(manifest_path, manifest)
     with pytest.raises(ValueError, match="universe mismatch"):
         build_daily_features(tmp_path)
+
+
+def successful_collectors():
+    return {
+        "nifty500_universe": {"status": "success"},
+        "nse_fo_underlyings": {"status": "success"},
+        "nifty500_fno_status": {"status": "success"},
+        "nse_cash_market": {"status": "success"},
+        "nse_fo_bhavcopy": {"status": "success"},
+        "nse_bulk_block_deals": {"status": "success"},
+    }
+
+
+def test_failed_cash_collector_overrides_any_stale_cash_manifest(tmp_path):
+    build_fixture(tmp_path)
+    statuses = successful_collectors()
+    statuses["nse_cash_market"] = {"status": "failure", "error": "temporary NSE timeout"}
+    manifest = build_daily_features(tmp_path, collector_status=statuses)
+    rows = list(csv.DictReader(
+        (tmp_path / manifest["current_path"]).open(encoding="utf-8")
+    ))
+    abc = next(row for row in rows if row["symbol"] == "ABC")
+    assert abc["cash_data_status"] == "unavailable"
+    assert abc["futures_data_status"] == "observed"
+    assert manifest["collector_run_status"]["nse_cash_market"]["status"] == "failure"
+
+
+def test_failed_fno_universe_refresh_makes_membership_unknown(tmp_path):
+    build_fixture(tmp_path)
+    statuses = successful_collectors()
+    statuses["nse_fo_underlyings"] = {"status": "failure", "error": "source unavailable"}
+    manifest = build_daily_features(tmp_path, collector_status=statuses)
+    rows = list(csv.DictReader(
+        (tmp_path / manifest["current_path"]).open(encoding="utf-8")
+    ))
+    abc = next(row for row in rows if row["symbol"] == "ABC")
+    assert abc["fno_status"] == "unknown"
+    assert abc["futures_data_status"] == "unavailable"
+    assert manifest["sources"]["fno_status"]["status"] == "unavailable"
