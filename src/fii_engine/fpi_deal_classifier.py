@@ -150,10 +150,29 @@ def _load_universe(
     by_company_name: dict[str, list[dict]] = defaultdict(list)
     for row in rows:
         by_company_name[normalize_registry_name(row["company_name"])].append(row)
+    csv_sha = _sha256(payload)
+    manifest_dir = root / "data/snapshots/universe"
+    matching_manifests = []
+    for manifest_path in sorted(manifest_dir.glob("nifty500_*.json")):
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        if manifest.get("normalized_sha256") == csv_sha:
+            matching_manifests.append((manifest_path, manifest))
+    if len(matching_manifests) != 1:
+        raise ValueError(
+            "current Nifty 500 CSV must match exactly one immutable snapshot manifest"
+        )
+    manifest_path, snapshot_manifest = matching_manifests[0]
     metadata = {
         "path": str(UNIVERSE_CSV),
-        "sha256": _sha256(payload),
+        "sha256": csv_sha,
         "row_count": len(rows),
+        "snapshot_manifest_path": str(manifest_path.relative_to(root)),
+        "retrieved_at_utc": snapshot_manifest["retrieved_at_utc"],
+        "source_freshness_statement": snapshot_manifest["source_freshness_statement"],
+        "source_freshness_semantics": snapshot_manifest["source_freshness_semantics"],
+        "publisher": snapshot_manifest["publisher"],
+        "source_page": snapshot_manifest["source_page"],
+        "source_download_url": snapshot_manifest["source_download_url"],
     }
     return by_isin, by_symbol, by_company_name, metadata
 
@@ -604,10 +623,13 @@ def classify(root: Path = Path("."), lookback_days: int = 7) -> dict:
             "symbol plus exact normalized company-name match. The universe ISIN is attached "
             "from the official constituent file."
         ),
-        "universe_snapshot_freshness_statement": (
-            "Data as on last trading day of the previous month, as stated by the official source page."
-        ),
-        "universe_effective_date_status": "exact_effective_date_not_supplied_in_current_feed",
+        "universe_snapshot_manifest_path": universe_metadata["snapshot_manifest_path"],
+        "universe_snapshot_retrieved_at_utc": universe_metadata["retrieved_at_utc"],
+        "universe_snapshot_freshness_statement": universe_metadata["source_freshness_statement"],
+        "universe_effective_date_status": universe_metadata["source_freshness_semantics"],
+        "universe_source_publisher": universe_metadata["publisher"],
+        "universe_source_page": universe_metadata["source_page"],
+        "universe_source_download_url": universe_metadata["source_download_url"],
         "universe_row_count": universe_metadata["row_count"],
         "nifty500_snapshot_verified_event_count": sum(
             event["nifty500_snapshot_member_verified"] == "true" for event in events
