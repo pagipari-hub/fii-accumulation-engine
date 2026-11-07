@@ -1,0 +1,67 @@
+name: NSE F&O stock eligibility tracker
+
+on:
+  push:
+    paths:
+      - "src/fii_engine/nse_fo_tracker.py"
+      - "tests/test_nse_fo_tracker.py"
+      - "pyproject.toml"
+      - ".github/workflows/nse-fo-tracker.yml"
+  workflow_dispatch:
+  schedule:
+    # 20:15 IST, Monday to Friday.
+    - cron: "45 14 * * 1-5"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nse-fo-stock-tracker
+  cancel-in-progress: false
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install project and research dependencies
+        run: python -m pip install -e ".[dev]"
+
+      - name: Prepare artifact directory
+        run: mkdir -p artifacts/nse-fo-tracker/raw
+
+      - name: Capture and inspect official NSE F&O tracker
+        run: python -m fii_engine.nse_fo_tracker --output-dir artifacts/nse-fo-tracker
+
+      - name: Validate tracker artifact
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path("artifacts/nse-fo-tracker")
+          manifest = json.loads((root / "manifest.json").read_text(encoding="utf-8"))
+          assert manifest["bytes"] > 0
+          assert manifest["sha256"]
+          assert manifest["workbook"]["sheet_names"]
+          path = Path(manifest["raw_artifact_path"])
+          assert path.is_file() and path.stat().st_size == manifest["bytes"]
+          print("NSE tracker workbook captured and structurally inspected.")
+          PY
+
+      - name: Upload tracker workbook and inspection manifest
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nse-fo-stock-tracker-${{ github.run_id }}
+          path: artifacts/nse-fo-tracker/
+          if-no-files-found: warn
+          retention-days: 90
