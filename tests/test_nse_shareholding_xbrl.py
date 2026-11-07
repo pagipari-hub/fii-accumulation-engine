@@ -92,3 +92,37 @@ def test_actual_nse_filing_sample_reconciles_fpi_components():
     assert rows["foreign_institutions_total"]["shares"] == 5_266_506_412
     assert rows["fpi_category_i"]["ownership_percentage_points"] == "37.6200"
     assert result["fpi_reconciliation"][0]["status"] == "matched"
+
+
+def test_preserves_entity_identifier_and_all_context_dimensions():
+    result = parse_xbrl(XML)
+    row = next(item for item in result["category_records"] if item["category_key"] == "fpi_category_i")
+    assert row["entity_identifier"] == "INE000A01001"
+    assert row["dimensions"] == [{
+        "dimension": "CategoryOfShareholdersAxis",
+        "member": "InstitutionsForeignPortfolioInvestorCategoryOneMember",
+    }]
+
+
+def test_rejects_multiple_contexts_for_same_category_and_reporting_date():
+    duplicate_context = XML.replace(
+        b'<xbrli:context id="FPI2">',
+        b'<xbrli:context id="FPI1_DUP">',
+        1,
+    ).replace(
+        b'<shp:NumberOfShares contextRef="FPI2" unitRef="shares">200</shp:NumberOfShares>',
+        b'<shp:NumberOfShares contextRef="FPI1_DUP" unitRef="shares">200</shp:NumberOfShares>',
+        1,
+    )
+    with pytest.raises(ValueError, match="multiple contexts for shareholder category"):
+        parse_xbrl(duplicate_context)
+
+
+def test_rejects_shareholder_category_context_without_instant_period():
+    payload = XML.replace(
+        b'<xbrli:instant>2026-09-30</xbrli:instant>',
+        b'<xbrli:startDate>2026-09-01</xbrli:startDate><xbrli:endDate>2026-09-30</xbrli:endDate>',
+        1,
+    )
+    with pytest.raises(ValueError, match="has no instant period"):
+        parse_xbrl(payload)
