@@ -236,14 +236,22 @@ def capture(output_dir: Path = Path("artifacts/nse-fo-tracker")) -> dict:
     )
     if not payload:
         raise ValueError("NSE F&O tracker download is empty")
-    workbook_info = inspect_workbook(payload)
-    as_of_date = datetime.now(ZoneInfo("Asia/Kolkata")).date()
-    event_history = parse_tracker_events(payload, as_of_date)
     digest = hashlib.sha256(payload).hexdigest()
     raw_dir = output_dir / "raw"
     raw_dir.mkdir(parents=True, exist_ok=True)
     raw_path = raw_dir / f"fo_stock_introduction_exclusion_{digest[:16]}.xlsx"
     raw_path.write_bytes(payload)
+    as_of_date = datetime.now(ZoneInfo("Asia/Kolkata")).date()
+    parse_error = None
+    try:
+        workbook_info = inspect_workbook(payload)
+        event_history = parse_tracker_events(payload, as_of_date)
+        interpretation_status = "effective_dated_change_history_parsed_baseline_required"
+    except Exception as exc:
+        workbook_info = {"parse_error": str(exc)}
+        event_history = None
+        interpretation_status = "schema_parse_failed_raw_preserved"
+        parse_error = str(exc)
     report = {
         "publisher": "National Stock Exchange of India",
         "source_page": SOURCE_PAGE,
@@ -254,7 +262,8 @@ def capture(output_dir: Path = Path("artifacts/nse-fo-tracker")) -> dict:
         "raw_artifact_path": str(raw_path),
         "workbook": workbook_info,
         "event_history": event_history,
-        "interpretation_status": "effective_dated_change_history_parsed_baseline_required",
+        "interpretation_status": interpretation_status,
+        "parse_error": parse_error,
     }
     output_dir.mkdir(parents=True, exist_ok=True)
     (output_dir / "manifest.json").write_text(
