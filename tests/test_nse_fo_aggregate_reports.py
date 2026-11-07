@@ -1,8 +1,9 @@
 import pytest
 
 from fii_engine.nse_fo_aggregate_reports import (
-    inspect_csv,
+    PARTICIPANT_COLUMNS,
     capture_dataset,
+    inspect_csv,
     inspect_xls,
     select_report,
 )
@@ -95,23 +96,69 @@ def test_rejects_untrusted_archive_host():
         select_report(catalogue, "participant_oi")
 
 
-def test_inspects_csv_header_and_rows_without_interpreting_values():
-    payload = (
-        "Participant,Index Futures Long,Index Futures Short,Stock Futures Long\n"
-        "FII,10,20,30\n"
-        "Client,40,50,60\n"
-    ).encode()
-    result = inspect_csv(payload, "participant_oi")
-    assert result["row_count"] == 2
-    assert result["column_count"] == 4
-    assert result["columns"][0] == "Participant"
-    assert len(result["preview_rows"]) == 2
+def _participant_csv(dataset="participant_oi", mismatch=False):
+    title_type = "Open Interest" if dataset == "participant_oi" else "Trading Volume"
+    title = (
+        f'""Participant wise {title_type} (no. of contracts) in Equity Derivatives '
+        'as on Nov 06, 2026"",,,,,,,,,,,,,,'
+    )
+    rows = []
+    for category, base in (("Client", 1), ("DII", 2), ("FII", 3), ("Pro", 4)):
+        components = [base] * 12
+        long_total = sum(components[i] for i in (0, 2, 4, 5, 8, 9))
+        short_total = sum(components[i] for i in (1, 3, 6, 7, 10, 11))
+        rows.append([category, *components, long_total, short_total])
+    total_components = [
+        sum(row[i + 1] for row in rows) for i in range(12)
+    ]
+    total_long = sum(total_components[i] for i in (0, 2, 4, 5, 8, 9))
+    total_short = sum(total_components[i] for i in (1, 3, 6, 7, 10, 11))
+    if mismatch:
+        total_components[4] += 1
+    rows.append(["TOTAL", *total_components, total_long, total_short])
+    lines = [title, ",".join(PARTICIPANT_COLUMNS)]
+    lines.extend(",".join(str(value) for value in row) for row in rows)
+    return ("\n".join(lines) + "\n").encode()
 
+
+def test_inspects_real_nse_participant_csv_structure_and_reconciles_totals():
+    result = inspect_csv(_participant_csv(), "participant_oi", "2026-11-06")
+    assert result["row_count"] == 5
+    assert result["column_count"] == 15
+    assert result["trade_date_in_title"] == "2026-11-06"
+    assert result["units_as_labelled"] == "number_of_contracts"
+    assert result["participant_categories"] == ["Client", "DII", "FII", "Pro", "TOTAL"]
+    assert result["reconciliation"]["status"] == "exact_match"
+    assert result["reconciliation"]["max_absolute_difference"] == 0
+
+
+def test_records_small_source_total_discrepancies_without_rewriting_them():
+    result = inspect_csv(_participant_csv(mismatch=True), "participant_oi", "2026-11-06")
+    assert result["reconciliation"]["status"] == "difference_observed"
+    assert result["reconciliation"]["column_totals"]["Option Index Call Long"]["difference"] == 1
+
+
+def test_rejects_participant_report_title_date_mismatch():
+    with pytest.raises(ValueError, match="does not match catalogue date"):
+        inspect_csv(_participant_csv(), "participant_oi", "2026-11-05")
+
+
+def test_rejects_wrong_participant_report_type_in_title():
+    with pytest.raises(ValueError, match="unexpected report title"):
+        inspect_csv(_participant_csv("participant_volume"), "participant_oi", "2026-11-06")
+
+
+def test_rejects_participant_csv_schema_drift():
+    payload = _participant_csv().decode().replace("Future Index Long", "Index Future Long").encode()
+    with pytest.raises(ValueError, match="schema drift"):
+        inspect_csv(payload, "participant_oi", "2026-11-06")
 
 def test_rejects_inconsistent_csv_row_width():
-    payload = b"A,B,C\n1,2,3\n4,5\n"
-    with pytest.raises(ValueError, match="row width differs"):
-        inspect_csv(payload, "participant_volume")
+    lines = _participant_csv("participant_volume").decode().splitlines()
+    lines[2] = lines[2].rsplit(",", 1)[0]
+    payload = ("\n".join(lines) + "\n").encode()
+    with pytest.raises(ValueError, match="fields; expected"):
+        inspect_csv(payload, "participant_volume", "2026-11-06")
 
 
 def test_rejects_non_utf8_csv():
