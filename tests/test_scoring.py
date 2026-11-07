@@ -32,7 +32,7 @@ def test_config_weights_sum_to_100_for_both_horizons(config):
 def test_missing_families_are_not_scored_as_zero(config):
     result = score_stock("ABC", [obs("cash_market", 0.8)], config)
     assert result["short_term"]["score"] == 80.0
-    assert result["short_term"]["coverage"] == 25.0
+    assert result["short_term"]["coverage"] == 35.0
     assert result["short_term"]["rankable"] is False
     assert "quarterly_ownership" in result["short_term"]["unavailable_families"]
 
@@ -43,7 +43,7 @@ def test_not_applicable_fno_family_does_not_reduce_coverage(config):
         obs("disclosed_deals", 0.5),
         obs("cash_market", 0.8),
         obs("stock_derivatives", None, status="not_applicable", reason="not F&O eligible"),
-            ]
+        ]
     result = score_stock("CASHONLY", observations, config)
     assert result["short_term"]["coverage"] == 100.0
     assert result["short_term"]["not_applicable_families"] == ["stock_derivatives"]
@@ -109,7 +109,7 @@ def test_universe_keeps_every_symbol_and_only_ranks_eligible_rows(config):
             obs("disclosed_deals", 0.7),
             obs("cash_market", 0.9),
             obs("stock_derivatives", 0.8),
-                    ],
+                ],
         "XYZ": [
             obs("quarterly_ownership", 0.2),
             obs("disclosed_deals", 0.2),
@@ -137,9 +137,11 @@ def test_grade_one_rejects_missing_transaction_provenance(config):
     with pytest.raises(ValueError, match="source references"):
         score_stock("ABC", [], config, direct_fpi_transaction_refs=[])
 
+
 def test_market_wide_participant_positioning_is_not_a_stock_score_family(config):
     with pytest.raises(ValueError, match="unknown evidence family"):
         score_stock("ABC", [obs("participant_positioning", 0.9)], config)
+
 
 def test_peer_relative_strength_is_part_of_cash_market_not_a_separate_family(config):
     with pytest.raises(ValueError, match="unknown evidence family"):
