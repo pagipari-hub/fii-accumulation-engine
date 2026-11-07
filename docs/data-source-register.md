@@ -12,8 +12,8 @@ Research checked: 7 November 2026. This register distinguishes source availabili
 | Final FPI cash data | [NSDL FPI reports](https://www.fpi.nsdl.co.in/web/Reports/Latest.aspx) and [CDSL foreign portfolio investor data](https://www.cdslindia.com/Publications/ForeignPortInvestor.html) | Final FPI data where available | Separate finalization source and publication date from trade date. Check field definitions before reconciling with NSE provisional data. |
 | Stock/index futures and options daily contracts | [NSE All Reports – Derivatives](https://www.nseindia.com/all-reports-derivatives), UDiFF Common Bhavcopy Final ZIP | Live-validated 7 Nov 2026 for trade date 6 Nov: 40,471 rows, 34 source columns, 218 stock symbols and four recognized instrument types | Use UDiFF final format; NSE marks older common bhavcopy formats discontinued from 8 July 2024. Retain contract identifiers and expiry/strike/option type. Volume/turnover units still require explicit semantic validation before scoring. |
 | Derivatives contract master | NSE All Reports – Derivatives, F&O MII contract file | Contract metadata needed to decode instruments and expiries | Version daily files; validate schema and effective date. |
-| Participant-wise derivatives OI and volume | NSE All Reports – Derivatives, F&O Participant-wise Open Interest and Trading Volumes | Aggregate positioning/volume by participant category | These are participant-category totals, not participant-by-stock positions. They must never be allocated to individual equities or used as proof of FII buying in a named stock. |
-| FII derivatives statistics | NSE All Reports – Derivatives, F&O FII derivatives statistics | Aggregate FII derivatives statistics as defined by the report | Keep separate from stock-level contract OI. Inspect workbook definitions before mapping metrics. |
+| Participant-wise derivatives OI and volume | NSE All Reports – Derivatives, `FO-PARTICIPANTWISE-OI` and `FO-PARTICIPANTWISE-TRADING-VOL` | Live-validated 6 Nov 2026: 48 normalized rows per report, by Client/DII/FII/Pro and index/stock futures/options | Participant-category aggregates, not participant-by-stock positions. OI has observed one-contract source reconciliation differences; volume reconciles exactly. Never allocate these values to individual equities. |
+| FII derivatives statistics | NSE All Reports – Derivatives, `FO-FII-DERIVATIVE-STAT` | Live-validated 6 Nov 2026: 16 normalized rows, including index-underlying detail and aggregate stock groups | FII aggregate only; stock futures/options are all-stock totals, not individual stock positions. Amount definitions and OI basis are documented; keep section totals distinct from details. |
 | Stock MWPL / ban context | NSE All Reports – Derivatives, client position % of stock MWPL and security-in-ban-period reports | Market-wide position-limit context and ban status | Preserve the report date and applicable denominator; do not infer stock-level FII ownership from client/MWPL reports. |
 | Equity daily OHLCV and delivery | NSE equity reports / official bhavcopy archives | Security-level cash-market price, volume and delivery fields where published | Validate current and legacy schemas separately; retain series and ISIN. |
 
@@ -89,3 +89,19 @@ manifest is committed at
 `data/raw/fno_bhavcopy/manifests/2026-11-06_9021b35dccd79f13.json`.
 The original ZIP and parsed CSV are retained as a 90-day workflow artifact
 while the long-term archive strategy is evaluated.
+
+
+## NSE participant/FII report live-validation record
+
+The participant-wise OI, participant-wise volume and FII derivatives statistics
+collectors are implemented in
+`src/fii_engine/nse_fo_aggregate_reports.py` and
+`.github/workflows/nse-fo-aggregate-reports.yml`. First live capture:
+[run 42355384757](https://github.com/pagipari-hub/fii-accumulation-engine/actions/runs/42355384757),
+trade date 6 Nov 2026. The normalized data and cross-source reconciliation
+are documented in [NSE participant and FII report semantics](nse-fo-participant-reports.md).
+
+The FII workbook OI reconciled exactly with participant FII long+short OI for
+index futures, stock futures and stock options; index options differed by one
+contract. This discrepancy is preserved. Neither source contains individual
+stock FII positions.
