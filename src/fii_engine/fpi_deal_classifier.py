@@ -181,7 +181,7 @@ def _universe_membership(
         }
 
     symbol = event["symbol"].strip().upper()
-    source_isin = str(event.get("isin", "")).strip().upper()
+    source_isin = str(event.get("source_isin", "")).strip().upper()
     security_name = str(event.get("security_name", "")).strip()
     normalized_security_name = normalize_registry_name(security_name)
     universe_row = None
