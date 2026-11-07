@@ -40,3 +40,13 @@ A named bulk/block transaction matched to a current CDSL FPI entry is a strong s
 ## Nifty 500 universe boundary
 
 The validated NSE bulk/block deal export does not contain an ISIN field. Every disclosed event is therefore joined to the current official Nifty 500 constituent file using both the exact symbol and exact normalized company name (case, punctuation/spacing and explicit legal suffix normalization only). The matching universe ISIN is attached from the official constituent file and is clearly labelled as enriched, not source-supplied. Symbol-only matches, company-name-only matches and symbol/company conflicts are not promoted to verified membership. Events outside the current Nifty 500 remain in the audit output but are not eligible for the Nifty 500 watchlist. The source page states its constituent data is as of the last trading day of the previous month and does not supply a precise effective date in the feed. The output therefore describes membership in the latest published snapshot, not confirmed membership on the later deal date.
+
+
+## Full-universe stock matrix
+
+The stock summary is a full 501-row view of the latest published Nifty 500 snapshot, not only the symbols appearing in bulk/block disclosures. Each row distinguishes:
+- observed disclosed deals with a verified symbol/company-name universe join;
+- deal records present but the universe join is unverified;
+- no disclosed bulk/block deal in the available snapshots.
+
+A no-disclosed-deal row is not evidence of zero total FPI trading. It means no named bulk/block transaction was present in the collected reports for the stated window. Unmatched counterparties and unavailable source data remain separate states.

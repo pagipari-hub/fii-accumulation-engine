@@ -101,24 +101,33 @@ def test_stock_summary_keeps_unmatched_and_odi_out_of_direct_fpi_net():
             "symbol": "ABC", "side": "BUY", "quantity": "100", "deal_value": "1000.00",
             "counterparty_class": "current_registry_matched_fpi_client", "temporal_status": "post_trade_snapshot_registration_start_unknown",
             "source_record_count": 1, "cross_report_duplicate": "false",
+            "nifty500_snapshot_member_verified": "true",
         },
         {
             "symbol": "ABC", "side": "BUY", "quantity": "50", "deal_value": "500.00",
             "counterparty_class": "current_registry_matched_odi_issuer", "temporal_status": "post_trade_snapshot_registration_start_unknown",
             "source_record_count": 1, "cross_report_duplicate": "false",
+            "nifty500_snapshot_member_verified": "true",
         },
         {
             "symbol": "ABC", "side": "SELL", "quantity": "25", "deal_value": "250.00",
             "counterparty_class": "unmatched", "temporal_status": "not_established",
             "source_record_count": 1, "cross_report_duplicate": "false",
+            "nifty500_snapshot_member_verified": "true",
         },
     ]
-    result = _stock_summary(events, date(2026, 10, 30), date(2026, 11, 6))[0]
+    universe_rows = [{
+        "symbol": "ABC", "company_name": "ABC Limited", "industry": "Industrials",
+        "series": "EQ", "isin": "INE000A01001",
+    }]
+    result = _stock_summary(events, date(2026, 10, 30), date(2026, 11, 6), universe_rows)[0]
     assert result["current_registry_matched_fpi_client_buy_quantity"] == "100"
     assert result["current_registry_matched_odi_issuer_buy_quantity"] == "50"
     assert result["unmatched_sell_quantity"] == "25"
     assert result["current_registry_matched_fpi_client_known_net_quantity"] == "100"
     assert result["known_fpi_net_status"] == "partial_unmatched_or_odi_counterparties"
+    assert result["deal_data_status"] == "observed_disclosed_deals"
+    assert result["nifty500_snapshot_member_verified"] == "true"
 
 
 def test_alias_match_and_multiple_registration_matches_are_explicit():
@@ -306,8 +315,15 @@ def test_classifier_writes_auditable_outputs_and_deduplicates_cross_report(tmp_p
     stock_csv = tmp_path / result["current_stock_summary_path"]
     with stock_csv.open(encoding="utf-8", newline="") as handle:
         stock_rows = list(csv.DictReader(handle))
-    assert stock_rows[0]["current_registry_matched_fpi_client_buy_quantity"] == "100"
-    assert stock_rows[0]["nifty500_snapshot_member_verified"] == "true"
+    assert len(stock_rows) == 501
+    abc_summary = next(row for row in stock_rows if row["symbol"] == "ABC")
+    no_deal_summary = next(row for row in stock_rows if row["symbol"] == "TEST000")
+    assert abc_summary["current_registry_matched_fpi_client_buy_quantity"] == "100"
+    assert abc_summary["nifty500_snapshot_member_verified"] == "true"
+    assert abc_summary["deal_data_status"] == "observed_disclosed_deals"
+    assert no_deal_summary["deal_data_status"] == "no_disclosed_deal_in_available_snapshots"
+    assert no_deal_summary["deal_event_count"] == "0"
+    assert no_deal_summary["counterparty_identity_coverage_pct"] == ""
     assert event_rows[0]["source_isin"] == ""
     assert event_rows[0]["matched_universe_isin"] == "INE000A01001"
     assert event_rows[0]["universe_join_method"] == "symbol_and_company_name_exact_normalized"

@@ -80,6 +80,8 @@ jobs:
           assert manifest["status"] in {"complete", "complete_no_deals"}
           assert manifest["registry_snapshot_sha256"]
           assert manifest["universe_row_count"] == 501
+          assert manifest["stock_summary_row_count"] == 501
+          assert manifest["nifty500_snapshot_member_count"] == 501
           assert manifest["universe_csv_sha256"]
           assert manifest["universe_join_policy"]
           assert manifest["universe_snapshot_manifest_path"]
@@ -94,7 +96,7 @@ jobs:
               "deduplicated_event_count", "current_registry_matched_fpi_client_event_count",
               "current_registry_matched_odi_issuer_event_count", "unmatched_event_count",
               "universe_row_count", "nifty500_snapshot_verified_event_count",
-              "nifty500_snapshot_verified_symbol_count", "nifty500_snapshot_verified_fpi_client_event_count",
+              "nifty500_snapshot_member_count", "nifty500_snapshot_verified_fpi_client_event_count",
               "source_isin_supplied_event_count", "universe_join_method_counts",
           )}, indent=2))
           PY
