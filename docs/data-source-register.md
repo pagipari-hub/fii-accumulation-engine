@@ -8,7 +8,8 @@ Research checked: 7 November 2026. This register distinguishes source availabili
 |---|---|---|---|
 | Current Nifty 500 members | [NSE Indices Nifty 500 page](https://www.niftyindices.com/indices/equity/broad-based-indices/NIFTY-500), [official constituent CSV](https://www.niftyindices.com/IndexConstituent/ind_nifty500list.csv) | Live-validated 7 Nov 2026: 501 rows with company, industry, symbol, series and ISIN; required fields populated and symbols/ISINs unique | Snapshot only. Preserve original bytes, normalized content, retrieval timestamp and SHA-256. The page says data is as on the last trading day of the previous month; do not infer a precise effective date or backfill historical membership from today's list. |
 | Nifty 500 methodology | [Nifty Indices Nifty 500 page](https://www.niftyindices.com/indices/equity/broad-based-indices/nifty-500) | Index selection and methodology context | Version methodology documents and record effective dates when rules change. |
-| Daily FII/FPI and DII cash activity | [NSE FII/DII reports](https://www.nseindia.com/reports/fii-dii) | NSE-exclusive and combined NSE/BSE/MSEI market-level cash activity | NSE labels FII/FPI data provisional and subject to custodial confirmation and modifications. Preserve provisional/final state; never interpret market-wide net flow as buying in a named stock. |
+| NSE-only FII/FPI and DII cash activity | [NSE FII/DII page](https://www.nseindia.com/reports/fii-dii), `/api/fiidiiTradeReact` | Live-validated 6 Nov 2026; daily per-date snapshots, ₹ crore, two categories | FII/FPI is provisional; DII is exchange-reported. Market-wide only; no stock attribution. The API's first capture returned one date, so scheduled collection is required to build history. |
+| Combined NSE/BSE/MSEI FII/FPI and DII cash activity | [NSE FII/DII reports](https://www.nseindia.com/reports/fii-dii), combined-market CSV | Separate combined market-level cash activity | Registered but schema/publishing semantics not yet live-validated. Do not mix with NSE-only series. |
 | Final FPI cash data | [NSDL FPI reports](https://www.fpi.nsdl.co.in/web/Reports/Latest.aspx) and [CDSL foreign portfolio investor data](https://www.cdslindia.com/Publications/ForeignPortInvestor.html) | Final FPI data where available | Separate finalization source and publication date from trade date. Check field definitions before reconciling with NSE provisional data. |
 | Stock/index futures and options daily contracts | [NSE All Reports – Derivatives](https://www.nseindia.com/all-reports-derivatives), UDiFF Common Bhavcopy Final ZIP | Live-validated 7 Nov 2026 for trade date 6 Nov: 40,471 rows, 34 source columns, 218 stock symbols and four recognized instrument types | Use UDiFF final format; NSE marks older common bhavcopy formats discontinued from 8 July 2024. Retain contract identifiers and expiry/strike/option type. Volume/turnover units still require explicit semantic validation before scoring. |
 | Derivatives contract master | NSE All Reports – Derivatives, F&O MII contract file | Contract metadata needed to decode instruments and expiries | Version daily files; validate schema and effective date. |
@@ -105,3 +106,14 @@ The FII workbook OI reconciled exactly with participant FII long+short OI for
 index futures, stock futures and stock options; index options differed by one
 contract. This discrepancy is preserved. Neither source contains individual
 stock FII positions.
+
+
+## NSE-only FII/DII cash-flow live-validation record
+
+The NSE-only daily API collector is implemented in
+`src/fii_engine/nse_fii_dii.py` and
+`.github/workflows/nse-fii-dii-cash-flows.yml`. First live capture:
+[run 42355689812](https://github.com/pagipari-hub/fii-accumulation-engine/actions/runs/42355689812),
+trade date 6 Nov 2026. The response's net values reconciled exactly to
+buy minus sell for both categories. The combined NSE/BSE/MSEI series and
+final NSDL/CDSL FPI data remain separate sources.
