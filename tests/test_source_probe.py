@@ -78,3 +78,11 @@ def test_official_stock_fo_reference_pages_are_probed():
     assert SOURCE_PAGES["nse_fo_individual_securities"] == (
         "https://www.nseindia.com/static/products-services/equity-derivatives-individual-securities"
     )
+
+
+def test_official_bulk_block_deals_page_is_probed():
+    from fii_engine.source_probe import SOURCE_PAGES
+
+    assert SOURCE_PAGES["nse_bulk_block_deals"] == (
+        "https://www.nseindia.com/report-detail/display-bulk-and-block-deals"
+    )
