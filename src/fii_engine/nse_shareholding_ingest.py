@@ -19,7 +19,7 @@ from fii_engine.nse_shareholding_xbrl import parse_xbrl
 TRUSTED_XBRL_HOST = "nsearchives.nseindia.com"
 TRUSTED_XBRL_PATH = "/corporate/xbrl/"
 UNIVERSE_PATH = "data/raw/universe/nifty500_current.csv"
-PARSER_VERSION = 2
+PARSER_VERSION = 3
 
 OWNERSHIP_FIELDS = [
     "reporting_date", "symbol", "company_name", "isin",
@@ -29,8 +29,9 @@ OWNERSHIP_FIELDS = [
     "fpi_total_shares", "fpi_category_i_ownership_percentage_points",
     "fpi_category_ii_ownership_percentage_points",
     "fpi_total_ownership_percentage_points",
-    "other_foreign_institution_shares", "foreign_institutions_total_shares",
-    "fpi_reconciliation_status", "xbrl_sha256", "source_master_sha256",
+    "other_foreign_institution_shares", "overseas_depositories_shares",
+    "foreign_institutions_total_shares", "fpi_reconciliation_status",
+    "xbrl_sha256", "source_master_sha256",
 ]
 
 
@@ -167,7 +168,11 @@ def _read_existing_filings(root: Path) -> dict[tuple[str, str], dict]:
     existing = {}
     for path in directory.glob("filing_*.json"):
         value = json.loads(path.read_text(encoding="utf-8"))
-        key = (str(value["filing"]["record_id"]), value["metadata_sha256"])
+        key = (
+            str(value["filing"]["record_id"]),
+            value["metadata_sha256"],
+            int(value.get("parser_version", 1)),
+        )
         if key in existing:
             raise ValueError(f"duplicate normalized shareholding filing snapshot: {key}")
         existing[key] = value
@@ -233,7 +238,7 @@ def _build_ownership_rows(
                 })
                 continue
             latest = max(candidates, key=_latest_sort_key)
-            key = (latest["record_id"], latest["metadata_sha256"])
+            key = (latest["record_id"], latest["metadata_sha256"], PARSER_VERSION)
             filing = filings_by_key.get(key)
             base = {
                 "reporting_date": reporting_date,
@@ -262,6 +267,7 @@ def _build_ownership_rows(
             fpi_i = categories.get("fpi_category_i", {})
             fpi_ii = categories.get("fpi_category_ii", {})
             other_foreign = categories.get("other_foreign_institutions", {})
+            overseas = categories.get("overseas_depositories", {})
             foreign_total = categories.get("foreign_institutions_total", {})
             reconciliation = next(
                 (item for item in parsed["fpi_reconciliation"] if item["reporting_date"] == reporting_date),
@@ -280,6 +286,7 @@ def _build_ownership_rows(
                     fpi_ii.get("ownership_percentage_points"),
                 ),
                 "other_foreign_institution_shares": other_foreign.get("shares"),
+                "overseas_depositories_shares": overseas.get("shares"),
                 "foreign_institutions_total_shares": foreign_total.get("shares"),
                 "fpi_reconciliation_status": reconciliation.get("status"),
                 "xbrl_sha256": filing["xbrl_sha256"],
@@ -368,7 +375,7 @@ def ingest(root: Path = Path(".")) -> dict:
     ]
 
     for metadata in eligible_records:
-        key = (metadata["record_id"], metadata["metadata_sha256"])
+        key = (metadata["record_id"], metadata["metadata_sha256"], PARSER_VERSION)
         if key in existing:
             reused_count += 1
             continue
@@ -419,7 +426,7 @@ def ingest(root: Path = Path(".")) -> dict:
                 "parsed": parsed,
             }
             filing_path = root / "data/snapshots/shareholding_filings" / (
-                f"filing_{metadata['record_id']}_{metadata['metadata_sha256'][:16]}.json"
+                f"filing_{metadata['record_id']}_{metadata['metadata_sha256'][:16]}_p{PARSER_VERSION}.json"
             )
             _write_json_snapshot(filing_path, filing_value)
             filings_by_key[key] = filing_value
@@ -488,7 +495,7 @@ def ingest(root: Path = Path(".")) -> dict:
         "filing_snapshot_paths": [
             str(
                 root / "data/snapshots/shareholding_filings"
-                / f"filing_{row['record_id']}_{row['metadata_sha256'][:16]}.json"
+                / f"filing_{row['record_id']}_{row['metadata_sha256'][:16]}_p{PARSER_VERSION}.json"
             ).replace(str(root) + "/", "")
             for row in eligible_records
             if (row["record_id"], row["metadata_sha256"]) in filings_by_key
