@@ -1,0 +1,120 @@
+name: Official NSE FII DII cash flows
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/fii_engine/nse_fii_dii.py"
+      - "tests/test_nse_fii_dii.py"
+      - ".github/workflows/nse-fii-dii-cash-flows.yml"
+  pull_request:
+    paths:
+      - "src/fii_engine/nse_fii_dii.py"
+      - "tests/test_nse_fii_dii.py"
+      - ".github/workflows/nse-fii-dii-cash-flows.yml"
+  workflow_dispatch:
+  schedule:
+    # 19:45 IST, Monday to Friday, after the NSE capital-market FII/DII release.
+    - cron: "15 14 * * 1-5"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: official-nse-fii-dii-cash-flows
+  cancel-in-progress: false
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install project and test dependencies
+        run: python -m pip install -e ".[dev]"
+
+      - name: Capture and validate official NSE-only FII/DII data
+        if: github.event_name != 'pull_request'
+        run: python -m fii_engine.nse_fii_dii --repo-root .
+
+      - name: Validate raw response, snapshots and provenance
+        if: github.event_name != 'pull_request'
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          root = Path("data/raw/fii_dii")
+          current_path = root / "current_manifest.json"
+          assert current_path.is_file(), "NSE FII/DII current manifest missing"
+          current = json.loads(current_path.read_text(encoding="utf-8"))
+          assert current["scope"] == "NSE_only"
+          assert current["segment"] == "capital_market"
+          raw = Path(current["raw_response_path"])
+          assert raw.is_file(), f"missing raw response: {raw}"
+          assert hashlib.sha256(raw.read_bytes()).hexdigest() == current["raw_response_sha256"]
+          parsed = current["parsed"]
+          assert parsed["normalized_row_count"] >= 2
+          assert set(parsed["trade_dates"])
+          assert len(current["snapshots"]) == len(parsed["trade_dates"])
+          for item in current["snapshots"]:
+              snapshot = Path(item["snapshot_path"])
+              manifest = Path(item["manifest_path"])
+              assert snapshot.is_file(), f"missing daily snapshot: {snapshot}"
+              assert manifest.is_file(), f"missing provenance: {manifest}"
+              assert hashlib.sha256(snapshot.read_bytes()).hexdigest() == item["snapshot_sha256"]
+              detail = json.loads(manifest.read_text(encoding="utf-8"))
+              assert detail["scope"] == "NSE_only"
+              assert detail["snapshot_sha256"] == item["snapshot_sha256"]
+          latest = max(parsed["trade_dates"])
+          assert latest in parsed["trade_dates"]
+          print(json.dumps({
+              "scope": current["scope"],
+              "segment": current["segment"],
+              "latest_trade_date": latest,
+              "trade_dates_captured": parsed["trade_dates"],
+              "normalized_rows": parsed["normalized_row_count"],
+              "categories": sorted({row["category"] for row in parsed["rows"]}),
+              "raw_sha256": current["raw_response_sha256"],
+              "snapshots": current["snapshots"],
+          }, indent=2))
+          PY
+
+      - name: Run complete project test suite
+        run: pytest
+
+      - name: Commit immutable daily snapshots and manifests
+        if: github.event_name != 'pull_request'
+        run: |
+          if [[ -n "$(git status --porcelain data/snapshots/fii_dii data/raw/fii_dii/manifests)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add data/snapshots/fii_dii data/raw/fii_dii/manifests
+            git commit -m "data: record official NSE FII DII cash flows"
+            git pull --rebase origin "$GITHUB_REF_NAME"
+            git push
+          else
+            echo "No new NSE FII/DII daily snapshot versions."
+          fi
+
+      - name: Upload raw response, snapshots and manifest
+        if: always() && github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: nse-fii-dii-cash-flows-${{ github.run_id }}
+          path: |
+            data/raw/fii_dii/*.json
+            data/raw/fii_dii/manifests/*.json
+            data/snapshots/fii_dii/*.csv
+          if-no-files-found: warn
+          retention-days: 90
