@@ -154,9 +154,11 @@ def test_rejects_participant_csv_schema_drift():
         inspect_csv(payload, "participant_oi", "2026-11-06")
 
 def test_rejects_inconsistent_csv_row_width():
-    payload = b"A,B,C\n1,2,3\n4,5\n"
-    with pytest.raises(ValueError, match="row width differs"):
-        inspect_csv(payload, "participant_volume")
+    lines = _participant_csv("participant_volume").decode().splitlines()
+    lines[2] = lines[2].rsplit(",", 1)[0]
+    payload = ("\n".join(lines) + "\n").encode()
+    with pytest.raises(ValueError, match="fields; expected"):
+        inspect_csv(payload, "participant_volume", "2026-11-06")
 
 
 def test_rejects_non_utf8_csv():
