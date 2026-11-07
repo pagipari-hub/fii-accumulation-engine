@@ -51,3 +51,9 @@ def test_endpoint_extraction_finds_relevant_api_paths_and_deduplicates():
     assert "https://www.nseindia.com/api/market-data" in candidates
     assert "/about" not in candidates
     assert len(candidates) == 2
+
+
+def test_equities_reports_page_is_in_official_source_probe():
+    from fii_engine.source_probe import SOURCE_PAGES
+
+    assert SOURCE_PAGES["nse_equities_reports"] == "https://www.nseindia.com/all-reports"
