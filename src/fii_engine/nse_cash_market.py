@@ -227,9 +227,11 @@ def validate_delivery(payload: bytes, trade_date: str) -> dict:
     symbols = set()
     observation_counts = {
         "reported": 0,
+        "not_reported_with_trades": 0,
         "no_trades_delivery_not_reported": 0,
         "not_reported": 0,
     }
+    unreported_by_series = {}
     for line, row in enumerate(rows, start=2):
         try:
             row_date = datetime.strptime(row["DATE1"], "%d-%b-%Y").date()
@@ -249,20 +251,34 @@ def validate_delivery(payload: bytes, trade_date: str) -> dict:
         delivered = values["DELIV_QTY"]
         pct = values["DELIV_PER"]
         price_fields = ("OPEN_PRICE", "HIGH_PRICE", "LOW_PRICE", "CLOSE_PRICE")
+        series = row["SERIES"]
 
         if traded is None and delivered is None and pct is None:
             if any(values[field] is not None for field in price_fields):
                 raise ValueError(f"delivery row has prices but no quantity observations at line {line}")
             observation_counts["not_reported"] += 1
+            unreported_by_series[series] = unreported_by_series.get(series, 0) + 1
             continue
+
         if traded == Decimal(0) and delivered is None and pct is None:
             observation_counts["no_trades_delivery_not_reported"] += 1
+            unreported_by_series[series] = unreported_by_series.get(series, 0) + 1
             continue
+
+        if traded is not None and traded > 0 and delivered is None and pct is None:
+            # NSE sometimes reports traded quantity while delivery fields are
+            # explicitly unavailable. Keep the price/volume row; do not impute.
+            if any(values[field] is None for field in price_fields):
+                raise ValueError(f"missing OHLC price on traded security at line {line}")
+            observation_counts["not_reported_with_trades"] += 1
+            unreported_by_series[series] = unreported_by_series.get(series, 0) + 1
+            continue
+
         if traded is None or delivered is None or pct is None:
             raw_fields = {
+                "SYMBOL": row["SYMBOL"], "SERIES": series,
                 "TTL_TRD_QNTY": row["TTL_TRD_QNTY"],
-                "DELIV_QTY": row["DELIV_QTY"],
-                "DELIV_PER": row["DELIV_PER"],
+                "DELIV_QTY": row["DELIV_QTY"], "DELIV_PER": row["DELIV_PER"],
             }
             raise ValueError(
                 f"incomplete delivery quantity/percentage fields at line {line}: "
@@ -273,7 +289,7 @@ def validate_delivery(payload: bytes, trade_date: str) -> dict:
         expected = (delivered / traded * 100) if traded else Decimal(0)
         if abs(expected - pct) > Decimal("0.11"):
             raise ValueError(f"delivery percentage mismatch at line {line}")
-        if any(values[field] is None for field in price_fields):
+        if traded > 0 and any(values[field] is None for field in price_fields):
             raise ValueError(f"missing OHLC price on traded security at line {line}")
         observation_counts["reported"] += 1
     return {
@@ -285,6 +301,7 @@ def validate_delivery(payload: bytes, trade_date: str) -> dict:
         "series_counts": {s: sum(1 for r in rows if r["SERIES"] == s)
                           for s in sorted({r["SERIES"] for r in rows})},
         "delivery_observation_counts": observation_counts,
+        "delivery_unreported_by_series": dict(sorted(unreported_by_series.items())),
     }
 
 def _capture(record: dict) -> bytes:
