@@ -107,11 +107,13 @@ def test_stock_summary_keeps_unmatched_and_odi_out_of_direct_fpi_net():
             "symbol": "ABC", "side": "BUY", "quantity": "50", "deal_value": "500.00",
             "counterparty_class": "current_registry_matched_odi_issuer", "temporal_status": "post_trade_snapshot_registration_start_unknown",
             "source_record_count": 1, "cross_report_duplicate": "false",
+            "nifty500_snapshot_member_verified": "true",
         },
         {
             "symbol": "ABC", "side": "SELL", "quantity": "25", "deal_value": "250.00",
             "counterparty_class": "unmatched", "temporal_status": "not_established",
             "source_record_count": 1, "cross_report_duplicate": "false",
+            "nifty500_snapshot_member_verified": "true",
         },
     ]
     universe_rows = [{
