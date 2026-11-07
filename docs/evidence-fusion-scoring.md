@@ -11,15 +11,13 @@ before producing a family observation.
 
 | Evidence family | Short-term (1–4 weeks) | Positional (1–6 months) |
 |---|---:|---:|
-| Quarterly FPI ownership | 5 | 25 |
-| Disclosed bulk/block deals | 10 | 10 |
-| Cash-market behaviour | 25 | 25 |
-| Stock derivatives | 30 | 15 |
-| Participant positioning | 15 | 10 |
-| Sector-relative strength | 15 | 15 |
+| Quarterly FPI ownership | 10 | 35 |
+| Verified FPI disclosed deals | 15 | 15 |
+| Cash-market behaviour (including peer-relative strength) | 35 | 35 |
+| Stock derivatives | 40 | 15 |
 | **Total** | **100** | **100** |
 
-These weights are research starting points, not empirically calibrated parameters.
+Market-wide FII/DII cash flows and participant-category aggregates are deliberately excluded from per-stock scoring. They will be reported as market-regime context alongside the rankings. These weights are research starting points, not empirically calibrated parameters.
 They must be evaluated with historical walk-forward tests before production
 rankings are treated as reliable.
 
@@ -54,9 +52,10 @@ denominator. A stock is rankable only when it has at least 60% coverage, at
 least three observed families and a score of at least 45/100.
 
 Each family contributes at most one normalized score per stock/horizon.
-Correlated indicators must be combined inside the family before the family
-score is supplied, preventing multiple price/volume indicators from inflating
-the final score.
+Price trend, volume, delivery and peer-relative strength are combined inside
+the cash-market family; peer-relative strength is not a separate independent
+family. This prevents correlated price features from inflating either the score
+or the corroboration grade.
 
 ## Evidence grades
 
