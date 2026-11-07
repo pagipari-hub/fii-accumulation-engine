@@ -1,6 +1,11 @@
 name: Yahoo Finance price smoke test
 
 on:
+  pull_request:
+    paths:
+      - "src/fii_engine/yahoo_prices.py"
+      - ".github/workflows/yahoo-price-smoke.yml"
+      - "config/samples/yahoo-smoke-symbols.csv"
   workflow_dispatch:
 
 permissions:
