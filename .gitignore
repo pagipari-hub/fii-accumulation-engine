@@ -153,3 +153,16 @@ Thumbs.db
 !data/raw/historical_backfill/
 data/raw/historical_backfill/*
 !data/raw/historical_backfill/backfill_manifest_current.json
+
+
+# Preserve normalized quarterly shareholding filings and ownership snapshots only.
+!data/snapshots/shareholding_master/
+!data/snapshots/shareholding_master/*.json
+!data/snapshots/shareholding_filings/
+!data/snapshots/shareholding_filings/*.json
+!data/snapshots/shareholding_ownership/
+!data/snapshots/shareholding_ownership/*.csv
+!data/raw/shareholding/
+data/raw/shareholding/*
+!data/raw/shareholding/current_manifest.json
+!data/raw/shareholding/shareholding_ownership_current.csv

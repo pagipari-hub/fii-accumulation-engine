@@ -222,3 +222,14 @@ sources:
     frequency: "quarterly_filing_and_revision"
     status: "endpoint_discovered_schema_probe_pending"
     attribution_scope: "explicit_reported_shareholding_categories_not_inferred_client_identity"
+
+  nse_equity_shareholding_fpi_ownership:
+    description: "Append-only NSE quarterly shareholding XBRL filings and FPI Category I/II ownership"
+    publisher: "National Stock Exchange of India"
+    reference_url: "https://www.nseindia.com/companies-listing/corporate-filings-shareholding-pattern/"
+    master_api_url: "https://www.nseindia.com/api/corporate-share-holdings-master?index=equities"
+    frequency: "weekly_and_filing_revision"
+    status: "production_ingestion_implemented_pending_live_capture"
+    identity_join: "exact_isin_preferred; symbol_and_exact_company_name_only_when_isin_missing; mismatches_rejected"
+    history_policy: "append_only_by_record_id_and_metadata_hash; revisions_preserved"
+    attribution_scope: "reported_quarterly_FPI_Category_I_and_II_ownership_not_daily_transaction_flow"
