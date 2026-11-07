@@ -303,6 +303,10 @@ def capture(output_dir: Path = Path("artifacts/nse-fo-tracker"), repo_root: Path
         report["persistent_raw_path"] = str(persistent_raw)
         report["persistent_current_path"] = str(current_raw)
         report["persistent_manifest_path"] = str(persistent_manifest)
+    (output_dir / "manifest.json").write_text(
+        json.dumps(report, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
     return report
 
 
