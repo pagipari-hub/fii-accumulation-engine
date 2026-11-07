@@ -196,10 +196,16 @@ sources:
     frequency: "daily_and_historical_query"
     option_types: [bulk_deals, block_deals]
     query_parameters: [optionType, from, to, symbol, csv]
-    status: "adapter_implemented_live_validation_pending"
+    status: "live_validated_current_capture"
     finality: "exchange_disclosed_historical_transaction_data"
     attribution_scope: "named_client_transaction_disclosure_not_beneficial_owner_classification"
     primary_format: "CSV_export"
     crosscheck_format: "JSON_page_data_subset"
     history_policy: "immutable_per_trade_date_snapshots_from_overlapping_7_day_queries"
     max_query_range_days: 365
+    last_live_validated_trade_date: "2026-11-06"
+    last_live_validated_range: ["2026-10-30", "2026-11-06"]
+    last_live_validated_bulk_csv_rows: 644
+    last_live_validated_bulk_json_rows: 70
+    last_live_validated_block_csv_rows: 36
+    last_live_validated_block_json_rows: 36
