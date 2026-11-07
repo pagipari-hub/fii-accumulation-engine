@@ -4,7 +4,8 @@ sources:
   nse_nifty500_constituents:
     description: "Official current Nifty 500 constituent CSV snapshot"
     publisher: "NSE Indices"
-    reference_url: "https://www.nseindia.com/static/products-services/indices-nifty500-index"
+    reference_url: "https://www.niftyindices.com/indices/equity/broad-based-indices/NIFTY-500"
+    download_url: "https://www.niftyindices.com/IndexConstituent/ind_nifty500list.csv"
     frequency: "monthly_or_on_change"
     required_fields: [symbol, company_name, industry, series, isin]
     status: "adapter_implemented_pending_live_validation"
