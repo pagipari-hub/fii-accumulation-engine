@@ -128,6 +128,8 @@ def run_pipeline(root: Path) -> dict:
             "as_of_trade_date": history["as_of_trade_date"],
             "daily_stock_session_count": history["daily_stock_session_count"],
             "market_flow_session_count": history["market_flow_session_count"],
+            "participant_oi_session_count": history["participant_oi_session_count"],
+            "participant_volume_session_count": history["participant_volume_session_count"],
             "windows_sessions": history["windows_sessions"],
         }
     except Exception as exc:
