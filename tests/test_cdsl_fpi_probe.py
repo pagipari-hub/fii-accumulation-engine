@@ -1,6 +1,10 @@
 from urllib.parse import parse_qs
 
-from fii_engine.cdsl_fpi_probe import _post_archive_date, summarize_html
+from fii_engine.cdsl_fpi_probe import (
+    _post_archive_date,
+    parse_registry_html,
+    summarize_html,
+)
 
 
 def test_summary_parser_extracts_tables_and_archive_links():
@@ -81,3 +85,33 @@ def test_archive_post_uses_captured_form_state_and_checks_requested_date(tmp_pat
     assert result["status"] == "success"
     assert result["response_date_match"] is True
     assert (tmp_path / "archive_2026-11-06.html").exists()
+
+
+def test_registry_parser_extracts_registration_identity_and_validity():
+    payload = b"""
+    <html><body>
+      <table>
+        <tr><td>1. Name</td><td>BNP PARIBAS FINANCIAL MARKETS</td></tr>
+        <tr><td>Registration No.</td><td>INFRFP085515</td></tr>
+        <tr><td>Registration valid upto</td><td>05-05-2027 00:00:00</td></tr>
+        <tr><td>Country Name</td><td>FRANCE</td></tr>
+        <tr><td>Address</td><td>PARIS</td></tr>
+      </table>
+    </body></html>
+    """
+    records = parse_registry_html(payload)
+    assert records == [{
+        "registered_name": "BNP PARIBAS FINANCIAL MARKETS",
+        "registration_no": "INFRFP085515",
+        "valid_upto": "05-05-2027 00:00:00",
+        "country": "FRANCE",
+        "address": "PARIS",
+    }]
+
+
+def test_registry_parser_ignores_layout_tables_without_registration_number():
+    payload = b"""
+    <table><tr><td>Navigation</td><td>Home</td></tr></table>
+    <table><tr><td>1. Name</td><td>Fund Name</td></tr></table>
+    """
+    assert parse_registry_html(payload) == []
