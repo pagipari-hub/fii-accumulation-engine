@@ -102,15 +102,19 @@ sources:
     reference_url: "https://www.nseindia.com/all-reports-derivatives"
     frequency: "daily"
     required_fields: [trade_date, participant_category]
-    status: "source_verified_schema_pending"
+    status: "adapter_implemented_live_validation_pending"
+    catalogue_api: "https://www.nseindia.com/api/daily-reports?key=FO"
+    report_key: "FO-PARTICIPANTWISE-OI"
     attribution_scope: "participant_category_aggregate_not_stock_specific"
   nse_fo_participant_volume:
     description: "Participant-category aggregate derivatives trading volume"
     publisher: "National Stock Exchange of India"
     reference_url: "https://www.nseindia.com/all-reports-derivatives"
     frequency: "daily"
-    required_fields: [trade_date, participant_category]
-    status: "source_verified_schema_pending"
+    required_fields: [participant_category, instrument_group, long_positions, short_positions]
+    status: "adapter_implemented_live_validation_pending"
+    catalogue_api: "https://www.nseindia.com/api/daily-reports?key=FO"
+    report_key: "FO-PARTICIPANTWISE-TRADING-VOL"
     attribution_scope: "participant_category_aggregate_not_stock_specific"
   nse_fii_derivatives_statistics:
     description: "Aggregate FII derivatives statistics"
@@ -118,7 +122,9 @@ sources:
     reference_url: "https://www.nseindia.com/all-reports-derivatives"
     frequency: "daily"
     required_fields: [trade_date]
-    status: "source_verified_schema_pending"
+    status: "adapter_implemented_live_validation_pending"
+    catalogue_api: "https://www.nseindia.com/api/daily-reports?key=FO"
+    report_key: "FO-FII-DERIVATIVE-STAT"
     attribution_scope: "aggregate_fii_derivatives_only"
   nse_stock_mwpl:
     description: "Stock MWPL utilization and ban context reports"

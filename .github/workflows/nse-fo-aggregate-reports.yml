@@ -1,0 +1,110 @@
+name: Official NSE participant and FII derivatives reports
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/fii_engine/nse_fo_aggregate_reports.py"
+      - "tests/test_nse_fo_aggregate_reports.py"
+      - "pyproject.toml"
+      - ".github/workflows/nse-fo-aggregate-reports.yml"
+  pull_request:
+    paths:
+      - "src/fii_engine/nse_fo_aggregate_reports.py"
+      - "tests/test_nse_fo_aggregate_reports.py"
+      - "pyproject.toml"
+      - ".github/workflows/nse-fo-aggregate-reports.yml"
+  workflow_dispatch:
+  schedule:
+    # 21:35 IST, Monday to Friday, after the derivatives reports are published.
+    - cron: "5 16 * * 1-5"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: official-nse-fo-aggregate-reports
+  cancel-in-progress: false
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install project and test dependencies
+        run: python -m pip install -e ".[dev]"
+
+      - name: Capture official participant OI, volume and FII statistics
+        if: github.event_name != 'pull_request'
+        run: python -m fii_engine.nse_fo_aggregate_reports --repo-root .
+
+      - name: Validate raw files and schema-inspection manifests
+        if: github.event_name != 'pull_request'
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          current_path = Path("data/raw/fno_aggregate_reports/current_manifest.json")
+          assert current_path.is_file(), "aggregate report current manifest missing"
+          current = json.loads(current_path.read_text(encoding="utf-8"))
+          assert len(current["datasets"]) == 3
+          for dataset in current["datasets"]:
+              raw_path = Path(dataset["raw_path"])
+              assert raw_path.is_file(), f"missing raw file: {raw_path}"
+              raw_hash = hashlib.sha256(raw_path.read_bytes()).hexdigest()
+              assert raw_hash == dataset["raw_sha256"]
+              manifest_path = Path(dataset["manifest_path"])
+              assert manifest_path.is_file(), f"missing provenance: {manifest_path}"
+              manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+              assert manifest["raw_sha256"] == raw_hash
+              print(json.dumps({
+                  "dataset": dataset["dataset"],
+                  "trade_date": dataset["trading_date"],
+                  "filename": dataset["filename"],
+                  "bytes": dataset["raw_bytes"],
+                  "sha256": raw_hash,
+                  "inspection": dataset["inspection"],
+              }, indent=2, default=str))
+          PY
+
+      - name: Run complete project test suite
+        run: pytest
+
+      - name: Commit immutable source manifests
+        if: github.event_name != 'pull_request'
+        run: |
+          if [[ -n "$(git status --porcelain data/raw/fno_aggregate_reports/manifests)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add data/raw/fno_aggregate_reports/manifests
+            git commit -m "data: record NSE participant and FII report provenance"
+            git pull --rebase origin "$GITHUB_REF_NAME"
+            git push
+          else
+            echo "No new participant/FII report versions; manifests unchanged."
+          fi
+
+      - name: Upload original reports and schema inspection
+        if: always() && github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: nse-fo-aggregate-reports-${{ github.run_id }}
+          path: |
+            data/raw/fno_aggregate_reports/*.csv
+            data/raw/fno_aggregate_reports/*.xls
+            data/raw/fno_aggregate_reports/current_manifest.json
+            data/raw/fno_aggregate_reports/manifests/*.json
+          if-no-files-found: warn
+          retention-days: 90
