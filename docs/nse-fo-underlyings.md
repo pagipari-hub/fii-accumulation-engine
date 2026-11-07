@@ -21,11 +21,19 @@ retrieval time as a point-in-time observation and does not invent a membership
 effective date. The official Introduction/Exclusion Tracker provides historical
 change events and circular references, but it is not a complete baseline by itself.
 
+## Live validation (7 November 2026)
+
+The official API returned 6 index underlyings and 218 individual-stock underlyings.
+The normalized snapshot is content-addressed and has passed live schema, uniqueness,
+and serial-sequence validation. The API does not provide a precise effective date.
+
 ## Data boundary
 
 The current list is authoritative for current individual-stock underlying
 membership. It is not a replacement for contract-level data such as expiry,
-instrument type, lot size, or daily open interest. The separate NSE FO MII contract
+instrument type, lot size, or daily open interest. The Introduction/Exclusion
+tracker provides effective-dated changes; its `ZOMATO` introduction reconciles to
+current `ETERNAL` through NSE F&O circular 54/2025 (effective 9 April 2025). The separate NSE FO MII contract
 master remains quarantined because the captured file's internal dates were stale
 relative to its catalogue trading date.
 
