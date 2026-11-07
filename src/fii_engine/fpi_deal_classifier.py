@@ -607,6 +607,13 @@ def classify(root: Path = Path("."), lookback_days: int = 7) -> dict:
         "nifty500_verified_event_count": sum(
             event["nifty500_member_verified"] == "true" for event in events
         ),
+        "source_isin_supplied_event_count": sum(
+            bool(event["source_isin"]) for event in events
+        ),
+        "universe_join_method_counts": {
+            method: sum(event["universe_join_method"] == method for event in events)
+            for method in sorted({event["universe_join_method"] for event in events})
+        },
         "nifty500_verified_symbol_count": sum(
             row["nifty500_member_verified"] == "true" for row in stock_rows
         ),
