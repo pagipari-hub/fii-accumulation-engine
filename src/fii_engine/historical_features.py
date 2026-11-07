@@ -283,12 +283,12 @@ def _window_market(
                 fields[target] = None
             else:
                 fields[target] = format(sum(values, Decimal(0)), ".2f")
-        total_gross = sum(
-            (_decimal(row["gross_turnover_crore"]) for row in rows), Decimal(0)
-        )
-        total_net = sum(
-            (_decimal(row["net_value_crore"]) for row in rows), Decimal(0)
-        )
+        gross_values = [_decimal(row["gross_turnover_crore"]) for row in rows]
+        net_values = [_decimal(row["net_value_crore"]) for row in rows]
+        if any(value is None for value in gross_values + net_values):
+            return {"status": "partial_observations", "sessions_available": len(rows)}
+        total_gross = sum(gross_values, Decimal(0))
+        total_net = sum(net_values, Decimal(0))
         fields["net_flow_ratio"] = (
             format(total_net / total_gross, ".6f") if total_gross != 0 else None
         )
