@@ -1,0 +1,118 @@
+name: Official NSE UDiFF derivatives bhavcopy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/fii_engine/nse_fo_bhavcopy.py"
+      - "tests/test_nse_fo_bhavcopy.py"
+      - "config/sources.yaml"
+      - "docs/nse-udiff-ingestion.md"
+      - ".github/workflows/nse-udiff-fo-bhavcopy.yml"
+  pull_request:
+    paths:
+      - "src/fii_engine/nse_fo_bhavcopy.py"
+      - "tests/test_nse_fo_bhavcopy.py"
+      - "config/sources.yaml"
+      - "docs/nse-udiff-ingestion.md"
+      - ".github/workflows/nse-udiff-fo-bhavcopy.yml"
+  workflow_dispatch:
+  schedule:
+    # 21:15 IST, Monday to Friday; source catalogue determines the actual report date.
+    - cron: "45 15 * * 1-5"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: official-nse-udiff-fo-bhavcopy
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install project and test dependencies
+        run: python -m pip install -e ".[dev]"
+
+      - name: Capture and validate official final UDiFF bhavcopy
+        if: github.event_name != 'pull_request'
+        run: python -m fii_engine.nse_fo_bhavcopy --repo-root .
+
+      - name: Validate provenance manifest and parsed dataset
+        if: github.event_name != 'pull_request'
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+
+          root = Path("data/raw/fno_bhavcopy")
+          current = root / "nse_fo_udiff_current_manifest.json"
+          assert current.is_file(), "current UDiFF manifest missing"
+          manifest = json.loads(current.read_text(encoding="utf-8"))
+          assert manifest["finality"] == "final"
+          assert manifest["attribution_scope"] == "market_wide_contract_activity_not_participant_specific"
+          assert manifest["validation"]["row_count"] > 0
+          assert manifest["validation"]["trade_date"] == manifest["trading_date"]
+          assert manifest["raw_zip_sha256"] and manifest["csv_sha256"]
+          raw = Path(manifest["raw_archive_path"])
+          parsed = Path(manifest["parsed_csv_path"])
+          assert raw.is_file() and parsed.is_file()
+          assert raw.stat().st_size == manifest["raw_zip_bytes"]
+          assert parsed.stat().st_size == manifest["csv_bytes"]
+          with parsed.open(newline="", encoding="utf-8-sig") as handle:
+              reader = csv.DictReader(handle)
+              assert reader.fieldnames
+              first = next(reader, None)
+              assert first and first["TradDt"] == manifest["trading_date"]
+          print(json.dumps({
+              "trade_date": manifest["trading_date"],
+              "rows": manifest["validation"]["row_count"],
+              "instrument_types": manifest["validation"]["instrument_type_counts"],
+              "raw_zip_bytes": manifest["raw_zip_bytes"],
+              "raw_sha256": manifest["raw_zip_sha256"],
+              "schema_sha256": manifest["validation"]["schema_sha256"],
+          }, indent=2))
+          PY
+
+      - name: Run complete project test suite
+        run: pytest
+
+      - name: Commit immutable provenance manifest
+        if: github.event_name != 'pull_request'
+        run: |
+          if [[ -n "$(git status --porcelain data/raw/fno_bhavcopy/manifests)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add data/raw/fno_bhavcopy/manifests
+            git commit -m "data: record NSE UDiFF derivatives provenance"
+            git pull --rebase origin "$GITHUB_REF_NAME"
+            git push
+          else
+            echo "No new UDiFF source version; provenance manifest unchanged."
+          fi
+
+      - name: Upload original archive, parsed data and run manifest
+        if: always() && github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: nse-fo-udiff-${{ github.run_id }}
+          path: |
+            data/raw/fno_bhavcopy/*.zip
+            data/raw/fno_bhavcopy/*_current_manifest.json
+            data/processed/fno_bhavcopy/*.csv
+            data/raw/fno_bhavcopy/manifests/*.json
+          if-no-files-found: warn
+          retention-days: 90

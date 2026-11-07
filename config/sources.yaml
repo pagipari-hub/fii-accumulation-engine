@@ -81,8 +81,12 @@ sources:
     reference_url: "https://www.nseindia.com/all-reports-derivatives"
     frequency: "daily"
     required_fields: [trade_date, instrument, symbol, expiry, open_interest, traded_volume]
-    status: "source_verified_schema_pending"
+    status: "adapter_implemented_live_validation_pending"
     finality: "final"
+    catalogue_api: "https://www.nseindia.com/api/daily-reports?key=FO"
+    report_key: "FO-UDIFF-BHAVCOPY-CSV"
+    archive_host: "nsearchives.nseindia.com"
+    archive_policy: "content_addressed_raw_archive_and_parsed_csv_as_workflow_artifact; immutable_sha256_manifest_committed"
   nse_fo_contract_master:
     description: "F&O MII contract master"
     publisher: "National Stock Exchange of India"
