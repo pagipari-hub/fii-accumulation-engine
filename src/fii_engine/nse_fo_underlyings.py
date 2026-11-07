@@ -266,6 +266,23 @@ def ingest(root: Path = Path(".")) -> dict:
         }
         manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     current_path.write_bytes(normalized)
+    current_manifest_path = raw_dir / "fno_underlyings_current_manifest.json"
+    current_manifest = {
+        "dataset": "nse_individual_stock_fno_underlyings",
+        "publisher": "National Stock Exchange of India",
+        "source_page": SOURCE_PAGE,
+        "source_api": API_URL,
+        "retrieved_at_utc": retrieved_at,
+        "source_effective_date": None,
+        "index_underlying_count": len(indexes),
+        "individual_stock_underlying_count": len(stocks),
+        "raw_sha256": raw_hash,
+        "normalized_sha256": normalized_hash,
+        "snapshot_manifest": str(manifest_path),
+    }
+    current_manifest_path.write_text(
+        json.dumps(current_manifest, indent=2) + "\\n", encoding="utf-8"
+    )
 
     as_of_date = datetime.now(ZoneInfo("Asia/Kolkata")).date()
     tracker_path = root / "data/raw/fno_tracker/fno_tracker_current.xlsx"
@@ -310,6 +327,7 @@ def ingest(root: Path = Path(".")) -> dict:
         "current_path": str(current_path),
         "snapshot_path": str(snapshot_path),
         "manifest_path": str(manifest_path),
+        "current_manifest_path": str(current_manifest_path),
         "reconciliation": reconciliation,
         "reconciliation_path": str(reconciliation_path),
         "reconciliation_current_path": str(reconciliation_current_path),
