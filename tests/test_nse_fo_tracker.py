@@ -1,9 +1,10 @@
+from datetime import date
 from io import BytesIO
 
 import pytest
 from openpyxl import Workbook
 
-from fii_engine.nse_fo_tracker import find_tracker_url, inspect_workbook
+from fii_engine.nse_fo_tracker import find_tracker_url, inspect_workbook, parse_tracker_events
 
 
 def test_find_tracker_url_uses_nse_link_text_and_resolves_relative_url():
@@ -54,3 +55,29 @@ def test_inspect_workbook_extracts_sheet_names_and_preview_rows():
 def test_inspect_workbook_rejects_non_xlsx_payload():
     with pytest.raises(ValueError, match="not an XLSX"):
         inspect_workbook(b"not a workbook")
+
+
+def test_parse_tracker_events_propagates_merged_effective_dates_and_circulars():
+    workbook = Workbook()
+    intro = workbook.active
+    intro.title = "Introduction"
+    intro.append([None, "Sr No", "Symbol", "Security Name", "Effective Date", "Circular Link"])
+    intro.append([None, 1, "ABC", "ABC Limited", "November 29, 2024", "https://nsearchives.nseindia.com/a.pdf"])
+    intro.append([None, 2, "XYZ", "XYZ Limited", None, None])
+    intro.merge_cells("E2:E3")
+    intro.merge_cells("F2:F3")
+
+    exclusion = workbook.create_sheet("Exclusion")
+    exclusion.append([None, "Sr No", "Symbol", "Security Name", "Effective Date", "Circular Link"])
+    exclusion.append([None, 1, "PQR", "PQR Limited", "November 25, 2026", "https://nsearchives.nseindia.com/b.pdf"])
+
+    output = BytesIO()
+    workbook.save(output)
+    workbook.close()
+
+    result = parse_tracker_events(output.getvalue(), date(2026, 11, 7))
+    assert result["summary"]["introduction"]["effective_as_of_date"] == 2
+    assert result["summary"]["exclusion"]["future_scheduled"] == 1
+    assert result["events"][1]["effective_date"] == "2024-11-29"
+    assert result["events"][1]["circular_links"] == ["https://nsearchives.nseindia.com/a.pdf"]
+    assert result["baseline_required"] is True
