@@ -23,17 +23,32 @@ def _utc_now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-def _compact_result(result):
+def _portable(value, root: Path):
+    if isinstance(value, dict):
+        return {key: _portable(item, root) for key, item in value.items()}
+    if isinstance(value, list):
+        return [_portable(item, root) for item in value]
+    if isinstance(value, str):
+        path = Path(value)
+        if path.is_absolute():
+            try:
+                return path.resolve().relative_to(root.resolve()).as_posix()
+            except ValueError:
+                return value
+    return value
+
+
+def _compact_result(result, root: Path):
     if not isinstance(result, dict):
         return str(result)
     compact = {}
     for key, value in result.items():
         if isinstance(value, (str, int, float, bool)) or value is None:
-            compact[key] = value
+            compact[key] = _portable(value, root)
         elif isinstance(value, dict) and key in {
             "counts", "summary", "reconciliation", "validation",
         }:
-            compact[key] = value
+            compact[key] = _portable(value, root)
         elif isinstance(value, list):
             compact[f"{key}_count"] = len(value)
     return compact
@@ -60,7 +75,7 @@ def run_pipeline(root: Path) -> dict:
                 "status": "success",
                 "started_at_utc": started,
                 "completed_at_utc": _utc_now(),
-                "result": _compact_result(result),
+                "result": _compact_result(result, root),
             }
         except Exception as exc:  # one feed must not suppress independent evidence
             statuses[name] = {
