@@ -233,3 +233,16 @@ sources:
     identity_join: "exact_isin_preferred; symbol_and_exact_company_name_only_when_isin_missing; mismatches_rejected"
     history_policy: "append_only_by_record_id_and_metadata_hash; revisions_preserved"
     attribution_scope: "reported_quarterly_FPI_Category_I_and_II_ownership_not_daily_transaction_flow"
+
+  cdsl_registered_fpi_directory:
+    description: "Official CDSL alphabetic register of registered Foreign Portfolio Investors"
+    publisher: "Central Depository Services (India) Limited"
+    reference_url: "https://www.cdslindia.com/Publications/RegForeignInstInvstr.aspx"
+    alphabetic_url_template: "https://www.cdslindia.com/Publications/RegForeignInstInvstr.aspx?indexname={letter}"
+    frequency: "daily_weekday_snapshot"
+    required_fields: [registered_name, registration_no, valid_upto_date]
+    status: "live_validated_all_26_letter_pages"
+    parser_version: 1
+    record_policy: "all records retained; duplicate names and registration numbers preserved"
+    temporal_boundary: "validity_end_date_available; registration_start_date_not_published; historical active status requires same-day registry snapshot"
+    attribution_scope: "counterparty_identity_reference_only_not_transaction_flow"

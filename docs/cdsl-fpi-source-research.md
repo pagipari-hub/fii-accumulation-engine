@@ -36,3 +36,14 @@ CDSL is a potential independent, custodian-reported FPI source to complement NSE
 ## Current status
 
 The source probe is discovery-only. It captures official page HTML, response metadata, table samples and archive links. No CDSL figures enter scoring until archive coverage, table structure, amendments, transaction semantics and identity joins are validated against real downloadable records.
+
+
+## Production registry snapshots
+
+The production collector fetches all 26 alphabetic CDSL directory pages, preserves raw HTML in a 90-day workflow artifact, and writes immutable normalized CSV snapshots with per-page SHA-256 provenance. Duplicate registration numbers and duplicate names are retained and counted; they are not silently collapsed. Name normalization is deterministic and conservative (case, punctuation/spacing, and explicit legal suffix variants only); no fuzzy matching is used.
+
+The current directory snapshot exposes validity end dates but not registration start dates. Therefore:
+- A counterparty found in the current register is a current-snapshot identity match.
+- A same-day registry snapshot can support presence on the trade date, subject to the published validity end date.
+- A registry snapshot collected after a historical trade date cannot, by itself, prove that the entity was registered on that earlier date.
+- A name absent from the register is unresolved, not proof that the counterparty is not an FPI.

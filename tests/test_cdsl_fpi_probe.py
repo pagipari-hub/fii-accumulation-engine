@@ -1,10 +1,7 @@
 from urllib.parse import parse_qs
 
-from fii_engine.cdsl_fpi_probe import (
-    _post_archive_date,
-    parse_registry_html,
-    summarize_html,
-)
+from fii_engine.cdsl_fpi_probe import _post_archive_date, summarize_html
+from fii_engine.cdsl_fpi_registry import parse_registry_html
 
 
 def test_summary_parser_extracts_tables_and_archive_links():
@@ -103,7 +100,7 @@ def test_registry_parser_extracts_registration_identity_and_validity():
     assert records == [{
         "registered_name": "BNP PARIBAS FINANCIAL MARKETS",
         "registration_no": "INFRFP085515",
-        "valid_upto": "05-05-2027 00:00:00",
+        "valid_upto_raw": "05-05-2027 00:00:00",
         "country": "FRANCE",
         "address": "PARIS",
     }]
