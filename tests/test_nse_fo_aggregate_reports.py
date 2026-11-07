@@ -330,3 +330,21 @@ def test_cross_checks_fii_participant_oi_against_fii_statistics():
     assert result["comparisons"]["index_futures"]["status"] == "exact_match"
     assert result["comparisons"]["index_options"]["difference"] == 1
     assert result["max_absolute_difference"] == 1
+
+
+def test_capture_dataset_persists_content_addressed_normalized_history(tmp_path, monkeypatch):
+    import hashlib
+    import csv
+    from fii_engine import nse_fo_aggregate_reports as module
+
+    raw = _participant_csv("participant_oi")
+    monkeypatch.setattr(module, "_get", lambda *args, **kwargs: raw)
+    result = capture_dataset("participant_oi", _catalogue(), tmp_path)
+
+    snapshot = tmp_path / result["snapshot_path"]
+    assert snapshot.is_file()
+    assert hashlib.sha256(snapshot.read_bytes()).hexdigest() == result["snapshot_sha256"]
+    with snapshot.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    assert len(rows) == 48
+    assert {row["participant_category"] for row in rows} == {"Client", "DII", "FII", "Pro"}
