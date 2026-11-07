@@ -113,14 +113,14 @@ def parse_registry_html(payload: bytes) -> list[dict[str, str]]:
                 continue
             label = row[0].strip().lower().rstrip(":")
             value = row[1].strip()
-            if label.endswith("name") and "registration" not in label:
+            if label.startswith("country name"):
+                fields.setdefault("country", value)
+            elif label.endswith("name") and "registration" not in label:
                 fields.setdefault("name", value)
             elif label.startswith("registration no"):
                 fields.setdefault("registration_no", value)
             elif label.startswith("registration valid upto"):
                 fields.setdefault("valid_upto", value)
-            elif label.startswith("country name"):
-                fields.setdefault("country", value)
             elif label == "address":
                 fields.setdefault("address", value)
         if fields.get("name") and fields.get("registration_no"):
