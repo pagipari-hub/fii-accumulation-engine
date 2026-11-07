@@ -139,7 +139,7 @@ def inspect_csv(
     lines = [line.rstrip("\r") for line in decoded.splitlines() if line.strip()]
     if len(lines) < 3:
         raise ValueError(f"{dataset}: CSV has no title/header/data structure")
-    title = lines[0].strip().strip('"').strip()
+    title = lines[0].strip().rstrip(",").strip().strip('"').strip()
     expected_title = {
         "participant_oi": "Open Interest",
         "participant_volume": "Trading Volume",
