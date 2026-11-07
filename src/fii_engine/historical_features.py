@@ -546,6 +546,7 @@ def build_historical_features(root: Path = Path(".")) -> dict:
             "Futures buildup counts describe market-wide contract activity, not FII attribution.",
             "Market-wide FII/FPI and DII aggregates are separate context and never stock-level attribution.",
             "FII/FPI publication status is preserved; rolling sums are not a final custodial series.",
+            "Participant OI and volume are participant-category aggregates, never participant-by-stock positions.",
         ],
     }
     manifest_path = output_dir / "historical_features_current_manifest.json"
