@@ -22,6 +22,8 @@ SOURCE_PAGES = {
     "nse_fii_dii": "https://www.nseindia.com/reports/fii-dii",
     "nse_equities_reports": "https://www.nseindia.com/all-reports",
     "nse_derivatives": "https://www.nseindia.com/all-reports-derivatives",
+    "nse_fo_contract_information": "https://www.nseindia.com/static/products-services/equity-derivatives-contract-information",
+    "nse_fo_individual_securities": "https://www.nseindia.com/static/products-services/equity-derivatives-individual-securities",
 }
 USER_AGENT = (
     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
