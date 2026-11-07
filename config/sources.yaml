@@ -187,3 +187,14 @@ sources:
     last_live_validated_rows: 3559
     last_live_validated_delivery_reported_rows: 3325
     last_live_validated_delivery_unreported_rows: 234
+
+  nse_bulk_block_deals:
+    description: "Official NSE historical bulk and block deal disclosures"
+    publisher: "National Stock Exchange of India"
+    reference_url: "https://www.nseindia.com/report-detail/display-bulk-and-block-deals"
+    api_url: "https://www.nseindia.com/api/historicalOR/bulk-block-short-deals"
+    frequency: "daily_and_historical_query"
+    option_types: [bulk_deals, block_deals]
+    query_parameters: [optionType, from, to, symbol, csv]
+    status: "endpoint_discovered_schema_validation_pending"
+    attribution_scope: "named_client_transaction_disclosure_not_beneficial_owner_classification"
