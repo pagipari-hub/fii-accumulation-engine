@@ -9,16 +9,23 @@
 
 The endpoint paths above are taken from the official NSE page's same-origin JavaScript and HTML. The page separates Equity and SME shareholding patterns and provides company and date filters, CSV download and filing detail.
 
-## Probe
+## Probe findings
 
-`src/fii_engine/nse_shareholding_probe.py` captures the official schema JSON, equity master response and RSS XML after bootstrapping a session from the report page. It stores raw bytes, HTTP metadata, hashes, top-level keys, columns/row samples and RSS item details as a workflow artifact. It is a research probe, not a production ingestion adapter.
+`src/fii_engine/nse_shareholding_probe.py` established the official schema, master and RSS endpoints. The current master response contained 2,370 records for the 30-Sep-2026 reporting quarter, including revised filings and XBRL links. The RSS feed is a change-discovery aid, not a complete historical source.
 
-## What must be established before production
+The XBRL parser reads explicit `CategoryOfShareholdersAxis` members. FPI Category I and II remain separate from other foreign institutions. It validates instant reporting periods, preserves entity identifiers and dimensions, and rejects ambiguous duplicate contexts rather than silently overwriting them.
 
-1. The master response's exact row schema and whether it is a full historical master or a limited current view.
-2. Distinct fields for quarter-end date, filing/submission date, last modified/revised date and any record identifier.
-3. How CSV and XBRL links are represented, and whether the same filing can be revised under a new record ID.
-4. How explicit FPI category rows are encoded (including FPI Category I/II or other applicable subcategories) and how share counts/percentages reconcile to totals.
-5. How to identify the latest valid filing for a company-quarter without discarding prior revisions.
+## Production ingestion
 
-Quarter-end date and filing date must never be conflated. An increase in FPI ownership is evidence of reported ownership change, but not proof of daily accumulation or the date the shares were purchased. The RSS feed is useful for change detection but is not assumed to be complete historical coverage.
+`src/fii_engine/nse_shareholding_ingest.py` now:
+
+- Captures the official equity master after an NSE session bootstrap.
+- Joins to the current Nifty 500 by exact ISIN. If the master ISIN is missing, symbol plus exact normalized company name is required. A present but mismatched ISIN is rejected.
+- Fetches all eligible filing records, including revisions, and preserves them append-only by record ID and metadata hash.
+- Stores normalized filing JSON, master snapshots and quarterly ownership CSV snapshots in the repository. Raw XBRL XML and raw master payloads remain in workflow artifacts.
+- Selects the latest filing for each company-quarter by broadcast/system timestamp while retaining earlier revisions.
+- Extracts FPI Category I/II shares and percentage points, while keeping other foreign institutions separate and preserving reconciliation status.
+
+The master API may expose only the currently available filing period. Captured quarterly snapshots accumulate from the first production run; no earlier quarter is invented or assumed. Until two validated quarters exist for a stock, quarter-on-quarter ownership change is unavailable.
+
+Quarter-end date and filing date must never be conflated. An increase in FPI ownership is evidence of reported ownership change, but not proof of daily accumulation or the date the shares were purchased. This dataset is ownership evidence, not a daily transaction feed.
