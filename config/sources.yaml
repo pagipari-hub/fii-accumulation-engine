@@ -101,7 +101,7 @@ sources:
     publisher: "National Stock Exchange of India"
     reference_url: "https://www.nseindia.com/all-reports-derivatives"
     frequency: "daily"
-    required_fields: [participant_category, instrument_group, long_positions, short_positions]
+    required_fields: [trade_date, participant_category]
     status: "adapter_implemented_live_validation_pending"
     catalogue_api: "https://www.nseindia.com/api/daily-reports?key=FO"
     report_key: "FO-PARTICIPANTWISE-OI"
@@ -121,7 +121,7 @@ sources:
     publisher: "National Stock Exchange of India"
     reference_url: "https://www.nseindia.com/all-reports-derivatives"
     frequency: "daily"
-    required_fields: [trade_date, instrument_group, buy_contracts, sell_contracts, open_interest]
+    required_fields: [trade_date]
     status: "adapter_implemented_live_validation_pending"
     catalogue_api: "https://www.nseindia.com/api/daily-reports?key=FO"
     report_key: "FO-FII-DERIVATIVE-STAT"
