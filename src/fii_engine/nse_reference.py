@@ -210,7 +210,7 @@ def inspect_fo_quality(expanded: bytes, trading_date: str) -> dict:
             int(raw_expiry), tz=__import__("datetime").timezone.utc
         ).date()
         expiries.append(expiry)
-        if expiry >= report_date:
+        if expiry >= report_date and row.get("PrtdToTrad") == "1":
             future_rows += 1
     latest_expiry = max(expiries).isoformat() if expiries else None
     issues = []
@@ -288,10 +288,10 @@ def ingest(output_dir: Path = Path("artifacts/nse-reference")) -> dict:
     cm_capture = _capture(cm_record, CM_REPORT_PAGE, output_dir)
     fo_capture = _capture(fo_record, FO_REPORT_PAGE, output_dir)
     cm_expanded = gzip.decompress(
-        (output_dir / cm_capture["raw_artifact_path"].split("/")[-1]).read_bytes()
+        (output_dir / "raw" / cm_capture["raw_artifact_path"].split("/")[-1]).read_bytes()
     )
     fo_expanded = gzip.decompress(
-        (output_dir / fo_capture["raw_artifact_path"].split("/")[-1]).read_bytes()
+        (output_dir / "raw" / fo_capture["raw_artifact_path"].split("/")[-1]).read_bytes()
     )
     quality = {
         "cm_security_master": inspect_cm_quality(cm_expanded, cm_record["trading_date"]),
