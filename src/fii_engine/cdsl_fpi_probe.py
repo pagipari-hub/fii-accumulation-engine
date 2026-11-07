@@ -9,6 +9,7 @@ from datetime import datetime, timezone
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.error import HTTPError, URLError
+from urllib.parse import urlencode
 from urllib.request import HTTPCookieProcessor, Request, build_opener
 from http.cookiejar import CookieJar
 
@@ -29,6 +30,7 @@ class _SummaryParser(HTMLParser):
         super().__init__(convert_charrefs=True)
         self.tables: list[list[list[str]]] = []
         self.links: list[dict[str, str]] = []
+        self.inputs: list[dict[str, str]] = []
         self._table: list[list[str]] | None = None
         self._row: list[str] | None = None
         self._cell: list[str] | None = None
@@ -44,6 +46,13 @@ class _SummaryParser(HTMLParser):
             self._cell = []
         elif tag == "a":
             self._anchor = {"href": attributes.get("href") or "", "text": ""}
+        elif tag == "input":
+            item = {
+                key: str(attributes.get(key) or "")
+                for key in ("name", "value", "type", "id")
+            }
+            item["checked"] = "true" if "checked" in attributes else ""
+            self.inputs.append(item)
 
     def handle_data(self, data: str) -> None:
         text = " ".join(data.split())
@@ -80,6 +89,8 @@ def summarize_html(payload: bytes) -> dict:
         "tables": [table[:15] for table in parser.tables[:30]],
         "link_count": len(parser.links),
         "links": parser.links[:500],
+        "input_count": len(parser.inputs),
+        "inputs": parser.inputs[:500],
     }
 
 
@@ -112,14 +123,74 @@ def _fetch(opener, url: str) -> tuple[bytes, str]:
     raise RuntimeError(f"CDSL request failed after retries: {url}")
 
 
+
+def _post_archive_date(
+    opener, url: str, archive_html: bytes, date_label: str, expected_date: str,
+    output_dir: Path,
+) -> dict:
+    """Exercise the official date-picker form using its captured ASP.NET state."""
+    summary = summarize_html(archive_html)
+    fields = {}
+    for item in summary["inputs"]:
+        name = item.get("name")
+        input_type = item.get("type", "").lower()
+        if not name:
+            continue
+        if input_type == "hidden" or item.get("checked") or (
+            input_type == "submit" and item.get("value") == "Go"
+        ):
+            fields[name] = item.get("value", "")
+    if "__VIEWSTATE" not in fields or "__EVENTVALIDATION" not in fields:
+        raise ValueError("CDSL archive form is missing required ASP.NET state fields")
+    fields["selectedDate"] = date_label
+    request = Request(
+        url,
+        data=urlencode(fields).encode("utf-8"),
+        headers={
+            "User-Agent": USER_AGENT,
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Language": "en-US,en;q=0.9",
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Referer": url,
+            "Origin": "https://www.cdslindia.com",
+        },
+        method="POST",
+    )
+    with opener.open(request, timeout=45) as response:
+        if response.status != 200:
+            raise RuntimeError(f"CDSL archive POST returned HTTP {response.status}")
+        payload = response.read()
+        content_type = response.headers.get("Content-Type", "")
+    if not payload:
+        raise ValueError("CDSL archive POST returned an empty response")
+    raw_path = output_dir / "archive_2026-11-06.html"
+    raw_path.write_bytes(payload)
+    digest = hashlib.sha256(payload).hexdigest()
+    date_match = expected_date in payload.decode("utf-8", errors="replace").upper()
+    return {
+        "status": "success" if date_match else "date_not_found",
+        "requested_date": date_label,
+        "expected_reporting_date": expected_date,
+        "response_date_match": date_match,
+        "http_status": 200,
+        "content_type": content_type,
+        "bytes": len(payload),
+        "sha256": digest,
+        "raw_path": raw_path.name,
+        **summarize_html(payload),
+    }
+
+
 def probe(output_dir: Path = Path("artifacts/cdsl_probe")) -> dict:
     output_dir.mkdir(parents=True, exist_ok=True)
     opener = build_opener(HTTPCookieProcessor(CookieJar()))
     results = []
+    payloads = {}
     for name, url in PAGES.items():
         item = {"name": name, "url": url}
         try:
             payload, content_type = _fetch(opener, url)
+            payloads[name] = payload
             digest = hashlib.sha256(payload).hexdigest()
             raw_path = output_dir / f"{name}.html"
             raw_path.write_bytes(payload)
@@ -137,6 +208,16 @@ def probe(output_dir: Path = Path("artifacts/cdsl_probe")) -> dict:
         results.append(item)
         time.sleep(0.25)
 
+    archive_date_probe = {"status": "unavailable"}
+    if "archive" in payloads:
+        try:
+            archive_date_probe = _post_archive_date(
+                opener, PAGES["archive"], payloads["archive"],
+                "November 6, 2026", "06-NOV-2026", output_dir,
+            )
+        except Exception as exc:
+            archive_date_probe = {"status": "unavailable", "error": str(exc)}
+
     successful = sum(item["status"] == "success" for item in results)
     manifest = {
         "dataset": "cdsl_fpi_source_discovery",
@@ -146,6 +227,7 @@ def probe(output_dir: Path = Path("artifacts/cdsl_probe")) -> dict:
         "successful_pages": successful,
         "expected_pages": len(PAGES),
         "results": results,
+        "archive_date_probe": archive_date_probe,
         "scope_note": (
             "Discovery only. HTML table extraction, archive coverage, revisions, "
             "and transaction-level semantics require validation before ingestion."
