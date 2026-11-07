@@ -2,6 +2,7 @@ import pytest
 
 from fii_engine.nse_fo_aggregate_reports import (
     inspect_csv,
+    capture_dataset,
     inspect_xls,
     select_report,
 )
@@ -151,3 +152,23 @@ def test_inspects_legacy_xls_sheet_metadata(monkeypatch):
 def test_rejects_non_ole2_xls_payload():
     with pytest.raises(ValueError, match="not an OLE2"):
         inspect_xls(b"not an excel workbook", "fii_derivatives_statistics")
+
+
+
+def test_preserves_original_csv_before_schema_inspection_failure(tmp_path, monkeypatch):
+    from fii_engine import nse_fo_aggregate_reports as module
+
+    raw = b"exchange source bytes that need inspection"
+    monkeypatch.setattr(module, "_get", lambda *args, **kwargs: raw)
+    monkeypatch.setattr(
+        module,
+        "inspect_csv",
+        lambda *args, **kwargs: (_ for _ in ()).throw(ValueError("unrecognized preamble")),
+    )
+    result = capture_dataset("participant_oi", _catalogue(), tmp_path)
+    raw_path = tmp_path / result["raw_path"]
+    manifest_path = tmp_path / result["manifest_path"]
+    assert raw_path.read_bytes() == raw
+    assert result["inspection"] is None
+    assert result["inspection_error"] == "unrecognized preamble"
+    assert manifest_path.is_file()
