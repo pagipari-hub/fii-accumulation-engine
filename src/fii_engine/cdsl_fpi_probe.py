@@ -17,6 +17,7 @@ PAGES = {
     "daily": "https://www.cdslindia.com/eservices/publications/fiidaily",
     "monthly": "https://www.cdslindia.com/eservices/publications/FIIMonthly",
     "archive": "https://www.cdslindia.com/Publications/FIITrends.aspx",
+    "archive_data_after_2009": "https://www.cdslindia.com/Publications/ArchiveDataAfter2009.aspx",
     "trade_wise_equity": "https://www.cdslindia.com/Publications/EquityDataFII.html",
     "registry_B": "https://www.cdslindia.com/Publications/RegForeignInstInvstr.aspx?indexname=B",
     "registry_G": "https://www.cdslindia.com/Publications/RegForeignInstInvstr.aspx?indexname=G",
