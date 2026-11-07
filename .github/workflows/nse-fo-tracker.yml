@@ -2,6 +2,7 @@ name: NSE F&O stock eligibility tracker
 
 on:
   push:
+    branches: [main]
     paths:
       - "src/fii_engine/nse_fo_tracker.py"
       - "tests/test_nse_fo_tracker.py"
