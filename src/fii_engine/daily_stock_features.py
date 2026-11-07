@@ -232,9 +232,10 @@ def _load_cash_sources(root: Path) -> tuple[dict, dict, dict]:
         delivery_by_symbol[key] = row
 
     trade_date = manifest["trade_date"]
-    for row in cash_by_isin.values():
-        if row.get("TradDt") != trade_date:
-            raise ValueError("cash UDiFF row date does not match current manifest")
+    for series_rows in cash_by_isin.values():
+        for row in series_rows.values():
+            if row.get("TradDt") != trade_date:
+                raise ValueError("cash UDiFF row date does not match current manifest")
     for row in delivery_by_symbol.values():
         row_date = row.get("DATE1", "").strip()
         if row_date and date.fromisoformat(trade_date).strftime("%d-%b-%Y").upper() != row_date.upper():
