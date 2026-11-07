@@ -15,11 +15,10 @@ before producing a family observation.
 | Disclosed bulk/block deals | 10 | 10 |
 | Cash-market behaviour | 25 | 25 |
 | Stock derivatives | 30 | 15 |
-| Participant positioning | 15 | 10 |
-| Sector-relative strength | 15 | 15 |
+| Sector-relative strength | 30 | 25 |
 | **Total** | **100** | **100** |
 
-These weights are research starting points, not empirically calibrated parameters.
+Market-wide FII/DII cash flows and participant-category aggregates are deliberately excluded from per-stock scoring. They will be reported as market-regime context alongside the rankings. These weights are research starting points, not empirically calibrated parameters.
 They must be evaluated with historical walk-forward tests before production
 rankings are treated as reliable.
 
