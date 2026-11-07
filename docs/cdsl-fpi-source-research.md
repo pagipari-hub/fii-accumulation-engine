@@ -47,3 +47,6 @@ The current directory snapshot exposes validity end dates but not registration s
 - A same-day registry snapshot can support presence on the trade date, subject to the published validity end date.
 - A registry snapshot collected after a historical trade date cannot, by itself, prove that the entity was registered on that earlier date.
 - A name absent from the register is unresolved, not proof that the counterparty is not an FPI.
+
+
+The source-discovery probe now focuses on CDSL daily/monthly flow, archive and trade-wise source pages. The 26 alphabetic registered-FPI pages are fetched only by the dedicated production registry collector, avoiding duplicate requests and separating discovery from maintained identity data.
