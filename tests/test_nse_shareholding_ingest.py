@@ -190,3 +190,15 @@ def test_does_not_fetch_untrusted_xbrl_hosts(tmp_path, monkeypatch):
     result = module.ingest(tmp_path)
     assert any(item["status"] == "untrusted_xbrl_url" for item in result["fetch_errors"])
     assert "https://example.invalid/def.xml" not in calls
+
+
+def test_company_name_fallback_normalizes_only_common_legal_suffix_variants():
+    assert module._normal_name("Reliance Industries Ltd.") == module._normal_name(
+        "Reliance Industries Limited"
+    )
+    assert module._normal_name("ABC Pvt. Ltd.") == module._normal_name(
+        "ABC Private Limited"
+    )
+    assert module._normal_name("ABC Limited") != module._normal_name(
+        "ABC Holdings Limited"
+    )
