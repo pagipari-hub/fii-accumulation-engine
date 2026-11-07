@@ -14,7 +14,8 @@ from html.parser import HTMLParser
 from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.parse import urljoin, urlparse
-from urllib.request import Request, urlopen
+from http.cookiejar import CookieJar
+from urllib.request import HTTPCookieProcessor, Request, build_opener
 
 SOURCE_PAGES = {
     "nse_nifty500": "https://www.nseindia.com/static/products-services/indices-nifty500-index",
@@ -149,7 +150,7 @@ def inspect_script(url: str, page_url: str, timeout: int = 15) -> dict[str, obje
         },
     )
     try:
-        with urlopen(request, timeout=timeout) as response:
+        with HTTP.open(request, timeout=timeout) as response:
             body = response.read(MAX_SCRIPT_BYTES + 1)
             truncated = len(body) > MAX_SCRIPT_BYTES
             body = body[:MAX_SCRIPT_BYTES]
@@ -174,7 +175,7 @@ def inspect_script(url: str, page_url: str, timeout: int = 15) -> dict[str, obje
 
 
 def inspect_page(name: str, url: str, timeout: int = 30) -> dict[str, object]:
-    request = Request(url, headers={"User-Agent": USER_AGENT, "Accept": "text/html,*/*"})
+    request = Request(url, headers={**REQUEST_HEADERS, "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "Referer": SESSION_BOOTSTRAP})
     checked_at = datetime.now(timezone.utc).isoformat()
     try:
         with urlopen(request, timeout=timeout) as response:
