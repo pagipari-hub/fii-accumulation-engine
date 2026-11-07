@@ -10,6 +10,7 @@ import argparse
 import json
 import xml.etree.ElementTree as ET
 from collections import defaultdict
+from datetime import date
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 
@@ -66,14 +67,23 @@ def parse_xbrl(payload: bytes) -> dict:
             raise ValueError("XBRL context is missing its id")
         period = {}
         category_members = []
+        dimensions = []
+        entity_identifier = None
         for child in element.iter():
             local = _local_name(child.tag).lower()
-            if local in {"instant", "startdate", "enddate", "forever"}:
+            if local == "identifier":
+                entity_identifier = (child.text or "").strip()
+            elif local in {"instant", "startdate", "enddate", "forever"}:
                 period[local] = (child.text or "").strip()
-            elif local == "explicitmember":
+            elif local in {"explicitmember", "typedmember"}:
                 dimension = child.attrib.get("dimension", "")
-                if _local_name(dimension) == CATEGORY_AXIS:
-                    member = _local_name((child.text or "").strip())
+                member_value = (child.text or "").strip()
+                dimensions.append({
+                    "dimension": _local_name(dimension),
+                    "member": _local_name(member_value),
+                })
+                if local == "explicitmember" and _local_name(dimension) == CATEGORY_AXIS:
+                    member = _local_name(member_value)
                     if member.endswith("Member"):
                         member = member[:-6]
                     if member:
@@ -82,9 +92,23 @@ def parse_xbrl(payload: bytes) -> dict:
             raise ValueError(
                 f"multiple shareholder-category dimensions in context {context_id}"
             )
+        if category_members:
+            instant = period.get("instant")
+            if not instant:
+                raise ValueError(
+                    f"shareholder category context {context_id} has no instant period"
+                )
+            try:
+                date.fromisoformat(instant)
+            except ValueError as exc:
+                raise ValueError(
+                    f"invalid shareholder reporting date in context {context_id}: {instant!r}"
+                ) from exc
         contexts[context_id] = {
             "period": period,
             "category_member": category_members[0] if category_members else None,
+            "entity_identifier": entity_identifier,
+            "dimensions": dimensions,
         }
 
     facts: dict[str, dict[str, tuple[Decimal, str | None]]] = defaultdict(dict)
@@ -121,6 +145,8 @@ def parse_xbrl(payload: bytes) -> dict:
             "category_key": FPI_MEMBERS.get(
                 member, FOREIGN_AGGREGATE_MEMBERS.get(member, member)
             ),
+            "entity_identifier": context["entity_identifier"],
+            "dimensions": context["dimensions"],
         }
         for fact_name, output_name in FACT_FIELDS.items():
             item = facts.get(context_id, {}).get(fact_name)
@@ -151,10 +177,25 @@ def parse_xbrl(payload: bytes) -> dict:
     if not category_records:
         raise ValueError("XBRL filing contains no shareholder CategoryOfShareholdersAxis contexts")
 
-    by_date_member = {
-        (row["reporting_date"], row["category_member"]): row
-        for row in category_records
-    }
+    by_date_member = {}
+    for row in category_records:
+        key = (row["reporting_date"], row["category_member"])
+        if key in by_date_member:
+            previous = by_date_member[key]
+            comparable = (
+                "shareholder_count", "shares", "fully_paid_shares",
+                "ownership_fraction", "voting_rights", "voting_rights_fraction",
+            )
+            if any(previous.get(field) != row.get(field) for field in comparable):
+                raise ValueError(
+                    "multiple non-identical contexts for shareholder category "
+                    f"{key[1]} on {key[0]}; refusing to overwrite a reported category"
+                )
+            raise ValueError(
+                "multiple contexts for shareholder category "
+                f"{key[1]} on {key[0]}; category aggregation is not inferred"
+            )
+        by_date_member[key] = row
     reconciliation = []
     dates = sorted({row["reporting_date"] for row in category_records if row["reporting_date"]})
     for reporting_date in dates:
