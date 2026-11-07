@@ -1,5 +1,3 @@
-import json
-
 import pytest
 
 from fii_engine.nse_shareholding_xbrl import parse_xbrl
