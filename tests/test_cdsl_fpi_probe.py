@@ -1,10 +1,7 @@
 from urllib.parse import parse_qs
 
-from fii_engine.cdsl_fpi_probe import (
-    _post_archive_date,
-    parse_registry_html,
-    summarize_html,
-)
+from fii_engine.cdsl_fpi_probe import _post_archive_date, summarize_html
+from fii_engine.cdsl_fpi_registry import parse_registry_html
 
 
 def test_summary_parser_extracts_tables_and_archive_links():
