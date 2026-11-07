@@ -86,3 +86,13 @@ def test_official_bulk_block_deals_page_is_probed():
     assert SOURCE_PAGES["nse_bulk_block_deals"] == (
         "https://www.nseindia.com/report-detail/display-bulk-and-block-deals"
     )
+
+
+def test_keyword_contexts_capture_date_format_helpers():
+    from fii_engine.source_probe import extract_keyword_contexts
+
+    source = "function getStartEndDate(range) { return formatDate(new Date()); }"
+    contexts = extract_keyword_contexts(source, keywords=("getStartEndDate",), radius=40)
+    assert len(contexts) == 1
+    assert contexts[0]["keyword"] == "getStartEndDate"
+    assert "formatDate" in contexts[0]["context"]

@@ -174,6 +174,40 @@ def extract_endpoint_contexts(text: str, radius: int = 320, limit: int = 20) -> 
     return contexts
 
 
+
+def extract_keyword_contexts(
+    text: str,
+    keywords: tuple[str, ...] = (
+        "getStartEndDate", "formatDate", "dateRangeValue",
+        "DD-MM-YYYY", "DD-MMM-YYYY", "YYYY-MM-DD",
+    ),
+    radius: int = 700,
+    limit: int = 40,
+) -> list[dict[str, object]]:
+    """Capture bounded context around date/query helpers for source-contract review."""
+    contexts: list[dict[str, object]] = []
+    seen: set[tuple[str, int]] = set()
+    lowered = text.lower()
+    for keyword in keywords:
+        needle = keyword.lower()
+        start = 0
+        while len(contexts) < limit:
+            position = lowered.find(needle, start)
+            if position < 0:
+                break
+            key = (needle, position)
+            if key not in seen:
+                left = max(0, position - radius)
+                right = min(len(text), position + len(keyword) + radius)
+                contexts.append({
+                    "keyword": keyword,
+                    "context_start": left,
+                    "context": text[left:right],
+                })
+                seen.add(key)
+            start = position + len(needle)
+    return contexts
+
 def inspect_script(url: str, page_url: str, timeout: int = 15) -> dict[str, object]:
     checked_at = datetime.now(timezone.utc).isoformat()
     request = Request(
@@ -200,6 +234,7 @@ def inspect_script(url: str, page_url: str, timeout: int = 15) -> dict[str, obje
                 "sha256_prefix": hashlib.sha256(body).hexdigest(),
                 "endpoint_candidates": extract_endpoint_candidates(text_body),
                 "endpoint_contexts": extract_endpoint_contexts(text_body, radius=3200, limit=50),
+                "keyword_contexts": extract_keyword_contexts(text_body),
                 "status": "ok" if response.status == 200 else "http_error",
             }
     except HTTPError as exc:
