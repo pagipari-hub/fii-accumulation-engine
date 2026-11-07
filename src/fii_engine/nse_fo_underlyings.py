@@ -189,6 +189,13 @@ def reconcile_tracker_events(
         "latest_introduction_count": sum(e["action"] == "introduction" for e in latest_events.values()),
         "latest_exclusion_count": sum(e["action"] == "exclusion" for e in latest_events.values()),
         "future_event_count": len(future_events),
+        "future_events": sorted(
+            [
+                {"symbol": event["symbol"], "action": event["action"], "effective_date": event["effective_date"]}
+                for event in future_events
+            ],
+            key=lambda item: (item["effective_date"], item["symbol"]),
+        ),
         "unknown_effective_date_event_count": len(unknown_events),
         "aliases_applied": aliases_applied,
         "mismatch_count": len(mismatches),
