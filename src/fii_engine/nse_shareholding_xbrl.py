@@ -188,7 +188,7 @@ def parse_xbrl(payload: bytes) -> dict:
             )
             if any(previous.get(field) != row.get(field) for field in comparable):
                 raise ValueError(
-                    "multiple non-identical contexts for shareholder category "
+                    "multiple contexts for shareholder category "
                     f"{key[1]} on {key[0]}; refusing to overwrite a reported category"
                 )
             raise ValueError(
