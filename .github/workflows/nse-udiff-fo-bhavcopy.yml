@@ -1,6 +1,14 @@
 name: Official NSE UDiFF derivatives bhavcopy
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - "src/fii_engine/nse_fo_bhavcopy.py"
+      - "tests/test_nse_fo_bhavcopy.py"
+      - "config/sources.yaml"
+      - "docs/nse-udiff-ingestion.md"
+      - ".github/workflows/nse-udiff-fo-bhavcopy.yml"
   pull_request:
     paths:
       - "src/fii_engine/nse_fo_bhavcopy.py"
