@@ -136,6 +136,8 @@ def _load_universe(root: Path) -> tuple[dict[str, dict], dict[str, dict], dict]:
         raise ValueError(f"unexpected Nifty 500 universe row count: {len(rows)}")
     symbols = [row["symbol"].strip().upper() for row in rows]
     isins = [row["isin"].strip().upper() for row in rows]
+    if any(not value for value in symbols) or any(not value for value in isins):
+        raise ValueError("blank symbol or ISIN in current Nifty 500 universe")
     if len(set(symbols)) != len(symbols):
         raise ValueError("duplicate symbols in current Nifty 500 universe")
     if len(set(isins)) != len(isins):
@@ -532,6 +534,19 @@ def classify(root: Path = Path("."), lookback_days: int = 7) -> dict:
         "universe_row_count": universe_metadata["row_count"],
         "nifty500_verified_event_count": sum(
             event["nifty500_member_verified"] == "true" for event in events
+        ),
+        "nifty500_verified_symbol_count": sum(
+            row["nifty500_member_verified"] == "true" for row in stock_rows
+        ),
+        "nifty500_verified_fpi_client_event_count": sum(
+            event["nifty500_member_verified"] == "true"
+            and event["counterparty_class"] == "current_registry_matched_fpi_client"
+            for event in events
+        ),
+        "nifty500_verified_odi_issuer_event_count": sum(
+            event["nifty500_member_verified"] == "true"
+            and event["counterparty_class"] == "current_registry_matched_odi_issuer"
+            for event in events
         ),
         "outside_or_unverified_universe_event_count": sum(
             event["nifty500_member_verified"] != "true" for event in events
