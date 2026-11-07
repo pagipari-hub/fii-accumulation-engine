@@ -259,6 +259,38 @@ def ingest(root: Path = Path(".")) -> dict:
         }
         manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     current_path.write_bytes(normalized)
+
+    as_of_date = datetime.now(ZoneInfo("Asia/Kolkata")).date()
+    tracker_path = root / "data/raw/fno_tracker/fno_tracker_current.xlsx"
+    aliases_path = root / "config/symbol_aliases.json"
+    if tracker_path.is_file():
+        tracker_bytes = tracker_path.read_bytes()
+        tracker_history = parse_tracker_events(tracker_bytes, as_of_date)
+        alias_data = json.loads(aliases_path.read_text(encoding="utf-8"))
+        reconciliation = reconcile_tracker_events(
+            tracker_history["events"],
+            {row["symbol"] for row in stocks},
+            alias_data.get("aliases", []),
+            as_of_date,
+        )
+        reconciliation["tracker_raw_sha256"] = hashlib.sha256(tracker_bytes).hexdigest()
+        reconciliation["symbol_aliases_sha256"] = hashlib.sha256(aliases_path.read_bytes()).hexdigest()
+    else:
+        reconciliation = {
+            "status": "pending_tracker_archive",
+            "as_of_date_ist": as_of_date.isoformat(),
+            "current_individual_stock_count": len(stocks),
+            "note": "Tracker workbook not yet archived; cross-source reconciliation will run after it is committed.",
+        }
+    reconciliation_bytes = json.dumps(
+        reconciliation, indent=2, ensure_ascii=False, sort_keys=True
+    ).encode("utf-8")
+    reconciliation_hash = hashlib.sha256(reconciliation_bytes).hexdigest()
+    reconciliation_path = snapshot_dir / (
+        f"fno_tracker_reconciliation_{as_of_date:%Y%m%d}_{reconciliation_hash[:12]}.json"
+    )
+    if not reconciliation_path.exists():
+        reconciliation_path.write_bytes(reconciliation_bytes + b"\\n")
     return {
         "retrieved_at_utc": retrieved_at,
         "index_underlying_count": len(indexes),
@@ -269,6 +301,8 @@ def ingest(root: Path = Path(".")) -> dict:
         "current_path": str(current_path),
         "snapshot_path": str(snapshot_path),
         "manifest_path": str(manifest_path),
+        "reconciliation": reconciliation,
+        "reconciliation_path": str(reconciliation_path),
     }
 
 
