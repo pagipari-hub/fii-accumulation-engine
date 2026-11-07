@@ -1,0 +1,22 @@
+# Register every upstream dataset with provenance before ingestion.
+# URLs and access methods are intentionally not guessed; they are validated
+# as each source adapter is implemented.
+sources:
+  nse_nifty500_constituents:
+    description: "Official Nifty 500 constituent list and effective dates"
+    publisher: "NSE Indices"
+    frequency: "monthly_or_on_change"
+    required_fields: [symbol, company_name, effective_from]
+    status: "adapter_pending"
+  nse_security_master:
+    description: "NSE security and series reference data"
+    publisher: "National Stock Exchange of India"
+    frequency: "daily_or_on_change"
+    required_fields: [symbol, series, isin]
+    status: "adapter_pending"
+  nse_fo_eligibility:
+    description: "Current stock derivatives eligibility and contract reference"
+    publisher: "National Stock Exchange of India"
+    frequency: "daily_or_on_change"
+    required_fields: [symbol, fno_status]
+    status: "adapter_pending"
