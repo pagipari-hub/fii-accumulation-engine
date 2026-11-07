@@ -259,7 +259,15 @@ def validate_delivery(payload: bytes, trade_date: str) -> dict:
             observation_counts["no_trades_delivery_not_reported"] += 1
             continue
         if traded is None or delivered is None or pct is None:
-            raise ValueError(f"incomplete delivery quantity/percentage fields at line {line}")
+            raw_fields = {
+                "TTL_TRD_QNTY": row["TTL_TRD_QNTY"],
+                "DELIV_QTY": row["DELIV_QTY"],
+                "DELIV_PER": row["DELIV_PER"],
+            }
+            raise ValueError(
+                f"incomplete delivery quantity/percentage fields at line {line}: "
+                f"{raw_fields}"
+            )
         if traded < 0 or delivered < 0 or delivered > traded:
             raise ValueError(f"invalid traded/delivered quantity at line {line}")
         expected = (delivered / traded * 100) if traded else Decimal(0)
