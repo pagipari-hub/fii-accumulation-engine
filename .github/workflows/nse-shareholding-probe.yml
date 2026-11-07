@@ -1,0 +1,54 @@
+name: NSE shareholding pattern source probe
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/fii_engine/nse_shareholding_probe.py"
+      - "tests/test_nse_shareholding_probe.py"
+      - ".github/workflows/nse-shareholding-probe.yml"
+  pull_request:
+    paths:
+      - "src/fii_engine/nse_shareholding_probe.py"
+      - "tests/test_nse_shareholding_probe.py"
+      - ".github/workflows/nse-shareholding-probe.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nse-shareholding-pattern-probe
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install -e ".[dev]"
+      - run: pytest
+
+  probe:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install -e .
+      - name: Probe official NSE shareholding sources
+        run: python -m fii_engine.nse_shareholding_probe --output-dir artifacts/nse-shareholding-probe
+      - name: Upload raw JSON, RSS and schema manifest
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nse-shareholding-probe-${{ github.run_id }}
+          path: artifacts/nse-shareholding-probe/
+          if-no-files-found: warn
+          retention-days: 14
