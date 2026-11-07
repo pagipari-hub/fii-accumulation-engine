@@ -153,3 +153,28 @@ sources:
     frequency: "daily"
     required_fields: [trade_date, symbol]
     status: "source_verified_schema_pending"
+
+  nse_cm_udiff_cash_prices:
+    description: "Official final NSE capital-market UDiFF common bhavcopy"
+    publisher: "National Stock Exchange of India"
+    reference_url: "https://www.nseindia.com/all-reports"
+    catalogue_api: "https://www.nseindia.com/api/daily-reports?key=CM"
+    frequency: "daily"
+    report_display_name: "CM-UDiFF Common Bhavcopy Final (zip)"
+    required_fields: [TradDt, BizDt, Sgmt, FinInstrmTp, FinInstrmId, ISIN, TckrSymb, SctySrs, OpnPric, HghPric, LwPric, ClsPric, TtlTradgVol, TtlTrfVal]
+    status: "adapter_implemented_live_validation_pending"
+    finality: "final"
+    scope: "NSE_capital_market"
+    semantic_boundary: "market_wide_price_and_volume_not_participant_attribution"
+  nse_cm_security_delivery:
+    description: "Official full bhavcopy with security-wise deliverable quantity and percentage"
+    publisher: "National Stock Exchange of India"
+    reference_url: "https://www.nseindia.com/all-reports"
+    catalogue_api: "https://www.nseindia.com/api/daily-reports?key=CM"
+    frequency: "daily"
+    report_display_name: "Full Bhavcopy and Security Deliverable data"
+    required_fields: [SYMBOL, SERIES, DATE1, OPEN_PRICE, HIGH_PRICE, LOW_PRICE, CLOSE_PRICE, TTL_TRD_QNTY, DELIV_QTY, DELIV_PER]
+    status: "adapter_implemented_live_validation_pending"
+    finality: "exchange_reported"
+    scope: "NSE_security_wise_delivery"
+    semantic_boundary: "deliverable_quantity_is_not_fii_ownership_or_beneficial_owner_attribution"
