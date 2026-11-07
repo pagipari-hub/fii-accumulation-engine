@@ -67,3 +67,14 @@ def test_endpoint_contexts_capture_bounded_reviewable_source():
     assert contexts[0]["endpoint"] == "/api/daily-reports?key="
     assert "reportKey" in contexts[0]["context"]
     assert len(contexts[0]["context"]) <= len(source)
+
+
+def test_official_stock_fo_reference_pages_are_probed():
+    from fii_engine.source_probe import SOURCE_PAGES
+
+    assert SOURCE_PAGES["nse_fo_contract_information"] == (
+        "https://www.nseindia.com/static/products-services/equity-derivatives-contract-information"
+    )
+    assert SOURCE_PAGES["nse_fo_individual_securities"] == (
+        "https://www.nseindia.com/static/products-services/equity-derivatives-individual-securities"
+    )
