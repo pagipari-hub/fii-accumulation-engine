@@ -229,7 +229,7 @@ sources:
     reference_url: "https://www.nseindia.com/companies-listing/corporate-filings-shareholding-pattern/"
     master_api_url: "https://www.nseindia.com/api/corporate-share-holdings-master?index=equities"
     frequency: "weekly_and_filing_revision"
-    status: "production_ingestion_implemented_pending_live_capture"
+    status: "live_validated_current_snapshot_partial_identity_coverage"
     identity_join: "exact_isin_preferred; symbol_and_exact_company_name_only_when_isin_missing; mismatches_rejected"
     history_policy: "append_only_by_record_id_and_metadata_hash; revisions_preserved"
     attribution_scope: "reported_quarterly_FPI_Category_I_and_II_ownership_not_daily_transaction_flow"
@@ -253,10 +253,23 @@ sources:
     reference_url: "https://www.nseindia.com/report-detail/display-bulk-and-block-deals"
     supporting_reference_url: "https://www.cdslindia.com/Publications/RegForeignInstInvstr.aspx"
     frequency: "daily_weekday_after_source_collectors"
-    status: "implementation_under_validation"
+    status: "live_validated_current_snapshot_501_stock_matrix"
     parser_version: 1
     identity_policy: "exact normalized counterparty name match only; no fuzzy match; ODI issuers kept separate; unmatched clients remain unresolved; Nifty 500 membership requires exact symbol plus exact normalized company name because the NSE deal export does not supply ISIN; universe ISIN is enriched from the official constituent file"
     temporal_boundary: "CDSL register has no registration start date; latest Nifty 500 source page says data as of last trading day of previous month and does not supply an exact effective date; snapshot membership is not asserted as trade-date membership"
     output_paths:
       - "data/raw/fpi_deal_attribution/fpi_deal_counterparty_current.csv"
       - "data/raw/fpi_deal_attribution/fpi_deal_stock_summary_current.csv"
+
+
+  fpi_evidence_blend:
+    description: "Full 501-stock evidence matrix blending named FPI-client bulk/block disclosures, quarterly FPI ownership, daily cash/delivery/derivatives and 5/20/60-session stock context"
+    publisher: "Derived from official NSE, CDSL and Nifty Indices datasets"
+    frequency: "daily_after_source_collectors"
+    status: "implementation_under_validation"
+    parser_version: 1
+    scoring_policy: "no_composite_score_until_independent_history_and_coverage_are_sufficient"
+    attribution_boundary: "market-wide FII/FPI flows and participant-category derivatives are context only; never stock-specific attribution"
+    output_paths:
+      - "data/raw/fpi_evidence_blend/fpi_evidence_matrix_current.csv"
+      - "data/raw/fpi_evidence_blend/fpi_evidence_matrix_current_manifest.json"
