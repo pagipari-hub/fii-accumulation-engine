@@ -25,7 +25,7 @@ The XBRL parser reads explicit `CategoryOfShareholdersAxis` members. FPI Categor
 - Stores normalized filing JSON, master snapshots and quarterly ownership CSV snapshots in the repository. Raw XBRL XML and raw master payloads remain in workflow artifacts.
 - Selects the latest filing for each company-quarter by broadcast/system timestamp while retaining earlier revisions.
 - Extracts FPI Category I/II shares and percentage points, while keeping other foreign institutions and explicitly reported overseas-depository holdings separate.
-- Reconciles the foreign-institutions aggregate using explicitly reported overseas-depository, foreign-direct-investment, foreign-venture-capital-investor and foreign-sovereign-wealth-fund components. These remain separate from FPI Category I/II. An absent or nil component is not assumed to be zero.
+- Reconciles the foreign-institutions aggregate using overseas-depository holdings only when that category is explicitly present. An absent or nil component is not assumed to be zero.
 - Parser-versioned filing snapshots allow a parser correction to be re-applied to existing XBRL records without overwriting immutable earlier parses.
 
 The master API may expose only the currently available filing period. Captured quarterly snapshots accumulate from the first production run; no earlier quarter is invented or assumed. Until two validated quarters exist for a stock, quarter-on-quarter ownership change is unavailable.
