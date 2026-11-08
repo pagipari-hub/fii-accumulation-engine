@@ -41,7 +41,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: fpi-evidence-blend-\${{ github.ref }}
+  group: fpi-evidence-blend-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -112,7 +112,7 @@ jobs:
         if: always() && github.event_name != 'pull_request'
         uses: actions/upload-artifact@v4
         with:
-          name: fpi-evidence-blend-\${{ github.run_id }}
+          name: fpi-evidence-blend-${{ github.run_id }}
           path: |
             data/raw/fpi_evidence_blend/
             data/snapshots/fpi_evidence_blend/
