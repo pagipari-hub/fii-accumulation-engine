@@ -32,9 +32,6 @@ FOREIGN_AGGREGATE_MEMBERS = {
     "InstitutionsForeign": "foreign_institutions_total",
     "OtherInstitutionsForeign": "other_foreign_institutions",
     "OverseasDepositories": "overseas_depositories",
-    "ForeignDirectInvestment": "foreign_direct_investment",
-    "ForeignVentureCapitalInvestors": "foreign_venture_capital_investors",
-    "SovereignWealthFundsForeign": "sovereign_wealth_funds_foreign",
 }
 
 
@@ -210,40 +207,21 @@ def parse_xbrl(payload: bytes) -> dict:
         category_i = shares("InstitutionsForeignPortfolioInvestorCategoryOne")
         category_ii = shares("InstitutionsForeignPortfolioInvestorCategoryTwo")
         other_foreign = shares("OtherInstitutionsForeign")
-        optional_members = {
-            "overseas_depositories": "OverseasDepositories",
-            "foreign_direct_investment": "ForeignDirectInvestment",
-            "foreign_venture_capital_investors": "ForeignVentureCapitalInvestors",
-            "sovereign_wealth_funds_foreign": "SovereignWealthFundsForeign",
-        }
-        optional_rows = {
-            key: by_date_member.get((reporting_date, member))
-            for key, member in optional_members.items()
-        }
-        optional_values = {
-            key: None if row is None else row["shares"]
-            for key, row in optional_rows.items()
-        }
+        overseas_row = by_date_member.get((reporting_date, "OverseasDepositories"))
+        overseas = None if overseas_row is None else overseas_row["shares"]
         foreign_total = shares("InstitutionsForeign")
         base_available = all(
             value is not None
             for value in (category_i, category_ii, other_foreign, foreign_total)
         )
-        # Include each additional foreign-institution component only when the issuer
-        # explicitly reports it. An absent context is not converted to zero; a present
-        # nil fact remains unavailable.
-        optional_available = all(
-            row is None or optional_values[key] is not None
-            for key, row in optional_rows.items()
-        )
-        available = base_available and optional_available
-        optional_sum = sum(
-            optional_values[key]
-            for key, row in optional_rows.items()
-            if row is not None
-        ) if available else None
+        # Include overseas-depository holdings only when the issuer explicitly reports
+        # the category. An absent context is not converted to zero; a present nil fact
+        # remains unavailable.
+        overseas_available = overseas_row is None or overseas is not None
+        available = base_available and overseas_available
         component_sum = (
-            category_i + category_ii + other_foreign + optional_sum
+            category_i + category_ii + other_foreign
+            + (overseas if overseas_row is not None else 0)
             if available else None
         )
         reconciliation.append({
@@ -251,10 +229,7 @@ def parse_xbrl(payload: bytes) -> dict:
             "fpi_category_i_shares": category_i,
             "fpi_category_ii_shares": category_ii,
             "other_foreign_institution_shares": other_foreign,
-            "overseas_depositories_shares": optional_values["overseas_depositories"],
-            "foreign_direct_investment_shares": optional_values["foreign_direct_investment"],
-            "foreign_venture_capital_investor_shares": optional_values["foreign_venture_capital_investors"],
-            "sovereign_wealth_funds_foreign_shares": optional_values["sovereign_wealth_funds_foreign"],
+            "overseas_depositories_shares": overseas,
             "foreign_institutions_total_shares": foreign_total,
             "component_sum_shares": component_sum,
             "difference_shares": (
@@ -265,16 +240,15 @@ def parse_xbrl(payload: bytes) -> dict:
                 else "mismatch" if available else "not_comparable_missing_component"
             ),
             "scope_note": (
-                "FPI Category I and II remain distinct from FDI, foreign venture capital, "
-                "foreign sovereign wealth funds, other foreign institutions and overseas "
-                "depositories. Additional categories are included only when explicitly "
-                "reported; absent or nil components are not assumed to be zero."
+                "FPI Category I and II are separate from other foreign institutions. "
+                "OverseasDepositories is included when explicitly reported; absent or nil "
+                "components are not assumed to be zero."
             ),
         })
 
     return {
         "parser": "nse_shareholding_xbrl",
-        "parser_version": 3,
+        "parser_version": 2,
         "category_axis": CATEGORY_AXIS,
         "reporting_dates": dates,
         "category_record_count": len(category_records),
