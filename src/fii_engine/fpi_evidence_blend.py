@@ -469,16 +469,43 @@ def build(root: Path = Path(".")) -> dict:
     ]
     output_payload = _csv_bytes(output_rows, OUTPUT_FIELDS)
     output_sha = _sha256(output_payload)
-    as_of = as_of_trade_date.replace("-", "")
-    stem = f"fpi_evidence_matrix_{as_of}_{output_sha[:16]}"
-    snapshot_path = Path("data/snapshots/fpi_evidence_blend") / f"{stem}.csv"
-    snapshot_manifest_path = Path("data/snapshots/fpi_evidence_blend") / f"{stem}.json"
-    snapshot_manifest = {
+    source_hashes = {
+        "universe": universe_meta["sha256"],
+        "daily_stock_features": daily_manifest["output_sha256"],
+        "historical_stock_features": historical_manifest["stock_output_sha256"],
+        "fpi_deal_stock_summary": deal_manifest["stock_summary_csv_sha256"],
+        "cdsl_registry_snapshot": deal_manifest["registry_snapshot_sha256"],
+        "shareholding_ownership": share_manifest["ownership_current_sha256"],
+        "market_flow_history": historical_manifest["market_output_sha256"],
+        "participant_derivatives_history": historical_manifest["participant_output_sha256"],
+    }
+    snapshot_identity = {
         "dataset": "nifty500_blended_fpi_accumulation_evidence_matrix",
         "parser_version": PARSER_VERSION,
+        "as_of_trade_date": as_of_trade_date,
+        "output_csv_sha256": output_sha,
+        "source_hashes": source_hashes,
+        "deal_trade_date_window": [
+            deal_manifest["trade_date_window_start"], deal_manifest["trade_date_window_end"]
+        ],
+        "registry_snapshot_date": deal_manifest["registry_snapshot_date"],
+        "registry_snapshot_sha256": deal_manifest["registry_snapshot_sha256"],
+        "ownership_reporting_date": share_manifest.get("latest_reporting_date"),
+        "universe_snapshot_manifest_path": universe_meta["snapshot_manifest_path"],
+    }
+    identity_sha = _sha256(
+        json.dumps(snapshot_identity, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    )
+    as_of = as_of_trade_date.replace("-", "")
+    csv_stem = f"fpi_evidence_matrix_{as_of}_{output_sha[:16]}"
+    manifest_stem = f"fpi_evidence_matrix_{as_of}_{output_sha[:12]}_{identity_sha[:12]}"
+    snapshot_path = Path("data/snapshots/fpi_evidence_blend") / f"{csv_stem}.csv"
+    snapshot_manifest_path = Path("data/snapshots/fpi_evidence_blend") / f"{manifest_stem}.json"
+    snapshot_manifest = {
+        **snapshot_identity,
+        "snapshot_identity_sha256": identity_sha,
         "status": "complete",
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
-        "as_of_trade_date": as_of_trade_date,
         "stock_count": len(output_rows),
         "direct_fpi_client_gross_buy_candidate_count": sum(
             row["direct_fpi_client_gross_buy_candidate"] == "true" for row in output_rows
@@ -514,15 +541,7 @@ def build(root: Path = Path(".")) -> dict:
         "participant_volume_session_count": historical_manifest["participant_volume_session_count"],
         "participant_derivatives_window_statuses": participant_statuses,
         "composite_score_status": "not_scored_independent_evidence_dimensions_only",
-        "source_hashes": {
-            "universe": universe_meta["sha256"],
-            "daily_stock_features": daily_manifest["output_sha256"],
-            "historical_stock_features": historical_manifest["stock_output_sha256"],
-            "fpi_deal_stock_summary": deal_manifest["stock_summary_csv_sha256"],
-            "shareholding_ownership": share_manifest["ownership_current_sha256"],
-            "market_flow_history": historical_manifest["market_output_sha256"],
-            "participant_derivatives_history": historical_manifest["participant_output_sha256"],
-        },
+        "source_hashes": source_hashes,
         "output_csv_sha256": output_sha,
         "snapshot_path": str(snapshot_path),
         "snapshot_manifest_path": str(snapshot_manifest_path),
@@ -546,9 +565,17 @@ def build(root: Path = Path(".")) -> dict:
         raise RuntimeError(f"immutable blend snapshot collision: {snapshot_path}")
     snapshot_path_abs.write_bytes(output_payload)
     snapshot_manifest_abs = root_out / snapshot_manifest_path
-    snapshot_manifest_abs.write_text(
-        json.dumps(snapshot_manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
-    )
+    if snapshot_manifest_abs.exists():
+        existing_snapshot_manifest = json.loads(
+            snapshot_manifest_abs.read_text(encoding="utf-8")
+        )
+        if existing_snapshot_manifest.get("snapshot_identity_sha256") != identity_sha:
+            raise RuntimeError(f"immutable blend manifest collision: {snapshot_manifest_path}")
+        snapshot_manifest = existing_snapshot_manifest
+    else:
+        snapshot_manifest_abs.write_text(
+            json.dumps(snapshot_manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+        )
     current_csv = root_out / OUTPUT_CSV
     current_csv.parent.mkdir(parents=True, exist_ok=True)
     current_csv.write_bytes(output_payload)
