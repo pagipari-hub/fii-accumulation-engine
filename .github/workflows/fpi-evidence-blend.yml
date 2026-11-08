@@ -64,11 +64,9 @@ jobs:
         run: pytest
 
       - name: Build blended evidence matrix
-        if: github.event_name != 'pull_request'
         run: python -m fii_engine.fpi_evidence_blend --root .
 
       - name: Validate full-universe matrix and provenance
-        if: github.event_name != 'pull_request'
         run: |
           python - <<'PY'
           import csv
