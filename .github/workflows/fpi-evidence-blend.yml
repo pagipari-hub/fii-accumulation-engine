@@ -1,0 +1,133 @@
+name: Build blended Nifty 500 FPI evidence matrix
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/fii_engine/fpi_evidence_blend.py"
+      - "tests/test_fpi_evidence_blend.py"
+      - "config/sources.yaml"
+      - "docs/fpi-evidence-blend.md"
+      - ".github/workflows/fpi-evidence-blend.yml"
+      - ".gitignore"
+      - "scripts/retry_git_push.sh"
+      - "data/raw/daily_stock_features/**"
+      - "data/raw/historical_features/**"
+      - "data/raw/shareholding/**"
+      - "data/raw/fpi_deal_attribution/**"
+      - "data/raw/universe/nifty500_current.csv"
+      - "data/snapshots/universe/**"
+  pull_request:
+    paths:
+      - "src/fii_engine/fpi_evidence_blend.py"
+      - "tests/test_fpi_evidence_blend.py"
+      - "config/sources.yaml"
+      - "docs/fpi-evidence-blend.md"
+      - ".github/workflows/fpi-evidence-blend.yml"
+      - ".gitignore"
+      - "scripts/retry_git_push.sh"
+      - "data/raw/daily_stock_features/**"
+      - "data/raw/historical_features/**"
+      - "data/raw/shareholding/**"
+      - "data/raw/fpi_deal_attribution/**"
+      - "data/raw/universe/nifty500_current.csv"
+      - "data/snapshots/universe/**"
+  workflow_dispatch:
+  schedule:
+    # 00:30 IST weekdays, after the daily registry/deal and stock-evidence collection window.
+    - cron: "0 19 * * 1-5"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fpi-evidence-blend-\${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  blend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install project and test dependencies
+        run: python -m pip install -e ".[dev]"
+
+      - name: Run project tests
+        run: pytest
+
+      - name: Build blended evidence matrix
+        if: github.event_name != 'pull_request'
+        run: python -m fii_engine.fpi_evidence_blend --root .
+
+      - name: Validate full-universe matrix and provenance
+        if: github.event_name != 'pull_request'
+        run: |
+          python - <<'PY'
+          import csv
+          import hashlib
+          import json
+          from pathlib import Path
+
+          manifest_path = Path("data/raw/fpi_evidence_blend/fpi_evidence_matrix_current_manifest.json")
+          manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+          output_path = Path(manifest["current_output_path"])
+          payload = output_path.read_bytes()
+          assert hashlib.sha256(payload).hexdigest() == manifest["output_csv_sha256"]
+          with output_path.open("r", encoding="utf-8", newline="") as handle:
+              rows = list(csv.DictReader(handle))
+          assert manifest["status"] == "complete"
+          assert manifest["stock_count"] == 501
+          assert len(rows) == 501
+          assert manifest["composite_score_status"] == "not_scored_independent_evidence_dimensions_only"
+          assert manifest["universe_snapshot_manifest_path"]
+          assert manifest["source_hashes"]["daily_stock_features"]
+          assert manifest["source_hashes"]["historical_stock_features"]
+          assert manifest["source_hashes"]["fpi_deal_stock_summary"]
+          assert manifest["source_hashes"]["shareholding_ownership"]
+          print(json.dumps({
+              "as_of_trade_date": manifest["as_of_trade_date"],
+              "stock_count": manifest["stock_count"],
+              "direct_fpi_client_gross_buy_candidate_count": manifest["direct_fpi_client_gross_buy_candidate_count"],
+              "grade_1_count": manifest["grade_1_count"],
+              "grade_2_count": manifest["grade_2_count"],
+              "ownership_reporting_date": manifest["ownership_reporting_date"],
+              "ownership_parsed_verified_count": manifest["ownership_parsed_verified_count"],
+              "ownership_coverage_pct": manifest["ownership_coverage_pct"],
+              "market_flow_session_count": manifest["market_flow_session_count"],
+              "participant_oi_session_count": manifest["participant_oi_session_count"],
+              "participant_volume_session_count": manifest["participant_volume_session_count"],
+              "composite_score_status": manifest["composite_score_status"],
+          }, indent=2))
+          PY
+
+      - name: Upload blended evidence outputs
+        if: always() && github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: fpi-evidence-blend-\${{ github.run_id }}
+          path: |
+            data/raw/fpi_evidence_blend/
+            data/snapshots/fpi_evidence_blend/
+          if-no-files-found: warn
+          retention-days: 90
+
+      - name: Commit blended evidence outputs
+        if: github.event_name != 'pull_request'
+        run: |
+          if [[ -n "$(git status --porcelain data/raw/fpi_evidence_blend data/snapshots/fpi_evidence_blend)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add data/raw/fpi_evidence_blend data/snapshots/fpi_evidence_blend
+            git commit -m "data: build blended Nifty 500 FPI evidence matrix"
+            bash scripts/retry_git_push.sh "$GITHUB_REF_NAME"
+          else
+            echo "Blended FPI evidence matrix unchanged."
+          fi
