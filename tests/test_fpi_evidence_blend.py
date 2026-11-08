@@ -186,6 +186,7 @@ def test_build_blended_matrix_preserves_missingness_and_full_universe(tmp_path):
         "stock_summary_csv_sha256": deal_hash, "universe_csv_sha256": universe_hash,
         "trade_date_window_start": "2026-10-30", "trade_date_window_end": "2026-11-06",
         "registry_snapshot_date": "2026-11-08",
+        "registry_snapshot_sha256": "a" * 64,
     })
     _write_json(tmp_path / "data/raw/shareholding/current_manifest.json", {
         "ownership_current_sha256": share_hash, "universe_sha256": universe_hash,
