@@ -217,3 +217,7 @@ def test_build_blended_matrix_preserves_missingness_and_full_universe(tmp_path):
     assert no_data["direct_fpi_client_gross_buy_candidate"] == "false"
     assert len(result["market_flow_window_statuses"]) == 6
     assert all(item["status"] == "insufficient_history" for item in result["market_flow_window_statuses"])
+
+    second_result = build(tmp_path)
+    assert second_result["snapshot_manifest_path"] == result["snapshot_manifest_path"]
+    assert second_result["generated_at_utc"] == result["generated_at_utc"]
