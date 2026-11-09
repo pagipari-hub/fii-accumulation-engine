@@ -11,7 +11,6 @@ import argparse
 import csv
 import json
 from pathlib import Path
-from typing import Iterable
 
 from fii_engine.scoring import load_config, score_stock
 
@@ -102,12 +101,14 @@ def score_matrix_rows(
 ) -> dict:
     if not rows:
         raise ValueError("matrix contains no stock rows")
+    symbols = [row.get("symbol", "").strip().upper() for row in rows]
+    if any(not symbol for symbol in symbols) or len(symbols) != len(set(symbols)):
+        raise ValueError("matrix symbols must be non-empty and unique")
     if not matrix_ref.strip():
         raise ValueError("matrix_ref is required for provenance")
 
     # Cross-sectional inputs are computed once over the same dated universe.
     delivery_delta: list[float | None] = []
-    return_values: dict[int, list[float | None]] = {}
     volume_ratio: list[float | None] = []
     trend_values: list[list[float | None]] = []
 
@@ -180,9 +181,6 @@ def score_matrix_rows(
             ),
         }
 
-        price_observations = [
-            return_values.get(index) for index in range(len(PRICE_WINDOWS))
-        ]
         valid_price_percentiles = [
             return_pct_by_window[i][index]
             for i in range(len(PRICE_WINDOWS))
