@@ -108,6 +108,7 @@ def _score_dimensions(
         and observed_count >= minimum_observed_dimensions
         and identity_verified
         and direct_gate_passed
+        and details["verified_net_fpi_transactions"]["status"] == "observed"
     )
     if not identity_verified:
         status = "not_rankable_identity_unverified"
