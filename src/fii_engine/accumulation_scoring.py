@@ -38,6 +38,7 @@ def _score_dimensions(
     identity_verified: bool,
     direct_gate_passed: bool = True,
     direct_dimensions: set[str] | None = None,
+    required_observed_dimensions: set[str] | None = None,
 ) -> dict[str, Any]:
     """Calculate a weighted mean over observed dimensions, preserving N/A."""
     expected = set(weights)
@@ -108,7 +109,10 @@ def _score_dimensions(
         and observed_count >= minimum_observed_dimensions
         and identity_verified
         and direct_gate_passed
-        and details["verified_net_fpi_transactions"]["status"] == "observed"
+        and all(
+            details[key]["status"] == "observed"
+            for key in (required_observed_dimensions or set())
+        )
     )
     if not identity_verified:
         status = "not_rankable_identity_unverified"
@@ -151,6 +155,7 @@ def score_fii_accumulation(
         identity_verified=identity_verified,
         direct_gate_passed=direct_gate_passed,
         direct_dimensions=FII_DIRECT_DIMENSIONS,
+        required_observed_dimensions={"verified_net_fpi_transactions"},
     )
 
 
