@@ -635,7 +635,25 @@ def classify(root: Path = Path("."), lookback_days: int = 7) -> dict:
     stock_payload = _csv_bytes(stock_rows, STOCK_FIELDS)
     event_sha = _sha256(event_payload)
     stock_sha = _sha256(stock_payload)
-    snapshot_hash = _sha256((event_sha + stock_sha).encode())
+    # Immutable snapshot identity must cover every input that is recorded in the
+    # manifest, not only the derived CSV bytes. Source manifests can be refreshed
+    # while producing identical event/stock rows; using only the CSV hashes would
+    # collide with a manifest containing different provenance.
+    snapshot_identity = {
+        "parser_version": PARSER_VERSION,
+        "trade_date_window_start": start_date.isoformat(),
+        "trade_date_window_end": end_date.isoformat(),
+        "event_csv_sha256": event_sha,
+        "stock_summary_csv_sha256": stock_sha,
+        "registry_snapshot_date": registry_snapshot_date.isoformat(),
+        "registry_snapshot_sha256": registry_manifest["normalized_csv_sha256"],
+        "universe_csv_sha256": universe_metadata["sha256"],
+        "source_deal_manifests": source_refs,
+    }
+    snapshot_identity_payload = json.dumps(
+        snapshot_identity, sort_keys=True, separators=(",", ":"), ensure_ascii=False
+    ).encode("utf-8")
+    snapshot_hash = _sha256(snapshot_identity_payload)
     stem = f"fpi_deal_attribution_{end_date:%Y%m%d}_{snapshot_hash[:16]}"
     event_snapshot_rel = f"data/snapshots/fpi_deal_attribution/{stem}_events.csv"
     stock_snapshot_rel = f"data/snapshots/fpi_deal_attribution/{stem}_stocks.csv"
@@ -728,6 +746,7 @@ def classify(root: Path = Path("."), lookback_days: int = 7) -> dict:
         ),
         "event_csv_sha256": event_sha,
         "stock_summary_csv_sha256": stock_sha,
+        "snapshot_identity_sha256": snapshot_hash,
         "event_snapshot_path": event_snapshot_rel,
         "stock_summary_snapshot_path": stock_snapshot_rel,
         "snapshot_manifest_path": snapshot_manifest_rel,
