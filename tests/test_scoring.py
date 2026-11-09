@@ -161,6 +161,7 @@ def test_fii_rankability_requires_observed_verified_net_transaction_dimension(co
             "persistence": 0.9,
             "quarterly_fpi_ownership_change": 0.9,
             "independent_fpi_buyer_breadth": 0.9,
+            "relative_accumulation_intensity": 0.9,
         },
     )
     confirmation = observations(
