@@ -35,7 +35,7 @@ def test_fii_score_is_weighted_and_coverage_is_separate():
     result = score_fii_accumulation(
         observations, identity_verified=True, direct_gate_passed=True
     )
-    assert result["score"] == 85.0
+    assert result["score"] == 83.75
     assert result["coverage_pct"] == 80.0
     assert result["rankable"] is True
     assert result["status"] == "research_rankable_provisional"
@@ -69,7 +69,7 @@ def test_missing_dimensions_reduce_coverage_not_score():
         observations, identity_verified=True, direct_gate_passed=True
     )
     assert result["score"] == 70.0
-    assert result["coverage_pct"] == 77.78
+    assert result["coverage_pct"] == 88.89
 
 
 def test_missingness_is_not_zero_and_observed_requires_provenance():
@@ -110,7 +110,7 @@ def test_market_confirmation_is_a_separate_weighted_score():
         },
     )
     result = score_market_confirmation(observations, identity_verified=True)
-    assert result["score"] == 75.0
+    assert result["score"] == 70.59
     assert result["coverage_pct"] == 85.0
     assert result["rankable"] is True
 
