@@ -153,6 +153,28 @@ def test_catalyst_cannot_be_positive_without_source(config):
         )
 
 
+
+def test_fii_rankability_requires_observed_verified_net_transaction_dimension(config):
+    fii = observations(
+        {item["key"]: item["weight"] for item in config["primary_score"]["dimensions"]},
+        {
+            "persistence": 0.9,
+            "quarterly_fpi_ownership_change": 0.9,
+            "independent_fpi_buyer_breadth": 0.9,
+        },
+    )
+    confirmation = observations(
+        {item["key"]: item["weight"] for item in config["confirmation_score"]["dimensions"]}, {}
+    )
+    result = score_stock(
+        "ABC", fii, confirmation, config,
+        identity_verified=True, direct_gate_passed=True,
+    )
+    assert result["fii_accumulation"]["score"] == 90.0
+    assert result["fii_accumulation"]["rankable"] is False
+    assert result["fii_accumulation"]["status"] == "not_rankable_insufficient_coverage_or_dimensions"
+
+
 def test_config_rejects_weight_or_dimension_drift(config):
     broken = json.loads(json.dumps(config))
     broken["primary_score"]["dimensions"][0]["weight"] = 34
