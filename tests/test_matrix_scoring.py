@@ -32,7 +32,7 @@ def _row(symbol, ret5, ret20, ret60, delivery5, delivery20, volume5, volume20):
 
 
 def test_percentile_ranks_handle_ties_and_missing_values():
-    assert _percentile_ranks([1.0, 2.0, 2.0, None, 4.0]) == [0.0, 0.375, 0.375, None, 1.0]
+    assert _percentile_ranks([1.0, 2.0, 2.0, None, 4.0]) == [0.0, 0.5, 0.5, None, 1.0]
     assert _percentile_ranks([5.0]) == [0.5]
     assert _percentile_ranks([None, None]) == [None, None]
 
