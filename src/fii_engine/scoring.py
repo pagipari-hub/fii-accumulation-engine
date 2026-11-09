@@ -78,19 +78,30 @@ def score_stock(
         minimum_coverage=config["confirmation_score"].get("minimum_coverage", 0.60),
         minimum_observed_dimensions=config["confirmation_score"].get("minimum_observed_dimensions", 3),
     )
-    catalyst = catalyst_assessment or {"score": 0, "summary": "No visible catalyst recorded", "source_refs": []}
-    if isinstance(catalyst.get("score"), bool) or not isinstance(catalyst.get("score"), (int, float)):
-        raise ValueError("catalyst score must be numeric")
-    if not 0 <= catalyst["score"] <= 10:
-        raise ValueError("catalyst score must be between 0 and 10")
-    if catalyst["score"] > 0 and not catalyst.get("source_refs"):
-        raise ValueError("positive catalyst assessment requires source references")
+    catalyst = catalyst_assessment or {
+        "status": "unavailable", "score": None,
+        "summary": "No catalyst research feed supplied", "source_refs": [],
+    }
+    catalyst_status = catalyst.get("status", "observed")
+    if catalyst_status not in {"observed", "unavailable"}:
+        raise ValueError("catalyst status must be observed or unavailable")
+    if catalyst_status == "unavailable":
+        if catalyst.get("score") is not None:
+            raise ValueError("unavailable catalyst score must be null")
+    else:
+        if isinstance(catalyst.get("score"), bool) or not isinstance(catalyst.get("score"), (int, float)):
+            raise ValueError("observed catalyst score must be numeric")
+        if not 0 <= catalyst["score"] <= 10:
+            raise ValueError("catalyst score must be between 0 and 10")
+        if not catalyst.get("source_refs"):
+            raise ValueError("observed catalyst assessment requires source references")
     return {
         "symbol": symbol,
         "fii_accumulation": fii,
         "market_confirmation": confirmation,
         "catalyst": {
-            "score": catalyst["score"],
+            "status": catalyst_status,
+            "score": catalyst.get("score"),
             "summary": catalyst.get("summary", ""),
             "source_refs": catalyst.get("source_refs", []),
         },
