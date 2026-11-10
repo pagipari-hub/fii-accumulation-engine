@@ -1,8 +1,8 @@
 {
   "dataset": "validated_historical_evidence_features",
-  "generated_at_utc": "2026-11-08T00:04:27.463122+00:00",
-  "as_of_trade_date": "2026-11-06",
-  "daily_stock_session_count": 60,
+  "generated_at_utc": "2026-11-10T00:48:48.402670+00:00",
+  "as_of_trade_date": "2026-11-09",
+  "daily_stock_session_count": 61,
   "daily_stock_trade_dates": [
     "2026-08-12",
     "2026-08-13",
@@ -63,19 +63,23 @@
     "2026-11-03",
     "2026-11-04",
     "2026-11-05",
-    "2026-11-06"
+    "2026-11-06",
+    "2026-11-09"
   ],
-  "market_flow_session_count": 1,
+  "market_flow_session_count": 2,
   "market_flow_trade_dates": [
-    "2026-11-06"
+    "2026-11-06",
+    "2026-11-09"
   ],
-  "participant_oi_session_count": 1,
+  "participant_oi_session_count": 2,
   "participant_oi_trade_dates": [
-    "2026-11-06"
+    "2026-11-06",
+    "2026-11-09"
   ],
-  "participant_volume_session_count": 1,
+  "participant_volume_session_count": 2,
   "participant_volume_trade_dates": [
-    "2026-11-06"
+    "2026-11-06",
+    "2026-11-09"
   ],
   "windows_sessions": [
     5,
@@ -83,12 +87,12 @@
     60
   ],
   "stock_universe_count": 501,
-  "stock_output_sha256": "92aa38e61eb491fc83b5cf6197a271f9e4c95a39de2a4d9b349eb22ec23eaa07",
-  "stock_snapshot_path": "data/snapshots/historical_features/stock_historical_features_2026-11-06_92aa38e61eb491fc.csv",
-  "market_output_sha256": "02e1f54decb5620344aea7ae51fbcd0340575225975ffd871af9a0eae6732572",
-  "market_snapshot_path": "data/snapshots/historical_features/market_flow_history_2026-11-06_02e1f54decb56203.csv",
-  "participant_output_sha256": "fd4f17bac02f45569ff0699b01295a65a10eb60d2eecce6132e9d70aa9eae60d",
-  "participant_snapshot_path": "data/snapshots/historical_features/participant_derivatives_history_2026-11-06_fd4f17bac02f4556.csv",
+  "stock_output_sha256": "cef668963bd5658c80df6fc5367c781e1d25093a5ab93dfb3a475939d3bbd26c",
+  "stock_snapshot_path": "data/snapshots/historical_features/stock_historical_features_2026-11-09_cef668963bd5658c.csv",
+  "market_output_sha256": "8d962a06ddff5208d376f0e88aa7561e7960fce56edac17937c3888ea2f093cb",
+  "market_snapshot_path": "data/snapshots/historical_features/market_flow_history_2026-11-09_8d962a06ddff5208.csv",
+  "participant_output_sha256": "8b7dfc0e2c1dcc140e09a25ff8b0a951642a0f7604fee8d49624aa65993a821f",
+  "participant_snapshot_path": "data/snapshots/historical_features/participant_derivatives_history_2026-11-09_8b7dfc0e2c1dcc14.csv",
   "limitations": [
     "A window is complete only when the requested number of distinct committed trading-date snapshots exists.",
     "Stock cash, delivery and derivatives metrics retain family-specific partial-observation statuses.",
