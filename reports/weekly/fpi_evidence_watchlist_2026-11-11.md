@@ -17,6 +17,14 @@
 Missing current NSE ownership records: ABBOTINDIA, ALKEM, BAGMANE, BIRET, EMBASSY, MCX.
 These remain N/A; no ownership values are imputed.
 
+## Disclosed stock-specific deal evidence window
+
+- **NSE bulk/block deal disclosure window:** 2026-11-02 to 2026-11-09 (7-day span).
+- **Source records / deduplicated events:** 661 / 650.
+- **Current-registry-matched FPI-client events / unmatched events:** 10 / 638.
+- **CDSL FPI registry snapshot date:** 2026-11-11.
+These are disclosed bulk/block transactions, not a complete tape of all FPI trades. Current-registry matches do not prove registration was active on earlier trade dates.
+
 ## Stock-specific FPI evidence
 
 - **Grade 1 candidates:** 0
@@ -38,7 +46,7 @@ These remain N/A; no ownership values are imputed.
 - **Positional (20 / 60 sessions):** price returns +8.35% / -7.42%; delivery context 5-session average delivery is at or above the 20-session average.
 - **Quarterly ownership:** FPI total 4.59% as of 2026-09-30; Quarterly FPI ownership baseline available; no prior-quarter change series.
 - **Derivatives:** futures Not applicable; options Not applicable; Options PCR has partial observations.
-- **Why included:** a named current-registry FPI-client gross-buy disclosure is visible, but registration timing is not verified for the transaction date and sell-side counterparty identity is incomplete. This is a lead, not confirmed net accumulation.
+- **Why included:** A named current-registry FPI-client gross-buy disclosure is visible, but registration timing is not verified for the transaction date and sell-side counterparty identity is incomplete. This is a lead, not confirmed net accumulation.
 - **Catalyst:** No sourced business/corporate catalyst or buyer motive is attached; none is inferred.
 
 A Grade 2 gross-buy match is a lead, not proof of net FPI accumulation. Unverified registration timing and incomplete buy/sell totals must remain explicit.
@@ -55,10 +63,19 @@ A Grade 2 gross-buy match is a lead, not proof of net FPI accumulation. Unverifi
 - **Source construction:** NSDL FPI Equity Sub-total and explicit DII Equity Total; debt, derivatives and duplicate investor subtotals are excluded.
 These are aggregate market-wide flows only. They do not establish which individual stocks were bought or sold.
 
+## Historical ownership source discovery
+
+- **NSE market-wide shareholding master:** 4,970 rows across 2,402 symbols (01-07-2026 to 11-11-2026).
+- **NSE symbol-specific master history rows:** {"ABBOTINDIA": {"date_range": 0, "symbol_history": 0}, "ALKEM": {"date_range": 1, "symbol_history": 20}, "HDFCBANK": {"date_range": 2, "symbol_history": 23}, "MCX": {"date_range": 0, "symbol_history": 0}, "RELIANCE": {"date_range": 2, "symbol_history": 23}}.
+- **Symbols returning multiple master records:** RELIANCE, HDFCBANK, ALKEM.
+- **NSE shareholding/unitholding pattern announcements:** {"ABBOTINDIA": 0, "ALKEM": 0, "BAGMANE": 3, "BIRET": 5, "EMBASSY": 4, "MCX": 0}.
+- **Official attachments captured / failed:** 12 / 0.
+These probes discover historical filing sources only. Their records are not used as ownership values until quarter dates, category totals, security identity and payload hashes are validated.
+
 ## BSE fallback coverage
 
 - **BSE corporate shareholding API access:** http_403_blocked.
-- **Probe statuses:** {"not_attempted_after_exchange_403": 5, "probe_error": 1}.
+- **Probe statuses:** {"not_attempted_after_exchange_403": 2, "probe_error": 1}.
 - **BSE UDiFF source SHA-256:** e2b7cea2672aed05df3ce55f3c531a153cb2b5215e2b493b2735cd9be116acce.
 An HTTP 403 is an access restriction, not proof that a filing does not exist. No third-party ownership percentages were substituted.
 
@@ -73,7 +90,7 @@ An HTTP 403 is an access restriction, not proof that a filing does not exist. No
 ## Reproducibility
 
 - Matrix CSV SHA-256: d96df24dc28ccb0feff1fdddfe565154b0defdc7d494f85369b66f49e845d6dd
-- BSE fallback manifest SHA-256: 12e694a6a58a4860a40a885d8e8551c46c271783d46480010eced9e21e8796bf
+- BSE fallback manifest SHA-256: 938c10cf9cec515652da0ea3da36896f714fc06377411dc31dba8233e3bb9222
 - Ownership identity crosswalk SHA-256: 12258998e48b1203bbcbc708d6d3ee9c5fcb9f7d537d925d47ae3c392a5d52c8
 - NSDL normalized CSV SHA-256: 061bc2be35b00e26bd6250938c005ba1998fbc01044cac72c2d0e7cdf216d4c1
 - NSDL raw archive manifest SHA-256: b1f08e3af954dba8db2182464433b111311c74a2e29240893c8c5d25dc42fb3a
