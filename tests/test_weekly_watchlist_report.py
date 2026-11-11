@@ -75,6 +75,12 @@ def test_weekly_watchlist_is_conservative_and_hash_validated(tmp_path):
         "direct_fpi_client_gross_buy_candidate_count": 1,
         "composite_score_status": "not_scored_independent_evidence_dimensions_only",
         "as_of_trade_date": "2026-11-09",
+        "deal_trade_date_window": ["2026-08-10", "2026-11-09"],
+        "deal_lookback_calendar_days": 91,
+        "deal_source_row_count": 100,
+        "deal_deduplicated_event_count": 90,
+        "deal_current_registry_matched_fpi_client_event_count": 4,
+        "deal_unmatched_event_count": 6,
         "nse_shareholding_history_probe": {
             "date_range": {"from_date": "01-07-2026", "to_date": "11-11-2026"},
             "market_wide_history": {"row_count": 2460, "unique_symbol_count": 500},
@@ -128,6 +134,8 @@ def test_weekly_watchlist_is_conservative_and_hash_validated(tmp_path):
     assert "Historical ownership source discovery" in report
     assert "ALKEM" in report and "EMBASSY" in report
     assert "2,460 rows across 500 symbols" in report
+    assert "NSE bulk/block deal disclosure window" in report
+    assert "100 / 90" in report
     assert "Official attachments captured / failed" in report and "1 / 1" in report
     assert "12,000,000 / 0 shares" in report
     assert "19,098,281 shares" in report
