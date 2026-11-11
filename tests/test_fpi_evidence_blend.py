@@ -62,6 +62,11 @@ def test_build_blended_matrix_preserves_missingness_and_full_universe(tmp_path):
         "fpi": {"cumulative_net_inr_crore": -10.0},
         "dii": {"cumulative_net_inr_crore": 20.0},
     })
+    _write_json(tmp_path / "data/raw/shareholding/bse_shareholding_fallback_probe_manifest.json", {
+        "api_access_status": "http_403_blocked",
+        "candidate_count": 6,
+        "status_counts": {"probe_error": 1, "not_attempted_after_exchange_403": 5},
+    })
 
     daily_rows = []
     historical_rows = []
@@ -220,6 +225,8 @@ def test_build_blended_matrix_preserves_missingness_and_full_universe(tmp_path):
     assert result["index_placeholder_count"] == 1
     assert result["nsdl_market_flow_context"]["stock_level_attribution"] is False
     assert result["nsdl_market_flow_context"]["scope"] == "aggregate_market_wide_cash_equity_context_only"
+    assert result["bse_shareholding_fallback_probe"]["api_access_status"] == "http_403_blocked"
+    assert result["source_hashes"]["bse_shareholding_fallback_probe_manifest"]
     assert result["ownership_coverage_pct"] == 0.2
     assert result["ownership_index_row_coverage_pct"] == 0.2
     assert result["ownership_status_counts"]["not_applicable_index_placeholder"] == 1
