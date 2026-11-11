@@ -129,6 +129,12 @@ def _load_identity_crosswalk(path: Path | None) -> tuple[dict[str, dict], dict |
         raise ValueError("dated BSE identity crosswalk is not fully verified")
     if report.get("unresolved_count") != 0 or not digest:
         raise ValueError("dated BSE identity crosswalk has unresolved rows or no source hash")
+    source_name = str(report.get("bse_source_path") or "").strip()
+    if not source_name or Path(source_name).name != source_name:
+        raise ValueError("dated BSE identity report has no safe raw-source filename")
+    source_path = report_path.parent / source_name
+    if not source_path.is_file() or _sha256(source_path.read_bytes()) != digest:
+        raise ValueError("dated BSE raw source is missing or fails SHA-256 verification")
     indexed = {}
     for row in rows:
         symbol = row.get("symbol", "").strip().upper()
