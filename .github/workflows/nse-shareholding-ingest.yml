@@ -78,15 +78,6 @@ jobs:
           cp artifacts/nse-security-master-probe/shareholding_bse_scripcode_isin_crosswalk.csv data/raw/shareholding/identity_evidence/
           cp artifacts/nse-security-master-probe/shareholding_bse_scripcode_isin_crosswalk.json data/raw/shareholding/identity_evidence/
           cp artifacts/nse-security-master-probe/BhavCopy_BSE_CM_0_0_0_20260930_F_0000_*.csv data/raw/shareholding/identity_evidence/
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          report = Path("data/raw/shareholding/identity_evidence/shareholding_bse_scripcode_isin_crosswalk.json")
-          value = json.loads(report.read_text(encoding="utf-8"))
-          raw = next(Path("data/raw/shareholding/identity_evidence").glob("BhavCopy_BSE_CM_0_0_0_20260930_F_0000_*.csv"))
-          value["bse_source_path"] = raw.name
-          report.write_text(json.dumps(value, indent=2) + "\\n", encoding="utf-8")
-          PY
 
       - name: Capture official NSE shareholding filings and FPI ownership
         if: github.event_name != 'pull_request'
