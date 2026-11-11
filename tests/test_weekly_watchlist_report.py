@@ -60,6 +60,16 @@ def test_weekly_watchlist_is_conservative_and_hash_validated(tmp_path):
         "direct_fpi_client_gross_buy_candidate_count": 1,
         "composite_score_status": "not_scored_independent_evidence_dimensions_only",
         "as_of_trade_date": "2026-11-09",
+        "nsdl_market_flow_context": {
+            "start_date": "2026-08-10",
+            "end_date": "2026-11-09",
+            "normalized_date_count": 60,
+            "fpi": {"cumulative_net_inr_crore": -255.21, "observed_days": 60, "positive_net_days": 30, "negative_net_days": 30},
+            "dii": {"cumulative_net_inr_crore": 231298.85, "observed_days": 60, "positive_net_days": 60, "negative_net_days": 0},
+            "overlapping_fpi_dii_days": 60,
+            "dii_no_data_days": ["2026-08-26"],
+            "stock_level_attribution": False,
+        },
     }
     manifest_path = tmp_path / "manifest.json"
     manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
@@ -82,6 +92,9 @@ def test_weekly_watchlist_is_conservative_and_hash_validated(tmp_path):
     assert "incomplete buy/sell totals" in report
     assert "146 / 146 verified" in report
     assert "http_403_blocked" in report
+    assert "Aggregate market-wide cash-flow context" in report
+    assert "₹-255.21 crore" in report
+    assert "These are aggregate market-wide flows only" in report
     assert "Composite score/ranking" in report and "disabled." in report
     assert "not an investment recommendation" in report
 
