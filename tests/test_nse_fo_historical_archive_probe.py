@@ -47,7 +47,7 @@ def test_unwrap_download_extracts_single_member_zip():
 
 
 def test_candidate_dates_skips_weekends():
-    dates = list(_candidate_dates(date(2026, 11, 9), 3, 10))
+    dates = list(_candidate_dates(date(2026, 11, 9), 10))
     assert dates == [
         date(2026, 11, 9),
         date(2026, 11, 6),
