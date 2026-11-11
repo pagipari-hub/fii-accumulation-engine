@@ -11,10 +11,12 @@
     "fpi_deal_stock_summary": "547ce6f5bd428fbc669cc345466723c0e027710d94834a6c802ed3d50f16e34a",
     "cdsl_registry_snapshot": "ed003b061a033b6ba26c7b8b2238aec8ab2d1682edd0b2688277aefcfd66dcb4",
     "shareholding_ownership": "877d97f99a90ae5f5c4b0fa921dfdceb7ba68d5a19f005113c088aee918ad697",
-    "shareholding_identity_crosswalk": "e2b7cea2672aed05df3ce55f3c531a153cb2b5215e2b493b2735cd9be116acce",
-    "nsdl_cash_flow_normalized_csv": null,
-    "nsdl_cash_flow_raw_archive_manifest": null,
-    "nsdl_cash_flow_context": null,
+    "shareholding_identity_crosswalk": "12258998e48b1203bbcbc708d6d3ee9c5fcb9f7d537d925d47ae3c392a5d52c8",
+    "shareholding_identity_bse_udiff": "e2b7cea2672aed05df3ce55f3c531a153cb2b5215e2b493b2735cd9be116acce",
+    "nsdl_cash_flow_normalized_csv": "061bc2be35b00e26bd6250938c005ba1998fbc01044cac72c2d0e7cdf216d4c1",
+    "nsdl_cash_flow_raw_archive_manifest": "b1f08e3af954dba8db2182464433b111311c74a2e29240893c8c5d25dc42fb3a",
+    "nsdl_cash_flow_context": "c37eb5c08b44227e06ae68fee1b2681e56d075f1811d71a4c55d4e2a992d1141",
+    "bse_shareholding_fallback_probe_manifest": "27b372b4bf3644e797485a41c9df01e2b76cf4a90ffc99ebb12c580b4b8a910f",
     "market_flow_history": "8d962a06ddff5208d376f0e88aa7561e7960fce56edac17937c3888ea2f093cb",
     "participant_derivatives_history": "8b7dfc0e2c1dcc140e09a25ff8b0a951642a0f7604fee8d49624aa65993a821f"
   },
@@ -34,9 +36,9 @@
       "DUMMYHEG"
     ]
   },
-  "snapshot_identity_sha256": "dd5bb1fdd28d739e95636c5621fbb58caede76ecfc4e98c12b71903a33ee7f12",
+  "snapshot_identity_sha256": "d3a0d8bcaace82aa9dd7c3ff0e7a2110069b3f9011ebc81814706b8bccb8dc0b",
   "status": "complete",
-  "generated_at_utc": "2026-11-11T17:31:25.599681+00:00",
+  "generated_at_utc": "2026-11-11T17:34:48.789880+00:00",
   "stock_count": 501,
   "tradable_stock_count": 500,
   "index_placeholder_count": 1,
@@ -46,7 +48,120 @@
   "direct_fpi_client_gross_buy_candidate_count": 1,
   "grade_1_count": 0,
   "grade_2_count": 1,
-  "nsdl_market_flow_context": null,
+  "nsdl_market_flow_context": {
+    "publisher": "National Securities Depository Limited",
+    "scope": "aggregate_market_wide_cash_equity_context_only",
+    "stock_level_attribution": false,
+    "start_date": "2026-08-10",
+    "end_date": "2026-11-09",
+    "normalized_date_count": 62,
+    "fpi": {
+      "observed_days": 62,
+      "cumulative_net_inr_crore": -255.21,
+      "positive_net_days": 28,
+      "negative_net_days": 34,
+      "zero_net_days": 0,
+      "max_daily_net_inr_crore": 16277.99,
+      "min_daily_net_inr_crore": -12884.07,
+      "gross_purchases_inr_crore": 1081290.98,
+      "gross_sales_inr_crore": 1081546.19
+    },
+    "dii": {
+      "observed_days": 62,
+      "cumulative_net_inr_crore": 231298.85,
+      "positive_net_days": 54,
+      "negative_net_days": 8,
+      "zero_net_days": 0,
+      "max_daily_net_inr_crore": 18491.7,
+      "min_daily_net_inr_crore": -11560.6,
+      "gross_purchases_inr_crore": 1219903.88,
+      "gross_sales_inr_crore": 988605.12
+    },
+    "overlapping_fpi_dii_days": 62,
+    "dii_no_data_days": [
+      "2026-08-26",
+      "2026-09-14",
+      "2026-10-02",
+      "2026-10-20",
+      "2026-11-10"
+    ],
+    "raw_response_counts": {
+      "data": 66,
+      "no_data": 5
+    },
+    "verified_raw_response_count": 71,
+    "raw_archive_manifest_sha256": "b1f08e3af954dba8db2182464433b111311c74a2e29240893c8c5d25dc42fb3a",
+    "normalized_csv_sha256": "061bc2be35b00e26bd6250938c005ba1998fbc01044cac72c2d0e7cdf216d4c1",
+    "raw_archive_manifest_path": "data/raw/nsdl_cash_flows/manifest.json",
+    "normalized_csv_path": "data/processed/nsdl_cash_flows.csv",
+    "source_boundaries": [
+      "FPI rows are NSDL Equity Sub-total cash investment values; derivatives and debt are excluded.",
+      "DII rows use NSDL Equity Total and do not sum investor/institution subtotals.",
+      "Explicit No Data responses remain missing and are never converted to zero.",
+      "These market-wide flows do not prove purchases or sales in any individual stock."
+    ]
+  },
+  "bse_shareholding_fallback_probe": {
+    "publisher": "Bombay Stock Exchange",
+    "retrieved_at_utc": "2026-11-11T17:34:46Z",
+    "reporting_date": "2026-09-30",
+    "candidate_count": 6,
+    "bse_udiff_source_sha256": "e2b7cea2672aed05df3ce55f3c531a153cb2b5215e2b493b2735cd9be116acce",
+    "api_access_status": "http_403_blocked",
+    "observations": [
+      {
+        "symbol": "ABBOTINDIA",
+        "reporting_date": "2026-09-30",
+        "universe_isin": "INE358A01014",
+        "bse_scrip_code": "500488",
+        "bse_symbol": "ABBOTINDIA",
+        "bse_series": "A",
+        "index_url": "https://api.bseindia.com/BseIndiaAPI/api/Corp_Shareholding_ng/w?scripcode=500488&flag=0&indtype=",
+        "status": "probe_error",
+        "error": "BSE request failed (403): https://api.bseindia.com/BseIndiaAPI/api/Corp_Shareholding_ng/w?scripcode=500488&flag=0&indtype="
+      },
+      {
+        "symbol": "ALKEM",
+        "reporting_date": "2026-09-30",
+        "universe_isin": "INE540L01014",
+        "bse_scrip_code": "539523",
+        "status": "not_attempted_after_exchange_403"
+      },
+      {
+        "symbol": "MCX",
+        "reporting_date": "2026-09-30",
+        "universe_isin": "INE745G01043",
+        "bse_scrip_code": "534091",
+        "status": "not_attempted_after_exchange_403"
+      },
+      {
+        "symbol": "EMBASSY",
+        "reporting_date": "2026-09-30",
+        "universe_isin": "INE041025011",
+        "bse_scrip_code": "542602",
+        "status": "not_attempted_after_exchange_403"
+      },
+      {
+        "symbol": "BIRET",
+        "reporting_date": "2026-09-30",
+        "universe_isin": "INE0FDU25010",
+        "bse_scrip_code": "543261",
+        "status": "not_attempted_after_exchange_403"
+      },
+      {
+        "symbol": "BAGMANE",
+        "reporting_date": "2026-09-30",
+        "universe_isin": "INE2OVN25015",
+        "bse_scrip_code": "544758",
+        "status": "not_attempted_after_exchange_403"
+      }
+    ],
+    "status_counts": {
+      "probe_error": 1,
+      "not_attempted_after_exchange_403": 5
+    },
+    "scope_boundary": "BSE quarterly shareholding filing availability only; captured attachments are not yet parsed into ownership rows and do not establish daily FPI transactions."
+  },
   "identity_crosswalk_candidate_count": 146,
   "identity_crosswalk_verified_count": 146,
   "identity_crosswalk_unresolved_count": 0,
@@ -3291,7 +3406,7 @@
   ],
   "composite_score_status": "not_scored_independent_evidence_dimensions_only",
   "snapshot_path": "data/snapshots/fpi_evidence_blend/fpi_evidence_matrix_20261109_d96df24dc28ccb0f.csv",
-  "snapshot_manifest_path": "data/snapshots/fpi_evidence_blend/fpi_evidence_matrix_20261109_d96df24dc28c_dd5bb1fdd28d.json",
+  "snapshot_manifest_path": "data/snapshots/fpi_evidence_blend/fpi_evidence_matrix_20261109_d96df24dc28c_d3a0d8bcaace.json",
   "limitations": [
     "No composite score is issued; independent evidence dimensions are preserved without arbitrary weights.",
     "Demerger index placeholders included at zero price remain in the index-row count but are excluded from tradable-stock ownership coverage and FPI scoring.",
