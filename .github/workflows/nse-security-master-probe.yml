@@ -1,0 +1,54 @@
+name: NSE equity identity reference source probe
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/fii_engine/nse_security_master_probe.py"
+      - "tests/test_nse_security_master_probe.py"
+      - ".github/workflows/nse-security-master-probe.yml"
+  pull_request:
+    paths:
+      - "src/fii_engine/nse_security_master_probe.py"
+      - "tests/test_nse_security_master_probe.py"
+      - ".github/workflows/nse-security-master-probe.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nse-security-master-probe
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install -e ".[dev]"
+      - run: pytest tests/test_nse_security_master_probe.py
+
+  probe:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install -e .
+      - name: Probe official NSE identity reference files
+        run: python -m fii_engine.nse_security_master_probe --output-dir artifacts/nse-security-master-probe
+      - name: Upload raw CSVs and source-contract manifest
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nse-security-master-probe-${{ github.run_id }}
+          path: artifacts/nse-security-master-probe/
+          if-no-files-found: warn
+          retention-days: 30
