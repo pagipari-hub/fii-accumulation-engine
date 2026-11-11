@@ -64,8 +64,8 @@ def test_weekly_watchlist_is_conservative_and_hash_validated(tmp_path):
             "start_date": "2026-08-10",
             "end_date": "2026-11-09",
             "normalized_date_count": 60,
-            "fpi": {"cumulative_net_inr_crore": -255.21, "observed_days": 60, "positive_net_days": 30, "negative_net_days": 30},
-            "dii": {"cumulative_net_inr_crore": 231298.85, "observed_days": 60, "positive_net_days": 60, "negative_net_days": 0},
+            "fpi": {"cumulative_net_inr_crore": -255.21, "observed_days": 60, "positive_net_days": 30, "negative_net_days": 30, "gross_purchases_inr_crore": 100, "gross_sales_inr_crore": 110},
+            "dii": {"cumulative_net_inr_crore": 231298.85, "observed_days": 60, "positive_net_days": 60, "negative_net_days": 0, "gross_purchases_inr_crore": 200, "gross_sales_inr_crore": 80},
             "overlapping_fpi_dii_days": 60,
             "dii_no_data_days": ["2026-08-26"],
             "stock_level_attribution": False,
@@ -94,6 +94,7 @@ def test_weekly_watchlist_is_conservative_and_hash_validated(tmp_path):
     assert "http_403_blocked" in report
     assert "Aggregate market-wide cash-flow context" in report
     assert "₹-255.21 crore" in report
+    assert "₹100.00 / ₹110.00 crore" in report
     assert "These are aggregate market-wide flows only" in report
     assert "Composite score/ranking" in report and "disabled." in report
     assert "not an investment recommendation" in report
