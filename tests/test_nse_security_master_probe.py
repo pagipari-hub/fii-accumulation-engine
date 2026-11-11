@@ -30,3 +30,24 @@ def test_rejects_empty_csv():
 
     with pytest.raises(ValueError, match="empty"):
         inspect_csv(b"", source_name="company_name_changes")
+
+
+def test_inspects_compressed_historical_mii_security_master():
+    import gzip
+
+    from fii_engine.nse_security_master_probe import inspect_gzip_csv
+
+    payload = gzip.compress(b"SYMBOL,SERIES,ISIN\\nABC,EQ,INE000A01001\\n")
+    result = inspect_gzip_csv(payload, source_name="historical_mii_security_master")
+    assert result["header"] == ["SYMBOL", "SERIES", "ISIN"]
+    assert result["row_count"] == 1
+    assert result["sample_rows"][0]["ISIN"] == "INE000A01001"
+
+
+def test_rejects_invalid_gzip_historical_master():
+    import pytest
+
+    from fii_engine.nse_security_master_probe import inspect_gzip_csv
+
+    with pytest.raises(ValueError, match="gzip"):
+        inspect_gzip_csv(b"not-gzip", source_name="historical_mii_security_master")
