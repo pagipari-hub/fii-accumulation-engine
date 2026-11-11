@@ -2,10 +2,14 @@ name: Official NSE quarterly FPI ownership ingestion
 
 on:
   push:
-    branches: [main]
+    branches: [main, research/shareholding-identity-integration]
     paths:
       - "src/fii_engine/nse_shareholding_xbrl.py"
       - "src/fii_engine/nse_shareholding_ingest.py"
+      - "src/fii_engine/nse_security_master_probe.py"
+      - "src/fii_engine/nse_shareholding_xbrl_entity_probe.py"
+      - "src/fii_engine/bse_shareholding_scripcode_crosswalk.py"
+      - "data/audits/shareholding_isin_mismatch_candidates_2026-09-30.csv"
       - "tests/test_nse_shareholding_xbrl.py"
       - "tests/test_nse_shareholding_ingest.py"
       - "config/sources.yaml"
@@ -58,9 +62,16 @@ jobs:
       - name: Run complete project test suite
         run: pytest
 
+      - name: Rebuild dated 2026-09-30 BSE identity evidence
+        if: github.event_name != 'pull_request'
+        run: |
+          python -m fii_engine.nse_security_master_probe --historical-date 2026-09-30 --output-dir artifacts/nse-security-master-probe
+          python -m fii_engine.nse_shareholding_xbrl_entity_probe --candidates data/audits/shareholding_isin_mismatch_candidates_2026-09-30.csv --output-dir artifacts/nse-security-master-probe
+          python -m fii_engine.bse_shareholding_scripcode_crosswalk --candidates data/audits/shareholding_isin_mismatch_candidates_2026-09-30.csv --xbrl-report artifacts/nse-security-master-probe/shareholding_xbrl_entity_probe.json --output-dir artifacts/nse-security-master-probe --reporting-date 2026-09-30
+
       - name: Capture official NSE shareholding filings and FPI ownership
         if: github.event_name != 'pull_request'
-        run: python -m fii_engine.nse_shareholding_ingest --repo-root .
+        run: python -m fii_engine.nse_shareholding_ingest --repo-root . --identity-crosswalk artifacts/nse-security-master-probe/shareholding_bse_scripcode_isin_crosswalk.csv
 
       - name: Validate filing, identity and ownership provenance
         if: github.event_name != 'pull_request'
@@ -79,6 +90,7 @@ jobs:
               "complete", "partial_identity_coverage", "partial_xbrl_coverage"
           }
           assert manifest["current_universe_count"] >= 480
+          assert manifest["identity_crosswalk"]["verified_count"] == 143
           master_raw = root / manifest["master_raw_path"]
           assert master_raw.is_file()
           assert hashlib.sha256(master_raw.read_bytes()).hexdigest() == manifest["master_raw_sha256"]
@@ -127,6 +139,7 @@ jobs:
           name: nse-shareholding-ingest-${{ github.run_id }}
           path: |
             data/raw/shareholding/
+            artifacts/nse-security-master-probe/
             data/snapshots/shareholding_master/
             data/snapshots/shareholding_filings/
             data/snapshots/shareholding_ownership/
