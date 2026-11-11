@@ -15,6 +15,8 @@ from datetime import date, datetime, timezone
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 
+from fii_engine.nse_fo_aggregate_reports import inspect_csv, normalize_participant_report
+
 WINDOWS = (5, 20, 60)
 DAILY_REQUIRED = {
     "trade_date", "symbol", "isin", "cash_data_status", "cash_close",
@@ -368,6 +370,125 @@ def _load_participant_snapshots(root: Path) -> dict[str, list[dict]]:
     return result
 
 
+
+def _load_historical_archive_participant_snapshots(root: Path) -> tuple[dict[str, list[dict]], list[str]]:
+    """Load participant reports only from complete, hash-verified NSE archive dates.
+
+    A date is eligible only when the archive manifest records all three validated
+    report families (participant OI, participant volume and FII derivatives stats).
+    The latter is a completeness gate, not stock-level attribution evidence.
+    """
+    manifest_path = root / "data/raw/nse_fo_historical/historical_manifest.json"
+    if not manifest_path.is_file():
+        return {"participant_oi": [], "participant_volume": []}, []
+
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    records = manifest.get("records")
+    if not isinstance(records, list):
+        raise ValueError("historical NSE F&O archive manifest has no records list")
+
+    by_date: dict[str, dict[str, dict]] = defaultdict(dict)
+    for record in records:
+        if not isinstance(record, dict):
+            raise ValueError("historical NSE F&O archive manifest contains an invalid record")
+        dataset = record.get("dataset")
+        trade_date = record.get("trade_date")
+        if dataset not in {"participant_oi", "participant_volume", "fii_derivatives_statistics"}:
+            continue
+        date.fromisoformat(trade_date)
+        if dataset in by_date[trade_date]:
+            raise ValueError(f"duplicate {dataset} archive record for {trade_date}")
+        by_date[trade_date][dataset] = record
+
+    required_datasets = {
+        "participant_oi", "participant_volume", "fii_derivatives_statistics"
+    }
+    complete_dates = sorted(
+        trade_date for trade_date, items in by_date.items()
+        if set(items) == required_datasets
+    )
+    result: dict[str, list[dict]] = {
+        "participant_oi": [], "participant_volume": []
+    }
+
+    for trade_date in complete_dates:
+        validated_payloads: dict[str, bytes] = {}
+        for dataset in sorted(required_datasets):
+            record = by_date[trade_date][dataset]
+            payload_path_value = record.get("payload_path")
+            expected_hash = record.get("payload_sha256")
+            if not isinstance(payload_path_value, str) or not payload_path_value:
+                raise ValueError(f"{dataset} archive record has no payload path for {trade_date}")
+            if not isinstance(expected_hash, str) or not re.fullmatch(r"[0-9a-f]{64}", expected_hash):
+                raise ValueError(f"{dataset} archive record has no valid payload SHA-256 for {trade_date}")
+            payload_path = Path(payload_path_value)
+            if payload_path.is_absolute() or ".." in payload_path.parts:
+                raise ValueError(f"unsafe archive payload path for {dataset} on {trade_date}")
+            resolved_path = (root / payload_path).resolve()
+            if root.resolve() not in resolved_path.parents:
+                raise ValueError(f"archive payload escapes repository root: {payload_path_value}")
+            if not resolved_path.is_file():
+                raise FileNotFoundError(f"missing archived {dataset} payload: {payload_path_value}")
+            payload = resolved_path.read_bytes()
+            if _sha256(payload) != expected_hash:
+                raise ValueError(f"archive payload hash mismatch: {payload_path_value}")
+            if not isinstance(record.get("inspection"), dict):
+                raise ValueError(f"archive payload lacks successful inspection metadata: {dataset} {trade_date}")
+            validated_payloads[dataset] = payload
+
+        for dataset in ("participant_oi", "participant_volume"):
+            inspection = inspect_csv(
+                validated_payloads[dataset], dataset, expected_trade_date=trade_date
+            )
+            normalized = normalize_participant_report(inspection, dataset, trade_date)
+            expected_count = 4 * 12
+            if len(normalized) != expected_count:
+                raise ValueError(
+                    f"{dataset} normalized row count changed for {trade_date}: "
+                    f"{len(normalized)} != {expected_count}"
+                )
+            rows = {}
+            for row in normalized:
+                key = (
+                    row["participant_category"], row["instrument_group"],
+                    row["option_type"], row["source_side"],
+                )
+                if key in rows:
+                    raise ValueError(f"duplicate normalized participant series for {dataset} {trade_date}: {key}")
+                rows[key] = row
+            result[dataset].append({
+                "date": trade_date,
+                "rows": rows,
+                "parser_version": 3,
+                "path": by_date[trade_date][dataset]["payload_path"],
+                "sha256": by_date[trade_date][dataset]["payload_sha256"],
+                "row_count": len(normalized),
+                "source": "official_nse_historical_archive",
+            })
+
+    return result, complete_dates
+
+
+def _load_all_participant_snapshots(root: Path) -> tuple[dict[str, list[dict]], list[str]]:
+    existing = _load_participant_snapshots(root)
+    archived, archive_dates = _load_historical_archive_participant_snapshots(root)
+    merged: dict[str, list[dict]] = {}
+    for dataset in ("participant_oi", "participant_volume"):
+        by_date = {item["date"]: item for item in existing[dataset]}
+        for item in archived[dataset]:
+            previous = by_date.get(item["date"])
+            if previous is not None:
+                if previous["rows"] != item["rows"]:
+                    raise ValueError(
+                        f"normalized snapshot and official archive disagree for "
+                        f"{dataset} on {item['date']}"
+                    )
+                continue
+            by_date[item["date"]] = item
+        merged[dataset] = [by_date[key] for key in sorted(by_date)]
+    return merged, archive_dates
+
+
 def _participant_window(
     snapshots: list[dict],
     expected_sessions: int,
@@ -432,7 +553,7 @@ def build_historical_features(root: Path = Path(".")) -> dict:
     root = root.resolve()
     daily, daily_dates = _load_daily_snapshots(root)
     fii, fii_dates = _load_fii_snapshots(root)
-    participant_history = _load_participant_snapshots(root)
+    participant_history, participant_archive_dates = _load_all_participant_snapshots(root)
     latest = daily[-1]
     latest_rows = [latest["rows"][symbol] for symbol in sorted(latest["symbols"])]
 
@@ -531,6 +652,8 @@ def build_historical_features(root: Path = Path(".")) -> dict:
         "participant_oi_trade_dates": [item["date"] for item in participant_history["participant_oi"]],
         "participant_volume_session_count": len(participant_history["participant_volume"]),
         "participant_volume_trade_dates": [item["date"] for item in participant_history["participant_volume"]],
+        "participant_archive_complete_session_count": len(participant_archive_dates),
+        "participant_archive_complete_trade_dates": participant_archive_dates,
         "windows_sessions": list(WINDOWS),
         "stock_universe_count": len(latest_rows),
         "stock_output_sha256": stock_hash,
