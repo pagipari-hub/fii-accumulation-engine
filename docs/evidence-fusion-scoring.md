@@ -1,90 +1,115 @@
-# Evidence fusion and scoring model v0.1
+# FII accumulation scoring model v0.2 (provisional specification)
 
-## Purpose
+## Objective
 
-The scoring core combines validated, normalized stock-level evidence from
-independent research families. It is deliberately separate from source
-collection and feature calculation: adapters must validate source semantics
-before producing a family observation.
+The primary question is: **which Nifty 500 stocks show credible, persistent, stock-specific evidence consistent with FPI accumulation?**
 
-## Independent evidence families and provisional weights
+The model deliberately separates three outputs:
 
-| Evidence family | Short-term (1–4 weeks) | Positional (1–6 months) |
-|---|---:|---:|
-| Quarterly FPI ownership | 10 | 35 |
-| Verified FPI disclosed deals | 15 | 15 |
-| Cash-market behaviour (including peer-relative strength) | 35 | 35 |
-| Stock derivatives | 40 | 15 |
-| **Total** | **100** | **100** |
+1. **FII Accumulation Score (0–100):** the primary ranking of stock-specific FPI accumulation evidence.
+2. **Market Confirmation Score (0–100):** independent price, delivery and volume confirmation. It never substitutes for FPI evidence.
+3. **Catalyst assessment (0–10):** a separately displayed assessment of a visible, sourced reason the business may be attracting attention. It is not added to the FII score and cannot upgrade the FPI evidence grade.
 
-Market-wide FII/DII cash flows and participant-category aggregates are deliberately excluded from per-stock scoring. They will be reported as market-regime context alongside the rankings. These weights are research starting points, not empirically calibrated parameters.
-They must be evaluated with historical walk-forward tests before production
-rankings are treated as reliable.
+This is a research specification only. It is not enabled for production ranking and its weights are not historically calibrated.
 
-## Observation contract
+## 1. Primary FII Accumulation Score
 
-Every stock/family observation has:
+| Dimension | Weight | Evidence required |
+|---|---:|---|
+| Verified net FPI transactions | 35 | Temporally verified FPI identity and reconciled disclosed buys/sells |
+| Persistence | 25 | Positive net disclosed FPI activity across distinct weekly windows |
+| Quarterly FPI ownership change | 20 | Comparable, identity-verified Category I/II ownership filings |
+| Independent FPI buyer breadth | 10 | Distinct verified beneficial-owner groups, not duplicate legal-entity aliases |
+| Relative accumulation intensity | 10 | Verified net disclosed buying relative to stock liquidity |
+| **Total** | **100** | |
 
-- `family`: one configured independent evidence family
-- `status`: `observed`, `unavailable` or `not_applicable`
-- `score`: a normalized 0–1 family strength only when status is observed
-- `source_refs`: provenance references for every observed score
-- `reason`: mandatory explanation for unavailable or not-applicable states
+For observed dimensions only:
 
-A verified zero signal is represented as `observed` with score 0.0 and source
-provenance. Missing data is `unavailable` with a null score. F&O is
-`not_applicable` for a verified cash-only stock, but remains unavailable when
-eligibility itself is unknown.
+`FII score = 100 × Σ(weight × normalized_dimension) / Σ(observed_dimension_weights)`
 
-## Score and coverage
+`Coverage = Σ(observed_dimension_weights) / Σ(applicable_dimension_weights)`
 
-The horizon score is the weighted mean of observed families only:
+Unavailable dimensions are excluded from the score denominator and reduce coverage. They are never converted to zero. A zero is valid only when the relevant source channel is complete and explicitly reports no qualifying activity for its defined scope.
 
-`score = 100 × sum(weight × family_score) / sum(observed_family_weights)`
+### Direct-transaction evidence gate
 
-Coverage is reported separately:
+A transaction can contribute to verified-direct FPI evidence only when:
 
-`coverage = observed_family_weight / applicable_family_weight × 100`
+- the counterparty is verified as an FPI for the transaction date;
+- registration validity covers the transaction date;
+- disclosed buy and sell sides are reconciled for the disclosed-event scope;
+- source completeness, duplicate handling and the stock/ISIN join are validated.
 
-Unavailable families reduce coverage but do not become negative evidence.
-Not-applicable families are excluded from both the score and applicable-weight
-denominator. A stock is rankable only when it has at least 60% coverage, at
-least three observed families and a score of at least 45/100.
+A match against a later registry snapshot with unknown registration start date is an **investigation lead**, not verified historical FPI activity. Unmatched counterparties remain unresolved; gross purchases are not net accumulation.
 
-Each family contributes at most one normalized score per stock/horizon.
-Price trend, volume, delivery and peer-relative strength are combined inside
-the cash-market family; peer-relative strength is not a separate independent
-family. This prevents correlated price features from inflating either the score
-or the corroboration grade.
+Persistence means repeated positive net disclosed activity in distinct weekly windows. It does not imply that every FPI trade is publicly disclosed. The report must state the scope and limitations of the disclosure channel.
 
-## Evidence grades
+Quarterly ownership change is a reported holding change between filing dates, not a dated purchase. It is supporting evidence, not proof of the exact timing or reason for buying.
 
-- **Grade 1 – Confirmed:** requires a separately verified, direct FPI
-  transaction. A quarterly holding change, bulk/block deal without validated
-  FPI identity, or market-wide derivatives statistic cannot qualify.
-- **Grade 2 – Corroborated:** at least three independent evidence families
-  each score 0.60 or higher.
-- **Grade 3 – Early Watchlist:** positive but insufficiently corroborated
-  evidence.
-- **Unclassified:** insufficient positive evidence.
+### Rankability and evidence grades
 
-Evidence grade and numeric score are separate outputs.
+A score is eligible for a research ranking only with at least 60% applicable-weight coverage and at least three observed dimensions, plus an exact verified universe identity join. These are provisional minimums, subject to validation.
 
-## Attribution boundaries
+The numeric score and evidence grade are separate. A high numerical score cannot bypass the direct-transaction gate. Reports must distinguish:
+- **Verified direct FPI evidence:** all temporal identity and transaction reconciliation checks pass.
+- **Ownership-supported evidence:** verified quarterly FPI holding change, without dated transaction proof.
+- **Corroborated / early watch:** supporting signals exist but direct attribution is incomplete.
+- **Unverified lead:** current-registry or unresolved counterparty evidence; excluded from verified-direct scoring.
 
-- Quarterly FPI ownership is a reported holding at a date, not a dated purchase.
-- Bulk/block deal counterparties are not automatically FPI.
-- Stock-level futures/options are market-wide contract activity, not proof of
-  FII positions.
-- Participant-wise reports are category aggregates, not participant-by-stock
-  positions.
-- Daily FII/DII cash flow is market-wide context, not stock-specific flow.
+## 2. Market Confirmation Score
 
-Market-wide flows therefore remain context metadata and are not treated as
-direct stock-level FPI transactions.
+| Dimension | Weight | What it measures |
+|---|---:|---|
+| Delivery strength | 35 | Delivery participation and strengthening versus its own rolling baseline |
+| Relative price strength | 30 | Stock return and market/sector-relative strength |
+| Volume confirmation | 20 | Valid cash-market volume/turnover versus rolling baseline |
+| Trend stability | 15 | Trend persistence, drawdown and volatility behaviour |
+| **Total** | **100** | |
 
-## Production gate
+The same weighted-mean and coverage approach applies. Correlated features must be combined within their dimension. This score is displayed beside the FII score, never blended into it.
 
-Model version 0.1 is provisional. Historical feature calculation, source
-coverage, walk-forward backtesting, ranking stability and false-positive
-analysis are required before enabling production recommendations.
+Stock futures/options activity can be shown as contextual market behaviour. Participant-category aggregate positioning is market-wide context only. Neither proves that FIIs hold or bought a particular stock.
+
+## 3. Catalyst assessment (0–10, separate)
+
+Record a visible reason only when supported by a dated source. Candidate categories include:
+- earnings or margin improvement;
+- order wins, business growth or capacity expansion;
+- sector or policy change;
+- corporate action, acquisition or restructuring;
+- index inclusion or other institutional event;
+- material valuation or balance-sheet change.
+
+Suggested descriptive scale:
+- **0:** no identifiable catalyst found;
+- **1–3:** plausible, sourced development;
+- **4–7:** material development with independent corroboration;
+- **8–10:** unusually strong, directly relevant and well-corroborated development.
+
+Each catalyst record must retain event date, publication date, source reference, business relevance and confidence. The report must say **“visible catalyst”**, not “reason FIIs bought”, unless an institution has explicitly disclosed that rationale. Catalyst points are not added to the FII score and do not upgrade evidence grade.
+
+## 4. Output contract
+
+Each stock/horizon report should show:
+
+- FII Accumulation Score and coverage;
+- Market Confirmation Score and coverage;
+- catalyst assessment and source-backed explanation;
+- evidence grade and direct-transaction gate result;
+- as-of date and source provenance;
+- unavailable dimensions and plain-language inclusion reason;
+- short-term (1–4 week) and positional (1–6 month) views separately.
+
+Market-wide FII/DII cash flows and participant-category derivatives positioning are shown in a separate market-regime panel, never allocated to individual stocks.
+
+## 5. Validation before production
+
+Do not enable production rankings until the model has:
+1. sufficient historical source depth and validated date semantics;
+2. walk-forward testing with point-in-time data only (no look-ahead);
+3. rank stability and sensitivity analysis for weights and missing-data coverage;
+4. false-positive analysis against subsequent disclosed accumulation/ownership changes;
+5. separate evaluation of short-term and positional horizons;
+6. documented review of score distributions and rankability gates.
+
+The proposed weights are transparent starting assumptions, not proven predictive coefficients. Calibrate them only after the historical dataset is reliable. No score is a buy recommendation or proof of undisclosed institutional intent.

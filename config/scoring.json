@@ -1,50 +1,142 @@
 {
-  "model_version": "0.1-provisional",
-  "model_status": "research_provisional_not_backtest_calibrated",
-  "horizons": {
-    "short_term": {
-      "label": "1-4 weeks",
-      "family_weights": {
-        "quarterly_ownership": 10,
-        "disclosed_deals": 15,
-        "cash_market": 35,
-        "stock_derivatives": 40
+  "model_version": "0.2-provisional",
+  "model_status": "research_specification_only_not_calibrated_or_enabled",
+  "primary_score": {
+    "name": "fii_accumulation_score",
+    "scale": [
+      0,
+      100
+    ],
+    "purpose": "Rank stock-specific evidence consistent with FPI accumulation; not a claim of all FPI trading activity.",
+    "dimensions": [
+      {
+        "key": "verified_net_fpi_transactions",
+        "weight": 35,
+        "definition": "Temporally verified FPI counterparties and net disclosed buy value/quantity after matching buys and sells; unresolved counterparties reduce eligible coverage and cannot be silently ignored."
+      },
+      {
+        "key": "persistence",
+        "weight": 25,
+        "definition": "Repeat positive net FPI disclosed activity across distinct weekly windows; only complete, temporally valid observations count."
+      },
+      {
+        "key": "quarterly_fpi_ownership_change",
+        "weight": 20,
+        "definition": "Change in explicitly reported FPI Category I and II ownership across comparable, identity-verified quarterly filings; a holding change is not a dated transaction."
+      },
+      {
+        "key": "independent_fpi_buyer_breadth",
+        "weight": 10,
+        "definition": "Distinct independently verified FPI beneficial-owner groups with positive net disclosed activity; legal-entity aliases must be consolidated where identity evidence permits."
+      },
+      {
+        "key": "relative_accumulation_intensity",
+        "weight": 10,
+        "definition": "Verified net disclosed buying relative to stock liquidity/turnover, with robust cross-sectional normalization and outlier control."
       }
+    ],
+    "formula": "100 * sum(weight_i * normalized_dimension_i) / sum(weights for observed dimensions)",
+    "coverage_formula": "sum(weights for observed dimensions) / sum(weights for applicable dimensions)",
+    "rankability_gates": {
+      "minimum_coverage": 0.6,
+      "minimum_observed_dimensions": 3,
+      "require_identity_verified_universe_join": true,
+      "require_temporal_and_counterparty_validation_for_direct_transaction_claims": true,
+      "no_score_from_market_wide_flows_or_participant_aggregates": true,
+      "require_observed_verified_net_fpi_dimension": true
     },
-    "positional": {
-      "label": "1-6 months",
-      "family_weights": {
-        "quarterly_ownership": 35,
-        "disclosed_deals": 15,
-        "cash_market": 35,
-        "stock_derivatives": 15
-      }
+    "direct_evidence_gate": {
+      "grade": "direct_fpi_transaction_verified",
+      "requirements": [
+        "counterparty identity verified as FPI for the transaction date",
+        "transaction date falls within validated registration interval",
+        "buy and sell sides reconciled for the disclosed-event scope",
+        "source completeness and duplicate handling validated"
+      ],
+      "fallback": "If temporal registration or netting is unresolved, retain as an investigation lead but exclude from verified-direct dimension scoring."
     }
   },
-  "thresholds": {
-    "minimum_coverage": 0.6,
-    "minimum_observed_families": 3,
-    "grade_2_family_score": 0.6,
-    "grade_2_minimum_positive_families": 3,
-    "watchlist_score": 0.45
+  "confirmation_score": {
+    "name": "market_confirmation_score",
+    "scale": [
+      0,
+      100
+    ],
+    "status": "separate_from_primary_fii_rank",
+    "dimensions": [
+      {
+        "key": "delivery_strength",
+        "weight": 35,
+        "definition": "Delivery participation level and strengthening versus its own rolling baseline."
+      },
+      {
+        "key": "relative_price_strength",
+        "weight": 30,
+        "definition": "Stock return and sector/market-relative strength over the relevant horizon."
+      },
+      {
+        "key": "volume_confirmation",
+        "weight": 20,
+        "definition": "Abnormal but valid cash-market volume/turnover relative to rolling baseline."
+      },
+      {
+        "key": "trend_stability",
+        "weight": 15,
+        "definition": "Trend persistence and drawdown/volatility behaviour; avoid duplicating relative-strength features."
+      }
+    ],
+    "formula": "100 * sum(weight_i * normalized_dimension_i) / sum(weights for observed dimensions)",
+    "note": "Stock futures/options and market-wide participant positioning may be displayed as context, but are not treated as proof of FPI stock ownership or buying."
   },
-  "family_semantics": {
-    "quarterly_ownership": "Change in explicitly reported FPI Category I and II holdings; quarterly snapshot, not a transaction date.",
-    "disclosed_deals": "Score only disclosed transactions whose counterparty has been independently verified as an FPI. Unclassified deal records remain event annotations and are unavailable for FPI scoring.",
-    "cash_market": "Delivery, traded volume, price trend and peer-relative strength are combined inside this family to avoid double-counting correlated price signals.",
-    "stock_derivatives": "Stock-specific futures/options activity; market-wide contract activity, not proof of FII positions."
+  "catalyst_assessment": {
+    "scale": [
+      0,
+      10
+    ],
+    "display": "separate_bonus_not_added_to_fii_accumulation_score",
+    "categories": [
+      "earnings_or_margin_change",
+      "order_or_business_growth",
+      "capacity_or_capex",
+      "sector_or_policy_change",
+      "corporate_action_or_restructuring",
+      "index_or_institutional_event",
+      "valuation_or_balance_sheet_change",
+      "other_verified_event"
+    ],
+    "requirements": [
+      "dated source reference",
+      "event date and publication date kept separately",
+      "plain-language link to the business",
+      "confidence label",
+      "distinguish observed catalyst from inferred investor motive"
+    ],
+    "scoring": "0 = none identified; 1-3 = plausible and sourced; 4-7 = material and independently corroborated; 8-10 = unusually strong, directly relevant and well-corroborated.",
+    "caveat": "A catalyst is not evidence that FIIs bought the stock and must never upgrade the FII evidence grade."
   },
-  "correlation_controls": [
-    "Each evidence family contributes at most one normalized family score per stock and horizon.",
-    "Correlated features must be combined inside their family before scoring.",
-    "Market-wide FII cash flows are context and are not treated as stock-specific transactions.",
-    "A Grade 1 result requires separately verified direct FPI transaction evidence.",
-    "Market-wide FII/DII cash flows and participant-category aggregates are reported as non-scoring market context, not repeated across every stock score."
-  ],
-  "missing_data_policy": "Unavailable families are excluded from the score denominator and reduce coverage; not_applicable families are excluded from both score and applicable coverage denominator; neither is treated as zero.",
-  "calibration_policy": "Weights and thresholds are provisional. Do not publish production rankings until historical backtests, stability checks and source-coverage validation are complete.",
-  "non_scoring_market_context": {
-    "market_wide_fii_dii_cash_flows": "Market-wide regime context only; never allocated to individual stocks or treated as stock-specific FPI transactions.",
-    "participant_positioning": "Participant-category aggregate derivatives positioning only; not participant-by-stock positions and not part of stock-level score."
+  "output_contract": {
+    "per_stock_fields": [
+      "fii_accumulation_score",
+      "fii_score_coverage_pct",
+      "fii_score_status",
+      "market_confirmation_score",
+      "confirmation_coverage_pct",
+      "catalyst_score",
+      "catalyst_summary",
+      "evidence_grade",
+      "source_as_of_date",
+      "missing_dimensions",
+      "plain_language_reason"
+    ],
+    "missing_data": "Unavailable dimensions are excluded from the numerator and reduce coverage; never impute zero.",
+    "observed_zero": "A zero is allowed only where the relevant source channel is complete and explicitly reports no qualifying activity for its defined scope.",
+    "no_production_ranking_until": "historical walk-forward validation, score stability checks, source coverage validation, false-positive analysis and documented acceptance review."
+  },
+  "market_context": {
+    "non_scoring": [
+      "market_wide_fii_dii_cash_flows",
+      "participant_category_aggregate_derivatives_positioning"
+    ],
+    "purpose": "Regime context only; never allocated to individual stocks as stock-specific FPI transactions."
   }
 }

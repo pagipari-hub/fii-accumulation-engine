@@ -1,0 +1,98 @@
+name: Run research scoring against current FPI evidence matrix
+
+on:
+  push:
+    paths:
+      - "src/fii_engine/accumulation_scoring.py"
+      - "src/fii_engine/scoring.py"
+      - "src/fii_engine/matrix_scoring.py"
+      - "config/scoring.json"
+      - "tests/test_accumulation_scoring.py"
+      - "tests/test_scoring.py"
+      - "tests/test_matrix_scoring.py"
+      - "data/raw/fpi_evidence_blend/fpi_evidence_matrix_current.csv"
+      - ".github/workflows/fii-scoring-research.yml"
+  pull_request:
+    paths:
+      - "src/fii_engine/accumulation_scoring.py"
+      - "src/fii_engine/scoring.py"
+      - "src/fii_engine/matrix_scoring.py"
+      - "config/scoring.json"
+      - "tests/test_accumulation_scoring.py"
+      - "tests/test_scoring.py"
+      - "tests/test_matrix_scoring.py"
+      - "data/raw/fpi_evidence_blend/fpi_evidence_matrix_current.csv"
+      - ".github/workflows/fii-scoring-research.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fii-scoring-research-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  score:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install project and test dependencies
+        run: python -m pip install -e ".[dev]"
+
+      - name: Run full test suite
+        run: pytest
+
+      - name: Build dated research scores
+        run: |
+          MATRIX="data/raw/fpi_evidence_blend/fpi_evidence_matrix_current.csv"
+          MATRIX_SHA="$(sha256sum "$MATRIX" | cut -d ' ' -f 1)"
+          python -m fii_engine.matrix_scoring \
+            --matrix "$MATRIX" \
+            --matrix-ref "$MATRIX#sha256=$MATRIX_SHA" \
+            --output data/raw/fpi_evidence_blend/fpi_scoring_current.json
+
+      - name: Validate research output and evidence gates
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path("data/raw/fpi_evidence_blend/fpi_scoring_current.json")
+          result = json.loads(path.read_text(encoding="utf-8"))
+          assert result["universe_row_count"] == 501
+          assert len(result["rows"]) == 501
+          assert result["model_status"] == "research_only_not_calibrated_not_a_production_watchlist"
+          assert result["confirmation_scoreable_row_count"] > 0
+          for row in result["rows"]:
+              if row["deal_temporal_status"] != "temporally_verified":
+                  assert row["fii_accumulation"]["score"] is None
+                  assert row["fii_accumulation"]["rankable"] is False
+          print(json.dumps({
+              key: result[key] for key in (
+                  "source_as_of_date",
+                  "universe_row_count",
+                  "fii_scoreable_row_count",
+                  "fii_rankable_row_count",
+                  "confirmation_scoreable_row_count",
+                  "confirmation_rankable_row_count",
+              )
+          }, indent=2))
+          PY
+
+      - name: Upload research scoring artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fii-scoring-research-${{ github.run_id }}
+          path: data/raw/fpi_evidence_blend/fpi_scoring_current.json
+          if-no-files-found: warn
+          retention-days: 30

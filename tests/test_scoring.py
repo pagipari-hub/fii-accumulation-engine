@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from fii_engine.scoring import load_config, score_stock, score_universe, validate_config
+from fii_engine.scoring import load_config, score_stock, validate_config
 
 
 CONFIG = Path(__file__).parents[1] / "config" / "scoring.json"
@@ -14,135 +14,170 @@ def config():
     return load_config(CONFIG)
 
 
-def obs(family, score, *, status="observed", reason=None):
+def observations(weights, values):
     return {
-        "family": family,
-        "status": status,
-        "score": score,
-        "reason": reason,
-        "source_refs": ["fixture://verified-source"] if status == "observed" else [],
+        key: (
+            {"status": "observed", "score": values[key], "source_refs": [f"source:{key}"]}
+            if key in values else
+            {"status": "unavailable", "score": None, "reason": "source history unavailable"}
+        )
+        for key in weights
     }
 
 
-def test_config_weights_sum_to_100_for_both_horizons(config):
-    for definition in config["horizons"].values():
-        assert sum(definition["family_weights"].values()) == 100
+def test_config_has_two_separate_100_point_scores(config):
+    assert sum(item["weight"] for item in config["primary_score"]["dimensions"]) == 100
+    assert sum(item["weight"] for item in config["confirmation_score"]["dimensions"]) == 100
+    assert config["catalyst_assessment"]["display"] == "separate_bonus_not_added_to_fii_accumulation_score"
 
 
-def test_missing_families_are_not_scored_as_zero(config):
-    result = score_stock("ABC", [obs("cash_market", 0.8)], config)
-    assert result["short_term"]["score"] == 80.0
-    assert result["short_term"]["coverage"] == 35.0
-    assert result["short_term"]["rankable"] is False
-    assert "quarterly_ownership" in result["short_term"]["unavailable_families"]
-
-
-def test_not_applicable_fno_family_does_not_reduce_coverage(config):
-    observations = [
-        obs("quarterly_ownership", 0.7),
-        obs("disclosed_deals", 0.5),
-        obs("cash_market", 0.8),
-        obs("stock_derivatives", None, status="not_applicable", reason="not F&O eligible"),
-        ]
-    result = score_stock("CASHONLY", observations, config)
-    assert result["short_term"]["coverage"] == 100.0
-    assert result["short_term"]["not_applicable_families"] == ["stock_derivatives"]
-    assert result["short_term"]["rankable"] is True
-
-
-def test_unavailable_fno_family_reduces_coverage(config):
-    observations = [
-        obs("quarterly_ownership", 0.7),
-        obs("disclosed_deals", 0.5),
-        obs("cash_market", 0.8),
-        obs("stock_derivatives", None, status="unavailable", reason="source missing"),
-            ]
-    result = score_stock("UNKNOWNFNO", observations, config)
-    assert result["short_term"]["coverage"] == 60.0
-    assert result["short_term"]["rankable"] is True
-
-
-def test_grade_two_requires_three_independent_positive_families(config):
-    observations = [
-        obs("quarterly_ownership", 0.8),
-        obs("cash_market", 0.9),
-        obs("stock_derivatives", 0.75),
-        obs("disclosed_deals", 0.2),
-            ]
-    result = score_stock("ABC", observations, config)
-    assert result["evidence_grade"] == "Grade 2 - Corroborated"
-
-
-def test_grade_one_requires_explicit_direct_transaction_flag(config):
-    result = score_stock(
-        "ABC", [], config,
-        direct_fpi_transaction_refs=["nse://verified-fpi-transaction/record-123"],
+def test_fii_score_and_confirmation_are_separate(config):
+    fii = observations(
+        {item["key"]: item["weight"] for item in config["primary_score"]["dimensions"]},
+        {
+            "verified_net_fpi_transactions": 1.0,
+            "persistence": 0.8,
+            "quarterly_fpi_ownership_change": 0.6,
+        },
     )
-    assert result["evidence_grade"] == "Grade 1 - Confirmed"
-    assert result["direct_fpi_transaction_refs"] == ["nse://verified-fpi-transaction/record-123"]
-    assert result["short_term"]["score"] is None
-    unverified = score_stock("XYZ", [], config)
-    assert unverified["evidence_grade"] != "Grade 1 - Confirmed"
+    confirmation = observations(
+        {item["key"]: item["weight"] for item in config["confirmation_score"]["dimensions"]},
+        {
+            "delivery_strength": 1.0,
+            "relative_price_strength": 0.5,
+            "volume_confirmation": 0.5,
+        },
+    )
+    result = score_stock(
+        "ABC", fii, confirmation, config,
+        identity_verified=True, direct_gate_passed=True,
+        catalyst_assessment={"score": 6, "summary": "Order win", "source_refs": ["exchange://filing/1"]},
+    )
+    assert result["fii_accumulation"]["score"] == 83.75
+    assert result["fii_accumulation"]["coverage_pct"] == 80.0
+    assert result["market_confirmation"]["score"] == 70.59
+    assert result["market_confirmation"]["coverage_pct"] == 85.0
+    assert result["catalyst"]["score"] == 6
+    assert result["catalyst"]["score"] not in (result["fii_accumulation"]["score"],)
 
 
-def test_observed_zero_is_valid_but_requires_source_provenance(config):
-    result = score_stock("ABC", [obs("cash_market", 0.0)], config)
-    assert result["short_term"]["score"] == 0.0
-    invalid = obs("cash_market", 0.0)
-    invalid["source_refs"] = []
-    with pytest.raises(ValueError, match="source_refs"):
-        score_stock("ABC", [invalid], config)
+def test_unverified_temporal_identity_cannot_score_direct_dimensions(config):
+    fii = observations(
+        {item["key"]: item["weight"] for item in config["primary_score"]["dimensions"]},
+        {"verified_net_fpi_transactions": 0.9},
+    )
+    confirmation = observations(
+        {item["key"]: item["weight"] for item in config["confirmation_score"]["dimensions"]}, {}
+    )
+    with pytest.raises(ValueError, match="cannot be scored"):
+        score_stock(
+            "ABC", fii, confirmation, config,
+            identity_verified=True, direct_gate_passed=False,
+        )
 
 
-def test_duplicate_or_unknown_family_is_rejected(config):
-    with pytest.raises(ValueError, match="duplicate evidence family"):
-        score_stock("ABC", [obs("cash_market", 0.2), obs("cash_market", 0.3)], config)
-    with pytest.raises(ValueError, match="unknown evidence family"):
-        score_stock("ABC", [obs("unknown", 0.2)], config)
-
-
-def test_universe_keeps_every_symbol_and_only_ranks_eligible_rows(config):
-    symbols = ["ABC", "XYZ", "NO_DATA"]
-    evidence = {
-        "ABC": [
-            obs("quarterly_ownership", 0.8),
-            obs("disclosed_deals", 0.7),
-            obs("cash_market", 0.9),
-            obs("stock_derivatives", 0.8),
-                ],
-        "XYZ": [
-            obs("quarterly_ownership", 0.2),
-            obs("disclosed_deals", 0.2),
-            obs("cash_market", 0.4),
-            obs("stock_derivatives", 0.3),
-                    ],
+def test_missing_data_reduces_coverage_and_is_not_zero(config):
+    fii = observations(
+        {item["key"]: item["weight"] for item in config["primary_score"]["dimensions"]},
+        {
+            "verified_net_fpi_transactions": 0.7,
+            "persistence": 0.7,
+            "quarterly_fpi_ownership_change": 0.7,
+        },
+    )
+    fii["independent_fpi_buyer_breadth"] = {
+        "status": "not_applicable", "score": None,
+        "reason": "no separately identifiable buyer groups in this validated feed",
     }
-    rows = score_universe(symbols, evidence, config)
-    assert {row["symbol"] for row in rows} == set(symbols)
-    abc = next(row for row in rows if row["symbol"] == "ABC")
-    no_data = next(row for row in rows if row["symbol"] == "NO_DATA")
-    assert abc["short_term_rank"] == 1
-    assert no_data["short_term_rank"] is None
-    assert no_data["short_term"]["score"] is None
+    confirmation = observations(
+        {item["key"]: item["weight"] for item in config["confirmation_score"]["dimensions"]}, {}
+    )
+    result = score_stock(
+        "ABC", fii, confirmation, config,
+        identity_verified=True, direct_gate_passed=True,
+    )
+    assert result["fii_accumulation"]["score"] == 70.0
+    assert result["fii_accumulation"]["coverage_pct"] == 88.89
 
 
-def test_config_rejects_invalid_weight_totals(config):
+def test_source_provenance_required_for_observed_zero(config):
+    fii = observations(
+        {item["key"]: item["weight"] for item in config["primary_score"]["dimensions"]}, {}
+    )
+    fii["quarterly_fpi_ownership_change"] = {
+        "status": "observed", "score": 0.0, "source_refs": []
+    }
+    confirmation = observations(
+        {item["key"]: item["weight"] for item in config["confirmation_score"]["dimensions"]}, {}
+    )
+    with pytest.raises(ValueError, match="requires source_refs"):
+        score_stock(
+            "ABC", fii, confirmation, config,
+            identity_verified=True, direct_gate_passed=True,
+        )
+
+
+def test_unverified_universe_identity_blocks_rankability(config):
+    fii = observations(
+        {item["key"]: item["weight"] for item in config["primary_score"]["dimensions"]},
+        {
+            "verified_net_fpi_transactions": 1.0,
+            "persistence": 1.0,
+            "quarterly_fpi_ownership_change": 1.0,
+        },
+    )
+    confirmation = observations(
+        {item["key"]: item["weight"] for item in config["confirmation_score"]["dimensions"]}, {}
+    )
+    result = score_stock(
+        "ABC", fii, confirmation, config,
+        identity_verified=False, direct_gate_passed=True,
+    )
+    assert result["fii_accumulation"]["score"] == 100.0
+    assert result["fii_accumulation"]["rankable"] is False
+    assert result["fii_accumulation"]["status"] == "not_rankable_identity_unverified"
+
+
+def test_catalyst_cannot_be_positive_without_source(config):
+    fii = observations(
+        {item["key"]: item["weight"] for item in config["primary_score"]["dimensions"]}, {}
+    )
+    confirmation = observations(
+        {item["key"]: item["weight"] for item in config["confirmation_score"]["dimensions"]}, {}
+    )
+    with pytest.raises(ValueError, match="requires source references"):
+        score_stock(
+            "ABC", fii, confirmation, config,
+            identity_verified=True, direct_gate_passed=False,
+            catalyst_assessment={"score": 4, "summary": "Rumour", "source_refs": []},
+        )
+
+
+
+def test_fii_rankability_requires_observed_verified_net_transaction_dimension(config):
+    fii = observations(
+        {item["key"]: item["weight"] for item in config["primary_score"]["dimensions"]},
+        {
+            "persistence": 0.9,
+            "quarterly_fpi_ownership_change": 0.9,
+            "independent_fpi_buyer_breadth": 0.9,
+            "relative_accumulation_intensity": 0.9,
+        },
+    )
+    confirmation = observations(
+        {item["key"]: item["weight"] for item in config["confirmation_score"]["dimensions"]}, {}
+    )
+    result = score_stock(
+        "ABC", fii, confirmation, config,
+        identity_verified=True, direct_gate_passed=True,
+    )
+    assert result["fii_accumulation"]["score"] == 90.0
+    assert result["fii_accumulation"]["rankable"] is False
+    assert result["fii_accumulation"]["status"] == "not_rankable_insufficient_coverage_or_dimensions"
+
+
+def test_config_rejects_weight_or_dimension_drift(config):
     broken = json.loads(json.dumps(config))
-    broken["horizons"]["short_term"]["family_weights"]["cash_market"] = 24
-    with pytest.raises(ValueError, match="sum to 100"):
+    broken["primary_score"]["dimensions"][0]["weight"] = 34
+    with pytest.raises(ValueError, match="weights do not match"):
         validate_config(broken)
-
-
-def test_grade_one_rejects_missing_transaction_provenance(config):
-    with pytest.raises(ValueError, match="source references"):
-        score_stock("ABC", [], config, direct_fpi_transaction_refs=[])
-
-
-def test_market_wide_participant_positioning_is_not_a_stock_score_family(config):
-    with pytest.raises(ValueError, match="unknown evidence family"):
-        score_stock("ABC", [obs("participant_positioning", 0.9)], config)
-
-
-def test_peer_relative_strength_is_part_of_cash_market_not_a_separate_family(config):
-    with pytest.raises(ValueError, match="unknown evidence family"):
-        score_stock("ABC", [obs("sector_relative_strength", 0.9)], config)
