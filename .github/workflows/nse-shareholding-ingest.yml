@@ -7,6 +7,8 @@ on:
       - "src/fii_engine/nse_shareholding_xbrl.py"
       - "src/fii_engine/nse_shareholding_ingest.py"
       - "src/fii_engine/fpi_evidence_blend.py"
+      - "src/fii_engine/weekly_watchlist_report.py"
+      - "tests/test_weekly_watchlist_report.py"
       - "tests/test_fpi_evidence_blend.py"
       - "src/fii_engine/nse_security_master_probe.py"
       - "src/fii_engine/nse_shareholding_xbrl_entity_probe.py"
@@ -245,6 +247,12 @@ jobs:
           }, indent=2))
           PY
 
+      - name: Generate weekly FPI evidence watchlist
+        if: github.event_name != 'pull_request'
+        run: |
+          python -m fii_engine.weekly_watchlist_report --matrix data/raw/fpi_evidence_blend/fpi_evidence_matrix_current.csv --manifest data/raw/fpi_evidence_blend/fpi_evidence_matrix_current_manifest.json --bse-fallback-manifest data/raw/shareholding/bse_shareholding_fallback_probe_manifest.json --output reports/weekly/fpi_evidence_watchlist_2026-11-11.md
+          test -s reports/weekly/fpi_evidence_watchlist_2026-11-11.md
+
       - name: Upload raw master, XBRL and normalized filing evidence
         if: always() && github.event_name != 'pull_request'
         uses: actions/upload-artifact@v4
@@ -261,6 +269,7 @@ jobs:
             data/snapshots/shareholding_ownership/
             data/raw/fpi_evidence_blend/
             data/snapshots/fpi_evidence_blend/
+            reports/weekly/
           if-no-files-found: warn
           retention-days: 90
 
@@ -271,6 +280,7 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add data/snapshots/shareholding_master data/snapshots/shareholding_filings data/snapshots/shareholding_ownership data/raw/shareholding/current_manifest.json data/raw/shareholding/shareholding_ownership_current.csv data/raw/fpi_evidence_blend data/snapshots/fpi_evidence_blend
+            git add reports/weekly/
             git add -f data/raw/shareholding/identity_evidence data/raw/shareholding/bse_shareholding_fallback_probe_manifest.json
             git commit -m "data: record official NSE quarterly FPI ownership"
             bash scripts/retry_git_push.sh "$GITHUB_REF_NAME"
