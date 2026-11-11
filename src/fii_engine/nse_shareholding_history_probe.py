@@ -39,6 +39,41 @@ def probe(
     symbols = [symbol.strip().upper() for symbol in (symbols or DEFAULT_SYMBOLS)]
     output_dir.mkdir(parents=True, exist_ok=True)
     _, bootstrap = _get(PAGE, BASE, "text/html,*/*")
+    market_url = f"{MASTER_URL}&from_date={quote(from_date)}&to_date={quote(to_date)}"
+    market_wide = {"query_url": market_url, "from_date": from_date, "to_date": to_date}
+    try:
+        market_payload, market_response = _get(market_url, PAGE, "application/json,*/*")
+        market_digest = _sha256(market_payload)
+        market_raw_path = output_dir / f"nse_shareholding_market_history_{market_digest[:16]}.json"
+        market_raw_path.write_bytes(market_payload)
+        market_decoded = json.loads(market_payload.decode("utf-8-sig"))
+        market_rows = _records(market_decoded)
+        market_symbols = sorted({
+            str(row.get("symbol", row.get("SYMBOL", ""))).strip().upper()
+            for row in market_rows
+            if row.get("symbol", row.get("SYMBOL", ""))
+        })
+        market_date_fields = sorted({
+            key for row in market_rows for key in row
+            if any(token in key.lower() for token in ("date", "period", "quarter"))
+        })
+        market_wide.update({
+            **market_response,
+            "status": "captured",
+            "response_sha256": market_digest,
+            "raw_path": str(market_raw_path),
+            "row_count": len(market_rows),
+            "unique_symbol_count": len(market_symbols),
+            "symbols": market_symbols,
+            "record_keys": sorted(market_rows[0]) if market_rows else [],
+            "date_fields": market_date_fields,
+            "date_samples": [
+                {key: row.get(key) for key in market_date_fields if row.get(key) not in (None, "")}
+                for row in market_rows[:10]
+            ],
+        })
+    except Exception as exc:
+        market_wide.update({"status": "probe_error", "error": str(exc)})
     observations = []
     for index, symbol in enumerate(symbols):
         queries = [
@@ -95,6 +130,7 @@ def probe(
         "symbol_specific_history_probe": True,
         "date_range": {"from_date": from_date, "to_date": to_date},
         "session_bootstrap": bootstrap,
+        "market_wide_history": market_wide,
         "candidate_symbols": symbols,
         "observations": observations,
         "row_counts": {
@@ -126,6 +162,8 @@ def main() -> None:
     report = probe(args.output_dir, args.symbols, args.delay, args.from_date, args.to_date)
     print(json.dumps({
         "symbols": len(report["candidate_symbols"]),
+        "market_wide_row_count": report["market_wide_history"].get("row_count", 0),
+        "market_wide_unique_symbol_count": report["market_wide_history"].get("unique_symbol_count", 0),
         "row_counts": report["row_counts"],
         "symbols_with_multiple_records": report["symbols_with_multiple_records"],
     }, indent=2))
