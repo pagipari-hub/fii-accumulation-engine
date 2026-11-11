@@ -133,6 +133,8 @@ def normalize_dii_html(html: str, source_sha256: str, query_date: str) -> dict:
 def normalize_manifest(manifest_path: Path, output_csv: Path) -> dict:
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     root = manifest_path.parent
+    start_date = manifest.get("start_date", "0001-01-01")
+    end_date = manifest.get("end_date", "9999-12-31")
     combined: dict[str, dict] = {}
     fpi_count = 0
     dii_count = 0
@@ -159,6 +161,9 @@ def normalize_manifest(manifest_path: Path, output_csv: Path) -> dict:
             normalized = normalize_fpi_html(html, digest, observation["query_date"])
             for item in normalized:
                 day = item["date"]
+                # Monthly NSDL archive pages may include dates before the requested window.
+                if not start_date <= day <= end_date:
+                    continue
                 existing = combined.setdefault(day, {"date": day})
                 for key, value in item.items():
                     if key in existing and existing[key] != value:
@@ -171,6 +176,8 @@ def normalize_manifest(manifest_path: Path, output_csv: Path) -> dict:
         elif observation["dataset"] == "dii" and observation.get("response_type") == "data":
             item = normalize_dii_html(html, digest, observation["query_date"])
             day = item["date"]
+            if not start_date <= day <= end_date:
+                continue
             existing = combined.setdefault(day, {"date": day})
             for key, value in item.items():
                 if key in existing and existing[key] != value:
