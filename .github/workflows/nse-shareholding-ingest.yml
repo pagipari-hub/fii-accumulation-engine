@@ -199,6 +199,10 @@ jobs:
         if: github.event_name != 'pull_request'
         run: python -m fii_engine.nse_shareholding_unitholding_announcement_probe --output-dir artifacts/nse-shareholding-announcements
 
+      - name: Normalize official NSE REIT unitholding FPI ownership
+        if: github.event_name != 'pull_request'
+        run: python -m fii_engine.nse_reit_unitholding --root .
+
       - name: Probe BSE quarterly shareholding fallback for three remaining EQ securities
         if: github.event_name != 'pull_request'
         run: |
@@ -232,6 +236,15 @@ jobs:
           assert manifest["index_placeholder_count"] == 1
           assert manifest["latest_quarter_coverage_pct"] == 98.8
           bse_fallback = json.loads(Path("artifacts/bse-shareholding-fallback/bse_shareholding_fallback_probe_manifest.json").read_text(encoding="utf-8"))
+          reit_manifest_path = root / "data/raw/shareholding/reit_unitholding_current_manifest.json"
+          assert reit_manifest_path.is_file(), "REIT unitholding normalized manifest missing"
+          reit_manifest = json.loads(reit_manifest_path.read_text(encoding="utf-8"))
+          assert reit_manifest["reporting_date"] == "2026-09-30"
+          assert reit_manifest["parsed_reit_count"] == 3
+          reit_csv = root / reit_manifest["output_path"]
+          assert hashlib.sha256(reit_csv.read_bytes()).hexdigest() == reit_manifest["output_sha256"]
+          assert {row["symbol"] for row in reit_manifest["rows"]} == {"BAGMANE", "BIRET", "EMBASSY"}
+          print(json.dumps({"reit_unitholding_fpi": reit_manifest["rows"]}, indent=2))
           assert bse_fallback["candidate_count"] == 3  # EQ-only BSE fallback; three REITs use NSE unitholding disclosures
           print(json.dumps({"bse_fallback_status_counts": bse_fallback["status_counts"]}, indent=2))
           master_raw = root / manifest["master_raw_path"]
@@ -358,6 +371,7 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add data/snapshots/shareholding_master data/snapshots/shareholding_filings data/snapshots/shareholding_ownership data/raw/shareholding/current_manifest.json data/raw/shareholding/shareholding_ownership_current.csv data/raw/fpi_evidence_blend data/snapshots/fpi_evidence_blend
+            git add data/raw/shareholding/reit_unitholding_current.csv data/raw/shareholding/reit_unitholding_current_manifest.json
             git add reports/weekly/
             git add data/processed/nsdl_cash_flows.csv data/processed/nsdl_cash_flow_context.json data/raw/nsdl_cash_flows
             git add data/raw/cdsl_fpi_registry data/snapshots/cdsl_fpi_registry
