@@ -6,6 +6,8 @@ on:
     paths:
       - "src/fii_engine/nse_shareholding_xbrl.py"
       - "src/fii_engine/nse_shareholding_ingest.py"
+      - "src/fii_engine/fpi_evidence_blend.py"
+      - "tests/test_fpi_evidence_blend.py"
       - "src/fii_engine/nse_security_master_probe.py"
       - "src/fii_engine/nse_shareholding_xbrl_entity_probe.py"
       - "src/fii_engine/bse_shareholding_scripcode_crosswalk.py"
@@ -157,6 +159,7 @@ jobs:
           assert manifest["status"] == "complete"
           assert manifest["stock_count"] == 501 and len(rows) == 501
           assert manifest["composite_score_status"] == "not_scored_independent_evidence_dimensions_only"
+          assert manifest["source_hashes"]["shareholding_identity_crosswalk"]
           print(json.dumps({
               "stock_count": manifest["stock_count"],
               "ownership_parsed_verified_count": manifest["ownership_parsed_verified_count"],
