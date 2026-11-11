@@ -101,11 +101,31 @@ def _safe_attachment_url(path: str) -> str:
     return parsed.geturl()
 
 
-def probe(candidates_csv: Path, output_dir: Path) -> dict:
+def probe(candidates_csv: Path, output_dir: Path, bse_udiff_path: Path) -> dict:
     with candidates_csv.open("r", encoding="utf-8-sig", newline="") as handle:
         candidates = list(csv.DictReader(handle))
     if not candidates:
         raise ValueError("BSE shareholding fallback candidate file is empty")
+    bse_payload = bse_udiff_path.read_bytes()
+    bse_digest = _sha256(bse_payload)
+    with bse_udiff_path.open("r", encoding="utf-8-sig", newline="") as handle:
+        bse_rows = list(csv.DictReader(handle))
+    bse_by_symbol = {
+        str(row.get("TckrSymb") or "").strip().upper(): row for row in bse_rows
+    }
+    for candidate in candidates:
+        if candidate.get("bse_udiff_source_sha256") != bse_digest:
+            raise ValueError("BSE UDiFF source SHA-256 differs from candidate audit")
+        symbol = candidate["bse_symbol"].strip().upper()
+        row = bse_by_symbol.get(symbol)
+        if not row:
+            raise ValueError(f"BSE UDiFF source has no exact symbol row: {symbol}")
+        if (
+            str(row.get("FinInstrmId") or "").strip() != candidate["bse_scrip_code"].strip()
+            or str(row.get("ISIN") or "").strip().upper() != candidate["universe_isin"].strip().upper()
+            or str(row.get("SctySrs") or "").strip().upper() != candidate["bse_series"].strip().upper()
+        ):
+            raise ValueError(f"BSE UDiFF identifier/ISIN/series mismatch: {symbol}")
     output_dir.mkdir(parents=True, exist_ok=True)
     observations = []
     for index, candidate in enumerate(candidates):
@@ -167,6 +187,7 @@ def probe(candidates_csv: Path, output_dir: Path) -> dict:
         "retrieved_at_utc": datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
         "reporting_date": "2026-09-30",
         "candidate_count": len(candidates),
+        "bse_udiff_source_sha256": bse_digest,
         "observations": observations,
         "status_counts": {},
         "scope_boundary": (
@@ -186,8 +207,12 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--candidates", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--bse-udiff", type=Path, required=True)
     args = parser.parse_args()
-    print(json.dumps(probe(args.candidates, args.output_dir), indent=2, ensure_ascii=False))
+    print(json.dumps(
+        probe(args.candidates, args.output_dir, args.bse_udiff),
+        indent=2, ensure_ascii=False,
+    ))
 
 
 if __name__ == "__main__":
