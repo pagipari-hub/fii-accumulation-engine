@@ -13,6 +13,7 @@ on:
       - "src/fii_engine/fpi_evidence_blend.py"
       - "src/fii_engine/nse_bulk_block_deals.py"
       - "src/fii_engine/fpi_deal_classifier.py"
+      - "src/fii_engine/cdsl_fpi_registry.py"
       - "src/fii_engine/weekly_watchlist_report.py"
       - "src/fii_engine/nsdl_cash_flow_context.py"
       - "src/fii_engine/nse_shareholding_history_probe.py"
@@ -24,6 +25,7 @@ on:
       - "tests/test_fpi_evidence_blend.py"
       - "tests/test_nse_bulk_block_deals.py"
       - "tests/test_fpi_deal_classifier.py"
+      - "tests/test_cdsl_fpi_registry.py"
       - "src/fii_engine/nse_security_master_probe.py"
       - "src/fii_engine/nse_shareholding_xbrl_entity_probe.py"
       - "src/fii_engine/bse_shareholding_scripcode_crosswalk.py"
@@ -47,6 +49,7 @@ on:
       - "src/fii_engine/fpi_evidence_blend.py"
       - "src/fii_engine/nse_bulk_block_deals.py"
       - "src/fii_engine/fpi_deal_classifier.py"
+      - "src/fii_engine/cdsl_fpi_registry.py"
       - "src/fii_engine/weekly_watchlist_report.py"
       - "src/fii_engine/nsdl_cash_flow_context.py"
       - "src/fii_engine/nse_shareholding_history_probe.py"
@@ -58,6 +61,7 @@ on:
       - "tests/test_fpi_evidence_blend.py"
       - "tests/test_nse_bulk_block_deals.py"
       - "tests/test_fpi_deal_classifier.py"
+      - "tests/test_cdsl_fpi_registry.py"
       - "src/fii_engine/bse_shareholding_fallback_probe.py"
       - "tests/test_bse_shareholding_fallback_probe.py"
       - "data/audits/bse_shareholding_fallback_candidates_2026-09-30.csv"
@@ -330,6 +334,9 @@ jobs:
             artifacts/nse-shareholding-announcements/
             data/raw/shareholding/identity_evidence/
             data/raw/nsdl_cash_flows/
+            artifacts/cdsl_fpi_registry/
+            data/raw/cdsl_fpi_registry/
+            data/snapshots/cdsl_fpi_registry/
             data/raw/bulk_block_deals/
             data/snapshots/bulk_block_deals/
             data/raw/fpi_deal_attribution/
@@ -347,12 +354,13 @@ jobs:
       - name: Commit normalized append-only filings and ownership snapshots
         if: github.event_name != 'pull_request'
         run: |
-          if [[ -n "$(git status --porcelain data/snapshots/shareholding_master data/snapshots/shareholding_filings data/snapshots/shareholding_ownership data/raw/shareholding/current_manifest.json data/raw/shareholding/shareholding_ownership_current.csv data/raw/shareholding/identity_evidence data/raw/shareholding/bse_shareholding_fallback_probe_manifest.json data/raw/nsdl_cash_flows data/processed/nsdl_cash_flows.csv data/processed/nsdl_cash_flow_context.json data/raw/bulk_block_deals data/snapshots/bulk_block_deals data/raw/fpi_deal_attribution data/snapshots/fpi_deal_attribution reports/weekly data/raw/fpi_evidence_blend data/snapshots/fpi_evidence_blend)" ]]; then
+          if [[ -n "$(git status --porcelain data/snapshots/shareholding_master data/snapshots/shareholding_filings data/snapshots/shareholding_ownership data/raw/shareholding/current_manifest.json data/raw/shareholding/shareholding_ownership_current.csv data/raw/shareholding/identity_evidence data/raw/shareholding/bse_shareholding_fallback_probe_manifest.json data/raw/nsdl_cash_flows data/processed/nsdl_cash_flows.csv data/processed/nsdl_cash_flow_context.json data/raw/bulk_block_deals data/snapshots/bulk_block_deals data/raw/fpi_deal_attribution data/snapshots/fpi_deal_attribution data/raw/cdsl_fpi_registry data/snapshots/cdsl_fpi_registry reports/weekly data/raw/fpi_evidence_blend data/snapshots/fpi_evidence_blend)" ]]; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add data/snapshots/shareholding_master data/snapshots/shareholding_filings data/snapshots/shareholding_ownership data/raw/shareholding/current_manifest.json data/raw/shareholding/shareholding_ownership_current.csv data/raw/fpi_evidence_blend data/snapshots/fpi_evidence_blend
             git add reports/weekly/
             git add data/processed/nsdl_cash_flows.csv data/processed/nsdl_cash_flow_context.json data/raw/nsdl_cash_flows
+            git add data/raw/cdsl_fpi_registry data/snapshots/cdsl_fpi_registry
             git add -f data/raw/bulk_block_deals data/snapshots/bulk_block_deals data/raw/fpi_deal_attribution data/snapshots/fpi_deal_attribution
             git add -f artifacts/nse-shareholding-history artifacts/nse-shareholding-announcements data/raw/shareholding/identity_evidence data/raw/shareholding/bse_shareholding_fallback_probe_manifest.json
             git commit -m "data: record official NSE quarterly FPI ownership"
