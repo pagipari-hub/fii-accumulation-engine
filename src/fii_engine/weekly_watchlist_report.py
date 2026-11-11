@@ -49,6 +49,9 @@ def build_report(
     )
     ownership_status = manifest.get("ownership_status_counts", {})
     crosswalk = manifest.get("source_hashes", {}).get("shareholding_identity_crosswalk")
+    nsdl = manifest.get("nsdl_market_flow_context")
+    if nsdl and nsdl.get("stock_level_attribution") is not False:
+        raise ValueError("NSDL aggregate context must not be attributed to individual stocks")
     if manifest.get("tradable_stock_count") != len(tradable):
         raise ValueError("tradable-stock count does not match matrix rows")
     if manifest.get("index_placeholder_count") != len(placeholders):
@@ -109,7 +112,6 @@ def build_report(
         lines.append("No named FPI-client gross-buy candidates passed the current evidence gates.")
     lines.append("")
 
-    nsdl = manifest.get("nsdl_market_flow_context")
     lines.extend([
         "## Aggregate market-wide cash-flow context",
         "",
@@ -153,7 +155,9 @@ def build_report(
         f"- Matrix CSV SHA-256: {manifest.get('output_csv_sha256', 'N/A')}",
         f"- BSE fallback manifest SHA-256: {_sha256(bse_payload)}",
         f"- Ownership identity crosswalk SHA-256: {crosswalk or 'N/A'}",
-        "- The accompanying run artifact retains raw source responses, manifests and normalized inputs.",
+        f"- NSDL normalized CSV SHA-256: {manifest.get('source_hashes', {}).get('nsdl_cash_flow_normalized_csv', 'N/A')}",
+        f"- NSDL raw archive manifest SHA-256: {manifest.get('source_hashes', {}).get('nsdl_cash_flow_raw_archive_manifest', 'N/A')}",
+        "- The accompanying run artifact retains raw source responses, manifests and normalized inputs."
         "",
         "This is an evidence watchlist, not an investment recommendation.",
     ])
