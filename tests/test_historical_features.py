@@ -7,6 +7,7 @@ import pytest
 from fii_engine.nse_fo_aggregate_reports import PARTICIPANT_COLUMNS
 from fii_engine.historical_features import (
     _participant_window,
+    _load_daily_snapshots,
     build_historical_features,
 )
 
@@ -345,3 +346,27 @@ def test_historical_archive_requires_all_three_report_families(tmp_path):
     assert result["participant_archive_complete_session_count"] == 0
     assert result["participant_oi_session_count"] == 0
     assert result["participant_volume_session_count"] == 0
+
+
+def test_daily_snapshot_revision_selects_only_strictly_dominant_observation(tmp_path):
+    _build_history(tmp_path)
+    directory = tmp_path / "data/snapshots/daily_stock_features"
+    original = next(directory.glob("daily_stock_features_2026-11-06_*.csv"))
+    with original.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    for row in rows:
+        row["futures_data_status"] = "unavailable"
+        row["futures_buildup"] = ""
+        row["futures_expiry"] = ""
+        row["options_data_status"] = "unavailable"
+        row["options_pcr_oi"] = ""
+        row["options_expiry"] = ""
+    duplicate = directory / "temporary.csv"
+    digest = _write_snapshot(duplicate, rows)
+    duplicate.rename(directory / f"daily_stock_features_2026-11-06_{digest[:16]}.csv")
+
+    snapshots, dates = _load_daily_snapshots(tmp_path)
+    selected = next(item for item in snapshots if item["date"] == "2026-11-06")
+    assert dates[-1] == "2026-11-06"
+    assert selected["path"] == str(original.relative_to(tmp_path))
+    assert len(selected["superseded_snapshot_paths"]) == 1
