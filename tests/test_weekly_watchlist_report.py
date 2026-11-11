@@ -75,6 +75,17 @@ def test_weekly_watchlist_is_conservative_and_hash_validated(tmp_path):
         "direct_fpi_client_gross_buy_candidate_count": 1,
         "composite_score_status": "not_scored_independent_evidence_dimensions_only",
         "as_of_trade_date": "2026-11-09",
+        "nse_shareholding_history_probe": {
+            "row_counts": {"ALKEM": 2},
+            "symbols_with_multiple_records": ["ALKEM"],
+        },
+        "nse_shareholding_unitholding_announcements_probe": {
+            "matching_announcement_counts": {"EMBASSY": 2},
+            "observations": [{
+                "symbol": "EMBASSY",
+                "attachments": [{"status": "captured"}, {"status": "download_error"}],
+            }],
+        },
         "nsdl_market_flow_context": {
             "start_date": "2026-08-10",
             "end_date": "2026-11-09",
@@ -112,6 +123,9 @@ def test_weekly_watchlist_is_conservative_and_hash_validated(tmp_path):
     assert "₹100.00 / ₹110.00 crore" in report
     assert "These are aggregate market-wide flows only" in report
     assert "No sourced business/corporate catalyst" in report
+    assert "Historical ownership source discovery" in report
+    assert "ALKEM" in report and "EMBASSY" in report
+    assert "Official attachments captured / failed: 1 / 1" in report
     assert "12,000,000 / 0 shares" in report
     assert "19,098,281 shares" in report
     assert "50.00%" in report
