@@ -24,6 +24,11 @@ def _format_integer(row: dict[str, str], key: str) -> str:
 
 def _format_percent(row: dict[str, str], key: str) -> str:
     value = row.get(key, "").strip()
+    return f"{float(value):.2f}%" if value else "N/A"
+
+
+def _format_return(row: dict[str, str], key: str) -> str:
+    value = row.get(key, "").strip()
     return f"{float(value):+.2f}%" if value else "N/A"
 
 
@@ -139,8 +144,8 @@ def build_report(
                 f"- **Unmatched gross sells:** {_format_integer(row, 'deal_unmatched_sell_quantity')} shares; counterparty identity coverage {_format_percent(row, 'deal_counterparty_identity_coverage_pct')}.",
                 f"- **Registry timing:** {_format_plain(row.get('deal_registry_temporal_status', ''))}.",
                 f"- **Known FPI net status:** {_format_plain(row.get('deal_known_fpi_net_status', ''))}.",
-                f"- **Short term (5 sessions):** price return {_format_percent(row, '5s_cash_return_pct')}; average delivery {_format_percent(row, '5s_average_delivery_percentage')}.",
-                f"- **Positional (20 / 60 sessions):** price returns {_format_percent(row, '20s_cash_return_pct')} / {_format_percent(row, '60s_cash_return_pct')}; delivery context {_format_plain(row.get('delivery_context', ''))}.",
+                f"- **Short term (5 sessions):** price return {_format_return(row, '5s_cash_return_pct')}; average delivery {_format_percent(row, '5s_average_delivery_percentage')}.",
+                f"- **Positional (20 / 60 sessions):** price returns {_format_return(row, '20s_cash_return_pct')} / {_format_return(row, '60s_cash_return_pct')}; delivery context {_format_plain(row.get('delivery_context', ''))}.",
                 f"- **Quarterly ownership:** FPI total {_format_percent(row, 'shareholding_fpi_total_ownership_percentage_points')} as of {row.get('shareholding_reporting_date', 'N/A')}; {_format_plain(row.get('ownership_context', ''))}.",
                 f"- **Derivatives:** futures {_format_plain(row.get('daily_futures_data_status', ''))}; options {_format_plain(row.get('daily_options_data_status', ''))}; {_format_plain(row.get('options_context', ''))}.",
                 "- **Why included:** a named current-registry FPI-client gross-buy disclosure is visible, but registration timing is not verified for the transaction date and sell-side counterparty identity is incomplete. This is a lead, not confirmed net accumulation.",
