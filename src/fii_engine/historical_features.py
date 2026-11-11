@@ -512,6 +512,13 @@ def _load_historical_archive_participant_snapshots(root: Path) -> tuple[dict[str
                 validated_payloads[dataset], dataset, expected_trade_date=trade_date
             )
             normalized = normalize_participant_report(inspection, dataset, trade_date)
+            # Existing immutable normalized CSV snapshots are read as strings;
+            # canonicalize archive-derived rows to the same representation before
+            # comparing same-date sources for exact agreement.
+            normalized = [
+                {key: "" if value is None else str(value) for key, value in row.items()}
+                for row in normalized
+            ]
             expected_count = 4 * 12
             if len(normalized) != expected_count:
                 raise ValueError(
