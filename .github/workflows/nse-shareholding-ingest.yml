@@ -137,6 +137,7 @@ jobs:
         if: github.event_name != 'pull_request'
         run: |
           python -m fii_engine.bse_shareholding_fallback_probe --candidates data/audits/bse_shareholding_fallback_candidates_2026-09-30.csv --output-dir artifacts/bse-shareholding-fallback --bse-udiff data/raw/shareholding/identity_evidence/BhavCopy_BSE_CM_0_0_0_20260930_F_0000_*.csv
+          cp artifacts/bse-shareholding-fallback/bse_shareholding_fallback_probe_manifest.json data/raw/shareholding/bse_shareholding_fallback_probe_manifest.json
 
       - name: Capture official NSE shareholding filings and FPI ownership
         if: github.event_name != 'pull_request'
@@ -270,7 +271,7 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add data/snapshots/shareholding_master data/snapshots/shareholding_filings data/snapshots/shareholding_ownership data/raw/shareholding/current_manifest.json data/raw/shareholding/shareholding_ownership_current.csv data/raw/fpi_evidence_blend data/snapshots/fpi_evidence_blend
-            git add -f data/raw/shareholding/identity_evidence
+            git add -f data/raw/shareholding/identity_evidence data/raw/shareholding/bse_shareholding_fallback_probe_manifest.json
             git commit -m "data: record official NSE quarterly FPI ownership"
             bash scripts/retry_git_push.sh "$GITHUB_REF_NAME"
           else
