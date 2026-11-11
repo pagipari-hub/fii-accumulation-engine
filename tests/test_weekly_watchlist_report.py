@@ -20,6 +20,21 @@ def test_weekly_watchlist_is_conservative_and_hash_validated(tmp_path):
             "deal_known_fpi_net_status": "partial",
             "shareholding_join_status": "parsed_verified_identity",
             "evidence_summary": "direct_named_fpi_client_gross_buy_candidate",
+            "deal_current_registry_matched_fpi_client_buy_quantity": "12000000",
+            "deal_current_registry_matched_fpi_client_sell_quantity": "0",
+            "deal_unmatched_sell_quantity": "19098281",
+            "deal_counterparty_identity_coverage_pct": "50.0",
+            "5s_cash_return_pct": "-0.5083",
+            "5s_average_delivery_percentage": "50.6360",
+            "20s_cash_return_pct": "8.3482",
+            "60s_cash_return_pct": "-7.4229",
+            "shareholding_fpi_total_ownership_percentage_points": "4.5900",
+            "shareholding_reporting_date": "2026-09-30",
+            "delivery_context": "5s_delivery_at_or_above_20s",
+            "daily_futures_data_status": "not_eligible",
+            "daily_options_data_status": "not_applicable",
+            "options_context": "5s_options_pcr_partial_observations",
+            "ownership_context": "2026_quarterly_fpi_ownership_baseline_available;no_prior_quarter_change_series",
         },
         {
             "symbol": "DUMMYHEG",
@@ -97,6 +112,11 @@ def test_weekly_watchlist_is_conservative_and_hash_validated(tmp_path):
     assert "₹100.00 / ₹110.00 crore" in report
     assert "These are aggregate market-wide flows only" in report
     assert "No sourced business/corporate catalyst" in report
+    assert "12,000,000 / 0 shares" in report
+    assert "19,098,281 shares" in report
+    assert "50.00%" in report
+    assert "-0.51%" in report and "+8.35%" in report and "-7.42%" in report
+    assert "4.59%" in report and "2026-09-30" in report
     assert "Composite score/ranking" in report and "disabled." in report
     assert "not an investment recommendation" in report
 
