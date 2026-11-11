@@ -10,7 +10,7 @@ import hashlib
 import json
 import re
 import time
-from datetime import date, datetime, timedelta, timezone
+from datetime import UTC, date, datetime, timedelta
 from html.parser import HTMLParser
 from http.cookiejar import CookieJar
 from pathlib import Path
@@ -198,7 +198,7 @@ def capture(start: date, end: date, output: Path, delay: float = 1.0) -> dict:
                 "dataset": kind,
                 "query_date": query_date.isoformat(),
                 "source_url": source_url,
-                "retrieved_at_utc": datetime.now(timezone.utc).isoformat(),
+                "retrieved_at_utc": datetime.now(UTC).isoformat(),
                 "http_status": 200,
                 "response_bytes": len(payload),
                 "response_sha256": digest,
@@ -207,7 +207,7 @@ def capture(start: date, end: date, output: Path, delay: float = 1.0) -> dict:
             })
     manifest = {
         "publisher": "National Securities Depository Limited",
-        "scope": "official_NS​​DL_archive_probe".replace("\u200b", ""),
+        "scope": "official_nsdl_archive_probe",
         "start_date": start.isoformat(),
         "end_date": end.isoformat(),
         "fpi_query_count": sum(r["dataset"] == "fpi" for r in records),
