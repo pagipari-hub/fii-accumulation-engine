@@ -43,7 +43,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: nse-shareholding-ownership
+  group: nse-shareholding-ownership-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
