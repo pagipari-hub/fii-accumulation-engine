@@ -215,8 +215,6 @@ def test_company_name_fallback_normalizes_only_common_legal_suffix_variants():
 
 
 def test_dated_bse_crosswalk_verifies_exact_identity_without_changing_source_isin(tmp_path):
-    import hashlib
-
     crosswalk = tmp_path / "shareholding_bse_scripcode_isin_crosswalk.csv"
     row = {
         "reporting_date": "2026-09-30",
