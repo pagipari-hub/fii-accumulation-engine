@@ -11,6 +11,9 @@ on:
       - "src/fii_engine/nse_security_master_probe.py"
       - "src/fii_engine/nse_shareholding_xbrl_entity_probe.py"
       - "src/fii_engine/bse_shareholding_scripcode_crosswalk.py"
+      - "src/fii_engine/bse_shareholding_fallback_probe.py"
+      - "tests/test_bse_shareholding_fallback_probe.py"
+      - "data/audits/bse_shareholding_fallback_candidates_2026-09-30.csv"
       - "data/audits/shareholding_isin_mismatch_candidates_2026-09-30.csv"
       - "data/audits/shareholding_missing_isin_candidates_2026-09-30.csv"
       - "tests/test_nse_shareholding_xbrl.py"
@@ -129,6 +132,11 @@ jobs:
           cp artifacts/nse-security-master-probe/shareholding_bse_scripcode_isin_crosswalk.json data/raw/shareholding/identity_evidence/
           cp artifacts/nse-security-master-probe/BhavCopy_BSE_CM_0_0_0_20260930_F_0000_*.csv data/raw/shareholding/identity_evidence/
 
+      - name: Probe BSE quarterly shareholding fallback for seven NSE-master gaps
+        if: github.event_name != 'pull_request'
+        run: |
+          python -m fii_engine.bse_shareholding_fallback_probe --candidates data/audits/bse_shareholding_fallback_candidates_2026-09-30.csv --output-dir artifacts/bse-shareholding-fallback --bse-udiff data/raw/shareholding/identity_evidence/BhavCopy_BSE_CM_0_0_0_20260930_F_0000_*.csv
+
       - name: Capture official NSE shareholding filings and FPI ownership
         if: github.event_name != 'pull_request'
         run: python -m fii_engine.nse_shareholding_ingest --repo-root . --identity-crosswalk data/raw/shareholding/identity_evidence/shareholding_bse_scripcode_isin_crosswalk.csv
@@ -152,6 +160,9 @@ jobs:
           assert manifest["current_universe_count"] >= 480
           assert manifest["identity_crosswalk"]["candidate_count"] == 146
           assert manifest["identity_crosswalk"]["verified_count"] >= 143
+          bse_fallback = json.loads(Path("artifacts/bse-shareholding-fallback/bse_shareholding_fallback_probe_manifest.json").read_text(encoding="utf-8"))
+          assert bse_fallback["candidate_count"] == 6
+          print(json.dumps({"bse_fallback_status_counts": bse_fallback["status_counts"]}, indent=2))
           master_raw = root / manifest["master_raw_path"]
           assert master_raw.is_file()
           assert hashlib.sha256(master_raw.read_bytes()).hexdigest() == manifest["master_raw_sha256"]
@@ -234,6 +245,7 @@ jobs:
             data/raw/shareholding/
             artifacts/nse-security-master-probe/
             artifacts/missing-isin-identity/
+            artifacts/bse-shareholding-fallback/
             data/raw/shareholding/identity_evidence/
             data/snapshots/shareholding_master/
             data/snapshots/shareholding_filings/
