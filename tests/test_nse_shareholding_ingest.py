@@ -283,3 +283,29 @@ def test_dated_bse_crosswalk_does_not_verify_different_filing_record(tmp_path):
     }, row)
     assert identity["identity_status"] == "isin_mismatch"
     assert identity["identity_join_method"] == "dated_bse_crosswalk_rejected"
+
+
+
+def test_dated_bse_crosswalk_can_verify_missing_master_isin_without_name_match():
+    evidence = {
+        "reporting_date": "2026-09-30",
+        "master_record_id": "201",
+        "master_xbrl_url": "https://nsearchives.nseindia.com/corporate/xbrl/xyz.xml",
+        "universe_isin": "INE000B01001",
+        "bse_isin": "INE000B01001",
+        "bse_crosswalk_status": "verified_exact_dated_bse_symbol_isin_match",
+        "xbrl_sha256": "b" * 64,
+        "bse_bhavcopy_sha256": "a" * 64,
+    }
+    master = _master_row(
+        "201", "XYZ", "The XYZ Company Limited", None,
+        "08-OCT-2026 17:00:00", "N", evidence["master_xbrl_url"],
+    )
+    identity = module._metadata(master, {
+        "symbol": "XYZ", "company_name": "XYZ Limited", "isin": "INE000B01001",
+    }, evidence)
+    assert identity["identity_status"] == "verified"
+    assert identity["identity_join_method"] == evidence["bse_crosswalk_status"]
+    assert identity["isin"] is None
+    assert identity["universe_isin"] == "INE000B01001"
+    assert identity["identity_evidence_xbrl_sha256"] == "b" * 64
