@@ -72,9 +72,21 @@ def build_report(
     ]
     grade_1 = [row for row in candidates if row.get("fpi_deal_evidence_grade", "").startswith("grade_1")]
     grade_2 = [row for row in candidates if row.get("fpi_deal_evidence_grade", "").startswith("grade_2")]
+    reit_manifest = None
+    if reit_manifest_path is not None and reit_manifest_path.is_file():
+        reit_manifest = json.loads(reit_manifest_path.read_text(encoding="utf-8"))
+        reit_csv_path = reit_manifest_path.parent / Path(reit_manifest["output_path"]).name
+        if not reit_csv_path.is_file() or _sha256(reit_csv_path.read_bytes()) != reit_manifest.get("output_sha256"):
+            raise ValueError("REIT unitholding CSV SHA-256 does not match its manifest")
+        if reit_manifest.get("reporting_date") != "2026-09-30":
+            raise ValueError("REIT unitholding reporting date is not the expected quarter")
+        reit_symbols = {item["symbol"].strip().upper() for item in reit_manifest.get("rows", [])}
+    else:
+        reit_symbols = set()
     missing_ownership = sorted(
         row["symbol"] for row in tradable
         if row.get("shareholding_join_status") == "not_found_in_current_master"
+        and row["symbol"].strip().upper() not in reit_symbols
     )
     ownership_status = manifest.get("ownership_status_counts", {})
     crosswalk = manifest.get("source_hashes", {}).get("shareholding_identity_crosswalk")
@@ -107,21 +119,15 @@ def build_report(
         f"- **Parsed verified ownership rows:** {ownership_status.get('parsed_verified_identity', 0)}.",
         f"- **Dated BSE identity crosswalk:** {manifest.get('identity_crosswalk_verified_count', 0)} / {manifest.get('identity_crosswalk_candidate_count', 0)} verified; {manifest.get('identity_crosswalk_unresolved_count', 0)} unresolved.",
         f"- **BSE UDiFF source SHA-256:** {manifest.get('identity_crosswalk_bse_source_sha256', 'N/A')}.",
-        f"- **Ownership rows not found in the current NSE filing master:** {len(missing_ownership)}.",
+        f"- **Tradable securities without parsed equity shareholding or separate REIT unitholding evidence:** {len(missing_ownership)}.",
         "",
     ]
     if missing_ownership:
-        lines.append("Missing current NSE ownership records: " + ", ".join(missing_ownership) + ".")
+        lines.append("Remaining uncovered EQ shareholding records: " + ", ".join(missing_ownership) + ".")
         lines.append("These remain N/A; no ownership values are imputed.")
         lines.append("")
 
-    if reit_manifest_path is not None and reit_manifest_path.is_file():
-        reit_manifest = json.loads(reit_manifest_path.read_text(encoding="utf-8"))
-        reit_csv_path = reit_manifest_path.parent / Path(reit_manifest["output_path"]).name
-        if not reit_csv_path.is_file() or _sha256(reit_csv_path.read_bytes()) != reit_manifest.get("output_sha256"):
-            raise ValueError("REIT unitholding CSV SHA-256 does not match its manifest")
-        if reit_manifest.get("reporting_date") != "2026-09-30":
-            raise ValueError("REIT unitholding reporting date is not the expected quarter")
+    if reit_manifest is not None:
         lines.extend([
             "## REIT unitholding FPI evidence (separate ownership data type)",
             "",
