@@ -1,0 +1,62 @@
+name: NSDL cash-flow normalization
+on:
+  push:
+    branches:
+      - research/nsdl-cash-flow-normalization
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install -e ".[dev]"
+      - run: pytest tests/test_nsdl_cash_flow_normalizer.py
+      - run: ruff check src/fii_engine/nsdl_cash_flow_normalizer.py tests/test_nsdl_cash_flow_normalizer.py
+
+  live-normalization:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install -e .
+      - name: Capture official NSDL archive responses
+        run: >-
+          python -m fii_engine.nsdl_cash_flow_archive_probe
+          --start-date 2026-08-17 --end-date 2026-11-10 --delay 1.0
+      - name: Normalize with source-hash validation
+        run: >-
+          python -m fii_engine.nsdl_cash_flow_normalizer
+          --manifest data/raw/nsdl_cash_flows/manifest.json
+          --output data/processed/nsdl_cash_flows.csv
+      - name: Enforce observed coverage floor
+        run: |
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+          rows = list(csv.DictReader(Path("data/processed/nsdl_cash_flows.csv").open()))
+          fpi = sum(bool(r["fpi_net_investment_inr_crore"]) for r in rows)
+          dii = sum(bool(r["dii_net_investment_inr_crore"]) for r in rows)
+          overlap = sum(bool(r["fpi_net_investment_inr_crore"]) and bool(r["dii_net_investment_inr_crore"]) for r in rows)
+          print({"fpi_dates": fpi, "dii_dates": dii, "overlap": overlap})
+          if fpi < 60 or dii < 50 or overlap < 50:
+              raise SystemExit("NSDL normalized cash-flow coverage below probe floor")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nsdl-cash-flow-normalized-${{ github.run_id }}
+          path: |
+            data/raw/nsdl_cash_flows/
+            data/processed/nsdl_cash_flows.csv
+          if-no-files-found: error
+          retention-days: 90
