@@ -564,6 +564,10 @@ def build(root: Path = Path(".")) -> dict:
         "grade_1_count": sum(row["fpi_deal_evidence_grade"].startswith("grade_1") for row in output_rows),
         "grade_2_count": sum(row["fpi_deal_evidence_grade"].startswith("grade_2") for row in output_rows),
         "ownership_reporting_date": share_manifest.get("latest_reporting_date"),
+        "identity_crosswalk_candidate_count": (share_manifest.get("identity_crosswalk") or {}).get("candidate_count"),
+        "identity_crosswalk_verified_count": (share_manifest.get("identity_crosswalk") or {}).get("verified_count"),
+        "identity_crosswalk_unresolved_count": (share_manifest.get("identity_crosswalk") or {}).get("unresolved_count"),
+        "identity_crosswalk_bse_source_sha256": (share_manifest.get("identity_crosswalk") or {}).get("bse_source_sha256"),
         "ownership_parsed_verified_count": ownership_status_counts["parsed_verified_identity"],
         "ownership_coverage_pct": round(
             ownership_status_counts["parsed_verified_identity"] / (len(output_rows) - len(placeholders)) * 100, 2
