@@ -13,8 +13,10 @@ on:
       - "src/fii_engine/fpi_evidence_blend.py"
       - "src/fii_engine/weekly_watchlist_report.py"
       - "src/fii_engine/nsdl_cash_flow_context.py"
+      - "src/fii_engine/nse_shareholding_history_probe.py"
       - "tests/test_weekly_watchlist_report.py"
       - "tests/test_nsdl_cash_flow_context.py"
+      - "tests/test_nse_shareholding_history_probe.py"
       - "tests/test_fpi_evidence_blend.py"
       - "src/fii_engine/nse_security_master_probe.py"
       - "src/fii_engine/nse_shareholding_xbrl_entity_probe.py"
@@ -171,6 +173,10 @@ jobs:
           cp artifacts/nse-security-master-probe/shareholding_bse_scripcode_isin_crosswalk.json data/raw/shareholding/identity_evidence/
           cp artifacts/nse-security-master-probe/BhavCopy_BSE_CM_0_0_0_20260930_F_0000_*.csv data/raw/shareholding/identity_evidence/
 
+      - name: Probe NSE symbol-specific quarterly shareholding history
+        if: github.event_name != 'pull_request'
+        run: python -m fii_engine.nse_shareholding_history_probe --output-dir artifacts/nse-shareholding-history
+
       - name: Probe BSE quarterly shareholding fallback for seven NSE-master gaps
         if: github.event_name != 'pull_request'
         run: |
@@ -302,6 +308,7 @@ jobs:
             artifacts/nse-security-master-probe/
             artifacts/missing-isin-identity/
             artifacts/bse-shareholding-fallback/
+            artifacts/nse-shareholding-history/
             data/raw/shareholding/identity_evidence/
             data/raw/nsdl_cash_flows/
             data/processed/
