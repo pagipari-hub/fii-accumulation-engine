@@ -151,6 +151,20 @@ def build_report(
             )
         lines.append("")
         for row in candidates:
+            grade = row.get("fpi_deal_evidence_grade", "")
+            if grade.startswith("grade_1"):
+                inclusion_reason = (
+                    "A temporally verified FPI-client transaction disclosure is present. "
+                    "Gross buys and sells remain visible separately; disclosed deals are not a complete tape of all FPI trades."
+                )
+            elif grade.startswith("grade_2"):
+                inclusion_reason = (
+                    "A named current-registry FPI-client gross-buy disclosure is visible, but registration timing "
+                    "is not verified for the transaction date and sell-side counterparty identity is incomplete. "
+                    "This is a lead, not confirmed net accumulation."
+                )
+            else:
+                inclusion_reason = "The record is retained for review because its evidence grade requires manual interpretation."
             lines.extend([
                 f"### {row['company_name']} ({row['symbol']})",
                 "",
@@ -162,7 +176,7 @@ def build_report(
                 f"- **Positional (20 / 60 sessions):** price returns {_format_return(row, '20s_cash_return_pct')} / {_format_return(row, '60s_cash_return_pct')}; delivery context {_format_plain(row.get('delivery_context', ''))}.",
                 f"- **Quarterly ownership:** FPI total {_format_percent(row, 'shareholding_fpi_total_ownership_percentage_points')} as of {row.get('shareholding_reporting_date', 'N/A')}; {_format_plain(row.get('ownership_context', ''))}.",
                 f"- **Derivatives:** futures {_format_plain(row.get('daily_futures_data_status', ''))}; options {_format_plain(row.get('daily_options_data_status', ''))}; {_format_plain(row.get('options_context', ''))}.",
-                "- **Why included:** a named current-registry FPI-client gross-buy disclosure is visible, but registration timing is not verified for the transaction date and sell-side counterparty identity is incomplete. This is a lead, not confirmed net accumulation.",
+                f"- **Why included:** {inclusion_reason}",
                 "- **Catalyst:** No sourced business/corporate catalyst or buyer motive is attached; none is inferred.",
                 "",
             ])
