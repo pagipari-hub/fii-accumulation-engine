@@ -142,9 +142,10 @@ def probe(candidates_csv: Path, output_dir: Path, bse_udiff_path: Path) -> dict:
             "response_url": bootstrap_meta["response_url"],
         }
     except Exception as exc:
+        # A blocked HTML page does not prove that the JSON API is blocked.
+        # Attempt the official API directly for the first candidate; only an
+        # API-level 403 should stop subsequent requests.
         bootstrap = {"status": "error", "error": str(exc)}
-        if "403" in str(exc):
-            exchange_blocked = True
     for index, candidate in enumerate(candidates):
         if exchange_blocked:
             observations.append({
