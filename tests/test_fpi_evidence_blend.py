@@ -55,6 +55,13 @@ def test_build_blended_matrix_preserves_missingness_and_full_universe(tmp_path):
         "source_url": "https://www.niftyindices.com/press-release",
         "reason": "Non-tradable index placeholder",
     }])
+    _write_json(tmp_path / "data/processed/nsdl_cash_flow_context.json", {
+        "scope": "aggregate_market_wide_cash_equity_context_only",
+        "stock_level_attribution": False,
+        "normalized_date_count": 60,
+        "fpi": {"cumulative_net_inr_crore": -10.0},
+        "dii": {"cumulative_net_inr_crore": 20.0},
+    })
 
     daily_rows = []
     historical_rows = []
@@ -211,6 +218,8 @@ def test_build_blended_matrix_preserves_missingness_and_full_universe(tmp_path):
     assert result["stock_count"] == 501
     assert result["tradable_stock_count"] == 500
     assert result["index_placeholder_count"] == 1
+    assert result["nsdl_market_flow_context"]["stock_level_attribution"] is False
+    assert result["nsdl_market_flow_context"]["scope"] == "aggregate_market_wide_cash_equity_context_only"
     assert result["ownership_coverage_pct"] == 0.2
     assert result["ownership_index_row_coverage_pct"] == 0.2
     assert result["ownership_status_counts"]["not_applicable_index_placeholder"] == 1
