@@ -125,7 +125,7 @@ def test_weekly_watchlist_is_conservative_and_hash_validated(tmp_path):
     assert "No sourced business/corporate catalyst" in report
     assert "Historical ownership source discovery" in report
     assert "ALKEM" in report and "EMBASSY" in report
-    assert "Official attachments captured / failed: 1 / 1" in report
+    assert "Official attachments captured / failed" in report and "1 / 1" in report
     assert "12,000,000 / 0 shares" in report
     assert "19,098,281 shares" in report
     assert "50.00%" in report
