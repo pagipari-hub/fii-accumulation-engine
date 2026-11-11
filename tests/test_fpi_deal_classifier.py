@@ -303,7 +303,10 @@ def test_classifier_writes_auditable_outputs_and_deduplicates_cross_report(tmp_p
             "snapshot_sha256": snapshot_hash,
         }))
 
-    result = classify(tmp_path, lookback_days=7)
+    result = classify(tmp_path, from_value="10-08-2026", to_value="09-11-2026")
+    assert result["lookback_calendar_days"] == 91
+    assert result["trade_date_window_start"] == "2026-08-10"
+    assert result["trade_date_window_end"] == "2026-11-09"
     assert result["source_row_count"] == 2
     assert result["deduplicated_event_count"] == 1
     assert result["cross_report_duplicate_event_count"] == 1
