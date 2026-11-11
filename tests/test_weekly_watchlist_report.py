@@ -122,6 +122,7 @@ def test_weekly_watchlist_is_conservative_and_hash_validated(tmp_path):
     assert result["tradable_stock_count"] == 1
     assert "ABC Limited" in report
     assert "Grade 2" in report
+    assert "registration timing is not verified for the transaction date" in report
     assert "unverified" in report
     assert "incomplete buy/sell totals" in report
     assert "146 / 146 verified" in report
