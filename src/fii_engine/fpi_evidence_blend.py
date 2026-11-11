@@ -476,7 +476,7 @@ def build(root: Path = Path(".")) -> dict:
             summary_parts.append("delivery_strengthening_vs_20s")
         if row["options_context"].startswith("5s_same_expiry_pcr_available"):
             summary_parts.append("5_session_options_pcr_same_expiry_available")
-        if row["ownership_context"] != "2026_quarterly_fpi_ownership_baseline_available;no_prior_quarter_change_series":
+        if not placeholder and row["ownership_context"] != "2026_quarterly_fpi_ownership_baseline_available;no_prior_quarter_change_series":
             summary_parts.append("quarterly_fpi_ownership_baseline_unavailable_or_unverified")
         if deal_data_status == "observed_disclosed_deals" and not direct_buy:
             summary_parts.append("bulk_block_deals_disclosed_without_direct_fpi_client_buy_match")
