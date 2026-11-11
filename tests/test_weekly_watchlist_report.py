@@ -96,6 +96,7 @@ def test_weekly_watchlist_is_conservative_and_hash_validated(tmp_path):
     assert "₹-255.21 crore" in report
     assert "₹100.00 / ₹110.00 crore" in report
     assert "These are aggregate market-wide flows only" in report
+    assert "No sourced business/corporate catalyst" in report
     assert "Composite score/ranking" in report and "disabled." in report
     assert "not an investment recommendation" in report
 
