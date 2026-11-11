@@ -278,8 +278,9 @@ jobs:
       - name: Generate weekly FPI evidence watchlist
         if: github.event_name != 'pull_request'
         run: |
-          python -m fii_engine.weekly_watchlist_report --matrix data/raw/fpi_evidence_blend/fpi_evidence_matrix_current.csv --manifest data/raw/fpi_evidence_blend/fpi_evidence_matrix_current_manifest.json --bse-fallback-manifest data/raw/shareholding/bse_shareholding_fallback_probe_manifest.json --output reports/weekly/fpi_evidence_watchlist_2026-11-11.md
-          test -s reports/weekly/fpi_evidence_watchlist_2026-11-11.md
+          REPORT_DATE="$(date -u +%F)"
+          python -m fii_engine.weekly_watchlist_report --matrix data/raw/fpi_evidence_blend/fpi_evidence_matrix_current.csv --manifest data/raw/fpi_evidence_blend/fpi_evidence_matrix_current_manifest.json --bse-fallback-manifest data/raw/shareholding/bse_shareholding_fallback_probe_manifest.json --output "reports/weekly/fpi_evidence_watchlist_${REPORT_DATE}.md"
+          test -s "reports/weekly/fpi_evidence_watchlist_${REPORT_DATE}.md"
 
       - name: Upload raw master, XBRL and normalized filing evidence
         if: always() && github.event_name != 'pull_request'
