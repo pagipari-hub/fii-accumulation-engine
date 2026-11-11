@@ -216,6 +216,9 @@ def test_company_name_fallback_normalizes_only_common_legal_suffix_variants():
 
 def test_dated_bse_crosswalk_verifies_exact_identity_without_changing_source_isin(tmp_path):
     crosswalk = tmp_path / "shareholding_bse_scripcode_isin_crosswalk.csv"
+    raw_source = tmp_path / "bse_source.csv"
+    raw_source.write_bytes(b"verified dated BSE source")
+    source_hash = __import__("hashlib").sha256(raw_source.read_bytes()).hexdigest()
     row = {
         "reporting_date": "2026-09-30",
         "symbol": "ABC",
@@ -224,7 +227,7 @@ def test_dated_bse_crosswalk_verifies_exact_identity_without_changing_source_isi
         "master_xbrl_url": "https://nsearchives.nseindia.com/corporate/xbrl/abc.xml",
         "bse_isin": "INE000A01001",
         "bse_crosswalk_status": "verified_exact_dated_bse_scripcode_isin_match",
-        "bse_bhavcopy_sha256": "a" * 64,
+        "bse_bhavcopy_sha256": source_hash,
         "xbrl_sha256": "b" * 64,
     }
     with crosswalk.open("w", newline="", encoding="utf-8") as handle:
@@ -237,7 +240,8 @@ def test_dated_bse_crosswalk_verifies_exact_identity_without_changing_source_isi
         "verified_count": 1,
         "unresolved_count": 0,
         "bse_source_http_status": 200,
-        "bse_source_sha256": "a" * 64,
+        "bse_source_sha256": source_hash,
+        "bse_source_path": "bse_source.csv",
     }
     crosswalk.with_suffix(".json").write_text(json.dumps(report), encoding="utf-8")
 
