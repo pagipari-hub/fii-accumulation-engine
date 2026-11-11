@@ -1,8 +1,8 @@
 """Probe NSE shareholding XBRL entity identifiers for selected ISIN-mismatch filings.
 
-The probe captures issuer entity identifiers (often CIN-like values) from the
-XBRL contexts. It does not equate an identifier to a company without an
-independent issuer registry crosswalk.
+The probe captures issuer entity identifiers from XBRL contexts. It does not
+equate an identifier to a company without an independent issuer registry
+crosswalk.
 """
 from __future__ import annotations
 
@@ -19,6 +19,7 @@ from urllib.error import HTTPError, URLError
 from urllib.request import HTTPCookieProcessor, Request, build_opener
 
 BASE = "https://www.nseindia.com"
+BOOTSTRAP_PAGE = f"{BASE}/static/market-data/securities-available-for-trading"
 PAGE = f"{BASE}/companies-listing/corporate-filings-shareholding-pattern/"
 UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36"
 HTTP = build_opener(HTTPCookieProcessor(CookieJar()))
@@ -33,30 +34,21 @@ def parse_xbrl_entity(payload: bytes) -> dict:
         root = ET.fromstring(payload)
     except ET.ParseError as exc:
         raise ValueError("invalid XBRL XML") from exc
-    identifiers = []
-    name_facts = []
+    identifiers, name_facts = [], []
     for element in root.iter():
         local = element.tag.rsplit("}", 1)[-1].lower()
         value = (element.text or "").strip()
         if local == "identifier" and value:
-            identifiers.append({
-                "scheme": element.attrib.get("scheme", ""),
-                "value": value,
-            })
-        if value and local in {
-            "nameofcompany", "nameofentity", "entityname",
-            "companyname", "nameofreportingentity",
-        }:
+            identifiers.append({"scheme": element.attrib.get("scheme", ""), "value": value})
+        if value and local in {"nameofcompany", "nameofentity", "entityname", "companyname", "nameofreportingentity"}:
             name_facts.append({"tag": element.tag.rsplit("}", 1)[-1], "value": value})
-    unique_ids = []
-    seen = set()
+    unique_ids, seen = [], set()
     for item in identifiers:
         key = (item["scheme"], item["value"])
         if key not in seen:
             seen.add(key)
             unique_ids.append(item)
-    unique_names = []
-    seen_names = set()
+    unique_names, seen_names = [], set()
     for item in name_facts:
         key = (item["tag"], item["value"])
         if key not in seen_names:
@@ -64,18 +56,12 @@ def parse_xbrl_entity(payload: bytes) -> dict:
             unique_names.append(item)
     if not unique_ids:
         raise ValueError("XBRL contains no entity identifier in contexts")
-    return {
-        "entity_identifiers": unique_ids,
-        "company_name_facts": unique_names,
-        "identifier_count": len(unique_ids),
-    }
+    return {"entity_identifiers": unique_ids, "company_name_facts": unique_names, "identifier_count": len(unique_ids)}
 
 
 def _get(url: str, referer: str, accept: str = "*/*") -> tuple[bytes, dict]:
     request = Request(url, headers={
-        "User-Agent": UA,
-        "Referer": referer,
-        "Accept": accept,
+        "User-Agent": UA, "Referer": referer, "Accept": accept,
         "Accept-Language": "en-US,en;q=0.9",
     })
     for attempt in range(4):
@@ -106,9 +92,9 @@ def probe(candidates_csv: Path, output_dir: Path, symbols: list[str]) -> dict:
     missing = [symbol for symbol in symbols if symbol not in by_symbol]
     if missing:
         raise ValueError(f"requested symbols missing from candidate audit: {missing}")
-    bootstrap, meta = _get(BASE + "/", BASE + "/", "text/html,*/*")
+    bootstrap, meta = _get(BOOTSTRAP_PAGE, BASE + "/", "text/html,*/*")
     if meta["http_status"] != 200 or not bootstrap:
-        raise RuntimeError("NSE XBRL session bootstrap failed")
+        raise RuntimeError("NSE session bootstrap failed")
     output_dir.mkdir(parents=True, exist_ok=True)
     observations = []
     for symbol in symbols:
@@ -123,30 +109,23 @@ def probe(candidates_csv: Path, output_dir: Path, symbols: list[str]) -> dict:
         if not raw_path.exists():
             raw_path.write_bytes(payload)
         observations.append({
-            "symbol": symbol,
-            "reporting_date": candidate["reporting_date"],
+            "symbol": symbol, "reporting_date": candidate["reporting_date"],
             "universe_isin": candidate["universe_isin"],
             "shareholding_master_isin": candidate["master_isin"],
             "master_company_name": candidate["master_company_name"],
-            "master_record_id": candidate["master_record_id"],
-            "xbrl_url": url,
-            **response,
-            "bytes": len(payload),
-            "sha256": digest,
-            "raw_path": str(raw_path),
-            **parsed,
+            "master_record_id": candidate["master_record_id"], "xbrl_url": url,
+            **response, "bytes": len(payload), "sha256": digest,
+            "raw_path": str(raw_path), **parsed,
             "identity_boundary": "Entity identifier extracted from filing only; no CIN/company registry crosswalk or ISIN override performed.",
         })
     report = {
         "publisher": "National Stock Exchange of India",
         "retrieved_at_utc": datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
         "session_bootstrap": {"http_status": meta["http_status"], "bytes": len(bootstrap)},
-        "symbols_probed": symbols,
-        "observations": observations,
+        "symbols_probed": symbols, "observations": observations,
         "safety": {
             "entity_identifiers_are_not_assumed_to_be_cin_without_scheme_validation": True,
-            "no_ownership_identity_status_changed": True,
-            "no_isin_override_performed": True,
+            "no_ownership_identity_status_changed": True, "no_isin_override_performed": True,
         },
     }
     (output_dir / "shareholding_xbrl_entity_probe.json").write_text(
