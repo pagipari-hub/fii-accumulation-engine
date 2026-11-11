@@ -17,6 +17,18 @@
 Missing current NSE ownership records: ABBOTINDIA, ALKEM, BAGMANE, BIRET, EMBASSY, MCX.
 These remain N/A; no ownership values are imputed.
 
+## REIT unitholding FPI evidence (separate ownership data type)
+
+These official REIT unit-holding disclosures are not mixed with equity shareholding XBRL or treated as equity shares.
+
+| REIT | Reporting date | FPI units | FPI ownership | Source attachment SHA-256 |
+|---|---|---:|---:|---|
+| BAGMANE — Bagmane Prime Office REIT | 2026-09-30 | 7,486,373 | 0.22% | f8cedb88375d56ad7a50453cbfd438cce150d8408d6da5cab98e30e5b81f9a4c |
+| BIRET — Brookfield India Real Estate Trust | 2026-09-30 | 88,393,039 | 10.65% | 667ae75caf0d68d0c3e703fa648cea693ce8e7f4783efe553ae39a2bce9fd8e1 |
+| EMBASSY — EMBASSY OFFICE PARKS REIT | 2026-09-30 | 302,751,052 | 31.94% | bf299766b4a206da6ba32ac654a42dbb30707a265b9244e8240e050bc44950b0 |
+
+Parsed official REIT disclosures: 3 / 3. These are quarter-end ownership snapshots, not dated purchases or proof of FPI accumulation.
+
 ## Disclosed stock-specific deal evidence window
 
 - **NSE bulk/block deal disclosure window:** 2026-11-02 to 2026-11-09 (7-day span).
@@ -90,7 +102,7 @@ An HTTP 403 is an access restriction, not proof that a filing does not exist. No
 ## Reproducibility
 
 - Matrix CSV SHA-256: d96df24dc28ccb0feff1fdddfe565154b0defdc7d494f85369b66f49e845d6dd
-- BSE fallback manifest SHA-256: 938c10cf9cec515652da0ea3da36896f714fc06377411dc31dba8233e3bb9222
+- BSE fallback manifest SHA-256: 90bfaaad0c65898ffe0c37c83b596e00cd46d1ee367a5fa426b379277c2b2b67
 - Ownership identity crosswalk SHA-256: 12258998e48b1203bbcbc708d6d3ee9c5fcb9f7d537d925d47ae3c392a5d52c8
 - NSDL normalized CSV SHA-256: 061bc2be35b00e26bd6250938c005ba1998fbc01044cac72c2d0e7cdf216d4c1
 - NSDL raw archive manifest SHA-256: b1f08e3af954dba8db2182464433b111311c74a2e29240893c8c5d25dc42fb3a
