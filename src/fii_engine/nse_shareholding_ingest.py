@@ -20,6 +20,7 @@ TRUSTED_XBRL_HOST = "nsearchives.nseindia.com"
 TRUSTED_XBRL_PATH = "/corporate/xbrl/"
 UNIVERSE_PATH = "data/raw/universe/nifty500_current.csv"
 PARSER_VERSION = 4
+PLACEHOLDER_CSV = Path("data/audits/nifty500_index_placeholders_2026-11-09.csv")
 
 ALLOWED_CROSSWALK_STATUSES = {
     "verified_exact_dated_bse_scripcode_isin_match",
@@ -28,7 +29,8 @@ ALLOWED_CROSSWALK_STATUSES = {
 
 OWNERSHIP_FIELDS = [
     "reporting_date", "symbol", "company_name", "isin",
-    "record_id", "submission_date", "broadcast_date", "system_date",
+    "universe_member_type", "tradability_status", "fpi_scoring_eligible",
+    "universe_exclusion_reason", "record_id", "submission_date", "broadcast_date", "system_date",
     "revised_data", "revision_date", "identity_status", "identity_join_method",
     "filing_status", "fpi_category_i_shares", "fpi_category_ii_shares",
     "fpi_total_shares", "fpi_category_i_ownership_percentage_points",
@@ -85,6 +87,29 @@ def _parse_nse_datetime(value: object, *, field: str) -> datetime | None:
         except ValueError:
             pass
     raise ValueError(f"invalid NSE shareholding {field}: {value!r}")
+
+
+def _load_index_placeholders(root: Path, universe: list[dict]) -> tuple[dict[str, dict], dict | None]:
+    path = root / PLACEHOLDER_CSV
+    if not path.exists():
+        return {}, None
+    payload = path.read_bytes()
+    rows = list(csv.DictReader(io.StringIO(payload.decode("utf-8-sig"))))
+    symbols = {row["symbol"].strip().upper() for row in universe}
+    indexed = {}
+    for row in rows:
+        symbol = row.get("symbol", "").strip().upper()
+        if not symbol or symbol not in symbols or symbol in indexed:
+            raise ValueError(f"invalid or duplicate index placeholder symbol: {symbol}")
+        if row.get("classification") != "demerged_index_placeholder":
+            raise ValueError(f"unsupported index placeholder classification: {symbol}")
+        indexed[symbol] = row
+    return indexed, {
+        "path": str(PLACEHOLDER_CSV),
+        "sha256": _sha256(payload),
+        "placeholder_count": len(indexed),
+        "symbols": sorted(indexed),
+    }
 
 
 def _load_universe(root: Path) -> tuple[list[dict], dict[str, dict], str]:
@@ -302,6 +327,7 @@ def _build_ownership_rows(
     master_records: list[dict],
     filings_by_key: dict[tuple[str, str], dict],
     master_hash: str,
+    placeholders: dict[str, dict] | None = None,
 ) -> list[dict]:
     grouped = defaultdict(list)
     dates = sorted({row["reporting_date"] for row in master_records})
@@ -311,6 +337,23 @@ def _build_ownership_rows(
     output = []
     for reporting_date in dates:
         for stock in universe:
+            placeholder = (placeholders or {}).get(stock["symbol"].upper())
+            if placeholder:
+                output.append({
+                    "reporting_date": reporting_date,
+                    "symbol": stock["symbol"],
+                    "company_name": stock["company_name"],
+                    "isin": stock["isin"],
+                    "universe_member_type": "index_adjustment_placeholder",
+                    "tradability_status": "non_tradable_zero_price",
+                    "fpi_scoring_eligible": "false",
+                    "universe_exclusion_reason": placeholder.get("reason", ""),
+                    "identity_status": "not_applicable_index_placeholder",
+                    "identity_join_method": "index_corporate_action_zero_price_placeholder",
+                    "filing_status": "not_applicable_index_placeholder",
+                    "source_master_sha256": master_hash,
+                })
+                continue
             candidates = grouped.get((stock["symbol"], reporting_date), [])
             if not candidates:
                 output.append({
@@ -318,6 +361,10 @@ def _build_ownership_rows(
                     "symbol": stock["symbol"],
                     "company_name": stock["company_name"],
                     "isin": stock["isin"],
+                    "universe_member_type": "tradable_security",
+                    "tradability_status": "tradable",
+                    "fpi_scoring_eligible": "true",
+                    "universe_exclusion_reason": "",
                     "identity_status": "not_found_in_current_master",
                     "identity_join_method": None,
                     "filing_status": "not_found_in_current_master",
@@ -332,6 +379,10 @@ def _build_ownership_rows(
                 "symbol": stock["symbol"],
                 "company_name": stock["company_name"],
                 "isin": stock["isin"],
+                "universe_member_type": "tradable_security",
+                "tradability_status": "tradable",
+                "fpi_scoring_eligible": "true",
+                "universe_exclusion_reason": "",
                 "record_id": latest["record_id"],
                 "submission_date": latest["submission_date"],
                 "broadcast_date": latest["broadcast_date"],
@@ -390,6 +441,7 @@ def _build_ownership_rows(
 def ingest(root: Path = Path("."), identity_crosswalk_path: Path | None = None) -> dict:
     root = root.resolve()
     universe, universe_by_symbol, universe_hash = _load_universe(root)
+    index_placeholders, placeholder_meta = _load_index_placeholders(root, universe)
     if identity_crosswalk_path is not None and not identity_crosswalk_path.is_absolute():
         identity_crosswalk_path = root / identity_crosswalk_path
     identity_crosswalk, identity_crosswalk_meta = _load_identity_crosswalk(identity_crosswalk_path)
@@ -541,7 +593,7 @@ def ingest(root: Path = Path("."), identity_crosswalk_path: Path | None = None) 
             })
 
     ownership_rows = _build_ownership_rows(
-        universe, current_records, filings_by_key, master_hash
+        universe, current_records, filings_by_key, master_hash, index_placeholders
     )
     ownership_payload_buffer = io.StringIO(newline="")
     writer = csv.DictWriter(ownership_payload_buffer, fieldnames=OWNERSHIP_FIELDS)
@@ -566,6 +618,7 @@ def ingest(root: Path = Path("."), identity_crosswalk_path: Path | None = None) 
     latest_ownership_rows = [row for row in ownership_rows if row["reporting_date"] == latest_reporting_date]
     parsed_latest_count = sum(row.get("filing_status") == "parsed" for row in latest_ownership_rows)
     eligible_count = len(eligible_records)
+    tradable_universe_count = len(universe) - len(index_placeholders)
     status = (
         "partial_xbrl_coverage" if fetch_errors
         else "partial_identity_coverage" if identity_counts.get("isin_mismatch", 0) or identity_counts.get("identity_unverified", 0) or identity_counts.get("not_found_in_current_master", 0)
@@ -582,7 +635,10 @@ def ingest(root: Path = Path("."), identity_crosswalk_path: Path | None = None) 
         "master_raw_sha256": master_hash,
         "universe_sha256": universe_hash,
         "identity_crosswalk": identity_crosswalk_meta,
+        "index_placeholder_classification": placeholder_meta,
         "current_universe_count": len(universe),
+        "current_tradable_universe_count": tradable_universe_count,
+        "index_placeholder_count": len(index_placeholders),
         "master_records_for_current_universe": len(current_records),
         "reporting_dates": sorted({row["reporting_date"] for row in current_records}),
         "identity_status_counts": dict(sorted(identity_counts.items())),
@@ -604,7 +660,7 @@ def ingest(root: Path = Path("."), identity_crosswalk_path: Path | None = None) 
         "ownership_row_count": len(ownership_rows),
         "latest_reporting_date": latest_reporting_date,
         "latest_quarter_parsed_count": parsed_latest_count,
-        "latest_quarter_coverage_pct": round(parsed_latest_count / len(universe) * 100, 2),
+        "latest_quarter_coverage_pct": round(parsed_latest_count / tradable_universe_count * 100, 2),
         "ownership_current_path": str(ownership_current.relative_to(root)),
         "ownership_snapshot_path": str(ownership_path.relative_to(root)),
         "ownership_snapshot_sha256": ownership_hash,
@@ -621,6 +677,7 @@ def ingest(root: Path = Path("."), identity_crosswalk_path: Path | None = None) 
             "Quarter-end ownership is not a dated transaction and does not prove when shares were bought.",
             "Missing or unparsed categories remain null; they are never assumed to be zero.",
             "The master API may expose only the currently available filing period; older captured snapshots are retained locally.",
+            "Demerger index placeholders included at zero price remain in the 501-row index snapshot but are excluded from tradable-stock ownership coverage and FPI scoring.",
         ],
     }
     manifest_path = raw_dir / "current_manifest.json"
