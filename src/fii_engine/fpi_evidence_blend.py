@@ -476,6 +476,9 @@ def build(root: Path = Path(".")) -> dict:
         "fpi_deal_stock_summary": deal_manifest["stock_summary_csv_sha256"],
         "cdsl_registry_snapshot": deal_manifest["registry_snapshot_sha256"],
         "shareholding_ownership": share_manifest["ownership_current_sha256"],
+        "shareholding_identity_crosswalk": (
+            share_manifest.get("identity_crosswalk") or {}
+        ).get("bse_source_sha256"),
         "market_flow_history": historical_manifest["market_output_sha256"],
         "participant_derivatives_history": historical_manifest["participant_output_sha256"],
     }
@@ -551,7 +554,7 @@ def build(root: Path = Path(".")) -> dict:
             "The CDSL registry snapshot follows the deal window and does not publish registration start dates.",
             "The Nifty 500 source states data as of the last trading day of the previous month; exact effective date is not supplied.",
             "Quarterly FPI ownership has one reporting quarter only; no quarter-on-quarter change series is available yet.",
-            "Shareholding identity coverage is partial; mismatched or unverified identities remain null.",
+            "Dated BSE crosswalk identities are accepted only when reporting date, filing record ID, XBRL URL/hash, and universe ISIN all match; any remaining mismatched or unverified identities remain null.",
             "Market-wide FII/FPI and DII flows have only one session; 5/20/60-session baselines are insufficient.",
             "Participant OI and volume are category aggregates, not participant-by-stock positions, and currently have only one session.",
             "No disclosed bulk/block deal does not mean no FPI trading; it means no named transaction appeared in the collected reports.",
