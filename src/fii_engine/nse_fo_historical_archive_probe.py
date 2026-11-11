@@ -139,11 +139,10 @@ def _save_immutable(path: Path, payload: bytes, digest: str) -> None:
     path.write_bytes(payload)
 
 
-def _candidate_dates(end_date: date, sessions: int, max_calendar_days: int):
-    found = 0
+def _candidate_dates(end_date: date, max_calendar_days: int):
     examined = 0
     current = end_date
-    while found < sessions and examined < max_calendar_days:
+    while examined < max_calendar_days:
         examined += 1
         if current.weekday() < 5:
             yield current
@@ -161,7 +160,7 @@ def run(root: Path, sessions: int, end_date: date, max_calendar_days: int) -> di
     # A date counts as a completed session only when all three report types
     # validate. Partial dates are retained in the manifest but not counted.
     complete_dates = 0
-    for trade_date in _candidate_dates(end_date, sessions, max_calendar_days):
+    for trade_date in _candidate_dates(end_date, max_calendar_days):
         date_records = []
         date_failed = False
         for dataset, spec in REPORTS.items():
