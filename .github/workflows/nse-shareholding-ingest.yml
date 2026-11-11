@@ -1,5 +1,9 @@
 name: Official NSE quarterly FPI ownership ingestion
 
+permissions:
+  contents: write
+  actions: read
+
 on:
   push:
     branches: [main, research/shareholding-identity-integration]
@@ -281,6 +285,7 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add data/snapshots/shareholding_master data/snapshots/shareholding_filings data/snapshots/shareholding_ownership data/raw/shareholding/current_manifest.json data/raw/shareholding/shareholding_ownership_current.csv data/raw/fpi_evidence_blend data/snapshots/fpi_evidence_blend
             git add reports/weekly/
+            git add data/processed/nsdl_cash_flows.csv data/processed/nsdl_cash_flow_context.json data/raw/nsdl_cash_flows
             git add -f data/raw/shareholding/identity_evidence data/raw/shareholding/bse_shareholding_fallback_probe_manifest.json
             git commit -m "data: record official NSE quarterly FPI ownership"
             bash scripts/retry_git_push.sh "$GITHUB_REF_NAME"
