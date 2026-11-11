@@ -154,6 +154,7 @@ def build_report(
         "- **FII Accumulation Score:** N/A — stock-level verified net FPI transactions and a calibrated historical ownership-change series are not yet available for the full universe.",
         "- **Market Confirmation Score:** not published until its historical calibration and reproducibility gates pass.",
         "- **Composite score/ranking:** disabled.",
+        "- Scoring weights, hard gates and calibration requirements are documented in docs/fii-accumulation-score-spec.md.",
         "- Market-wide FPI/DII flows are context only and are never treated as evidence that a specific stock was bought.",
         "",
         "## Reproducibility",
