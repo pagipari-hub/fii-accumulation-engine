@@ -136,6 +136,37 @@ jobs:
           }, indent=2))
           PY
 
+      - name: Rebuild full-universe FPI evidence matrix from refreshed ownership
+        if: github.event_name != 'pull_request'
+        run: python -m fii_engine.fpi_evidence_blend --root .
+
+      - name: Validate full-universe evidence matrix
+        if: github.event_name != 'pull_request'
+        run: |
+          python - <<'PY'
+          import csv
+          import hashlib
+          import json
+          from pathlib import Path
+          manifest_path = Path("data/raw/fpi_evidence_blend/fpi_evidence_matrix_current_manifest.json")
+          manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+          output = Path(manifest["current_output_path"])
+          assert hashlib.sha256(output.read_bytes()).hexdigest() == manifest["output_csv_sha256"]
+          with output.open(newline="", encoding="utf-8") as handle:
+              rows = list(csv.DictReader(handle))
+          assert manifest["status"] == "complete"
+          assert manifest["stock_count"] == 501 and len(rows) == 501
+          assert manifest["composite_score_status"] == "not_scored_independent_evidence_dimensions_only"
+          print(json.dumps({
+              "stock_count": manifest["stock_count"],
+              "ownership_parsed_verified_count": manifest["ownership_parsed_verified_count"],
+              "ownership_coverage_pct": manifest["ownership_coverage_pct"],
+              "ownership_status_counts": manifest["ownership_status_counts"],
+              "as_of_trade_date": manifest["as_of_trade_date"],
+              "composite_score_status": manifest["composite_score_status"],
+          }, indent=2))
+          PY
+
       - name: Upload raw master, XBRL and normalized filing evidence
         if: always() && github.event_name != 'pull_request'
         uses: actions/upload-artifact@v4
@@ -147,16 +178,18 @@ jobs:
             data/snapshots/shareholding_master/
             data/snapshots/shareholding_filings/
             data/snapshots/shareholding_ownership/
+            data/raw/fpi_evidence_blend/
+            data/snapshots/fpi_evidence_blend/
           if-no-files-found: warn
           retention-days: 90
 
       - name: Commit normalized append-only filings and ownership snapshots
         if: github.event_name != 'pull_request'
         run: |
-          if [[ -n "$(git status --porcelain data/snapshots/shareholding_master data/snapshots/shareholding_filings data/snapshots/shareholding_ownership data/raw/shareholding/current_manifest.json data/raw/shareholding/shareholding_ownership_current.csv)" ]]; then
+          if [[ -n "$(git status --porcelain data/snapshots/shareholding_master data/snapshots/shareholding_filings data/snapshots/shareholding_ownership data/raw/shareholding/current_manifest.json data/raw/shareholding/shareholding_ownership_current.csv data/raw/fpi_evidence_blend data/snapshots/fpi_evidence_blend)" ]]; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add data/snapshots/shareholding_master data/snapshots/shareholding_filings data/snapshots/shareholding_ownership data/raw/shareholding/current_manifest.json data/raw/shareholding/shareholding_ownership_current.csv
+            git add data/snapshots/shareholding_master data/snapshots/shareholding_filings data/snapshots/shareholding_ownership data/raw/shareholding/current_manifest.json data/raw/shareholding/shareholding_ownership_current.csv data/raw/fpi_evidence_blend data/snapshots/fpi_evidence_blend
             git commit -m "data: record official NSE quarterly FPI ownership"
             bash scripts/retry_git_push.sh "$GITHUB_REF_NAME"
           else
