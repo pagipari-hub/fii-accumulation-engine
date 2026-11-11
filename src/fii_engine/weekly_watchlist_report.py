@@ -69,6 +69,8 @@ def build_report(
         f"- **Quarterly ownership parsed and identity-verified:** {manifest.get('ownership_parsed_verified_count', 0)} / {len(tradable)} ({manifest.get('ownership_coverage_pct', 0):.1f}%).",
         f"- **Coverage across all index rows:** {manifest.get('ownership_index_row_coverage_pct', 0):.1f}%.",
         f"- **Parsed verified ownership rows:** {ownership_status.get('parsed_verified_identity', 0)}.",
+        f"- **Dated BSE identity crosswalk:** {manifest.get('identity_crosswalk_verified_count', 0)} / {manifest.get('identity_crosswalk_candidate_count', 0)} verified; {manifest.get('identity_crosswalk_unresolved_count', 0)} unresolved.",
+        f"- **BSE UDiFF source SHA-256:** {manifest.get('identity_crosswalk_bse_source_sha256', 'N/A')}.",
         f"- **Ownership rows not found in the current NSE filing master:** {len(missing_ownership)}.",
         "",
     ]
