@@ -560,7 +560,7 @@ def ingest(root: Path = Path("."), identity_crosswalk_path: Path | None = None) 
 
     ownership_current = root / "data/raw/shareholding/shareholding_ownership_current.csv"
     ownership_current.write_bytes(ownership_payload)
-    identity_counts = Counter(row["identity_status"] for row in current_records)
+    identity_counts = Counter(row["identity_status"] for row in ownership_rows)
     parsed_count = sum(row.get("filing_status") == "parsed" for row in ownership_rows)
     latest_reporting_date = max(row["reporting_date"] for row in current_records)
     latest_ownership_rows = [row for row in ownership_rows if row["reporting_date"] == latest_reporting_date]
@@ -568,7 +568,7 @@ def ingest(root: Path = Path("."), identity_crosswalk_path: Path | None = None) 
     eligible_count = len(eligible_records)
     status = (
         "partial_xbrl_coverage" if fetch_errors
-        else "partial_identity_coverage" if identity_counts.get("isin_mismatch", 0) or identity_counts.get("identity_unverified", 0)
+        else "partial_identity_coverage" if identity_counts.get("isin_mismatch", 0) or identity_counts.get("identity_unverified", 0) or identity_counts.get("not_found_in_current_master", 0)
         else "complete"
     )
     manifest = {
