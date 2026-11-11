@@ -191,7 +191,7 @@ def _metadata(master_row: dict, stock: dict, identity_evidence: dict | None = No
     else:
         identity_status, join_method = "identity_unverified", "symbol_only_rejected"
 
-    return {
+    result = {
         "record_id": str(master_row.get("recordId") or "").strip(),
         "symbol": symbol,
         "company_name": company_name,
@@ -207,9 +207,11 @@ def _metadata(master_row: dict, stock: dict, identity_evidence: dict | None = No
         "xbrl_url": str(master_row.get("xbrl") or "").strip(),
         "identity_status": identity_status,
         "identity_join_method": join_method,
-        "identity_evidence_xbrl_sha256": identity_evidence_xbrl_sha256,
-        "identity_evidence_bse_sha256": identity_evidence_bse_sha256,
     }
+    if identity_evidence_xbrl_sha256:
+        result["identity_evidence_xbrl_sha256"] = identity_evidence_xbrl_sha256
+        result["identity_evidence_bse_sha256"] = identity_evidence_bse_sha256
+    return result
 
 
 def _trusted_xbrl_url(url: str) -> bool:
