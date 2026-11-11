@@ -57,7 +57,8 @@ def parse_xbrl_entity(payload: bytes) -> dict:
             unique_names.append(item)
     if not unique_ids:
         raise ValueError("XBRL contains no entity identifier in contexts")
-    return {"entity_identifiers": unique_ids, "company_name_facts": unique_names, "identifier_count": len(unique_ids)}
+    bse_codes = [item["value"] for item in unique_ids if item["scheme"].rstrip("/").endswith(BSE_SCRIP_SCHEME_SUFFIX) and item["value"].isdigit()]
+    return {"entity_identifiers": unique_ids, "company_name_facts": unique_names, "bse_scrip_codes": sorted(set(bse_codes)), "identifier_count": len(unique_ids)}
 
 
 def _get(url: str, referer: str, accept: str = "*/*") -> tuple[bytes, dict]:
