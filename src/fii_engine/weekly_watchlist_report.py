@@ -119,7 +119,7 @@ def build_report(
         lines.extend([
             "## Disclosed stock-specific deal evidence window",
             "",
-            f"- **NSE bulk/block deal disclosure window:** {deal_window[0]} to {deal_window[1]} ({manifest.get('deal_lookback_calendar_days', 'N/A')} calendar days).",
+            f"- **NSE bulk/block deal disclosure window:** {deal_window[0]} to {deal_window[1]} ({manifest.get('deal_lookback_calendar_days', 'N/A')}-day span).",
             f"- **Source records / deduplicated events:** {manifest.get('deal_source_row_count', 'N/A')} / {manifest.get('deal_deduplicated_event_count', 'N/A')}.",
             f"- **Current-registry-matched FPI-client events / unmatched events:** {manifest.get('deal_current_registry_matched_fpi_client_event_count', 'N/A')} / {manifest.get('deal_unmatched_event_count', 'N/A')}.",
             "These are disclosed bulk/block transactions, not a complete tape of all FPI trades. Current-registry matches do not prove registration was active on earlier trade dates.",
