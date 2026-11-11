@@ -65,6 +65,8 @@ def test_nsdl_context_verifies_raw_sources_and_keeps_market_wide_scope(tmp_path)
         "dii_gross_purchases_inr_crore",
         "dii_gross_sales_inr_crore",
         "dii_net_investment_inr_crore",
+        "fpi_source_response_sha256",
+        "dii_source_response_sha256",
     ]
     with csv_path.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=fields)
@@ -79,6 +81,8 @@ def test_nsdl_context_verifies_raw_sources_and_keeps_market_wide_scope(tmp_path)
                 "dii_gross_purchases_inr_crore": "20",
                 "dii_gross_sales_inr_crore": "18",
                 "dii_net_investment_inr_crore": "2",
+                "fpi_source_response_sha256": fpi_observation["response_sha256"],
+                "dii_source_response_sha256": dii_observation["response_sha256"],
             })
 
     context = build_context(tmp_path)
