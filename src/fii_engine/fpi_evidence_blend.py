@@ -302,6 +302,9 @@ def build(root: Path = Path(".")) -> dict:
     nsdl_context = json.loads(nsdl_context_payload.decode("utf-8")) if nsdl_context_payload else None
     if nsdl_context and nsdl_context.get("stock_level_attribution") is not False:
         raise ValueError("NSDL aggregate cash-flow context must not be attributed to individual stocks")
+    bse_fallback_path = root / Path("data/raw/shareholding/bse_shareholding_fallback_probe_manifest.json")
+    bse_fallback_payload = bse_fallback_path.read_bytes() if bse_fallback_path.exists() else None
+    bse_fallback = json.loads(bse_fallback_payload.decode("utf-8")) if bse_fallback_payload else None
     daily_manifest, daily_rows = _load_source(
         root, DAILY_MANIFEST, DAILY_CSV, "output_sha256"
     )
@@ -531,6 +534,7 @@ def build(root: Path = Path(".")) -> dict:
         "nsdl_cash_flow_normalized_csv": (nsdl_context or {}).get("normalized_csv_sha256"),
         "nsdl_cash_flow_raw_archive_manifest": (nsdl_context or {}).get("raw_archive_manifest_sha256"),
         "nsdl_cash_flow_context": _sha256(nsdl_context_payload) if nsdl_context_payload else None,
+        "bse_shareholding_fallback_probe_manifest": _sha256(bse_fallback_payload) if bse_fallback_payload else None,
         "market_flow_history": historical_manifest["market_output_sha256"],
         "participant_derivatives_history": historical_manifest["participant_output_sha256"],
     }
@@ -573,6 +577,7 @@ def build(root: Path = Path(".")) -> dict:
         "grade_2_count": sum(row["fpi_deal_evidence_grade"].startswith("grade_2") for row in output_rows),
         "ownership_reporting_date": share_manifest.get("latest_reporting_date"),
         "nsdl_market_flow_context": nsdl_context,
+        "bse_shareholding_fallback_probe": bse_fallback,
         "identity_crosswalk_candidate_count": (share_manifest.get("identity_crosswalk") or {}).get("candidate_count"),
         "identity_crosswalk_verified_count": (share_manifest.get("identity_crosswalk") or {}).get("verified_count"),
         "identity_crosswalk_unresolved_count": (share_manifest.get("identity_crosswalk") or {}).get("unresolved_count"),
@@ -608,6 +613,7 @@ def build(root: Path = Path(".")) -> dict:
         "participant_volume_session_count": historical_manifest["participant_volume_session_count"],
         "participant_derivatives_window_statuses": participant_statuses,
         "nsdl_market_flow_context": nsdl_context,
+        "bse_shareholding_fallback_probe": bse_fallback,
         "composite_score_status": "not_scored_independent_evidence_dimensions_only",
         "source_hashes": source_hashes,
         "output_csv_sha256": output_sha,
