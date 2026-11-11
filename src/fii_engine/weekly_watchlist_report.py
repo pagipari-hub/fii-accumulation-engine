@@ -109,6 +109,29 @@ def build_report(
         lines.append("No named FPI-client gross-buy candidates passed the current evidence gates.")
     lines.append("")
 
+    nsdl = manifest.get("nsdl_market_flow_context")
+    lines.extend([
+        "## Aggregate market-wide cash-flow context",
+        "",
+    ])
+    if nsdl:
+        fpi = nsdl.get("fpi", {})
+        dii = nsdl.get("dii", {})
+        lines.extend([
+            f"- **NSDL observation window:** {nsdl.get('start_date')} to {nsdl.get('end_date')} ({nsdl.get('normalized_date_count')} dates).",
+            f"- **FPI cash-equity net:** ₹{fpi.get('cumulative_net_inr_crore', 0):,.2f} crore across {fpi.get('observed_days', 0)} observations; {fpi.get('positive_net_days', 0)} positive and {fpi.get('negative_net_days', 0)} negative days.",
+            f"- **DII cash-equity net:** ₹{dii.get('cumulative_net_inr_crore', 0):,.2f} crore across {dii.get('observed_days', 0)} observations; {dii.get('positive_net_days', 0)} positive and {dii.get('negative_net_days', 0)} negative days.",
+            f"- **Overlapping FPI/DII dates:** {nsdl.get('overlapping_fpi_dii_days', 0)}.",
+            f"- **Explicit DII No Data dates:** {', '.join(nsdl.get('dii_no_data_days', [])) or 'None'}.",
+            "These are aggregate market-wide flows only. They do not establish which individual stocks were bought or sold.",
+            "",
+        ])
+    else:
+        lines.extend([
+            "NSDL aggregate cash-flow history has not been integrated into this matrix build.",
+            "",
+        ])
+
     lines.extend([
         "## BSE fallback coverage",
         "",
