@@ -297,6 +297,11 @@ def _load_source(root: Path, manifest_path: Path, csv_path: Path, hash_key: str)
 def build(root: Path = Path(".")) -> dict:
     universe_rows, universe_meta = _load_universe(root)
     placeholders, placeholder_meta = _load_placeholders(root, universe_rows)
+    nsdl_context_path = root / Path("data/processed/nsdl_cash_flow_context.json")
+    nsdl_context_payload = nsdl_context_path.read_bytes() if nsdl_context_path.exists() else None
+    nsdl_context = json.loads(nsdl_context_payload.decode("utf-8")) if nsdl_context_payload else None
+    if nsdl_context and nsdl_context.get("stock_level_attribution") is not False:
+        raise ValueError("NSDL aggregate cash-flow context must not be attributed to individual stocks")
     daily_manifest, daily_rows = _load_source(
         root, DAILY_MANIFEST, DAILY_CSV, "output_sha256"
     )
@@ -523,6 +528,9 @@ def build(root: Path = Path(".")) -> dict:
         "shareholding_identity_crosswalk": (
             share_manifest.get("identity_crosswalk") or {}
         ).get("bse_source_sha256"),
+        "nsdl_cash_flow_normalized_csv": (nsdl_context or {}).get("normalized_csv_sha256"),
+        "nsdl_cash_flow_raw_archive_manifest": (nsdl_context or {}).get("raw_archive_manifest_sha256"),
+        "nsdl_cash_flow_context": _sha256(nsdl_context_payload) if nsdl_context_payload else None,
         "market_flow_history": historical_manifest["market_output_sha256"],
         "participant_derivatives_history": historical_manifest["participant_output_sha256"],
     }
@@ -564,6 +572,7 @@ def build(root: Path = Path(".")) -> dict:
         "grade_1_count": sum(row["fpi_deal_evidence_grade"].startswith("grade_1") for row in output_rows),
         "grade_2_count": sum(row["fpi_deal_evidence_grade"].startswith("grade_2") for row in output_rows),
         "ownership_reporting_date": share_manifest.get("latest_reporting_date"),
+        "nsdl_market_flow_context": nsdl_context,
         "identity_crosswalk_candidate_count": (share_manifest.get("identity_crosswalk") or {}).get("candidate_count"),
         "identity_crosswalk_verified_count": (share_manifest.get("identity_crosswalk") or {}).get("verified_count"),
         "identity_crosswalk_unresolved_count": (share_manifest.get("identity_crosswalk") or {}).get("unresolved_count"),
@@ -598,6 +607,7 @@ def build(root: Path = Path(".")) -> dict:
         "participant_oi_session_count": historical_manifest["participant_oi_session_count"],
         "participant_volume_session_count": historical_manifest["participant_volume_session_count"],
         "participant_derivatives_window_statuses": participant_statuses,
+        "nsdl_market_flow_context": nsdl_context,
         "composite_score_status": "not_scored_independent_evidence_dimensions_only",
         "source_hashes": source_hashes,
         "output_csv_sha256": output_sha,
@@ -606,6 +616,7 @@ def build(root: Path = Path(".")) -> dict:
         "limitations": [
             "No composite score is issued; independent evidence dimensions are preserved without arbitrary weights.",
             "Demerger index placeholders included at zero price remain in the index-row count but are excluded from tradable-stock ownership coverage and FPI scoring.",
+            "NSDL FPI/DII cash flows are aggregate market-wide context only and are not attributed to any individual stock.",
             "A named bulk/block client match is not complete FPI trading flow and does not establish beneficial ownership.",
             "The CDSL registry snapshot follows the deal window and does not publish registration start dates.",
             "The Nifty 500 source states data as of the last trading day of the previous month; exact effective date is not supplied.",
