@@ -43,7 +43,7 @@ def build_context(root: Path) -> dict:
         rows = list(csv.DictReader(handle))
     if not rows:
         raise ValueError("NSDL normalized cash-flow CSV is empty")
-    dates = [row["reporting_date"] for row in rows]
+    dates = [row["date"] for row in rows]
     if len(dates) != len(set(dates)):
         raise ValueError("NSDL normalized cash-flow CSV has duplicate dates")
     fpi_values = [
@@ -70,9 +70,9 @@ def build_context(root: Path) -> dict:
         if observation.get("dataset") == "dii" and observation.get("response_type") == "data"
     }
     for row in rows:
-        if row.get("fpi_source_response_sha256") not in fpi_hashes:
-            raise ValueError(f"NSDL FPI row lacks a matching raw response hash: {row['reporting_date']}")
-        if row.get("dii_source_response_sha256") not in dii_hashes:
+        if row.get("fpi_source_sha256") not in fpi_hashes:
+            raise ValueError(f"NSDL FPI row lacks a matching raw response hash: {row['date']}")
+        if row.get("dii_source_sha256") not in dii_hashes:
             raise ValueError(f"NSDL DII row lacks a matching raw response hash: {row['reporting_date']}")
     if len(fpi_values) < 60 or len(dii_values) < 60 or overlap < 60:
         raise ValueError("NSDL aggregate cash-flow history is below the 60-observation evidence floor")
