@@ -407,6 +407,12 @@ def _load_historical_archive_participant_snapshots(root: Path) -> tuple[dict[str
         trade_date for trade_date, items in by_date.items()
         if set(items) == required_datasets
     )
+    declared_complete = manifest.get("complete_sessions")
+    if declared_complete is not None and declared_complete != len(complete_dates):
+        raise ValueError(
+            "historical NSE F&O manifest complete-session count does not match "
+            f"its validated record families: {declared_complete} != {len(complete_dates)}"
+        )
     result: dict[str, list[dict]] = {
         "participant_oi": [], "participant_volume": []
     }
@@ -654,6 +660,16 @@ def build_historical_features(root: Path = Path(".")) -> dict:
         "participant_volume_trade_dates": [item["date"] for item in participant_history["participant_volume"]],
         "participant_archive_complete_session_count": len(participant_archive_dates),
         "participant_archive_complete_trade_dates": participant_archive_dates,
+        "participant_archive_manifest_path": (
+            "data/raw/nse_fo_historical/historical_manifest.json"
+            if (root / "data/raw/nse_fo_historical/historical_manifest.json").is_file()
+            else None
+        ),
+        "participant_archive_manifest_sha256": (
+            _sha256((root / "data/raw/nse_fo_historical/historical_manifest.json").read_bytes())
+            if (root / "data/raw/nse_fo_historical/historical_manifest.json").is_file()
+            else None
+        ),
         "windows_sessions": list(WINDOWS),
         "stock_universe_count": len(latest_rows),
         "stock_output_sha256": stock_hash,
