@@ -51,6 +51,7 @@ def build_report(
     bse_fallback_manifest_path: Path,
     output_path: Path,
     reit_manifest_path: Path | None = None,
+    issuer_fallback_manifest_path: Path | None = None,
 ) -> dict:
     matrix_payload = matrix_path.read_bytes()
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -83,10 +84,22 @@ def build_report(
         reit_symbols = {item["symbol"].strip().upper() for item in reit_manifest.get("rows", [])}
     else:
         reit_symbols = set()
+    issuer_manifest = None
+    if issuer_fallback_manifest_path is not None and issuer_fallback_manifest_path.is_file():
+        issuer_manifest = json.loads(issuer_fallback_manifest_path.read_text(encoding="utf-8"))
+        issuer_csv_path = issuer_fallback_manifest_path.parent / Path(issuer_manifest["output_path"]).name
+        if not issuer_csv_path.is_file() or _sha256(issuer_csv_path.read_bytes()) != issuer_manifest.get("output_sha256"):
+            raise ValueError("issuer fallback CSV SHA-256 does not match its manifest")
+        if issuer_manifest.get("reporting_date") != "2026-09-30":
+            raise ValueError("issuer fallback reporting date is not the expected quarter")
+        issuer_symbols = {item["symbol"].strip().upper() for item in issuer_manifest.get("rows", [])}
+    else:
+        issuer_symbols = set()
+    covered_alternately = reit_symbols | issuer_symbols
     missing_ownership = sorted(
         row["symbol"] for row in tradable
         if row.get("shareholding_join_status") == "not_found_in_current_master"
-        and row["symbol"].strip().upper() not in reit_symbols
+        and row["symbol"].strip().upper() not in covered_alternately
     )
     ownership_status = manifest.get("ownership_status_counts", {})
     crosswalk = manifest.get("source_hashes", {}).get("shareholding_identity_crosswalk")
@@ -147,6 +160,28 @@ def build_report(
             f"Parsed official REIT disclosures: {reit_manifest.get('parsed_reit_count', 0)} / "
             f"{reit_manifest.get('expected_reit_count', 0)}. These are quarter-end ownership snapshots, "
             "not dated purchases or proof of FPI accumulation."
+        )
+        lines.append("")
+
+    if issuer_manifest is not None:
+        lines.extend([
+            "## Official issuer-published equity shareholding fallback (separate source)",
+            "",
+            "These issuer-hosted disclosures are kept separate from NSE XBRL records. Missing category splits remain N/A; no fallback values overwrite exchange filings.",
+            "",
+            "| Security | Reporting date | FPI shares | FPI ownership | Category split | Source SHA-256 |",
+            "|---|---|---:|---:|---|---|",
+        ])
+        for item in issuer_manifest.get("rows", []):
+            lines.append(
+                f"| {item['symbol']} — {item['company_name']} | {item['reporting_date']} | "
+                f"{int(item['fpi_total_shares']):,} | {float(item['fpi_total_ownership_percentage_points']):.2f}% | "
+                f"{item['category_breakdown_status']} | {item['source_sha256']} |"
+            )
+        lines.append("")
+        lines.append(
+            f"Parsed issuer-published EQ fallback records: {issuer_manifest.get('parsed_verified_count', 0)} / "
+            f"{issuer_manifest.get('expected_candidate_count', 0)}. These are quarter-end snapshots, not dated FPI purchases."
         )
         lines.append("")
 
@@ -338,9 +373,10 @@ def main() -> None:
     parser.add_argument("--bse-fallback-manifest", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--reit-manifest", type=Path)
+    parser.add_argument("--issuer-fallback-manifest", type=Path)
     args = parser.parse_args()
     print(json.dumps(
-        build_report(args.matrix, args.manifest, args.bse_fallback_manifest, args.output, args.reit_manifest),
+        build_report(args.matrix, args.manifest, args.bse_fallback_manifest, args.output, args.reit_manifest, args.issuer_fallback_manifest),
         indent=2,
     ))
 
