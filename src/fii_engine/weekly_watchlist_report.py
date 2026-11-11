@@ -50,6 +50,7 @@ def build_report(
     manifest_path: Path,
     bse_fallback_manifest_path: Path,
     output_path: Path,
+    reit_manifest_path: Path | None = None,
 ) -> dict:
     matrix_payload = matrix_path.read_bytes()
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -112,6 +113,35 @@ def build_report(
     if missing_ownership:
         lines.append("Missing current NSE ownership records: " + ", ".join(missing_ownership) + ".")
         lines.append("These remain N/A; no ownership values are imputed.")
+        lines.append("")
+
+    if reit_manifest_path is not None and reit_manifest_path.is_file():
+        reit_manifest = json.loads(reit_manifest_path.read_text(encoding="utf-8"))
+        reit_csv_path = reit_manifest_path.parent / Path(reit_manifest["output_path"]).name
+        if not reit_csv_path.is_file() or _sha256(reit_csv_path.read_bytes()) != reit_manifest.get("output_sha256"):
+            raise ValueError("REIT unitholding CSV SHA-256 does not match its manifest")
+        if reit_manifest.get("reporting_date") != "2026-09-30":
+            raise ValueError("REIT unitholding reporting date is not the expected quarter")
+        lines.extend([
+            "## REIT unitholding FPI evidence (separate ownership data type)",
+            "",
+            "These official REIT unit-holding disclosures are not mixed with equity shareholding XBRL or treated as equity shares.",
+            "",
+            "| REIT | Reporting date | FPI units | FPI ownership | Source attachment SHA-256 |",
+            "|---|---|---:|---:|---|",
+        ])
+        for item in reit_manifest.get("rows", []):
+            lines.append(
+                f"| {item['symbol']} — {item['company_name']} | {item['reporting_date']} | "
+                f"{int(item['fpi_units']):,} | {float(item['fpi_ownership_percentage_points']):.2f}% | "
+                f"{item['attachment_sha256']} |"
+            )
+        lines.append("")
+        lines.append(
+            f"Parsed official REIT disclosures: {reit_manifest.get('parsed_reit_count', 0)} / "
+            f"{reit_manifest.get('expected_reit_count', 0)}. These are quarter-end ownership snapshots, "
+            "not dated purchases or proof of FPI accumulation."
+        )
         lines.append("")
 
     deal_window = manifest.get("deal_trade_date_window", [])
@@ -301,9 +331,10 @@ def main() -> None:
     parser.add_argument("--manifest", type=Path, required=True)
     parser.add_argument("--bse-fallback-manifest", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--reit-manifest", type=Path)
     args = parser.parse_args()
     print(json.dumps(
-        build_report(args.matrix, args.manifest, args.bse_fallback_manifest, args.output),
+        build_report(args.matrix, args.manifest, args.bse_fallback_manifest, args.output, args.reit_manifest),
         indent=2,
     ))
 
