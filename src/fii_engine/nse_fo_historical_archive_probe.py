@@ -25,14 +25,17 @@ REPORTS = {
     "participant_oi": {
         "name": "F&O - Participant wise Open Interest(csv)",
         "extension": ".csv",
+        "scope": "participant_category_aggregate_not_stock_specific",
     },
     "participant_volume": {
         "name": "F&O - Participant wise Trading Volumes(csv)",
         "extension": ".csv",
+        "scope": "participant_category_aggregate_not_stock_specific",
     },
     "fii_derivatives_statistics": {
         "name": "F&O - FII Derivatives Statistics",
         "extension": ".xls",
+        "scope": "aggregate_fii_derivatives_only",
     },
 }
 # NSE's archive selector metadata is not documented. Try the section/category
@@ -160,6 +163,8 @@ def run(root: Path, sessions: int, end_date: date, max_calendar_days: int) -> di
     # A date counts as a completed session only when all three report types
     # validate. Partial dates are retained in the manifest but not counted.
     complete_dates = 0
+    # Warm NSE's session before calling the historical archive endpoint.
+    _get(REPORT_PAGE, BASE_URL + "/", "text/html,*/*")
     for trade_date in _candidate_dates(end_date, max_calendar_days):
         date_records = []
         date_failed = False
