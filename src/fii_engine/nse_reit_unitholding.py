@@ -108,6 +108,7 @@ def normalize(root: Path = Path("."), announcements_path: Path = ANNOUNCEMENTS) 
             item for item in observation.get("matching_announcements", [])
             if REPORTING_DATE in str(item.get("attchmntText") or "")
             or "September 30, 2026" in str(item.get("attchmntText") or "")
+            or "Q2 FY 2026-27" in str(item.get("attchmntText") or "")
         ]
         selected = []
         for announcement in matching:
