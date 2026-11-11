@@ -76,6 +76,8 @@ def test_manifest_hash_validation_and_csv_output(tmp_path: Path) -> None:
     fpi_path.write_bytes(fpi_bytes)
     dii_path.write_bytes(dii_bytes)
     manifest = {
+        "start_date": "2026-08-17",
+        "end_date": "2026-11-10",
         "observations": [
             {
                 "dataset": "fpi",
@@ -105,3 +107,31 @@ def test_manifest_hash_validation_and_csv_output(tmp_path: Path) -> None:
     assert len(rows) == 1
     assert rows[0]["fpi_net_investment_inr_crore"] == "24.0"
     assert rows[0]["dii_net_investment_inr_crore"] == "24.0"
+
+
+
+def test_manifest_excludes_fpi_dates_outside_requested_window(tmp_path: Path) -> None:
+    raw_path = tmp_path / "fpi" / "fpi.html"
+    raw_path.parent.mkdir()
+    raw_bytes = FPI_HTML.replace("17-Aug-2026", "16-Aug-2026").encode()
+    raw_path.write_bytes(raw_bytes)
+    manifest = {
+        "start_date": "2026-08-17",
+        "end_date": "2026-11-10",
+        "observations": [
+            {
+                "dataset": "fpi",
+                "query_date": "2026-08-31",
+                "http_status": 200,
+                "response_sha256": hashlib.sha256(raw_bytes).hexdigest(),
+                "raw_path": "fpi/fpi.html",
+            }
+        ],
+    }
+    manifest_path = tmp_path / "manifest.json"
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+    output = tmp_path / "out.csv"
+    result = normalize_manifest(manifest_path, output)
+    assert result["fpi_unique_dates"] == 0
+    with output.open(encoding="utf-8", newline="") as stream:
+        assert list(csv.DictReader(stream)) == []
