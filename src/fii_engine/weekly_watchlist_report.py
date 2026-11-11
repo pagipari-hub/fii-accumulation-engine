@@ -195,7 +195,7 @@ def build_report(
     if history_probe:
         market_history = history_probe.get("market_wide_history", {})
         lines.append(
-            f"- **NSE market-wide shareholding master:** {market_history.get('row_count', 0)} rows across {market_history.get('unique_symbol_count', 0)} symbols ({history_probe.get('date_range', {}).get('from_date', 'N/A')} to {history_probe.get('date_range', {}).get('to_date', 'N/A')})."
+            f"- **NSE market-wide shareholding master:** {market_history.get('row_count', 0):,} rows across {market_history.get('unique_symbol_count', 0):,} symbols ({history_probe.get('date_range', {}).get('from_date', 'N/A')} to {history_probe.get('date_range', {}).get('to_date', 'N/A')})."
         )
         lines.append(
             f"- **NSE symbol-specific master history rows:** {json.dumps(history_probe.get('row_counts', {}), sort_keys=True)}."
