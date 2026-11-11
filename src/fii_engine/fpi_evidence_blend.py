@@ -12,6 +12,7 @@ from pathlib import Path
 
 UNIVERSE_CSV = Path("data/raw/universe/nifty500_current.csv")
 UNIVERSE_MANIFEST_DIR = Path("data/snapshots/universe")
+PLACEHOLDER_CSV = Path("data/audits/nifty500_index_placeholders_2026-11-09.csv")
 DAILY_MANIFEST = Path("data/raw/daily_stock_features/daily_stock_features_current_manifest.json")
 DAILY_CSV = Path("data/raw/daily_stock_features/daily_stock_features_current.csv")
 HISTORICAL_MANIFEST = Path("data/raw/historical_features/historical_features_current_manifest.json")
@@ -79,7 +80,8 @@ DEAL_FIELDS = [
 
 OUTPUT_FIELDS = [
     "as_of_trade_date", "symbol", "company_name", "industry", "series", "isin",
-    "daily_join_status",
+    "universe_member_type", "tradability_status", "fpi_scoring_eligible",
+    "universe_exclusion_reason", "daily_join_status",
     *[f"daily_{field}" for field in DAILY_FIELDS],
     "historical_join_status",
     *[f"{window}s_{field}" for window in (5, 20, 60) for field in HISTORICAL_METRICS],
@@ -173,6 +175,29 @@ def _load_universe(root: Path) -> tuple[list[dict], dict]:
         "freshness_semantics": manifest["source_freshness_semantics"],
         "publisher": manifest["publisher"],
         "source_page": manifest["source_page"],
+    }
+
+
+def _load_placeholders(root: Path, universe_rows: list[dict]) -> tuple[dict[str, dict], dict | None]:
+    path = root / PLACEHOLDER_CSV
+    if not path.exists():
+        return {}, None
+    payload = path.read_bytes()
+    rows = _read_csv(path)
+    universe_symbols = {row["symbol"].strip().upper() for row in universe_rows}
+    indexed = {}
+    for row in rows:
+        symbol = row.get("symbol", "").strip().upper()
+        if not symbol or symbol not in universe_symbols or symbol in indexed:
+            raise ValueError(f"invalid or duplicate index placeholder symbol: {symbol}")
+        if row.get("classification") != "demerged_index_placeholder":
+            raise ValueError(f"unsupported index placeholder classification: {symbol}")
+        indexed[symbol] = row
+    return indexed, {
+        "path": str(PLACEHOLDER_CSV),
+        "sha256": _sha256(payload),
+        "placeholder_count": len(indexed),
+        "symbols": sorted(indexed),
     }
 
 
@@ -271,6 +296,7 @@ def _load_source(root: Path, manifest_path: Path, csv_path: Path, hash_key: str)
 
 def build(root: Path = Path(".")) -> dict:
     universe_rows, universe_meta = _load_universe(root)
+    placeholders, placeholder_meta = _load_placeholders(root, universe_rows)
     daily_manifest, daily_rows = _load_source(
         root, DAILY_MANIFEST, DAILY_CSV, "output_sha256"
     )
@@ -326,29 +352,35 @@ def build(root: Path = Path(".")) -> dict:
         deal = deal_by_symbol[symbol]
         share = share_by_symbol[symbol]
 
-        daily_status = "isin_exact" if daily.get("isin", "").strip().upper() == isin else "isin_mismatch"
-        historical_status = (
-            "isin_exact" if historical.get("isin", "").strip().upper() == isin
-            else "isin_mismatch"
-        )
-        deal_status = (
-            "universe_isin_exact" if deal.get("universe_isin", "").strip().upper() == isin
-            else "universe_isin_mismatch"
-        )
-        share_identity = share.get("identity_status", "")
-        if share_identity == "verified" and share.get("isin", "").strip().upper() == isin:
-            if share.get("filing_status") == "parsed":
-                share_status = "parsed_verified_identity"
-            else:
-                share_status = "verified_identity_filing_not_parsed"
-        elif share_identity == "isin_mismatch":
-            share_status = "isin_mismatch"
-        elif share_identity == "identity_unverified":
-            share_status = "identity_unverified"
-        elif share_identity == "not_found_in_current_master":
-            share_status = "not_found_in_current_master"
+        placeholder = placeholders.get(symbol)
+        if placeholder:
+            daily_status = historical_status = deal_status = share_status = "not_applicable_index_placeholder"
         else:
-            share_status = "ownership_identity_or_join_unavailable"
+            daily_status = "isin_exact" if daily.get("isin", "").strip().upper() == isin else "isin_mismatch"
+            historical_status = (
+                "isin_exact" if historical.get("isin", "").strip().upper() == isin
+                else "isin_mismatch"
+            )
+            deal_status = (
+                "universe_isin_exact" if deal.get("universe_isin", "").strip().upper() == isin
+                else "universe_isin_mismatch"
+            )
+            share_identity = share.get("identity_status", "")
+            if share_identity == "verified" and share.get("isin", "").strip().upper() == isin:
+                if share.get("filing_status") == "parsed":
+                    share_status = "parsed_verified_identity"
+                else:
+                    share_status = "verified_identity_filing_not_parsed"
+            elif share_identity == "isin_mismatch":
+                share_status = "isin_mismatch"
+            elif share_identity == "identity_unverified":
+                share_status = "identity_unverified"
+            elif share_identity == "not_found_in_current_master":
+                share_status = "not_found_in_current_master"
+            elif share_identity == "not_applicable_index_placeholder":
+                share_status = "not_applicable_index_placeholder"
+            else:
+                share_status = "ownership_identity_or_join_unavailable"
 
         daily_join_counts[daily_status] += 1
         historical_join_counts[historical_status] += 1
@@ -362,6 +394,10 @@ def build(root: Path = Path(".")) -> dict:
             "industry": universe["industry"],
             "series": universe["series"],
             "isin": isin,
+            "universe_member_type": "index_adjustment_placeholder" if placeholder else "tradable_security",
+            "tradability_status": "non_tradable_zero_price" if placeholder else "tradable",
+            "fpi_scoring_eligible": "false" if placeholder else "true",
+            "universe_exclusion_reason": placeholder.get("reason", "") if placeholder else "",
             "daily_join_status": daily_status,
             "historical_join_status": historical_status,
             "shareholding_join_status": share_status,
@@ -404,8 +440,11 @@ def build(root: Path = Path(".")) -> dict:
             grade = "grade_2_named_client_current_registry_match_temporal_status_unverified"
         else:
             grade = "not_assigned_no_direct_fpi_client_buy_evidence"
-        row["fpi_deal_evidence_grade"] = grade
+        row["fpi_deal_evidence_grade"] = (
+            "not_applicable_index_placeholder" if placeholder else grade
+        )
         row["deal_evidence_pattern"] = (
+            "not_applicable_index_placeholder" if placeholder else
             _deal_pattern(deal) if deal_status == "universe_isin_exact"
             else "deal_summary_universe_isin_mismatch"
         )
@@ -413,9 +452,13 @@ def build(root: Path = Path(".")) -> dict:
         row["positional_price_context"] = _positional_context(row) if historical_status == "isin_exact" else "unavailable"
         row["delivery_context"] = _delivery_context(row) if historical_status == "isin_exact" else "unavailable"
         row["options_context"] = _options_context(row) if historical_status == "isin_exact" else "unavailable"
-        row["ownership_context"] = _ownership_context(row)
+        row["ownership_context"] = (
+            "not_applicable_index_placeholder" if placeholder else _ownership_context(row)
+        )
         summary_parts = []
-        if direct_buy:
+        if placeholder:
+            summary_parts.append("non_tradable_demerger_index_placeholder")
+        if direct_buy and not placeholder:
             summary_parts.append("direct_named_fpi_client_buy_disclosed")
         if direct_buy and net_status != "complete_for_current_registry_matched_counterparties":
             summary_parts.append("known_net_incomplete_or_counterparty_unresolved")
@@ -471,6 +514,7 @@ def build(root: Path = Path(".")) -> dict:
     output_sha = _sha256(output_payload)
     source_hashes = {
         "universe": universe_meta["sha256"],
+        "universe_placeholder_classification": (placeholder_meta or {}).get("sha256"),
         "daily_stock_features": daily_manifest["output_sha256"],
         "historical_stock_features": historical_manifest["stock_output_sha256"],
         "fpi_deal_stock_summary": deal_manifest["stock_summary_csv_sha256"],
@@ -495,6 +539,7 @@ def build(root: Path = Path(".")) -> dict:
         "registry_snapshot_sha256": deal_manifest["registry_snapshot_sha256"],
         "ownership_reporting_date": share_manifest.get("latest_reporting_date"),
         "universe_snapshot_manifest_path": universe_meta["snapshot_manifest_path"],
+        "universe_placeholder_classification": placeholder_meta,
     }
     identity_sha = _sha256(
         json.dumps(snapshot_identity, sort_keys=True, separators=(",", ":")).encode("utf-8")
@@ -510,6 +555,9 @@ def build(root: Path = Path(".")) -> dict:
         "status": "complete",
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "stock_count": len(output_rows),
+        "tradable_stock_count": len(output_rows) - len(placeholders),
+        "index_placeholder_count": len(placeholders),
+        "index_placeholder_symbols": sorted(placeholders),
         "direct_fpi_client_gross_buy_candidate_count": sum(
             row["direct_fpi_client_gross_buy_candidate"] == "true" for row in output_rows
         ),
@@ -518,6 +566,9 @@ def build(root: Path = Path(".")) -> dict:
         "ownership_reporting_date": share_manifest.get("latest_reporting_date"),
         "ownership_parsed_verified_count": ownership_status_counts["parsed_verified_identity"],
         "ownership_coverage_pct": round(
+            ownership_status_counts["parsed_verified_identity"] / (len(output_rows) - len(placeholders)) * 100, 2
+        ),
+        "ownership_index_row_coverage_pct": round(
             ownership_status_counts["parsed_verified_identity"] / len(output_rows) * 100, 2
         ),
         "ownership_status_counts": dict(ownership_status_counts),
@@ -550,6 +601,7 @@ def build(root: Path = Path(".")) -> dict:
         "snapshot_manifest_path": str(snapshot_manifest_path),
         "limitations": [
             "No composite score is issued; independent evidence dimensions are preserved without arbitrary weights.",
+            "Demerger index placeholders included at zero price remain in the index-row count but are excluded from tradable-stock ownership coverage and FPI scoring.",
             "A named bulk/block client match is not complete FPI trading flow and does not establish beneficial ownership.",
             "The CDSL registry snapshot follows the deal window and does not publish registration start dates.",
             "The Nifty 500 source states data as of the last trading day of the previous month; exact effective date is not supplied.",
