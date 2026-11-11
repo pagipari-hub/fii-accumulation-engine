@@ -84,7 +84,7 @@ jobs:
           report = Path("data/raw/shareholding/identity_evidence/shareholding_bse_scripcode_isin_crosswalk.json")
           value = json.loads(report.read_text(encoding="utf-8"))
           raw = next(Path("data/raw/shareholding/identity_evidence").glob("BhavCopy_BSE_CM_0_0_0_20260930_F_0000_*.csv"))
-          value["bse_source_path"] = str(raw)
+          value["bse_source_path"] = raw.name
           report.write_text(json.dumps(value, indent=2) + "\\n", encoding="utf-8")
           PY
 
