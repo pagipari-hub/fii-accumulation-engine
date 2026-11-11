@@ -10,7 +10,7 @@ from urllib.parse import quote
 
 from fii_engine.nse_shareholding_probe import BASE, MASTER_URL, PAGE, _get
 
-DEFAULT_SYMBOLS = ["RELIANCE", "HDFCBANK", "ALKEM", "MCX", "EMBASSY", "BIRET", "BAGMANE"]
+DEFAULT_SYMBOLS = ["RELIANCE", "HDFCBANK", "ABBOTINDIA", "ALKEM", "MCX"]
 
 
 def _sha256(payload: bytes) -> str:
