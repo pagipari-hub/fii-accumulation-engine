@@ -58,15 +58,15 @@ def test_nsdl_context_verifies_raw_sources_and_keeps_market_wide_scope(tmp_path)
     csv_path = tmp_path / "data/processed/nsdl_cash_flows.csv"
     csv_path.parent.mkdir(parents=True, exist_ok=True)
     fields = [
-        "reporting_date",
+        "date",
         "fpi_gross_purchases_inr_crore",
         "fpi_gross_sales_inr_crore",
         "fpi_net_investment_inr_crore",
         "dii_gross_purchases_inr_crore",
         "dii_gross_sales_inr_crore",
         "dii_net_investment_inr_crore",
-        "fpi_source_response_sha256",
-        "dii_source_response_sha256",
+        "fpi_source_sha256",
+        "dii_source_sha256",
     ]
     with csv_path.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=fields)
@@ -74,15 +74,15 @@ def test_nsdl_context_verifies_raw_sources_and_keeps_market_wide_scope(tmp_path)
         start = date(2026, 8, 10)
         for i in range(60):
             writer.writerow({
-                "reporting_date": (start + timedelta(days=i)).isoformat(),
+                "date": (start + timedelta(days=i)).isoformat(),
                 "fpi_gross_purchases_inr_crore": "10",
                 "fpi_gross_sales_inr_crore": "9",
                 "fpi_net_investment_inr_crore": "1",
                 "dii_gross_purchases_inr_crore": "20",
                 "dii_gross_sales_inr_crore": "18",
                 "dii_net_investment_inr_crore": "2",
-                "fpi_source_response_sha256": fpi_observation["response_sha256"],
-                "dii_source_response_sha256": dii_observation["response_sha256"],
+                "fpi_source_sha256": fpi_observation["response_sha256"],
+                "dii_source_sha256": dii_observation["response_sha256"],
             })
 
     context = build_context(tmp_path)
@@ -111,11 +111,11 @@ def test_nsdl_context_rejects_raw_source_hash_mismatch(tmp_path):
     csv_path.parent.mkdir(parents=True, exist_ok=True)
     with csv_path.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=[
-            "reporting_date", "fpi_net_investment_inr_crore", "dii_net_investment_inr_crore",
+            "date", "fpi_net_investment_inr_crore", "dii_net_investment_inr_crore",
         ])
         writer.writeheader()
         writer.writerow({
-            "reporting_date": "2026-08-10",
+            "date": "2026-08-10",
             "fpi_net_investment_inr_crore": "1",
             "dii_net_investment_inr_crore": "1",
         })
