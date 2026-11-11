@@ -1,10 +1,9 @@
-"""Probe NSE's date-selectable historical F&O report archive.
+"""Backfill NSE's date-addressable historical F&O aggregate reports.
 
-The daily-reports catalogue is intentionally not used here: it exposes only
-CurrentDay/PreviousDay. This probe uses the separate /api/reports archive
-selector and accepts a report only after its embedded trade date and existing
-schema validator agree. Aggregate reports are context-only, never stock-level
-FPI attribution.
+Uses the public NSE archive file paths rather than guessing the undocumented
+/api/reports category/section selector. Every payload must pass the existing
+strict schema and embedded trade-date validators before it is retained.
+Aggregate F&O reports are context-only, never stock-level FPI attribution.
 """
 from __future__ import annotations
 
@@ -16,62 +15,44 @@ import zipfile
 from datetime import date, datetime, timedelta, timezone
 from io import BytesIO
 from pathlib import Path
-from urllib.parse import urlencode
 
 from fii_engine.nse_fo_aggregate_reports import inspect_csv, parse_fii_stats_xls
-from fii_engine.nse_fo_bhavcopy import BASE_URL, REPORT_PAGE, _get
+from fii_engine.nse_fo_bhavcopy import REPORT_PAGE, _get
 
+ARCHIVE_BASE = "https://nsearchives.nseindia.com"
 REPORTS = {
     "participant_oi": {
-        "name": "F&O - Participant wise Open Interest(csv)",
+        "path": "/content/nsccl/fao_participant_oi_{date}.csv",
         "extension": ".csv",
         "scope": "participant_category_aggregate_not_stock_specific",
     },
     "participant_volume": {
-        "name": "F&O - Participant wise Trading Volumes(csv)",
+        "path": "/content/nsccl/fao_participant_vol_{date}.csv",
         "extension": ".csv",
         "scope": "participant_category_aggregate_not_stock_specific",
     },
     "fii_derivatives_statistics": {
-        "name": "F&O - FII Derivatives Statistics",
+        "path": "/content/fo/fii_stats_{date}.xls",
         "extension": ".xls",
         "scope": "aggregate_fii_derivatives_only",
     },
 }
-# NSE's archive selector metadata is not documented. Try the section/category
-# labels represented by the F&O archive UI; only schema/date-valid payloads
-# are accepted. The successful pair is written to the manifest.
-SELECTOR_CANDIDATES = (
-    ("derivatives", "equity-derivatives"),
-    ("derivatives", "fo"),
-    ("derivatives", "futures-and-options"),
-    ("equity-derivatives", "derivatives"),
-    ("capital-market", "equity-derivatives"),
-)
 
 
-def build_archive_url(dataset: str, trade_date: date, category: str, section: str) -> str:
+def build_archive_url(dataset: str, trade_date: date) -> str:
     if dataset not in REPORTS:
         raise ValueError(f"unsupported historical F&O dataset: {dataset}")
-    archive = [{
-        "name": REPORTS[dataset]["name"],
-        "type": "daily-reports",
-        "category": category,
-        "section": section,
-    }]
-    query = urlencode({
-        "archives": json.dumps(archive, separators=(",", ":")),
-        "date": trade_date.strftime("%d-%b-%Y"),
-        "type": "derivatives",
-        "mode": "single",
-    })
-    return f"{BASE_URL}/api/reports?{query}"
+    if dataset == "fii_derivatives_statistics":
+        date_token = trade_date.strftime("%d-%b-%Y")
+    else:
+        date_token = trade_date.strftime("%d%m%Y")
+    return ARCHIVE_BASE + REPORTS[dataset]["path"].format(date=date_token)
 
 
 def _unwrap_download(payload: bytes, dataset: str) -> tuple[bytes, str | None]:
     if not payload:
         raise ValueError(f"{dataset}: NSE returned an empty archive response")
-    if not payload.startswith(b"PK\x03\x04"):
+    if not payload.startswith(b"PK\\x03\\x04"):
         return payload, None
     try:
         with zipfile.ZipFile(BytesIO(payload)) as archive:
@@ -95,42 +76,25 @@ def _validate(dataset: str, payload: bytes, expected_date: str) -> dict:
 
 
 def fetch_one(dataset: str, trade_date: date) -> tuple[dict, bytes, bytes]:
-    failures = []
-    for category, section in SELECTOR_CANDIDATES:
-        url = build_archive_url(dataset, trade_date, category, section)
-        try:
-            response = _get(url, REPORT_PAGE, "application/octet-stream,*/*")
-            extracted, member_name = _unwrap_download(response, dataset)
-            inspection = _validate(dataset, extracted, trade_date.isoformat())
-            return ({
-                "dataset": dataset,
-                "trade_date": trade_date.isoformat(),
-                "selector_category": category,
-                "selector_section": section,
-                "request_url": url,
-                "archive_member": member_name,
-                "raw_bytes": len(response),
-                "payload_bytes": len(extracted),
-                "archive_sha256": hashlib.sha256(response).hexdigest(),
-                "payload_sha256": hashlib.sha256(extracted).hexdigest(),
-                "inspection": inspection,
-                "retrieved_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-                "attribution_scope": REPORTS[dataset].get(
-                    "scope", "participant_category_aggregate_not_stock_specific"
-                ),
-            }, response, extracted)
-        except Exception as exc:  # Record each selector failure; do not mask all failures.
-            failures.append({
-                "category": category,
-                "section": section,
-                "error": f"{type(exc).__name__}: {exc}",
-            })
-            time.sleep(0.25)
-    raise RuntimeError(json.dumps({
+    url = build_archive_url(dataset, trade_date)
+    response = _get(
+        url, REPORT_PAGE, "application/octet-stream,application/vnd.ms-excel,*/*"
+    )
+    extracted, member_name = _unwrap_download(response, dataset)
+    inspection = _validate(dataset, extracted, trade_date.isoformat())
+    return ({
         "dataset": dataset,
         "trade_date": trade_date.isoformat(),
-        "selector_attempts": failures,
-    }, indent=2))
+        "request_url": url,
+        "archive_member": member_name,
+        "raw_bytes": len(response),
+        "payload_bytes": len(extracted),
+        "archive_sha256": hashlib.sha256(response).hexdigest(),
+        "payload_sha256": hashlib.sha256(extracted).hexdigest(),
+        "inspection": inspection,
+        "retrieved_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "attribution_scope": REPORTS[dataset]["scope"],
+    }, response, extracted)
 
 
 def _save_immutable(path: Path, payload: bytes, digest: str) -> None:
@@ -160,11 +124,9 @@ def run(root: Path, sessions: int, end_date: date, max_calendar_days: int) -> di
     root = root.resolve()
     manifests = []
     unavailable = []
-    # A date counts as a completed session only when all three report types
-    # validate. Partial dates are retained in the manifest but not counted.
     complete_dates = 0
-    # Warm NSE's session before calling the historical archive endpoint.
-    _get(REPORT_PAGE, BASE_URL + "/", "text/html,*/*")
+    # Warm the NSE session before requesting files from its archive subdomain.
+    _get(REPORT_PAGE, "https://www.nseindia.com/", "text/html,*/*")
     for trade_date in _candidate_dates(end_date, max_calendar_days):
         date_records = []
         date_failed = False
@@ -180,7 +142,8 @@ def run(root: Path, sessions: int, end_date: date, max_calendar_days: int) -> di
                 payload_digest = record["payload_sha256"]
                 payload_path = (
                     root / "data/raw/nse_fo_historical"
-                    / trade_date.isoformat() / f"{dataset}_{payload_digest[:16]}{spec['extension']}"
+                    / trade_date.isoformat()
+                    / f"{dataset}_{payload_digest[:16]}{spec['extension']}"
                 )
                 _save_immutable(payload_path, payload_bytes, payload_digest)
                 record["raw_path"] = str(raw_path.relative_to(root))
@@ -192,7 +155,7 @@ def run(root: Path, sessions: int, end_date: date, max_calendar_days: int) -> di
                     "trade_date": trade_date.isoformat(),
                     "dataset": dataset,
                     "status": "unavailable_or_unvalidated",
-                    "error": str(exc),
+                    "error": f"{type(exc).__name__}: {exc}",
                 })
         manifests.extend(date_records)
         if not date_failed and len(date_records) == len(REPORTS):
@@ -219,7 +182,8 @@ def run(root: Path, sessions: int, end_date: date, max_calendar_days: int) -> di
     encoded = (json.dumps(summary, indent=2, sort_keys=True, default=str) + "\n").encode()
     digest = hashlib.sha256(encoded).hexdigest()
     _save_immutable(
-        root / "data/raw/nse_fo_historical/manifests" / f"historical_manifest_{digest[:16]}.json",
+        root / "data/raw/nse_fo_historical/manifests"
+        / f"historical_manifest_{digest[:16]}.json",
         encoded,
         digest,
     )
