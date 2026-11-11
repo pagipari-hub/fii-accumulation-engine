@@ -22,7 +22,7 @@ jobs:
       - run: ruff check src/fii_engine/nsdl_cash_flow_normalizer.py tests/test_nsdl_cash_flow_normalizer.py
 
   live-normalization:
-    if: github.event_name == 'workflow_dispatch' or (github.event_name == 'push' and github.event.head_commit.message == 'Add NSDL normalized cash-flow workflow')
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.event.head_commit.message == 'Add NSDL normalized cash-flow workflow')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
