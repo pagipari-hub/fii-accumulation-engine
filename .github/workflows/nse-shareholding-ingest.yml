@@ -249,7 +249,8 @@ jobs:
           if [[ -n "$(git status --porcelain data/snapshots/shareholding_master data/snapshots/shareholding_filings data/snapshots/shareholding_ownership data/raw/shareholding/current_manifest.json data/raw/shareholding/shareholding_ownership_current.csv data/raw/shareholding/identity_evidence data/raw/fpi_evidence_blend data/snapshots/fpi_evidence_blend)" ]]; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add data/snapshots/shareholding_master data/snapshots/shareholding_filings data/snapshots/shareholding_ownership data/raw/shareholding/current_manifest.json data/raw/shareholding/shareholding_ownership_current.csv data/raw/shareholding/identity_evidence data/raw/fpi_evidence_blend data/snapshots/fpi_evidence_blend
+            git add data/snapshots/shareholding_master data/snapshots/shareholding_filings data/snapshots/shareholding_ownership data/raw/shareholding/current_manifest.json data/raw/shareholding/shareholding_ownership_current.csv data/raw/fpi_evidence_blend data/snapshots/fpi_evidence_blend
+            git add -f data/raw/shareholding/identity_evidence
             git commit -m "data: record official NSE quarterly FPI ownership"
             bash scripts/retry_git_push.sh "$GITHUB_REF_NAME"
           else
