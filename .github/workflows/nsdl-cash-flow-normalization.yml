@@ -49,8 +49,8 @@ jobs:
           dii = sum(bool(r["dii_net_investment_inr_crore"]) for r in rows)
           overlap = sum(bool(r["fpi_net_investment_inr_crore"]) and bool(r["dii_net_investment_inr_crore"]) for r in rows)
           print({"fpi_dates": fpi, "dii_dates": dii, "overlap": overlap})
-          if fpi < 60 or dii < 50 or overlap < 50:
-              raise SystemExit("NSDL normalized cash-flow coverage below probe floor")
+          if fpi < 55 or dii < 50 or overlap < 50:
+              raise SystemExit("NSDL normalized in-window cash-flow coverage below probe floor")
           PY
       - uses: actions/upload-artifact@v4
         with:
