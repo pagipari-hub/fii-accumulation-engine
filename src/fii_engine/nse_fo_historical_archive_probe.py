@@ -52,7 +52,7 @@ def build_archive_url(dataset: str, trade_date: date) -> str:
 def _unwrap_download(payload: bytes, dataset: str) -> tuple[bytes, str | None]:
     if not payload:
         raise ValueError(f"{dataset}: NSE returned an empty archive response")
-    if not payload.startswith(b"PK\\x03\\x04"):
+    if not payload.startswith(b"PK\x03\x04"):
         return payload, None
     try:
         with zipfile.ZipFile(BytesIO(payload)) as archive:
