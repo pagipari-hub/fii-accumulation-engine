@@ -186,6 +186,39 @@ def build_report(
             "",
         ])
 
+    history_probe = manifest.get("nse_shareholding_history_probe") or {}
+    announcement_probe = manifest.get("nse_shareholding_unitholding_announcements_probe") or {}
+    lines.extend([
+        "## Historical ownership source discovery",
+        "",
+    ])
+    if history_probe:
+        lines.append(
+            f"- **NSE symbol-specific master history rows:** {json.dumps(history_probe.get('row_counts', {}), sort_keys=True)}."
+        )
+        lines.append(
+            f"- **Symbols returning multiple master records:** {', '.join(history_probe.get('symbols_with_multiple_records', [])) or 'None'}."
+        )
+    else:
+        lines.append("NSE symbol-specific master history probe was not available in this build.")
+    if announcement_probe:
+        matches = announcement_probe.get("matching_announcement_counts", {})
+        attachments = [
+            attachment
+            for observation in announcement_probe.get("observations", [])
+            for attachment in observation.get("attachments", [])
+        ]
+        captured = sum(item.get("status") == "captured" for item in attachments)
+        errors = sum(item.get("status") == "download_error" for item in attachments)
+        lines.append(f"- **NSE shareholding/unitholding pattern announcements:** {json.dumps(matches, sort_keys=True)}.")
+        lines.append(f"- **Official attachments captured / failed:** {captured} / {errors}.")
+    else:
+        lines.append("NSE shareholding/unitholding announcement probe was not available in this build.")
+    lines.append(
+        "These probes discover historical filing sources only. Their records are not used as ownership values until quarter dates, category totals, security identity and payload hashes are validated."
+    )
+    lines.append("")
+
     lines.extend([
         "## BSE fallback coverage",
         "",
