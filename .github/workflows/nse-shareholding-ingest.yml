@@ -14,6 +14,7 @@ on:
       - "src/fii_engine/bse_shareholding_fallback_probe.py"
       - "tests/test_bse_shareholding_fallback_probe.py"
       - "data/audits/bse_shareholding_fallback_candidates_2026-09-30.csv"
+      - "data/audits/nifty500_index_placeholders_2026-11-09.csv"
       - "data/audits/shareholding_isin_mismatch_candidates_2026-09-30.csv"
       - "data/audits/shareholding_missing_isin_candidates_2026-09-30.csv"
       - "tests/test_nse_shareholding_xbrl.py"
@@ -160,6 +161,9 @@ jobs:
           assert manifest["current_universe_count"] >= 480
           assert manifest["identity_crosswalk"]["candidate_count"] == 146
           assert manifest["identity_crosswalk"]["verified_count"] >= 143
+          assert manifest["current_tradable_universe_count"] == 500
+          assert manifest["index_placeholder_count"] == 1
+          assert manifest["latest_quarter_coverage_pct"] == 98.8
           bse_fallback = json.loads(Path("artifacts/bse-shareholding-fallback/bse_shareholding_fallback_probe_manifest.json").read_text(encoding="utf-8"))
           assert bse_fallback["candidate_count"] == 6
           print(json.dumps({"bse_fallback_status_counts": bse_fallback["status_counts"]}, indent=2))
@@ -224,6 +228,10 @@ jobs:
               rows = list(csv.DictReader(handle))
           assert manifest["status"] == "complete"
           assert manifest["stock_count"] == 501 and len(rows) == 501
+          assert manifest["tradable_stock_count"] == 500
+          assert manifest["index_placeholder_count"] == 1
+          assert manifest["ownership_coverage_pct"] == 98.8
+          assert manifest["ownership_index_row_coverage_pct"] == 98.6
           assert manifest["composite_score_status"] == "not_scored_independent_evidence_dimensions_only"
           assert manifest["source_hashes"]["shareholding_identity_crosswalk"]
           print(json.dumps({
