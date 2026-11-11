@@ -125,10 +125,12 @@ def _load_identity_crosswalk(path: Path | None) -> tuple[dict[str, dict], dict |
     digest = str(report.get("bse_source_sha256") or "").strip()
     if report.get("bse_source_http_status") != 200:
         raise ValueError("dated BSE identity source was not HTTP 200")
-    if report.get("candidate_count") != len(rows) or report.get("verified_count") != len(rows):
-        raise ValueError("dated BSE identity crosswalk is not fully verified")
-    if report.get("unresolved_count") != 0 or not digest:
-        raise ValueError("dated BSE identity crosswalk has unresolved rows or no source hash")
+    if report.get("candidate_count") != len(rows):
+        raise ValueError("dated BSE identity crosswalk candidate count mismatch")
+    if report.get("verified_count", -1) + report.get("unresolved_count", -1) != len(rows):
+        raise ValueError("dated BSE identity crosswalk verified/unresolved counts do not reconcile")
+    if not digest:
+        raise ValueError("dated BSE identity crosswalk has no source hash")
     source_reference = str(report.get("bse_source_path") or "").strip()
     source_name = Path(source_reference).name
     if not source_name:
@@ -143,7 +145,7 @@ def _load_identity_crosswalk(path: Path | None) -> tuple[dict[str, dict], dict |
         if not symbol or symbol in indexed:
             raise ValueError("dated BSE identity crosswalk has blank or duplicate symbols")
         if status not in ALLOWED_CROSSWALK_STATUSES:
-            raise ValueError(f"dated BSE identity crosswalk row is not verified: {symbol}")
+            continue
         if row.get("reporting_date") != report.get("reporting_date"):
             raise ValueError(f"dated BSE identity crosswalk date mismatch: {symbol}")
         if row.get("bse_bhavcopy_sha256") != digest:
@@ -153,12 +155,16 @@ def _load_identity_crosswalk(path: Path | None) -> tuple[dict[str, dict], dict |
         if len(row.get("xbrl_sha256", "")) != 64:
             raise ValueError(f"crosswalk row has no valid XBRL hash: {symbol}")
         indexed[symbol] = row
+    if len(indexed) != report.get("verified_count"):
+        raise ValueError("dated BSE identity crosswalk verified row count mismatch")
     return indexed, {
         "path": str(path),
         "sha256": _sha256(payload),
         "report_path": str(report_path),
         "reporting_date": report["reporting_date"],
+        "candidate_count": len(rows),
         "verified_count": len(indexed),
+        "unresolved_count": len(rows) - len(indexed),
         "bse_source_sha256": digest,
     }
 
