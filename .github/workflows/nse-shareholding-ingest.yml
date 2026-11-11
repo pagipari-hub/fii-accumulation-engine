@@ -14,9 +14,11 @@ on:
       - "src/fii_engine/weekly_watchlist_report.py"
       - "src/fii_engine/nsdl_cash_flow_context.py"
       - "src/fii_engine/nse_shareholding_history_probe.py"
+      - "src/fii_engine/nse_shareholding_unitholding_announcement_probe.py"
       - "tests/test_weekly_watchlist_report.py"
       - "tests/test_nsdl_cash_flow_context.py"
       - "tests/test_nse_shareholding_history_probe.py"
+      - "tests/test_nse_shareholding_unitholding_announcement_probe.py"
       - "tests/test_fpi_evidence_blend.py"
       - "src/fii_engine/nse_security_master_probe.py"
       - "src/fii_engine/nse_shareholding_xbrl_entity_probe.py"
@@ -179,6 +181,10 @@ jobs:
         if: github.event_name != 'pull_request'
         run: python -m fii_engine.nse_shareholding_history_probe --output-dir artifacts/nse-shareholding-history
 
+      - name: Discover official NSE shareholding and unitholding disclosures
+        if: github.event_name != 'pull_request'
+        run: python -m fii_engine.nse_shareholding_unitholding_announcement_probe --output-dir artifacts/nse-shareholding-announcements
+
       - name: Probe BSE quarterly shareholding fallback for seven NSE-master gaps
         if: github.event_name != 'pull_request'
         run: |
@@ -311,6 +317,7 @@ jobs:
             artifacts/missing-isin-identity/
             artifacts/bse-shareholding-fallback/
             artifacts/nse-shareholding-history/
+            artifacts/nse-shareholding-announcements/
             data/raw/shareholding/identity_evidence/
             data/raw/nsdl_cash_flows/
             data/processed/
