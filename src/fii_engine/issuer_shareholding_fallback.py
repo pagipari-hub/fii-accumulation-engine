@@ -95,19 +95,19 @@ def _verified_identity(root: Path, symbol: str, expected_scrip: str) -> dict:
 
 
 def parse_abbott_pdf_text(text: str) -> dict:
-    normalized = re.sub(r"\\s+", " ", text)
+    normalized = re.sub(r"\s+", " ", text)
     if "Abbott India Limited" not in normalized:
         raise ValueError("issuer PDF does not identify Abbott India Limited")
-    if not re.search(r"ISIN\\s+INE358A01014", normalized, re.IGNORECASE):
+    if not re.search(r"ISIN\s+INE358A01014", normalized, re.IGNORECASE):
         raise ValueError("issuer PDF ISIN does not match ABBOTINDIA")
-    if not re.search(r"Scrip\\s+code\\s+500488", normalized, re.IGNORECASE):
+    if not re.search(r"Scrip\s+code\s+500488", normalized, re.IGNORECASE):
         raise ValueError("issuer PDF BSE scrip code does not match ABBOTINDIA")
     if not re.search(r"30-09-2026", normalized):
         raise ValueError("issuer PDF reporting date is not 2026-09-30")
     values = {}
     for category in ("I", "II"):
         pattern = re.compile(
-            rf"Foreign Portfolio Investor(?:s)? Category {category}\\s+\\d+\\s+([0-9,]+)\\s+[0-9,]+\\s+([0-9]+(?:\\.[0-9]+)?)",
+            rf"Foreign Portfolio Investor(?:s)? Category {category}\s+\d+\s+([0-9,]+)\s+[0-9,]+\s+([0-9]+(?:\.[0-9]+)?)",
             re.IGNORECASE,
         )
         match = pattern.search(normalized)
@@ -133,13 +133,13 @@ def parse_mcx_html(payload: bytes) -> dict:
         parser.feed(payload.decode("utf-8", errors="strict"))
     except UnicodeDecodeError as exc:
         raise ValueError("MCX issuer page is not UTF-8") from exc
-    text = re.sub(r"\\s+", " ", " ".join(parser.parts))
+    text = re.sub(r"\s+", " ", " ".join(parser.parts))
     if "MCX (BSE: MCX)" not in text:
         raise ValueError("issuer page does not identify MCX")
     if "Shareholding Pattern as on September 30, 2026" not in text:
         raise ValueError("issuer page does not contain the 2026-09-30 shareholding table")
     match = re.search(
-        r"Foreign Portfolio Investors\\s+([0-9,]+)\\s+([0-9]+(?:\\.[0-9]+)?)",
+        r"Foreign Portfolio Investors\s+([0-9,]+)\s+([0-9]+(?:\.[0-9]+)?)",
         text,
         re.IGNORECASE,
     )
@@ -179,7 +179,7 @@ def probe(root: Path = Path(".")) -> dict:
             (root / raw_path).write_bytes(payload)
             if source["format"] == "pdf":
                 reader = PdfReader(io.BytesIO(payload), strict=True)
-                text = "\\n".join(page.extract_text() or "" for page in reader.pages)
+                text = "\n".join(page.extract_text() or "" for page in reader.pages)
                 parsed = parse_abbott_pdf_text(text)
             else:
                 parsed = parse_mcx_html(payload)
@@ -219,7 +219,7 @@ def probe(root: Path = Path(".")) -> dict:
         "source_http_status", "source_raw_path", "source_sha256",
     ]
     stream = io.StringIO(newline="")
-    writer = csv.DictWriter(stream, fieldnames=fields, lineterminator="\\n")
+    writer = csv.DictWriter(stream, fieldnames=fields, lineterminator="\n")
     writer.writeheader()
     writer.writerows(sorted(rows, key=lambda row: row["symbol"]))
     csv_payload = stream.getvalue().encode("utf-8")
@@ -238,7 +238,7 @@ def probe(root: Path = Path(".")) -> dict:
         "output_sha256": _sha256(csv_payload),
         "scope_boundary": "Issuer-published equity shareholding is a separate fallback source. Missing category splits remain null; no issuer-source values overwrite NSE XBRL records.",
     }
-    (root / MANIFEST).write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\\n", encoding="utf-8")
+    (root / MANIFEST).write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     return manifest
 
 
