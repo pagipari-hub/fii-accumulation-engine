@@ -107,13 +107,41 @@ jobs:
       - name: Run complete project test suite
         run: pytest
 
-      - name: Commit immutable normalized history snapshots and source manifests
+      - name: Rebuild rolling features from validated historical archive
+        run: python -m fii_engine.historical_features --repo-root .
+
+      - name: Validate historical participant archive integration
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path("data/raw/historical_features/historical_features_current_manifest.json")
+          assert path.is_file(), "historical feature manifest missing after rebuild"
+          manifest = json.loads(path.read_text(encoding="utf-8"))
+          archive_manifest = Path("data/raw/nse_fo_historical/historical_manifest.json")
+          if archive_manifest.is_file():
+              archive = json.loads(archive_manifest.read_text(encoding="utf-8"))
+              assert manifest["participant_archive_complete_session_count"] == archive["complete_sessions"]
+              assert manifest["participant_oi_session_count"] >= archive["complete_sessions"]
+              assert manifest["participant_volume_session_count"] >= archive["complete_sessions"]
+          print(json.dumps({
+              "as_of_trade_date": manifest["as_of_trade_date"],
+              "daily_stock_sessions": manifest["daily_stock_session_count"],
+              "participant_archive_complete_sessions": manifest["participant_archive_complete_session_count"],
+              "participant_oi_sessions": manifest["participant_oi_session_count"],
+              "participant_volume_sessions": manifest["participant_volume_session_count"],
+              "participant_archive_manifest_sha256": manifest["participant_archive_manifest_sha256"],
+          }, indent=2))
+          PY
+
+      - name: Commit immutable report snapshots and rebuilt historical feature outputs
         if: github.event_name != 'pull_request'
         run: |
-          if [[ -n "$(git status --porcelain data/raw/fno_aggregate_reports/manifests data/snapshots/fno_aggregate_reports)" ]]; then
+          if [[ -n "$(git status --porcelain data/raw/fno_aggregate_reports/manifests data/snapshots/fno_aggregate_reports data/raw/historical_features data/snapshots/historical_features)" ]]; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add data/raw/fno_aggregate_reports/manifests data/snapshots/fno_aggregate_reports
+            git add data/raw/fno_aggregate_reports/manifests data/snapshots/fno_aggregate_reports data/raw/historical_features data/snapshots/historical_features
             git commit -m "data: record NSE participant and FII report provenance"
             bash scripts/retry_git_push.sh "$GITHUB_REF_NAME"
           else
