@@ -54,6 +54,10 @@ def build_report(
         raise ValueError("NSDL aggregate context must not be attributed to individual stocks")
     if manifest.get("tradable_stock_count") != len(tradable):
         raise ValueError("tradable-stock count does not match matrix rows")
+    parsed_count = manifest.get("ownership_parsed_verified_count", 0)
+    expected_coverage = round(parsed_count / len(tradable) * 100, 2) if tradable else 0.0
+    if manifest.get("ownership_coverage_pct") != expected_coverage:
+        raise ValueError("ownership coverage percentage does not match tradable denominator")
     if manifest.get("index_placeholder_count") != len(placeholders):
         raise ValueError("index placeholder count does not match matrix rows")
     if len(candidates) != manifest.get("direct_fpi_client_gross_buy_candidate_count"):
