@@ -42,6 +42,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+      - run: python -m pip install -e .
       - run: python -m fii_engine.nsdl_cash_flow_archive_probe --start-date 2026-08-17 --end-date 2026-11-10 --delay 1.0
       - name: Validate captured raw responses and hashes
         run: |
