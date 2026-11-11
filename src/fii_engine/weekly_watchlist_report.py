@@ -121,7 +121,9 @@ def build_report(
         dii = nsdl.get("dii", {})
         lines.extend([
             f"- **NSDL observation window:** {nsdl.get('start_date')} to {nsdl.get('end_date')} ({nsdl.get('normalized_date_count')} dates).",
+            f"- **FPI cash-equity gross purchases / sales:** ₹{fpi.get('gross_purchases_inr_crore', 0):,.2f} / ₹{fpi.get('gross_sales_inr_crore', 0):,.2f} crore.",
             f"- **FPI cash-equity net:** ₹{fpi.get('cumulative_net_inr_crore', 0):,.2f} crore across {fpi.get('observed_days', 0)} observations; {fpi.get('positive_net_days', 0)} positive and {fpi.get('negative_net_days', 0)} negative days.",
+            f"- **DII cash-equity gross purchases / sales:** ₹{dii.get('gross_purchases_inr_crore', 0):,.2f} / ₹{dii.get('gross_sales_inr_crore', 0):,.2f} crore.",
             f"- **DII cash-equity net:** ₹{dii.get('cumulative_net_inr_crore', 0):,.2f} crore across {dii.get('observed_days', 0)} observations; {dii.get('positive_net_days', 0)} positive and {dii.get('negative_net_days', 0)} negative days.",
             f"- **Overlapping FPI/DII dates:** {nsdl.get('overlapping_fpi_dii_days', 0)}.",
             f"- **Explicit DII No Data dates:** {', '.join(nsdl.get('dii_no_data_days', [])) or 'None'}.",
