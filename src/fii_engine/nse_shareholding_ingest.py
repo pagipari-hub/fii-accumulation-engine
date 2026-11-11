@@ -178,27 +178,30 @@ def _metadata(master_row: dict, stock: dict, identity_evidence: dict | None = No
     company_name = str(master_row.get("name") or "").strip()
     identity_evidence_xbrl_sha256 = None
     identity_evidence_bse_sha256 = None
-    if isin:
-        if isin == stock["isin"]:
-            identity_status, join_method = "verified", "isin_exact"
-        elif identity_evidence:
-            exact_evidence = (
-                identity_evidence.get("reporting_date") == reporting_date
-                and identity_evidence.get("master_record_id") == str(master_row.get("recordId") or "").strip()
-                and identity_evidence.get("master_xbrl_url") == str(master_row.get("xbrl") or "").strip()
-                and identity_evidence.get("universe_isin", "").strip().upper() == stock["isin"].upper()
-                and identity_evidence.get("bse_isin", "").strip().upper() == stock["isin"].upper()
-                and identity_evidence.get("bse_crosswalk_status") in ALLOWED_CROSSWALK_STATUSES
-            )
-            if exact_evidence:
-                identity_status = "verified"
-                join_method = identity_evidence["bse_crosswalk_status"]
-                identity_evidence_xbrl_sha256 = identity_evidence["xbrl_sha256"]
-                identity_evidence_bse_sha256 = identity_evidence["bse_bhavcopy_sha256"]
-            else:
-                identity_status, join_method = "isin_mismatch", "dated_bse_crosswalk_rejected"
+    if isin and isin == stock["isin"]:
+        identity_status, join_method = "verified", "isin_exact"
+    elif identity_evidence:
+        exact_evidence = (
+            identity_evidence.get("reporting_date") == reporting_date
+            and identity_evidence.get("master_record_id") == str(master_row.get("recordId") or "").strip()
+            and identity_evidence.get("master_xbrl_url") == str(master_row.get("xbrl") or "").strip()
+            and identity_evidence.get("universe_isin", "").strip().upper() == stock["isin"].upper()
+            and identity_evidence.get("bse_isin", "").strip().upper() == stock["isin"].upper()
+            and identity_evidence.get("bse_crosswalk_status") in ALLOWED_CROSSWALK_STATUSES
+        )
+        if exact_evidence:
+            identity_status = "verified"
+            join_method = identity_evidence["bse_crosswalk_status"]
+            identity_evidence_xbrl_sha256 = identity_evidence["xbrl_sha256"]
+            identity_evidence_bse_sha256 = identity_evidence["bse_bhavcopy_sha256"]
+        elif isin:
+            identity_status, join_method = "isin_mismatch", "dated_bse_crosswalk_rejected"
+        elif _normal_name(company_name) == _normal_name(stock["company_name"]):
+            identity_status, join_method = "verified", "symbol_and_company_name"
         else:
-            identity_status, join_method = "isin_mismatch", "symbol_only_rejected"
+            identity_status, join_method = "identity_unverified", "dated_bse_crosswalk_rejected"
+    elif isin:
+        identity_status, join_method = "isin_mismatch", "symbol_only_rejected"
     elif _normal_name(company_name) == _normal_name(stock["company_name"]):
         identity_status, join_method = "verified", "symbol_and_company_name"
     else:
