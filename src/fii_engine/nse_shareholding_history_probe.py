@@ -29,60 +29,81 @@ def _records(decoded: object) -> list[dict]:
     return []
 
 
-def probe(output_dir: Path, symbols: list[str] | None = None, delay: float = 0.3) -> dict:
+def probe(
+    output_dir: Path,
+    symbols: list[str] | None = None,
+    delay: float = 0.3,
+    from_date: str = "01-04-2026",
+    to_date: str = "30-09-2026",
+) -> dict:
     symbols = [symbol.strip().upper() for symbol in (symbols or DEFAULT_SYMBOLS)]
     output_dir.mkdir(parents=True, exist_ok=True)
     _, bootstrap = _get(PAGE, BASE, "text/html,*/*")
     observations = []
     for index, symbol in enumerate(symbols):
-        url = f"{MASTER_URL}&symbol={quote(symbol)}"
-        record = {"symbol": symbol, "query_url": url}
-        try:
-            payload, response = _get(url, PAGE, "application/json,*/*")
-            digest = _sha256(payload)
-            raw_path = output_dir / f"nse_shareholding_history_{symbol}_{digest[:16]}.json"
-            raw_path.write_bytes(payload)
-            decoded = json.loads(payload.decode("utf-8-sig"))
-            rows = _records(decoded)
-            date_fields = sorted({
-                key for row in rows for key in row
-                if any(token in key.lower() for token in ("date", "period", "quarter"))
-            })
-            attachment_fields = sorted({
-                key for row in rows for key in row
-                if any(token in key.lower() for token in ("xbrl", "attach", "file", "url", "link"))
-            })
-            date_samples = [
-                {key: row.get(key) for key in date_fields if row.get(key) not in (None, "")}
-                for row in rows[:10]
-            ]
-            record.update({
-                **response,
-                "status": "captured",
-                "response_sha256": digest,
-                "raw_path": str(raw_path),
-                "row_count": len(rows),
-                "record_keys": sorted(rows[0]) if rows else [],
-                "date_fields": date_fields,
-                "attachment_fields": attachment_fields,
-                "date_samples": date_samples,
-                "records": rows,
-            })
-        except Exception as exc:
-            record.update({"status": "probe_error", "error": str(exc)})
-        observations.append(record)
+        queries = [
+            ("symbol_history", f"{MASTER_URL}&symbol={quote(symbol)}"),
+            (
+                "date_range",
+                f"{MASTER_URL}&from_date={quote(from_date)}&to_date={quote(to_date)}&symbol={quote(symbol)}",
+            ),
+        ]
+        query_results = []
+        for query_type, url in queries:
+            record = {"symbol": symbol, "query_type": query_type, "query_url": url}
+            try:
+                payload, response = _get(url, PAGE, "application/json,*/*")
+                digest = _sha256(payload)
+                raw_path = output_dir / f"nse_shareholding_history_{symbol}_{query_type}_{digest[:16]}.json"
+                raw_path.write_bytes(payload)
+                decoded = json.loads(payload.decode("utf-8-sig"))
+                rows = _records(decoded)
+                date_fields = sorted({
+                    key for row in rows for key in row
+                    if any(token in key.lower() for token in ("date", "period", "quarter"))
+                })
+                attachment_fields = sorted({
+                    key for row in rows for key in row
+                    if any(token in key.lower() for token in ("xbrl", "attach", "file", "url", "link"))
+                })
+                date_samples = [
+                    {key: row.get(key) for key in date_fields if row.get(key) not in (None, "")}
+                    for row in rows[:10]
+                ]
+                record.update({
+                    **response,
+                    "status": "captured",
+                    "response_sha256": digest,
+                    "raw_path": str(raw_path),
+                    "row_count": len(rows),
+                    "record_keys": sorted(rows[0]) if rows else [],
+                    "date_fields": date_fields,
+                    "attachment_fields": attachment_fields,
+                    "date_samples": date_samples,
+                    "records": rows,
+                })
+            except Exception as exc:
+                record.update({"status": "probe_error", "error": str(exc)})
+            query_results.append(record)
+            time.sleep(delay)
+        observations.append({"symbol": symbol, "queries": query_results})
         if index + 1 < len(symbols):
             time.sleep(delay)
     report = {
         "publisher": "National Stock Exchange of India",
         "endpoint": MASTER_URL,
         "symbol_specific_history_probe": True,
+        "date_range": {"from_date": from_date, "to_date": to_date},
         "session_bootstrap": bootstrap,
         "candidate_symbols": symbols,
         "observations": observations,
-        "row_counts": {row["symbol"]: row.get("row_count", 0) for row in observations},
+        "row_counts": {
+            row["symbol"]: {query["query_type"]: query.get("row_count", 0) for query in row["queries"]}
+            for row in observations
+        },
         "symbols_with_multiple_records": [
-            row["symbol"] for row in observations if row.get("row_count", 0) > 1
+            row["symbol"] for row in observations
+            if any(query.get("row_count", 0) > 1 for query in row["queries"])
         ],
         "scope_boundary": (
             "Read-only endpoint capability probe. Captured records are not ingested into the ownership master "
@@ -99,8 +120,10 @@ def main() -> None:
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--symbols", nargs="*", default=DEFAULT_SYMBOLS)
     parser.add_argument("--delay", type=float, default=0.3)
+    parser.add_argument("--from-date", default="01-04-2026")
+    parser.add_argument("--to-date", default="30-09-2026")
     args = parser.parse_args()
-    report = probe(args.output_dir, args.symbols, args.delay)
+    report = probe(args.output_dir, args.symbols, args.delay, args.from_date, args.to_date)
     print(json.dumps({
         "symbols": len(report["candidate_symbols"]),
         "row_counts": report["row_counts"],
