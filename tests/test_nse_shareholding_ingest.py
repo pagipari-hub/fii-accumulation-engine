@@ -310,3 +310,31 @@ def test_dated_bse_crosswalk_can_verify_missing_master_isin_without_name_match()
     assert identity["isin"] is None
     assert identity["universe_isin"] == "INE000B01001"
     assert identity["identity_evidence_xbrl_sha256"] == "b" * 64
+
+
+
+def test_zero_price_index_placeholder_is_not_reported_as_missing_filing():
+    master = _master_row(
+        "100", "ABC", "ABC Limited", "INE000A01001",
+        "09-OCT-2026 17:00:00", "N", "https://nsearchives.nseindia.com/corporate/xbrl/abc.xml",
+    )
+    rows = module._build_ownership_rows(
+        [
+            {"symbol": "ABC", "company_name": "ABC Limited", "isin": "INE000A01001"},
+            {"symbol": "DUMMYHEG", "company_name": "Dummy HEG Ltd.", "isin": "DUM545A01024"},
+        ],
+        [master],
+        {},
+        "c" * 64,
+        {"DUMMYHEG": {
+            "classification": "demerged_index_placeholder",
+            "reason": "Non-tradable zero-price index placeholder",
+        }},
+    )
+    placeholder = next(row for row in rows if row["symbol"] == "DUMMYHEG")
+    assert placeholder["identity_status"] == "not_applicable_index_placeholder"
+    assert placeholder["filing_status"] == "not_applicable_index_placeholder"
+    assert placeholder["universe_member_type"] == "index_adjustment_placeholder"
+    assert placeholder["tradability_status"] == "non_tradable_zero_price"
+    assert placeholder["fpi_scoring_eligible"] == "false"
+    assert placeholder["universe_exclusion_reason"] == "Non-tradable zero-price index placeholder"
