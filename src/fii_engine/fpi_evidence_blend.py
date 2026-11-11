@@ -530,6 +530,9 @@ def build(root: Path = Path(".")) -> dict:
         "shareholding_ownership": share_manifest["ownership_current_sha256"],
         "shareholding_identity_crosswalk": (
             share_manifest.get("identity_crosswalk") or {}
+        ).get("sha256"),
+        "shareholding_identity_bse_udiff": (
+            share_manifest.get("identity_crosswalk") or {}
         ).get("bse_source_sha256"),
         "nsdl_cash_flow_normalized_csv": (nsdl_context or {}).get("normalized_csv_sha256"),
         "nsdl_cash_flow_raw_archive_manifest": (nsdl_context or {}).get("raw_archive_manifest_sha256"),
