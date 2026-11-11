@@ -112,6 +112,7 @@ def build_report(
             "A Grade 2 gross-buy match is a lead, not proof of net FPI accumulation. "
             "Unverified registration timing and incomplete buy/sell totals must remain explicit."
         )
+        lines.append("No sourced business/corporate catalyst or buyer motive is attached; none is inferred.")
     else:
         lines.append("No named FPI-client gross-buy candidates passed the current evidence gates.")
     lines.append("")
@@ -131,6 +132,7 @@ def build_report(
             f"- **DII cash-equity net:** ₹{dii.get('cumulative_net_inr_crore', 0):,.2f} crore across {dii.get('observed_days', 0)} observations; {dii.get('positive_net_days', 0)} positive and {dii.get('negative_net_days', 0)} negative days.",
             f"- **Overlapping FPI/DII dates:** {nsdl.get('overlapping_fpi_dii_days', 0)}.",
             f"- **Explicit DII No Data dates:** {', '.join(nsdl.get('dii_no_data_days', [])) or 'None'}.",
+            "- **Source construction:** NSDL FPI Equity Sub-total and explicit DII Equity Total; debt, derivatives and duplicate investor subtotals are excluded.",
             "These are aggregate market-wide flows only. They do not establish which individual stocks were bought or sold.",
             "",
         ])
