@@ -1,0 +1,83 @@
+name: NSE equity identity reference source probe
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/fii_engine/nse_security_master_probe.py"
+      - "src/fii_engine/nse_mii_identity_reconciliation.py"
+      - "src/fii_engine/nse_shareholding_xbrl_entity_probe.py"
+      - "src/fii_engine/bse_shareholding_scripcode_crosswalk.py"
+      - "tests/test_nse_security_master_probe.py"
+      - "tests/test_nse_mii_identity_reconciliation.py"
+      - "tests/test_nse_shareholding_xbrl_entity_probe.py"
+      - "tests/test_bse_shareholding_scripcode_crosswalk.py"
+      - ".github/workflows/nse-security-master-probe.yml"
+  pull_request:
+    paths:
+      - "src/fii_engine/nse_security_master_probe.py"
+      - "src/fii_engine/nse_mii_identity_reconciliation.py"
+      - "src/fii_engine/nse_shareholding_xbrl_entity_probe.py"
+      - "src/fii_engine/bse_shareholding_scripcode_crosswalk.py"
+      - "tests/test_nse_security_master_probe.py"
+      - "tests/test_nse_mii_identity_reconciliation.py"
+      - "tests/test_nse_shareholding_xbrl_entity_probe.py"
+      - "tests/test_bse_shareholding_scripcode_crosswalk.py"
+      - ".github/workflows/nse-security-master-probe.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nse-security-master-probe
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install -e ".[dev]"
+      - run: pytest tests/test_nse_security_master_probe.py tests/test_nse_mii_identity_reconciliation.py tests/test_nse_shareholding_xbrl_entity_probe.py tests/test_bse_shareholding_scripcode_crosswalk.py
+
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install -e .
+      - name: Probe official NSE identity reference files
+        run: python -m fii_engine.nse_security_master_probe --historical-date 2026-09-30 --output-dir artifacts/nse-security-master-probe
+      - name: Reconcile ownership mismatch candidates against dated NSE MII
+        run: |
+          python -m fii_engine.nse_mii_identity_reconciliation \
+            --mii-gzip artifacts/nse-security-master-probe/NSE_CM_security_30092026_$(python -c "import json; print(json.load(open('artifacts/nse-security-master-probe/probe_manifest.json'))['historical_mii_security_master']['sha256'][:16])").csv.gz \
+            --candidates data/audits/shareholding_isin_mismatch_candidates_2026-09-30.csv \
+            --output-dir artifacts/nse-security-master-probe
+      - name: Probe every audited shareholding XBRL entity identifier
+        run: |
+          python -m fii_engine.nse_shareholding_xbrl_entity_probe \
+            --candidates data/audits/shareholding_isin_mismatch_candidates_2026-09-30.csv \
+            --output-dir artifacts/nse-security-master-probe
+      - name: Reconcile BSE ScripCode identifiers to dated BSE ISINs
+        run: >-
+          python -m fii_engine.bse_shareholding_scripcode_crosswalk
+          --candidates data/audits/shareholding_isin_mismatch_candidates_2026-09-30.csv
+          --xbrl-report artifacts/nse-security-master-probe/shareholding_xbrl_entity_probe.json
+          --output-dir artifacts/nse-security-master-probe
+          --reporting-date 2026-09-30
+      - name: Upload raw exchange sources and identity reconciliation
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nse-security-master-probe-${{ github.run_id }}
+          path: artifacts/nse-security-master-probe/
+          if-no-files-found: warn
+          retention-days: 30
