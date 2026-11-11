@@ -69,7 +69,21 @@ def build_context(root: Path) -> dict:
         for observation in raw_manifest.get("observations", [])
         if observation.get("dataset") == "dii" and observation.get("response_type") == "data"
     }
+    fpi_queries = {
+        observation.get("query_date")
+        for observation in raw_manifest.get("observations", [])
+        if observation.get("dataset") == "fpi" and observation.get("response_type") == "data"
+    }
+    dii_queries = {
+        observation.get("query_date")
+        for observation in raw_manifest.get("observations", [])
+        if observation.get("dataset") == "dii" and observation.get("response_type") == "data"
+    }
     for row in rows:
+        if row.get("fpi_source_query_date") not in fpi_queries:
+            raise ValueError(f"NSDL FPI row has no matching raw query date: {row['date']}")
+        if row.get("dii_source_query_date") not in dii_queries:
+            raise ValueError(f"NSDL DII row has no matching raw query date: {row['date']}")
         if row.get("fpi_source_sha256") not in fpi_hashes:
             raise ValueError(f"NSDL FPI row lacks a matching raw response hash: {row['date']}")
         if row.get("dii_source_sha256") not in dii_hashes:
