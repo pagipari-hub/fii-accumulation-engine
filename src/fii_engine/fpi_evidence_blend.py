@@ -305,6 +305,12 @@ def build(root: Path = Path(".")) -> dict:
     bse_fallback_path = root / Path("data/raw/shareholding/bse_shareholding_fallback_probe_manifest.json")
     bse_fallback_payload = bse_fallback_path.read_bytes() if bse_fallback_path.exists() else None
     bse_fallback = json.loads(bse_fallback_payload.decode("utf-8")) if bse_fallback_payload else None
+    nse_history_path = root / Path("artifacts/nse-shareholding-history/nse_shareholding_history_probe_manifest.json")
+    nse_history_payload = nse_history_path.read_bytes() if nse_history_path.exists() else None
+    nse_history = json.loads(nse_history_payload.decode("utf-8")) if nse_history_payload else None
+    nse_announcement_path = root / Path("artifacts/nse-shareholding-announcements/nse_shareholding_unitholding_announcements_manifest.json")
+    nse_announcement_payload = nse_announcement_path.read_bytes() if nse_announcement_path.exists() else None
+    nse_announcements = json.loads(nse_announcement_payload.decode("utf-8")) if nse_announcement_payload else None
     daily_manifest, daily_rows = _load_source(
         root, DAILY_MANIFEST, DAILY_CSV, "output_sha256"
     )
@@ -538,6 +544,8 @@ def build(root: Path = Path(".")) -> dict:
         "nsdl_cash_flow_raw_archive_manifest": (nsdl_context or {}).get("raw_archive_manifest_sha256"),
         "nsdl_cash_flow_context": _sha256(nsdl_context_payload) if nsdl_context_payload else None,
         "bse_shareholding_fallback_probe_manifest": _sha256(bse_fallback_payload) if bse_fallback_payload else None,
+        "nse_shareholding_history_probe_manifest": _sha256(nse_history_payload) if nse_history_payload else None,
+        "nse_shareholding_unitholding_announcement_probe_manifest": _sha256(nse_announcement_payload) if nse_announcement_payload else None,
         "market_flow_history": historical_manifest["market_output_sha256"],
         "participant_derivatives_history": historical_manifest["participant_output_sha256"],
     }
@@ -581,6 +589,8 @@ def build(root: Path = Path(".")) -> dict:
         "ownership_reporting_date": share_manifest.get("latest_reporting_date"),
         "nsdl_market_flow_context": nsdl_context,
         "bse_shareholding_fallback_probe": bse_fallback,
+        "nse_shareholding_history_probe": nse_history,
+        "nse_shareholding_unitholding_announcements_probe": nse_announcements,
         "identity_crosswalk_candidate_count": (share_manifest.get("identity_crosswalk") or {}).get("candidate_count"),
         "identity_crosswalk_verified_count": (share_manifest.get("identity_crosswalk") or {}).get("verified_count"),
         "identity_crosswalk_unresolved_count": (share_manifest.get("identity_crosswalk") or {}).get("unresolved_count"),
@@ -617,6 +627,8 @@ def build(root: Path = Path(".")) -> dict:
         "participant_derivatives_window_statuses": participant_statuses,
         "nsdl_market_flow_context": nsdl_context,
         "bse_shareholding_fallback_probe": bse_fallback,
+        "nse_shareholding_history_probe": nse_history,
+        "nse_shareholding_unitholding_announcements_probe": nse_announcements,
         "composite_score_status": "not_scored_independent_evidence_dimensions_only",
         "source_hashes": source_hashes,
         "output_csv_sha256": output_sha,
@@ -626,6 +638,7 @@ def build(root: Path = Path(".")) -> dict:
             "No composite score is issued; independent evidence dimensions are preserved without arbitrary weights.",
             "Demerger index placeholders included at zero price remain in the index-row count but are excluded from tradable-stock ownership coverage and FPI scoring.",
             "NSDL FPI/DII cash flows are aggregate market-wide context only and are not attributed to any individual stock.",
+            "NSE symbol-history and shareholding/unitholding announcement probes are source discovery only; their records are not ownership inputs until their period, categories, identity and payload hashes are validated.",
             "A named bulk/block client match is not complete FPI trading flow and does not establish beneficial ownership.",
             "The CDSL registry snapshot follows the deal window and does not publish registration start dates.",
             "The Nifty 500 source states data as of the last trading day of the previous month; exact effective date is not supplied.",
