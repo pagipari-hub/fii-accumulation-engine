@@ -78,7 +78,7 @@ Before numeric scores or rankings are enabled:
 
 - The 501-row index snapshot contains 500 tradable securities plus the DUMMYHEG demerger placeholder.
 - The dated BSE identity crosswalk verifies 146 of 146 identity candidates.
-- Quarterly ownership is parsed and identity-verified for 494 of 500 tradable securities (98.8%); six remain unavailable because the NSE master has no current filing and the BSE corporate shareholding endpoint returned HTTP 403 from the collection runner.
+- Quarterly ownership is parsed and identity-verified for 494 of 500 tradable securities (98.8%). Three remaining EQ securities are being probed through the BSE shareholding fallback (the BSE endpoint returned HTTP 403); three REITs are being routed to the distinct NSE InvIT/REIT unitholding disclosure stream rather than treated as ordinary equity shareholding filings.
 - The NSDL archive provides 62 overlapping market-wide FPI/DII cash-equity observations. These are not attributed to stocks.
 - The current deal evidence contains one Grade 2 named FPI-client gross-buy lead. Registration timing is unverified and known net buy/sell totals are incomplete.
 
