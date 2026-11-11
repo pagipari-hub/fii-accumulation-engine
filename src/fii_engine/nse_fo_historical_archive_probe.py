@@ -68,7 +68,7 @@ def build_archive_url(dataset: str, trade_date: date, category: str, section: st
 def _unwrap_download(payload: bytes, dataset: str) -> tuple[bytes, str | None]:
     if not payload:
         raise ValueError(f"{dataset}: NSE returned an empty archive response")
-    if not payload.startswith(b"PK\\x03\\x04"):
+    if not payload.startswith(b"PK\x03\x04"):
         return payload, None
     try:
         with zipfile.ZipFile(BytesIO(payload)) as archive:
@@ -212,7 +212,7 @@ def run(root: Path, sessions: int, end_date: date, max_calendar_days: int) -> di
         ),
     }
     manifest_path = root / "data/raw/nse_fo_historical/historical_manifest.json"
-    encoded = (json.dumps(summary, indent=2, sort_keys=True, default=str) + "\\n").encode()
+    encoded = (json.dumps(summary, indent=2, sort_keys=True, default=str) + "\n").encode()
     digest = hashlib.sha256(encoded).hexdigest()
     _save_immutable(
         root / "data/raw/nse_fo_historical/manifests" / f"historical_manifest_{digest[:16]}.json",
