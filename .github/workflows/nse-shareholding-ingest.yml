@@ -263,6 +263,8 @@ jobs:
           assert manifest["index_placeholder_count"] == 1
           assert manifest["ownership_coverage_pct"] == 98.8
           assert manifest["ownership_index_row_coverage_pct"] == 98.6
+          assert manifest["nsdl_market_flow_context"]["normalized_date_count"] >= 60
+          assert manifest["nsdl_market_flow_context"]["stock_level_attribution"] is False
           assert manifest["composite_score_status"] == "not_scored_independent_evidence_dimensions_only"
           assert manifest["source_hashes"]["shareholding_identity_crosswalk"]
           print(json.dumps({
