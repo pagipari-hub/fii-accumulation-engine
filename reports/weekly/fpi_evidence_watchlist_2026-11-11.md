@@ -20,7 +20,7 @@ These remain N/A; no ownership values are imputed.
 ## Stock-specific FPI evidence
 
 - **Grade 1 candidates:** 0
-- **Grade 2 candidates:** 0
+- **Grade 2 candidates:** 1
 - **Named FPI-client gross-buy candidates:** 1
 
 | Security | Evidence grade | Deal evidence pattern | Registry timing | Known net status |
@@ -52,12 +52,13 @@ An HTTP 403 is an access restriction, not proof that a filing does not exist. No
 - **FII Accumulation Score:** N/A — stock-level verified net FPI transactions and a calibrated historical ownership-change series are not yet available for the full universe.
 - **Market Confirmation Score:** not published until its historical calibration and reproducibility gates pass.
 - **Composite score/ranking:** disabled.
+- Scoring weights, hard gates and calibration requirements are documented in docs/fii-accumulation-score-spec.md.
 - Market-wide FPI/DII flows are context only and are never treated as evidence that a specific stock was bought.
 
 ## Reproducibility
 
 - Matrix CSV SHA-256: d96df24dc28ccb0feff1fdddfe565154b0defdc7d494f85369b66f49e845d6dd
-- BSE fallback manifest SHA-256: 27b372b4bf3644e797485a41c9df01e2b76cf4a90ffc99ebb12c580b4b8a910f
+- BSE fallback manifest SHA-256: 88f67dfaf90b4106fed2bb4b0fda1edf41257b87bf9fa2e4dbc7d95dad02cd92
 - Ownership identity crosswalk SHA-256: 12258998e48b1203bbcbc708d6d3ee9c5fcb9f7d537d925d47ae3c392a5d52c8
 - NSDL normalized CSV SHA-256: 061bc2be35b00e26bd6250938c005ba1998fbc01044cac72c2d0e7cdf216d4c1
 - NSDL raw archive manifest SHA-256: b1f08e3af954dba8db2182464433b111311c74a2e29240893c8c5d25dc42fb3a
