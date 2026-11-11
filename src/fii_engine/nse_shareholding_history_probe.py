@@ -33,8 +33,8 @@ def probe(
     output_dir: Path,
     symbols: list[str] | None = None,
     delay: float = 0.3,
-    from_date: str = "01-04-2026",
-    to_date: str = "30-09-2026",
+    from_date: str = "01-07-2026",
+    to_date: str = "11-11-2026",
 ) -> dict:
     symbols = [symbol.strip().upper() for symbol in (symbols or DEFAULT_SYMBOLS)]
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -156,8 +156,8 @@ def main() -> None:
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--symbols", nargs="*", default=DEFAULT_SYMBOLS)
     parser.add_argument("--delay", type=float, default=0.3)
-    parser.add_argument("--from-date", default="01-04-2026")
-    parser.add_argument("--to-date", default="30-09-2026")
+    parser.add_argument("--from-date", default="01-07-2026")
+    parser.add_argument("--to-date", default="11-11-2026")
     args = parser.parse_args()
     report = probe(args.output_dir, args.symbols, args.delay, args.from_date, args.to_date)
     print(json.dumps({
