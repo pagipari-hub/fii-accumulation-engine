@@ -187,7 +187,7 @@ jobs:
         if: github.event_name != 'pull_request'
         run: python -m fii_engine.nse_shareholding_unitholding_announcement_probe --output-dir artifacts/nse-shareholding-announcements
 
-      - name: Probe BSE quarterly shareholding fallback for seven NSE-master gaps
+      - name: Probe BSE quarterly shareholding fallback for three remaining EQ securities
         if: github.event_name != 'pull_request'
         run: |
           python -m fii_engine.bse_shareholding_fallback_probe --candidates data/audits/bse_shareholding_fallback_candidates_2026-09-30.csv --output-dir artifacts/bse-shareholding-fallback --bse-udiff data/raw/shareholding/identity_evidence/BhavCopy_BSE_CM_0_0_0_20260930_F_0000_*.csv
