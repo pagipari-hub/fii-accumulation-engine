@@ -18,7 +18,7 @@ jobs:
         with:
           python-version: "3.11"
       - run: python -m pip install -e ".[dev]"
-      - run: pytest tests/test_nsdl_cash_flow_normalizer.py
+      - run: pytest
       - run: ruff check src/fii_engine/nsdl_cash_flow_normalizer.py tests/test_nsdl_cash_flow_normalizer.py
 
   live-normalization:
