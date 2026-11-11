@@ -74,10 +74,23 @@ jobs:
           python -m fii_engine.nse_security_master_probe --historical-date 2026-09-30 --output-dir artifacts/nse-security-master-probe
           python -m fii_engine.nse_shareholding_xbrl_entity_probe --candidates data/audits/shareholding_isin_mismatch_candidates_2026-09-30.csv --output-dir artifacts/nse-security-master-probe
           python -m fii_engine.bse_shareholding_scripcode_crosswalk --candidates data/audits/shareholding_isin_mismatch_candidates_2026-09-30.csv --xbrl-report artifacts/nse-security-master-probe/shareholding_xbrl_entity_probe.json --output-dir artifacts/nse-security-master-probe --reporting-date 2026-09-30
+          mkdir -p data/raw/shareholding/identity_evidence
+          cp artifacts/nse-security-master-probe/shareholding_bse_scripcode_isin_crosswalk.csv data/raw/shareholding/identity_evidence/
+          cp artifacts/nse-security-master-probe/shareholding_bse_scripcode_isin_crosswalk.json data/raw/shareholding/identity_evidence/
+          cp artifacts/nse-security-master-probe/BhavCopy_BSE_CM_0_0_0_20260930_F_0000_*.csv data/raw/shareholding/identity_evidence/
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report = Path("data/raw/shareholding/identity_evidence/shareholding_bse_scripcode_isin_crosswalk.json")
+          value = json.loads(report.read_text(encoding="utf-8"))
+          raw = next(Path("data/raw/shareholding/identity_evidence").glob("BhavCopy_BSE_CM_0_0_0_20260930_F_0000_*.csv"))
+          value["bse_source_path"] = str(raw)
+          report.write_text(json.dumps(value, indent=2) + "\\n", encoding="utf-8")
+          PY
 
       - name: Capture official NSE shareholding filings and FPI ownership
         if: github.event_name != 'pull_request'
-        run: python -m fii_engine.nse_shareholding_ingest --repo-root . --identity-crosswalk artifacts/nse-security-master-probe/shareholding_bse_scripcode_isin_crosswalk.csv
+        run: python -m fii_engine.nse_shareholding_ingest --repo-root . --identity-crosswalk data/raw/shareholding/identity_evidence/shareholding_bse_scripcode_isin_crosswalk.csv
 
       - name: Validate filing, identity and ownership provenance
         if: github.event_name != 'pull_request'
@@ -178,6 +191,7 @@ jobs:
           path: |
             data/raw/shareholding/
             artifacts/nse-security-master-probe/
+            data/raw/shareholding/identity_evidence/
             data/snapshots/shareholding_master/
             data/snapshots/shareholding_filings/
             data/snapshots/shareholding_ownership/
@@ -189,10 +203,10 @@ jobs:
       - name: Commit normalized append-only filings and ownership snapshots
         if: github.event_name != 'pull_request'
         run: |
-          if [[ -n "$(git status --porcelain data/snapshots/shareholding_master data/snapshots/shareholding_filings data/snapshots/shareholding_ownership data/raw/shareholding/current_manifest.json data/raw/shareholding/shareholding_ownership_current.csv data/raw/fpi_evidence_blend data/snapshots/fpi_evidence_blend)" ]]; then
+          if [[ -n "$(git status --porcelain data/snapshots/shareholding_master data/snapshots/shareholding_filings data/snapshots/shareholding_ownership data/raw/shareholding/current_manifest.json data/raw/shareholding/shareholding_ownership_current.csv data/raw/shareholding/identity_evidence data/raw/fpi_evidence_blend data/snapshots/fpi_evidence_blend)" ]]; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add data/snapshots/shareholding_master data/snapshots/shareholding_filings data/snapshots/shareholding_ownership data/raw/shareholding/current_manifest.json data/raw/shareholding/shareholding_ownership_current.csv data/raw/fpi_evidence_blend data/snapshots/fpi_evidence_blend
+            git add data/snapshots/shareholding_master data/snapshots/shareholding_filings data/snapshots/shareholding_ownership data/raw/shareholding/current_manifest.json data/raw/shareholding/shareholding_ownership_current.csv data/raw/shareholding/identity_evidence data/raw/fpi_evidence_blend data/snapshots/fpi_evidence_blend
             git commit -m "data: record official NSE quarterly FPI ownership"
             bash scripts/retry_git_push.sh "$GITHUB_REF_NAME"
           else
