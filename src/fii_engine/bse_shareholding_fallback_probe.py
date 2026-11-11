@@ -42,7 +42,7 @@ def _get(url: str, accept: str) -> tuple[bytes, dict]:
                     "response_url": response.geturl(),
                 }
         except HTTPError as exc:
-            if exc.code in {403, 429, 500, 502, 503, 504} and attempt < 3:
+            if exc.code in {429, 500, 502, 503, 504} and attempt < 3:
                 time.sleep(2 ** attempt)
                 continue
             raise RuntimeError(f"BSE request failed ({exc.code}): {url}") from exc
@@ -128,7 +128,17 @@ def probe(candidates_csv: Path, output_dir: Path, bse_udiff_path: Path) -> dict:
             raise ValueError(f"BSE UDiFF identifier/ISIN/series mismatch: {symbol}")
     output_dir.mkdir(parents=True, exist_ok=True)
     observations = []
+    exchange_blocked = False
     for index, candidate in enumerate(candidates):
+        if exchange_blocked:
+            observations.append({
+                "symbol": candidate["symbol"],
+                "reporting_date": candidate["reporting_date"],
+                "universe_isin": candidate["universe_isin"],
+                "bse_scrip_code": str(candidate["bse_scrip_code"]).strip(),
+                "status": "not_attempted_after_exchange_403",
+            })
+            continue
         code = str(candidate["bse_scrip_code"]).strip()
         url = f"{API_BASE}?scripcode={quote(code)}&flag=0&indtype="
         record = {
@@ -178,6 +188,8 @@ def probe(candidates_csv: Path, output_dir: Path, bse_udiff_path: Path) -> dict:
         except Exception as exc:
             record["status"] = "probe_error"
             record["error"] = str(exc)
+            if "403" in str(exc):
+                exchange_blocked = True
         observations.append(record)
         if index + 1 < len(candidates):
             time.sleep(0.25)
@@ -188,6 +200,7 @@ def probe(candidates_csv: Path, output_dir: Path, bse_udiff_path: Path) -> dict:
         "reporting_date": "2026-09-30",
         "candidate_count": len(candidates),
         "bse_udiff_source_sha256": bse_digest,
+        "api_access_status": "http_403_blocked" if exchange_blocked else "responses_received",
         "observations": observations,
         "status_counts": {},
         "scope_boundary": (
