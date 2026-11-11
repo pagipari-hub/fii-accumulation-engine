@@ -120,6 +120,7 @@ def build_report(
         f"- **Grade 1 candidates:** {len(grade_1)}",
         f"- **Grade 2 candidates:** {len(grade_2)}",
         f"- **Named FPI-client gross-buy candidates:** {len(candidates)}",
+        f"- **Other tradable securities without a qualifying named-client gross-buy candidate:** {len(tradable) - len(candidates)}.",
         "",
     ])
     if candidates:
