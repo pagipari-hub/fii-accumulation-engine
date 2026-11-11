@@ -1,7 +1,7 @@
 {
   "dataset": "nse_shareholding_fpi_ownership",
   "publisher": "National Stock Exchange of India",
-  "retrieved_at_utc": "2026-11-11T17:21:50.168149+00:00",
+  "retrieved_at_utc": "2026-11-11T17:27:17.913688+00:00",
   "status": "partial_identity_coverage",
   "source_page": "https://www.nseindia.com/companies-listing/corporate-filings-shareholding-pattern/",
   "master_url": "https://www.nseindia.com/api/corporate-share-holdings-master?index=equities",
@@ -18,13 +18,24 @@
     "unresolved_count": 0,
     "bse_source_sha256": "e2b7cea2672aed05df3ce55f3c531a153cb2b5215e2b493b2735cd9be116acce"
   },
+  "index_placeholder_classification": {
+    "path": "data/audits/nifty500_index_placeholders_2026-11-09.csv",
+    "sha256": "05cd88ad02eed6bce8622a9e887e1545035c93c01c1d5d53aa543e9bca4147ba",
+    "placeholder_count": 1,
+    "symbols": [
+      "DUMMYHEG"
+    ]
+  },
   "current_universe_count": 501,
+  "current_tradable_universe_count": 500,
+  "index_placeholder_count": 1,
   "master_records_for_current_universe": 494,
   "reporting_dates": [
     "2026-09-30"
   ],
   "identity_status_counts": {
-    "not_found_in_current_master": 7,
+    "not_applicable_index_placeholder": 1,
+    "not_found_in_current_master": 6,
     "verified": 494
   },
   "eligible_filing_count": 494,
@@ -533,11 +544,11 @@
   "ownership_row_count": 501,
   "latest_reporting_date": "2026-09-30",
   "latest_quarter_parsed_count": 494,
-  "latest_quarter_coverage_pct": 98.6,
+  "latest_quarter_coverage_pct": 98.8,
   "ownership_current_path": "data/raw/shareholding/shareholding_ownership_current.csv",
-  "ownership_snapshot_path": "data/snapshots/shareholding_ownership/shareholding_ownership_2026-09-30_c2399ba42d73a2b1.csv",
-  "ownership_snapshot_sha256": "c2399ba42d73a2b18007000c82b5d5ebbefa4364114cc9ded59e342f6d996c83",
-  "ownership_current_sha256": "c2399ba42d73a2b18007000c82b5d5ebbefa4364114cc9ded59e342f6d996c83",
+  "ownership_snapshot_path": "data/snapshots/shareholding_ownership/shareholding_ownership_2026-09-30_877d97f99a90ae5f.csv",
+  "ownership_snapshot_sha256": "877d97f99a90ae5f5c4b0fa921dfdceb7ba68d5a19f005113c088aee918ad697",
+  "ownership_current_sha256": "877d97f99a90ae5f5c4b0fa921dfdceb7ba68d5a19f005113c088aee918ad697",
   "master_snapshot_path": "data/snapshots/shareholding_master/shareholding_master_2026-09-30_a0a6fb7389aad66f.json",
   "master_snapshot_sha256": "a0a6fb7389aad66ffda85816721a4ae04b034f4bb89ecb421d7bc0017beb49ce",
   "parser_version": 4,
@@ -549,6 +560,7 @@
     "FPI Category I and II are extracted from XBRL dimensions; other foreign institutions remain separate.",
     "Quarter-end ownership is not a dated transaction and does not prove when shares were bought.",
     "Missing or unparsed categories remain null; they are never assumed to be zero.",
-    "The master API may expose only the currently available filing period; older captured snapshots are retained locally."
+    "The master API may expose only the currently available filing period; older captured snapshots are retained locally.",
+    "Demerger index placeholders included at zero price remain in the 501-row index snapshot but are excluded from tradable-stock ownership coverage and FPI scoring."
   ]
 }

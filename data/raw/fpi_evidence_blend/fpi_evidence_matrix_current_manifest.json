@@ -2,14 +2,15 @@
   "dataset": "nifty500_blended_fpi_accumulation_evidence_matrix",
   "parser_version": 1,
   "as_of_trade_date": "2026-11-09",
-  "output_csv_sha256": "a094c44b17e9cb2ac10acb06bcd8b3eb85dfce0dbbfcf3a61bf9e43287be2c60",
+  "output_csv_sha256": "d96df24dc28ccb0feff1fdddfe565154b0defdc7d494f85369b66f49e845d6dd",
   "source_hashes": {
     "universe": "68e2eac52f778cb8b1b63c2dd5617386a942b6313553f58ef2ef7f4260dfa469",
+    "universe_placeholder_classification": "05cd88ad02eed6bce8622a9e887e1545035c93c01c1d5d53aa543e9bca4147ba",
     "daily_stock_features": "2d9b201f31100ec5b5f2b6409e93e377e70b49c2e51f72fc65d80430570f245f",
     "historical_stock_features": "cef668963bd5658c80df6fc5367c781e1d25093a5ab93dfb3a475939d3bbd26c",
     "fpi_deal_stock_summary": "547ce6f5bd428fbc669cc345466723c0e027710d94834a6c802ed3d50f16e34a",
     "cdsl_registry_snapshot": "ed003b061a033b6ba26c7b8b2238aec8ab2d1682edd0b2688277aefcfd66dcb4",
-    "shareholding_ownership": "c2399ba42d73a2b18007000c82b5d5ebbefa4364114cc9ded59e342f6d996c83",
+    "shareholding_ownership": "877d97f99a90ae5f5c4b0fa921dfdceb7ba68d5a19f005113c088aee918ad697",
     "shareholding_identity_crosswalk": "e2b7cea2672aed05df3ce55f3c531a153cb2b5215e2b493b2735cd9be116acce",
     "market_flow_history": "8d962a06ddff5208d376f0e88aa7561e7960fce56edac17937c3888ea2f093cb",
     "participant_derivatives_history": "8b7dfc0e2c1dcc140e09a25ff8b0a951642a0f7604fee8d49624aa65993a821f"
@@ -22,24 +23,41 @@
   "registry_snapshot_sha256": "ed003b061a033b6ba26c7b8b2238aec8ab2d1682edd0b2688277aefcfd66dcb4",
   "ownership_reporting_date": "2026-09-30",
   "universe_snapshot_manifest_path": "data/snapshots/universe/nifty500_68e2eac52f778cb8.json",
-  "snapshot_identity_sha256": "54ce727cdde44d27fd2298840a19068ef21ed4b1aeb6c02c5d0001956bbd2a47",
+  "universe_placeholder_classification": {
+    "path": "data/audits/nifty500_index_placeholders_2026-11-09.csv",
+    "sha256": "05cd88ad02eed6bce8622a9e887e1545035c93c01c1d5d53aa543e9bca4147ba",
+    "placeholder_count": 1,
+    "symbols": [
+      "DUMMYHEG"
+    ]
+  },
+  "snapshot_identity_sha256": "64a26881a9bc6638fd67083fc865cb1afd50cfae82d5845506a468a09083f594",
   "status": "complete",
-  "generated_at_utc": "2026-11-11T17:14:58.349889+00:00",
+  "generated_at_utc": "2026-11-11T17:27:18.758006+00:00",
   "stock_count": 501,
+  "tradable_stock_count": 500,
+  "index_placeholder_count": 1,
+  "index_placeholder_symbols": [
+    "DUMMYHEG"
+  ],
   "direct_fpi_client_gross_buy_candidate_count": 1,
   "grade_1_count": 0,
   "grade_2_count": 1,
   "ownership_parsed_verified_count": 494,
-  "ownership_coverage_pct": 98.6,
+  "ownership_coverage_pct": 98.8,
+  "ownership_index_row_coverage_pct": 98.6,
   "ownership_status_counts": {
     "parsed_verified_identity": 494,
-    "not_found_in_current_master": 7
+    "not_found_in_current_master": 6,
+    "not_applicable_index_placeholder": 1
   },
   "daily_join_status_counts": {
-    "isin_exact": 501
+    "isin_exact": 500,
+    "not_applicable_index_placeholder": 1
   },
   "historical_join_status_counts": {
-    "isin_exact": 501
+    "isin_exact": 500,
+    "not_applicable_index_placeholder": 1
   },
   "deal_status_counts": {
     "no_disclosed_deal_in_available_snapshots": 494,
@@ -3264,10 +3282,11 @@
     }
   ],
   "composite_score_status": "not_scored_independent_evidence_dimensions_only",
-  "snapshot_path": "data/snapshots/fpi_evidence_blend/fpi_evidence_matrix_20261109_a094c44b17e9cb2a.csv",
-  "snapshot_manifest_path": "data/snapshots/fpi_evidence_blend/fpi_evidence_matrix_20261109_a094c44b17e9_54ce727cdde4.json",
+  "snapshot_path": "data/snapshots/fpi_evidence_blend/fpi_evidence_matrix_20261109_d96df24dc28ccb0f.csv",
+  "snapshot_manifest_path": "data/snapshots/fpi_evidence_blend/fpi_evidence_matrix_20261109_d96df24dc28c_64a26881a9bc.json",
   "limitations": [
     "No composite score is issued; independent evidence dimensions are preserved without arbitrary weights.",
+    "Demerger index placeholders included at zero price remain in the index-row count but are excluded from tradable-stock ownership coverage and FPI scoring.",
     "A named bulk/block client match is not complete FPI trading flow and does not establish beneficial ownership.",
     "The CDSL registry snapshot follows the deal window and does not publish registration start dates.",
     "The Nifty 500 source states data as of the last trading day of the previous month; exact effective date is not supplied.",
