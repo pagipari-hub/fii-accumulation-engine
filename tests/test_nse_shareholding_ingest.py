@@ -318,6 +318,7 @@ def test_zero_price_index_placeholder_is_not_reported_as_missing_filing():
         "100", "ABC", "ABC Limited", "INE000A01001",
         "09-OCT-2026 17:00:00", "N", "https://nsearchives.nseindia.com/corporate/xbrl/abc.xml",
     )
+    master["reporting_date"] = "2026-09-30"
     rows = module._build_ownership_rows(
         [
             {"symbol": "ABC", "company_name": "ABC Limited", "isin": "INE000A01001"},
