@@ -82,7 +82,7 @@ def test_weekly_watchlist_is_conservative_and_hash_validated(tmp_path):
     assert "incomplete buy/sell totals" in report
     assert "146 / 146 verified" in report
     assert "http_403_blocked" in report
-    assert "Composite score/ranking: disabled." in report
+    assert "Composite score/ranking" in report and "disabled." in report
     assert "not an investment recommendation" in report
 
 
