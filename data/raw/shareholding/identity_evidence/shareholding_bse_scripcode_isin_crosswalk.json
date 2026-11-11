@@ -1,0 +1,34 @@
+{
+  "publisher": "Bombay Stock Exchange",
+  "retrieved_at_utc": "2026-11-11T17:14:51.280700+00:00",
+  "reporting_date": "2026-09-30",
+  "candidate_count": 146,
+  "xbrl_observation_count": 146,
+  "bse_source_url": "https://www.bseindia.com/download/BhavCopy/Equity/BhavCopy_BSE_CM_0_0_0_20260930_F_0000.CSV",
+  "bse_source_http_status": 200,
+  "bse_source_bytes": 868796,
+  "bse_source_sha256": "e2b7cea2672aed05df3ce55f3c531a153cb2b5215e2b493b2735cd9be116acce",
+  "bse_source_path": "artifacts/nse-security-master-probe/BhavCopy_BSE_CM_0_0_0_20260930_F_0000_e2b7cea2672aed05.csv",
+  "bse_source_rows": 5077,
+  "counts": {
+    "verified_exact_dated_bse_scripcode_isin_match": 131,
+    "verified_exact_dated_bse_symbol_isin_match": 15
+  },
+  "verified_count": 146,
+  "unresolved_count": 0,
+  "identity_safety": {
+    "exactly_one_bse_scripcode_or_symbol_required": true,
+    "dated_bse_identifier_to_isin_required": true,
+    "exact_isin_match_to_dated_nse_universe_required": true,
+    "no_name_only_match": true,
+    "missing_bhavcopy_row_remains_unresolved": true
+  },
+  "output_csv": "artifacts/nse-security-master-probe/shareholding_bse_scripcode_isin_crosswalk.csv",
+  "additional_missing_isin_audit": {
+    "candidate_count": 3,
+    "verified_count": 3,
+    "counts": {
+      "verified_exact_dated_bse_scripcode_isin_match": 3
+    }
+  }
+}

@@ -2,14 +2,15 @@
   "dataset": "nifty500_blended_fpi_accumulation_evidence_matrix",
   "parser_version": 1,
   "as_of_trade_date": "2026-11-09",
-  "output_csv_sha256": "4373cf62c494db1dbb21486ae085553c628e3eb2d4e7c2e0d5151e736ab707e9",
+  "output_csv_sha256": "a094c44b17e9cb2ac10acb06bcd8b3eb85dfce0dbbfcf3a61bf9e43287be2c60",
   "source_hashes": {
     "universe": "68e2eac52f778cb8b1b63c2dd5617386a942b6313553f58ef2ef7f4260dfa469",
     "daily_stock_features": "2d9b201f31100ec5b5f2b6409e93e377e70b49c2e51f72fc65d80430570f245f",
     "historical_stock_features": "cef668963bd5658c80df6fc5367c781e1d25093a5ab93dfb3a475939d3bbd26c",
     "fpi_deal_stock_summary": "547ce6f5bd428fbc669cc345466723c0e027710d94834a6c802ed3d50f16e34a",
     "cdsl_registry_snapshot": "ed003b061a033b6ba26c7b8b2238aec8ab2d1682edd0b2688277aefcfd66dcb4",
-    "shareholding_ownership": "5629c60cebfd90a2d885c9a757b9c9934af96153bd520e1fdf56b5a1612c29df",
+    "shareholding_ownership": "c2399ba42d73a2b18007000c82b5d5ebbefa4364114cc9ded59e342f6d996c83",
+    "shareholding_identity_crosswalk": "e2b7cea2672aed05df3ce55f3c531a153cb2b5215e2b493b2735cd9be116acce",
     "market_flow_history": "8d962a06ddff5208d376f0e88aa7561e7960fce56edac17937c3888ea2f093cb",
     "participant_derivatives_history": "8b7dfc0e2c1dcc140e09a25ff8b0a951642a0f7604fee8d49624aa65993a821f"
   },
@@ -21,20 +22,18 @@
   "registry_snapshot_sha256": "ed003b061a033b6ba26c7b8b2238aec8ab2d1682edd0b2688277aefcfd66dcb4",
   "ownership_reporting_date": "2026-09-30",
   "universe_snapshot_manifest_path": "data/snapshots/universe/nifty500_68e2eac52f778cb8.json",
-  "snapshot_identity_sha256": "8ce0ae4bdd9f32f4b946e2b2afa431af72aaed220a5e865c2f98c6d847e448c8",
+  "snapshot_identity_sha256": "54ce727cdde44d27fd2298840a19068ef21ed4b1aeb6c02c5d0001956bbd2a47",
   "status": "complete",
-  "generated_at_utc": "2026-11-10T23:50:55.126467+00:00",
+  "generated_at_utc": "2026-11-11T17:14:58.349889+00:00",
   "stock_count": 501,
   "direct_fpi_client_gross_buy_candidate_count": 1,
   "grade_1_count": 0,
   "grade_2_count": 1,
-  "ownership_parsed_verified_count": 348,
-  "ownership_coverage_pct": 69.46,
+  "ownership_parsed_verified_count": 494,
+  "ownership_coverage_pct": 98.6,
   "ownership_status_counts": {
-    "isin_mismatch": 143,
-    "parsed_verified_identity": 348,
-    "not_found_in_current_master": 7,
-    "identity_unverified": 3
+    "parsed_verified_identity": 494,
+    "not_found_in_current_master": 7
   },
   "daily_join_status_counts": {
     "isin_exact": 501
@@ -3265,15 +3264,15 @@
     }
   ],
   "composite_score_status": "not_scored_independent_evidence_dimensions_only",
-  "snapshot_path": "data/snapshots/fpi_evidence_blend/fpi_evidence_matrix_20261109_4373cf62c494db1d.csv",
-  "snapshot_manifest_path": "data/snapshots/fpi_evidence_blend/fpi_evidence_matrix_20261109_4373cf62c494_8ce0ae4bdd9f.json",
+  "snapshot_path": "data/snapshots/fpi_evidence_blend/fpi_evidence_matrix_20261109_a094c44b17e9cb2a.csv",
+  "snapshot_manifest_path": "data/snapshots/fpi_evidence_blend/fpi_evidence_matrix_20261109_a094c44b17e9_54ce727cdde4.json",
   "limitations": [
     "No composite score is issued; independent evidence dimensions are preserved without arbitrary weights.",
     "A named bulk/block client match is not complete FPI trading flow and does not establish beneficial ownership.",
     "The CDSL registry snapshot follows the deal window and does not publish registration start dates.",
     "The Nifty 500 source states data as of the last trading day of the previous month; exact effective date is not supplied.",
     "Quarterly FPI ownership has one reporting quarter only; no quarter-on-quarter change series is available yet.",
-    "Shareholding identity coverage is partial; mismatched or unverified identities remain null.",
+    "Dated BSE crosswalk identities are accepted only when reporting date, filing record ID, XBRL URL/hash, and universe ISIN all match; any remaining mismatched or unverified identities remain null.",
     "Market-wide FII/FPI and DII flows have only one session; 5/20/60-session baselines are insufficient.",
     "Participant OI and volume are category aggregates, not participant-by-stock positions, and currently have only one session.",
     "No disclosed bulk/block deal does not mean no FPI trading; it means no named transaction appeared in the collected reports.",
