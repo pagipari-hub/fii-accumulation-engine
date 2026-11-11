@@ -43,7 +43,7 @@ jobs:
           python-version: "3.11"
       - run: python -m pip install -e .
       - name: Probe official NSE identity reference files
-        run: python -m fii_engine.nse_security_master_probe --output-dir artifacts/nse-security-master-probe
+        run: python -m fii_engine.nse_security_master_probe --historical-date 2026-09-30 --output-dir artifacts/nse-security-master-probe
       - name: Upload raw CSVs and source-contract manifest
         if: always()
         uses: actions/upload-artifact@v4
