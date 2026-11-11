@@ -206,8 +206,11 @@ def test_build_blended_matrix_preserves_missingness_and_full_universe(tmp_path):
         "participant_oi_session_count": 1, "participant_volume_session_count": 1,
     })
     _write_json(tmp_path / "data/raw/fpi_deal_attribution/fpi_deal_attribution_current_manifest.json", {
-        "stock_summary_csv_sha256": deal_hash, "universe_csv_sha256": universe_hash,
+        "stock_summary_csv_sha256": deal_hash, "event_csv_sha256": "d" * 64,
+        "universe_csv_sha256": universe_hash,
         "trade_date_window_start": "2026-10-30", "trade_date_window_end": "2026-11-06",
+        "lookback_calendar_days": 7, "source_row_count": 2, "deduplicated_event_count": 1,
+        "current_registry_matched_fpi_client_event_count": 1, "unmatched_event_count": 0,
         "registry_snapshot_date": "2026-11-08",
         "registry_snapshot_sha256": "a" * 64,
     })
