@@ -232,7 +232,7 @@ jobs:
           assert manifest["index_placeholder_count"] == 1
           assert manifest["latest_quarter_coverage_pct"] == 98.8
           bse_fallback = json.loads(Path("artifacts/bse-shareholding-fallback/bse_shareholding_fallback_probe_manifest.json").read_text(encoding="utf-8"))
-          assert bse_fallback["candidate_count"] == 6
+          assert bse_fallback["candidate_count"] == 3  # EQ-only BSE fallback; three REITs use NSE unitholding disclosures
           print(json.dumps({"bse_fallback_status_counts": bse_fallback["status_counts"]}, indent=2))
           master_raw = root / manifest["master_raw_path"]
           assert master_raw.is_file()
