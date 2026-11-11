@@ -129,6 +129,7 @@ def test_ingests_fpi_categories_and_selects_latest_revision(tmp_path, monkeypatc
     assert result["eligible_filing_count"] == 3
     assert result["fetched_filing_count"] == 3
     assert result["fetch_error_count"] == 0
+    assert result["identity_status_counts"]["not_found_in_current_master"] == 498
     assert result["latest_quarter_parsed_count"] == 2
     assert result["latest_quarter_coverage_pct"] == 0.4
 
