@@ -44,6 +44,17 @@ def test_build_blended_matrix_preserves_missingness_and_full_universe(tmp_path):
         "publisher": "NSE Indices",
         "source_page": "https://www.niftyindices.com/indices/equity/broad-based-indices/NIFTY-500",
     })
+    _write_csv(tmp_path / "data/audits/nifty500_index_placeholders_2026-11-09.csv", [{
+        "symbol": "TEST000",
+        "security_name": "Test demerged entity",
+        "classification": "demerged_index_placeholder",
+        "effective_date": "2026-09-07",
+        "price_treatment": "zero_price_without_divisor_adjustment",
+        "source_title": "Test index placeholder notice",
+        "source_date": "2026-09-03",
+        "source_url": "https://www.niftyindices.com/press-release",
+        "reason": "Non-tradable index placeholder",
+    }])
 
     daily_rows = []
     historical_rows = []
@@ -198,12 +209,18 @@ def test_build_blended_matrix_preserves_missingness_and_full_universe(tmp_path):
     with output_path.open("r", encoding="utf-8", newline="") as handle:
         output = list(csv.DictReader(handle))
     assert result["stock_count"] == 501
+    assert result["tradable_stock_count"] == 500
+    assert result["index_placeholder_count"] == 1
+    assert result["ownership_coverage_pct"] == 0.2
+    assert result["ownership_index_row_coverage_pct"] == 0.2
+    assert result["ownership_status_counts"]["not_applicable_index_placeholder"] == 1
     assert result["composite_score_status"] == "not_scored_independent_evidence_dimensions_only"
     assert result["ownership_parsed_verified_count"] == 1
     assert len(output) == 501
 
     abc = next(row for row in output if row["symbol"] == "ABC")
-    no_data = next(row for row in output if row["symbol"] == "TEST000")
+    no_data = next(row for row in output if row["symbol"] == "TEST001")
+    placeholder = next(row for row in output if row["symbol"] == "TEST000")
     assert abc["direct_fpi_client_gross_buy_candidate"] == "true"
     assert abc["fpi_deal_evidence_grade"].startswith("grade_2")
     assert abc["5s_cash_return_pct"] == "2"
@@ -216,6 +233,12 @@ def test_build_blended_matrix_preserves_missingness_and_full_universe(tmp_path):
     assert no_data["shareholding_join_status"] == "isin_mismatch"
     assert no_data["shareholding_fpi_total_ownership_percentage_points"] == ""
     assert no_data["direct_fpi_client_gross_buy_candidate"] == "false"
+    assert placeholder["universe_member_type"] == "index_adjustment_placeholder"
+    assert placeholder["tradability_status"] == "non_tradable_zero_price"
+    assert placeholder["fpi_scoring_eligible"] == "false"
+    assert placeholder["shareholding_join_status"] == "not_applicable_index_placeholder"
+    assert placeholder["fpi_deal_evidence_grade"] == "not_applicable_index_placeholder"
+    assert placeholder["evidence_summary"] == "non_tradable_demerger_index_placeholder"
     assert len(result["market_flow_window_statuses"]) == 6
     assert all(item["status"] == "insufficient_history" for item in result["market_flow_window_statuses"])
 
