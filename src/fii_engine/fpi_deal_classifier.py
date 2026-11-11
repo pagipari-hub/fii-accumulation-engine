@@ -275,7 +275,12 @@ def _universe_membership(
         "universe_series": universe_row.get("series", "") if universe_row else "",
     }
 
-def _load_latest_deal_manifests(root: Path, lookback_days: int) -> tuple[list[dict], date, date]:
+def _load_latest_deal_manifests(
+    root: Path,
+    lookback_days: int,
+    requested_start: date | None = None,
+    requested_end: date | None = None,
+) -> tuple[list[dict], date, date]:
     manifest_dir = root / DEAL_MANIFEST_DIR
     if not manifest_dir.exists():
         raise FileNotFoundError(f"NSE bulk/block manifest directory missing: {manifest_dir}")
@@ -300,8 +305,17 @@ def _load_latest_deal_manifests(root: Path, lookback_days: int) -> tuple[list[di
             raise ValueError(f"conflicting latest NSE deal manifests for {key}")
     if not all_dates:
         raise ValueError("no valid NSE bulk/block deal manifests found")
-    end_date = max(date.fromisoformat(value) for value in all_dates)
-    start_date = end_date - timedelta(days=lookback_days)
+    if requested_start is not None or requested_end is not None:
+        if requested_start is None or requested_end is None:
+            raise ValueError("explicit deal window requires both from-date and to-date")
+        start_date, end_date = requested_start, requested_end
+        if start_date > end_date:
+            raise ValueError("deal from-date must not be after to-date")
+        if (end_date - start_date).days > 365:
+            raise ValueError("explicit deal window must not exceed 365 calendar days")
+    else:
+        end_date = max(date.fromisoformat(value) for value in all_dates)
+        start_date = end_date - timedelta(days=lookback_days)
     selected = [
         (manifest, path)
         for (deal_type, trade_date), (manifest, path) in latest.items()
@@ -606,9 +620,25 @@ def _stock_summary(
     return results
 
 
-def classify(root: Path = Path("."), lookback_days: int = 7) -> dict:
-    if lookback_days < 1 or lookback_days > 60:
-        raise ValueError("lookback_days must be between 1 and 60")
+def classify(
+    root: Path = Path("."),
+    lookback_days: int = 7,
+    from_value: str | None = None,
+    to_value: str | None = None,
+) -> dict:
+    if from_value is None and to_value is None:
+        if lookback_days < 1 or lookback_days > 60:
+            raise ValueError("lookback_days must be between 1 and 60 when using a rolling window")
+        requested_start = requested_end = None
+    else:
+        if not from_value or not to_value:
+            raise ValueError("explicit deal window requires both --from-date and --to-date")
+        requested_start = datetime.strptime(from_value, "%d-%m-%Y").date()
+        requested_end = datetime.strptime(to_value, "%d-%m-%Y").date()
+        if requested_start > requested_end:
+            raise ValueError("deal from-date must not be after to-date")
+        if (requested_end - requested_start).days > 365:
+            raise ValueError("explicit deal window must not exceed 365 calendar days")
     registry_manifest, registry_index = _load_registry(root)
     registry_snapshot_date = date.fromisoformat(registry_manifest["retrieved_date_ist"])
     (
@@ -616,7 +646,7 @@ def classify(root: Path = Path("."), lookback_days: int = 7) -> dict:
         universe_rows, universe_metadata
     ) = _load_universe(root)
     selected_manifests, start_date, end_date = _load_latest_deal_manifests(
-        root, lookback_days
+        root, lookback_days, requested_start, requested_end
     )
     source_rows, source_refs = _load_deal_rows(root, selected_manifests)
     events = _deduplicate_cross_report_rows(source_rows)
@@ -645,7 +675,7 @@ def classify(root: Path = Path("."), lookback_days: int = 7) -> dict:
         "dataset": "nse_bulk_block_deal_fpi_counterparty_classification",
         "parser_version": PARSER_VERSION,
         "status": "complete" if events else "complete_no_deals",
-        "lookback_calendar_days": lookback_days,
+        "lookback_calendar_days": (end_date - start_date).days,
         "trade_date_window_start": start_date.isoformat(),
         "trade_date_window_end": end_date.isoformat(),
         "registry_snapshot_date": registry_snapshot_date.isoformat(),
@@ -770,8 +800,13 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=Path("."))
     parser.add_argument("--lookback-days", type=int, default=7)
+    parser.add_argument("--from-date", type=str, default=None, help="DD-MM-YYYY")
+    parser.add_argument("--to-date", type=str, default=None, help="DD-MM-YYYY")
     args = parser.parse_args()
-    print(json.dumps(classify(args.root, args.lookback_days), indent=2))
+    print(json.dumps(
+        classify(args.root, args.lookback_days, args.from_date, args.to_date),
+        indent=2,
+    ))
 
 
 if __name__ == "__main__":
