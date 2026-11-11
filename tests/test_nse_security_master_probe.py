@@ -37,7 +37,7 @@ def test_inspects_compressed_historical_mii_security_master():
 
     from fii_engine.nse_security_master_probe import inspect_gzip_csv
 
-    payload = gzip.compress(b"SYMBOL,SERIES,ISIN\\nABC,EQ,INE000A01001\\n")
+    payload = gzip.compress(b"SYMBOL,SERIES,ISIN\nABC,EQ,INE000A01001\n")
     result = inspect_gzip_csv(payload, source_name="historical_mii_security_master")
     assert result["header"] == ["SYMBOL", "SERIES", "ISIN"]
     assert result["row_count"] == 1
