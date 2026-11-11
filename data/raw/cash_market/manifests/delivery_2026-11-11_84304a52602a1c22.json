@@ -1,0 +1,74 @@
+{
+  "dataset": "nse_cm_security_delivery",
+  "publisher": "National Stock Exchange of India",
+  "reference_url": "https://www.nseindia.com/all-reports",
+  "catalogue_api": "https://www.nseindia.com/api/daily-reports?key=CM",
+  "report": {
+    "kind": "delivery",
+    "display_name": "Full Bhavcopy and Security Deliverable data",
+    "report_key": "CM-BHAVDATA-FULL",
+    "filename": "sec_bhavdata_full_11112026.csv",
+    "trading_date": "2026-11-11",
+    "catalogue_group": "CurrentDay",
+    "download_url": "https://nsearchives.nseindia.com/products/content/sec_bhavdata_full_11112026.csv",
+    "reported_file_size": "397.15 KB",
+    "file_hash_key": "CM-BHAVDATA-FULL-2"
+  },
+  "retrieved_at_utc": "2026-11-11T22:30:11Z",
+  "finality": "final",
+  "trade_date": "2026-11-11",
+  "raw_path": "data/raw/cash_market/delivery_2026-11-11_d83003c4c46a2c97.csv",
+  "raw_sha256": "d83003c4c46a2c9765b2c54d941ab95f5c64e779b3cb20790a4a9ac68d21a85a",
+  "raw_bytes": 406680,
+  "parsed_path": null,
+  "parsed_sha256": null,
+  "parser_version": 1,
+  "validation": {
+    "row_count": 3583,
+    "column_count": 15,
+    "columns": [
+      "SYMBOL",
+      "SERIES",
+      "DATE1",
+      "PREV_CLOSE",
+      "OPEN_PRICE",
+      "HIGH_PRICE",
+      "LOW_PRICE",
+      "LAST_PRICE",
+      "CLOSE_PRICE",
+      "AVG_PRICE",
+      "TTL_TRD_QNTY",
+      "TURNOVER_LACS",
+      "NO_OF_TRADES",
+      "DELIV_QTY",
+      "DELIV_PER"
+    ],
+    "schema_sha256": "a1739ff676a12f307310f2799e661599ca138a8ddbe47032b0ae15876a8e9f16",
+    "distinct_symbols": 3583,
+    "series_counts": {
+      "BE": 198,
+      "BZ": 34,
+      "E1": 4,
+      "EQ": 2746,
+      "GB": 43,
+      "GS": 54,
+      "IV": 13,
+      "MF": 1,
+      "RR": 6,
+      "SM": 411,
+      "ST": 72,
+      "SZ": 1
+    },
+    "delivery_observation_counts": {
+      "reported": 3351,
+      "not_reported_with_trades": 232,
+      "no_trades_delivery_not_reported": 0,
+      "not_reported": 0
+    },
+    "delivery_unreported_by_series": {
+      "BE": 198,
+      "BZ": 34
+    }
+  },
+  "semantic_scope": "security-wise traded and deliverable quantities; not beneficial ownership"
+}
