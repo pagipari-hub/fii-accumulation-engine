@@ -12,7 +12,9 @@ on:
       - "src/fii_engine/nse_shareholding_ingest.py"
       - "src/fii_engine/fpi_evidence_blend.py"
       - "src/fii_engine/weekly_watchlist_report.py"
+      - "src/fii_engine/nsdl_cash_flow_context.py"
       - "tests/test_weekly_watchlist_report.py"
+      - "tests/test_nsdl_cash_flow_context.py"
       - "tests/test_fpi_evidence_blend.py"
       - "src/fii_engine/nse_security_master_probe.py"
       - "src/fii_engine/nse_shareholding_xbrl_entity_probe.py"
@@ -67,6 +69,17 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Retrieve validated 62-session NSDL archive
+        if: github.event_name != 'pull_request'
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: nsdl-cash-flow-normalized-43054613197
+          path: artifacts/nsdl-cash-flow-normalized
+          run-id: 43054613197
+          repository: ${{ github.repository }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -75,6 +88,17 @@ jobs:
 
       - name: Install project and test dependencies
         run: python -m pip install -e ".[dev]"
+
+      - name: Preserve and verify NSDL aggregate cash-flow history
+        if: github.event_name != 'pull_request'
+        run: |
+          if [ ! -f data/processed/nsdl_cash_flows.csv ]; then
+            test -f artifacts/nsdl-cash-flow-normalized/processed/nsdl_cash_flows.csv
+            mkdir -p data/raw/nsdl_cash_flows data/processed
+            cp -R artifacts/nsdl-cash-flow-normalized/raw/nsdl_cash_flows/. data/raw/nsdl_cash_flows/
+            cp artifacts/nsdl-cash-flow-normalized/processed/nsdl_cash_flows.csv data/processed/
+          fi
+          python -m fii_engine.nsdl_cash_flow_context --repo-root . --output data/processed/nsdl_cash_flow_context.json
 
       - name: Run complete project test suite
         run: pytest
