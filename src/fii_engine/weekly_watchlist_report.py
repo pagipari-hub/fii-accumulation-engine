@@ -41,8 +41,8 @@ def build_report(
         row for row in tradable
         if row.get("direct_fpi_client_gross_buy_candidate") == "true"
     ]
-    grade_1 = [row for row in candidates if row.get("fpi_deal_evidence_grade") == "grade_1"]
-    grade_2 = [row for row in candidates if row.get("fpi_deal_evidence_grade") == "grade_2"]
+    grade_1 = [row for row in candidates if row.get("fpi_deal_evidence_grade", "").startswith("grade_1")]
+    grade_2 = [row for row in candidates if row.get("fpi_deal_evidence_grade", "").startswith("grade_2")]
     missing_ownership = sorted(
         row["symbol"] for row in tradable
         if row.get("shareholding_join_status") == "not_found_in_current_master"
