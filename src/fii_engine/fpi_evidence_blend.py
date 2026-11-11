@@ -532,6 +532,8 @@ def build(root: Path = Path(".")) -> dict:
         "daily_stock_features": daily_manifest["output_sha256"],
         "historical_stock_features": historical_manifest["stock_output_sha256"],
         "fpi_deal_stock_summary": deal_manifest["stock_summary_csv_sha256"],
+        "fpi_deal_events": deal_manifest["event_csv_sha256"],
+        "fpi_deal_attribution_manifest": _sha256((root / DEAL_MANIFEST).read_bytes()),
         "cdsl_registry_snapshot": deal_manifest["registry_snapshot_sha256"],
         "shareholding_ownership": share_manifest["ownership_current_sha256"],
         "shareholding_identity_crosswalk": (
@@ -558,6 +560,11 @@ def build(root: Path = Path(".")) -> dict:
         "deal_trade_date_window": [
             deal_manifest["trade_date_window_start"], deal_manifest["trade_date_window_end"]
         ],
+        "deal_lookback_calendar_days": deal_manifest.get("lookback_calendar_days"),
+        "deal_source_row_count": deal_manifest.get("source_row_count"),
+        "deal_deduplicated_event_count": deal_manifest.get("deduplicated_event_count"),
+        "deal_current_registry_matched_fpi_client_event_count": deal_manifest.get("current_registry_matched_fpi_client_event_count"),
+        "deal_unmatched_event_count": deal_manifest.get("unmatched_event_count"),
         "registry_snapshot_date": deal_manifest["registry_snapshot_date"],
         "registry_snapshot_sha256": deal_manifest["registry_snapshot_sha256"],
         "ownership_reporting_date": share_manifest.get("latest_reporting_date"),
