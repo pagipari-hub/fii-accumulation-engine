@@ -64,6 +64,60 @@ def _read_csv(path: Path) -> tuple[list[dict], str]:
     return rows, digest
 
 
+
+_DAILY_STATUS_RANKS = {
+    "cash_data_status": {"observed": 2, "not_applicable": 1, "unavailable": 0, "unknown": 0},
+    "delivery_status": {"reported": 3, "not_reported": 2, "not_applicable": 1, "not_found": 0, "unavailable": 0, "unknown": 0},
+    "futures_data_status": {"observed": 2, "not_applicable": 1, "unavailable": 0, "unknown": 0},
+    "options_data_status": {"observed": 2, "not_applicable": 1, "unavailable": 0, "unknown": 0},
+    "fno_status": {"eligible": 2, "not_eligible": 2, "unknown": 0},
+}
+_DAILY_MEASUREMENT_FIELDS = (
+    "cash_close", "cash_previous_close", "cash_return_pct", "cash_volume",
+    "cash_turnover", "cash_trade_count", "delivery_quantity",
+    "delivery_percentage", "futures_expiry", "futures_close",
+    "futures_previous_close", "futures_return_pct", "futures_open_interest",
+    "futures_oi_change", "futures_oi_change_pct", "futures_volume",
+    "futures_buildup", "options_expiry", "call_open_interest",
+    "put_open_interest", "options_pcr_oi", "call_volume", "put_volume",
+    "options_pcr_volume",
+)
+
+
+def _daily_snapshot_dominates(candidate: dict, other: dict) -> bool:
+    """Return true only when candidate is strictly more complete without conflicts."""
+    if candidate["symbols"] != other["symbols"] or candidate["isins"] != other["isins"]:
+        raise ValueError(
+            f"daily snapshots for {candidate['date']} have different symbol/ISIN identity sets"
+        )
+    strictly_better = False
+    for symbol in candidate["symbols"]:
+        left = candidate["rows"][symbol]
+        right = other["rows"][symbol]
+        for field in _DAILY_MEASUREMENT_FIELDS:
+            left_value = str(left.get(field, "") or "").strip()
+            right_value = str(right.get(field, "") or "").strip()
+            if left_value and right_value and left_value != right_value:
+                raise ValueError(
+                    f"conflicting daily snapshot values for {candidate['date']} "
+                    f"{symbol}/{field}; manual revision review required"
+                )
+            if left_value and not right_value:
+                strictly_better = True
+            elif right_value and not left_value:
+                return False
+        for field, ranks in _DAILY_STATUS_RANKS.items():
+            left_status = str(left.get(field, "unknown") or "unknown").strip()
+            right_status = str(right.get(field, "unknown") or "unknown").strip()
+            left_rank = ranks.get(left_status, 0)
+            right_rank = ranks.get(right_status, 0)
+            if left_rank < right_rank:
+                return False
+            if left_rank > right_rank:
+                strictly_better = True
+    return strictly_better
+
+
 def _load_daily_snapshots(root: Path) -> tuple[list[dict], list[str]]:
     directory = root / "data/snapshots/daily_stock_features"
     paths = sorted(directory.glob("daily_stock_features_*.csv"))
@@ -97,12 +151,7 @@ def _load_daily_snapshots(root: Path) -> tuple[list[dict], list[str]]:
         isins = {row["symbol"]: row["isin"] for row in rows}
         if any(not value for value in isins.values()):
             raise ValueError(f"blank ISIN in daily stock snapshot: {path}")
-        if snapshot_date in by_date:
-            raise ValueError(
-                f"multiple immutable stock snapshots exist for {snapshot_date}; "
-                "resolve the corrected/revised snapshot explicitly before rolling analysis"
-            )
-        by_date[snapshot_date] = {
+        candidate = {
             "date": snapshot_date,
             "rows": {row["symbol"]: row for row in rows},
             "symbols": set(symbols),
@@ -111,6 +160,22 @@ def _load_daily_snapshots(root: Path) -> tuple[list[dict], list[str]]:
             "sha256": digest,
             "row_count": len(rows),
         }
+        previous = by_date.get(snapshot_date)
+        if previous is not None:
+            if _daily_snapshot_dominates(candidate, previous):
+                candidate["superseded_snapshot_paths"] = (
+                    previous.get("superseded_snapshot_paths", []) + [previous["path"]]
+                )
+                by_date[snapshot_date] = candidate
+            elif _daily_snapshot_dominates(previous, candidate):
+                previous.setdefault("superseded_snapshot_paths", []).append(candidate["path"])
+            else:
+                raise ValueError(
+                    f"multiple immutable stock snapshots exist for {snapshot_date} "
+                    "without a strict completeness-dominance resolution"
+                )
+        else:
+            by_date[snapshot_date] = candidate
     dates = sorted(by_date)
     return [by_date[item] for item in dates], dates
 
@@ -652,6 +717,15 @@ def build_historical_features(root: Path = Path(".")) -> dict:
         "as_of_trade_date": latest["date"],
         "daily_stock_session_count": len(daily),
         "daily_stock_trade_dates": daily_dates,
+        "daily_snapshot_revision_resolutions": [
+            {
+                "trade_date": item["date"],
+                "selected_snapshot_path": item["path"],
+                "superseded_snapshot_paths": item["superseded_snapshot_paths"],
+                "rule": "strict_identity_and_measurement_consistent_completeness_dominance",
+            }
+            for item in daily if item.get("superseded_snapshot_paths")
+        ],
         "market_flow_session_count": len(fii),
         "market_flow_trade_dates": fii_dates,
         "participant_oi_session_count": len(participant_history["participant_oi"]),
