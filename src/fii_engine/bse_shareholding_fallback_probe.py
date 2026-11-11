@@ -14,28 +14,30 @@ from datetime import datetime, timezone
 from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote, urljoin, urlparse
-from urllib.request import Request, urlopen
+from http.cookiejar import CookieJar
+from urllib.request import HTTPCookieProcessor, Request, build_opener
 
 API_BASE = "https://api.bseindia.com/BseIndiaAPI/api/Corp_Shareholding_ng/w"
 BSE_BASE = "https://www.bseindia.com"
 REFERER = "https://www.bseindia.com/corporates/Sharehold_Searchnew.aspx"
+HTTP = build_opener(HTTPCookieProcessor(CookieJar()))
 UA = (
     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
     "(KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36"
 )
 
 
-def _get(url: str, accept: str) -> tuple[bytes, dict]:
+def _get(url: str, accept: str, referer: str = REFERER) -> tuple[bytes, dict]:
     request = Request(url, headers={
         "User-Agent": UA,
-        "Referer": REFERER,
+        "Referer": referer,
         "Accept": accept,
         "Accept-Language": "en-US,en;q=0.9",
         "Cache-Control": "no-cache",
     })
     for attempt in range(4):
         try:
-            with urlopen(request, timeout=60) as response:
+            with HTTP.open(request, timeout=60) as response:
                 return response.read(), {
                     "http_status": response.status,
                     "content_type": response.headers.get("Content-Type", ""),
@@ -129,6 +131,20 @@ def probe(candidates_csv: Path, output_dir: Path, bse_udiff_path: Path) -> dict:
     output_dir.mkdir(parents=True, exist_ok=True)
     observations = []
     exchange_blocked = False
+    bootstrap = {}
+    try:
+        bootstrap_payload, bootstrap_meta = _get(
+            REFERER, "text/html,*/*", referer=BSE_BASE + "/"
+        )
+        bootstrap = {
+            "http_status": bootstrap_meta["http_status"],
+            "bytes": len(bootstrap_payload),
+            "response_url": bootstrap_meta["response_url"],
+        }
+    except Exception as exc:
+        bootstrap = {"status": "error", "error": str(exc)}
+        if "403" in str(exc):
+            exchange_blocked = True
     for index, candidate in enumerate(candidates):
         if exchange_blocked:
             observations.append({
