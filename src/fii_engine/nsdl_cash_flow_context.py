@@ -73,7 +73,7 @@ def build_context(root: Path) -> dict:
         if row.get("fpi_source_sha256") not in fpi_hashes:
             raise ValueError(f"NSDL FPI row lacks a matching raw response hash: {row['date']}")
         if row.get("dii_source_sha256") not in dii_hashes:
-            raise ValueError(f"NSDL DII row lacks a matching raw response hash: {row['reporting_date']}")
+            raise ValueError(f"NSDL DII row lacks a matching raw response hash: {row['date']}")
     if len(fpi_values) < 60 or len(dii_values) < 60 or overlap < 60:
         raise ValueError("NSDL aggregate cash-flow history is below the 60-observation evidence floor")
     no_data_days = sorted(
