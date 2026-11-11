@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import gzip
 import hashlib
 import io
 import json
@@ -104,7 +105,20 @@ def _save(output: Path, name: str, payload: bytes, metadata: dict) -> dict:
     }
 
 
-def probe(output_dir: Path) -> dict:
+def inspect_gzip_csv(payload: bytes, *, source_name: str) -> dict:
+    if not payload:
+        raise ValueError(f"{source_name}: empty response")
+    try:
+        expanded = gzip.decompress(payload)
+    except (OSError, EOFError) as exc:
+        raise ValueError(f"{source_name}: invalid gzip payload") from exc
+    contract = inspect_csv(expanded, source_name=source_name)
+    contract["compressed_bytes"] = len(payload)
+    contract["expanded_bytes"] = len(expanded)
+    return contract
+
+
+def probe(output_dir: Path, historical_date: str | None = None) -> dict:
     bootstrap, bootstrap_meta = _get(PAGE, BASE + "/", "text/html,*/*")
     if not bootstrap or bootstrap_meta["http_status"] != 200:
         raise RuntimeError("NSE securities page session bootstrap failed")
@@ -113,12 +127,47 @@ def probe(output_dir: Path) -> dict:
         payload, metadata = _get(url, PAGE, "text/csv,text/plain,*/*")
         observations.append(_save(output_dir, name, payload, metadata))
 
+    historical_observation = None
+    if historical_date:
+        try:
+            parsed_date = datetime.strptime(historical_date, "%Y-%m-%d")
+        except ValueError as exc:
+            raise ValueError("historical_date must use YYYY-MM-DD") from exc
+        date_token = parsed_date.strftime("%d%m%Y")
+        historical_url = (
+            f"https://nsearchives.nseindia.com/content/cm/"
+            f"NSE_CM_security_{date_token}.csv.gz"
+        )
+        compressed, historical_meta = _get(
+            historical_url, f"{BASE}/all-reports", "application/gzip,application/octet-stream,*/*"
+        )
+        contract = inspect_gzip_csv(compressed, source_name="historical_mii_security_master")
+        digest = hashlib.sha256(compressed).hexdigest()
+        historical_path = output_dir / f"NSE_CM_security_{date_token}_{digest[:16]}.csv.gz"
+        historical_path.parent.mkdir(parents=True, exist_ok=True)
+        if historical_path.exists() and hashlib.sha256(historical_path.read_bytes()).hexdigest() != digest:
+            raise RuntimeError(f"immutable NSE historical master collision: {historical_path}")
+        if not historical_path.exists():
+            historical_path.write_bytes(compressed)
+        historical_observation = {
+            "name": "historical_mii_security_master",
+            "requested_trade_date": parsed_date.date().isoformat(),
+            "url": historical_meta["response_url"],
+            **historical_meta,
+            "bytes": len(compressed),
+            "sha256": digest,
+            "saved_path": str(historical_path),
+            "contract": contract,
+            "source_boundary": "Daily MII security master; verify record date and schema before using as historical ISIN evidence.",
+        }
+
     report = {
         "publisher": "National Stock Exchange of India",
         "page_url": PAGE,
         "retrieved_at_utc": datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
         "session_bootstrap": {"http_status": bootstrap_meta["http_status"], "bytes": len(bootstrap)},
         "observations": observations,
+        "historical_mii_security_master": historical_observation,
         "identity_safety": {
             "current_equity_master_is_current_state_only": True,
             "change_registers_are_discovery_evidence_until_effective_dates_and_identity_are_verified": True,
@@ -136,8 +185,9 @@ def probe(output_dir: Path) -> dict:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output-dir", type=Path, default=Path("artifacts/nse-security-master-probe"))
+    parser.add_argument("--historical-date", help="Optional NSE MII security master date (YYYY-MM-DD)")
     args = parser.parse_args()
-    print(json.dumps(probe(args.output_dir), indent=2, ensure_ascii=False))
+    print(json.dumps(probe(args.output_dir, args.historical_date), indent=2, ensure_ascii=False))
 
 
 if __name__ == "__main__":
