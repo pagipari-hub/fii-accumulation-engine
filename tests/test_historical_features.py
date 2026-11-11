@@ -4,8 +4,10 @@ from pathlib import Path
 
 import pytest
 
+from fii_engine.nse_fo_aggregate_reports import PARTICIPANT_COLUMNS
 from fii_engine.historical_features import (
     _participant_window,
+    _load_daily_snapshots,
     build_historical_features,
 )
 
@@ -143,7 +145,7 @@ def test_rejects_multiple_daily_snapshots_for_same_trade_date(tmp_path):
         original.name.rsplit("_", 1)[0] + f"_{digest[:16]}.csv"
     )
     temporary.rename(duplicate)
-    with pytest.raises(ValueError, match="multiple immutable stock snapshots"):
+    with pytest.raises(ValueError, match="conflicting daily snapshot values"):
         build_historical_features(tmp_path)
 
 
@@ -197,3 +199,174 @@ def test_participant_history_reports_insufficient_sessions_and_partial_series():
     complete_dates[2]["rows"] = {}
     partial = _participant_window(complete_dates, 5, "participant_oi")[0]
     assert partial["status"] == "partial_observations"
+
+
+def _write_archive_participant_csv(path: Path, dataset: str, day: str, value: int) -> str:
+    from datetime import date
+    import io
+
+    title = "Open Interest" if dataset == "participant_oi" else "Trading Volume"
+    parsed_day = date.fromisoformat(day)
+    lines = [f'"{title} as on {parsed_day.strftime("%b")} {parsed_day.day}, {parsed_day.year}"']
+    rows = []
+    numeric_columns = PARTICIPANT_COLUMNS[1:]
+    participant_values = {}
+    for category in ("Client", "DII", "FII", "Pro"):
+        values = {column: 0 for column in numeric_columns}
+        if category == "FII":
+            values["Future Stock Long"] = value
+        values["Total Long Contracts"] = sum(
+            amount for column, amount in values.items() if column.endswith(" Long")
+        )
+        values["Total Short Contracts"] = sum(
+            amount for column, amount in values.items() if column.endswith(" Short")
+        )
+        participant_values[category] = values
+    total = {
+        column: sum(participant_values[category][column] for category in participant_values)
+        for column in numeric_columns
+    }
+    rows.extend([[category] + [participant_values[category][column] for column in numeric_columns]
+                 for category in ("Client", "DII", "FII", "Pro")])
+    rows.append(["TOTAL"] + [total[column] for column in numeric_columns])
+    buffer = io.StringIO(newline="")
+    writer = csv.writer(buffer)
+    writer.writerow(PARTICIPANT_COLUMNS)
+    writer.writerows(rows)
+    payload = ("\n".join(lines) + "\n" + buffer.getvalue()).encode("utf-8")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(payload)
+    return hashlib.sha256(payload).hexdigest()
+
+
+def _write_archive_manifest(root: Path, days: list[str]) -> None:
+    import json
+
+    records = []
+    for index, day in enumerate(days):
+        for dataset, value in (
+            ("participant_oi", 100 + index * 10),
+            ("participant_volume", 200 + index * 10),
+        ):
+            digest = _write_archive_participant_csv(
+                root / "data/raw/nse_fo_historical" / day / f"{dataset}_{index}.csv",
+                dataset, day, value,
+            )
+            path = root / "data/raw/nse_fo_historical" / day / f"{dataset}_{index}.csv"
+            records.append({
+                "dataset": dataset,
+                "trade_date": day,
+                "payload_path": str(path.relative_to(root)),
+                "payload_sha256": digest,
+                "inspection": {"status": "validated"},
+            })
+        stats_payload = f"validated aggregate FII statistics {day}".encode()
+        stats_path = root / "data/raw/nse_fo_historical" / day / f"fii_stats_{index}.xls"
+        stats_path.parent.mkdir(parents=True, exist_ok=True)
+        stats_path.write_bytes(stats_payload)
+        records.append({
+            "dataset": "fii_derivatives_statistics",
+            "trade_date": day,
+            "payload_path": str(stats_path.relative_to(root)),
+            "payload_sha256": hashlib.sha256(stats_payload).hexdigest(),
+            "inspection": {"status": "validated"},
+        })
+    manifest_path = root / "data/raw/nse_fo_historical/historical_manifest.json"
+    manifest_path.parent.mkdir(parents=True, exist_ok=True)
+    manifest_path.write_text(json.dumps({
+        "coverage_status": "target_met",
+        "requested_complete_sessions": len(days),
+        "complete_sessions": len(days),
+        "records": records,
+    }), encoding="utf-8")
+
+
+def test_historical_archive_participant_reports_feed_rolling_features(tmp_path):
+    _build_history(tmp_path)
+    days = [f"2026-11-0{day}" for day in range(2, 7)]
+    _write_archive_manifest(tmp_path, days)
+
+    result = build_historical_features(tmp_path)
+
+    assert result["participant_archive_complete_session_count"] == 5
+    assert result["participant_archive_complete_trade_dates"] == days
+    assert result["participant_oi_session_count"] == 5
+    assert result["participant_volume_session_count"] == 5
+
+    path = tmp_path / "data/raw/historical_features/participant_derivatives_history_current.csv"
+    with path.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    oi = next(row for row in rows
+              if row["dataset"] == "participant_oi"
+              and row["participant_category"] == "FII"
+              and row["instrument_group"] == "stock_futures"
+              and row["source_side"] == "long"
+              and row["window_sessions"] == "5")
+    volume = next(row for row in rows
+                  if row["dataset"] == "participant_volume"
+                  and row["participant_category"] == "FII"
+                  and row["instrument_group"] == "stock_futures"
+                  and row["source_side"] == "long"
+                  and row["window_sessions"] == "5")
+    assert oi["status"] == "complete"
+    assert oi["start_contracts"] == "100"
+    assert oi["end_contracts"] == "140"
+    assert oi["change_contracts"] == "40"
+    assert volume["status"] == "complete"
+    assert volume["total_traded_contracts"] == "1100"
+    assert oi["scope"] == "participant_category_aggregate_not_stock_specific"
+
+
+def test_historical_archive_rejects_payload_hash_mismatch(tmp_path):
+    _build_history(tmp_path)
+    days = ["2026-11-02"]
+    _write_archive_manifest(tmp_path, days)
+    path = next((tmp_path / "data/raw/nse_fo_historical/2026-11-02").glob("participant_oi_*.csv"))
+    path.write_text(path.read_text(encoding="utf-8") + "\n", encoding="utf-8")
+
+    with pytest.raises(ValueError, match="archive payload hash mismatch"):
+        build_historical_features(tmp_path)
+
+
+def test_historical_archive_requires_all_three_report_families(tmp_path):
+    _build_history(tmp_path)
+    days = ["2026-11-02"]
+    _write_archive_manifest(tmp_path, days)
+    manifest_path = tmp_path / "data/raw/nse_fo_historical/historical_manifest.json"
+    import json
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["records"] = [
+        record for record in manifest["records"]
+        if record["dataset"] != "fii_derivatives_statistics"
+    ]
+    manifest["complete_sessions"] = 0
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+
+    result = build_historical_features(tmp_path)
+    assert result["participant_archive_complete_session_count"] == 0
+    assert result["participant_oi_session_count"] == 0
+    assert result["participant_volume_session_count"] == 0
+
+
+def test_daily_snapshot_revision_selects_only_strictly_dominant_observation(tmp_path):
+    _build_history(tmp_path)
+    directory = tmp_path / "data/snapshots/daily_stock_features"
+    original = next(directory.glob("daily_stock_features_2026-11-06_*.csv"))
+    with original.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    for row in rows:
+        row["futures_data_status"] = "unavailable"
+        row["futures_buildup"] = ""
+        row["futures_expiry"] = ""
+        row["options_data_status"] = "unavailable"
+        row["options_pcr_oi"] = ""
+        row["options_expiry"] = ""
+    duplicate = directory / "temporary.csv"
+    digest = _write_snapshot(duplicate, rows)
+    duplicate.rename(directory / f"daily_stock_features_2026-11-06_{digest[:16]}.csv")
+
+    snapshots, dates = _load_daily_snapshots(tmp_path)
+    selected = next(item for item in snapshots if item["date"] == "2026-11-06")
+    assert dates[-1] == "2026-11-06"
+    assert selected["path"] == str(original.relative_to(tmp_path))
+    assert len(selected["superseded_snapshot_paths"]) == 1
