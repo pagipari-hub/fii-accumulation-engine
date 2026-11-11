@@ -150,7 +150,7 @@ def build_report(
                 f"- **Quarterly ownership:** FPI total {_format_percent(row, 'shareholding_fpi_total_ownership_percentage_points')} as of {row.get('shareholding_reporting_date', 'N/A')}; {_format_plain(row.get('ownership_context', ''))}.",
                 f"- **Derivatives:** futures {_format_plain(row.get('daily_futures_data_status', ''))}; options {_format_plain(row.get('daily_options_data_status', ''))}; {_format_plain(row.get('options_context', ''))}.",
                 "- **Why included:** a named current-registry FPI-client gross-buy disclosure is visible, but registration timing is not verified for the transaction date and sell-side counterparty identity is incomplete. This is a lead, not confirmed net accumulation.",
-                "- **Catalyst:** no sourced business/corporate catalyst or buyer motive is attached; none is inferred.",
+                "- **Catalyst:** No sourced business/corporate catalyst or buyer motive is attached; none is inferred.",
                 "",
             ])
         lines.append(
