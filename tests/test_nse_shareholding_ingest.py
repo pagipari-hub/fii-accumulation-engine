@@ -211,3 +211,73 @@ def test_company_name_fallback_normalizes_only_common_legal_suffix_variants():
     assert module._normal_name("ABC Limited") != module._normal_name(
         "ABC Holdings Limited"
     )
+
+
+
+def test_dated_bse_crosswalk_verifies_exact_identity_without_changing_source_isin(tmp_path):
+    import hashlib
+
+    crosswalk = tmp_path / "shareholding_bse_scripcode_isin_crosswalk.csv"
+    row = {
+        "reporting_date": "2026-09-30",
+        "symbol": "ABC",
+        "universe_isin": "INE000A01001",
+        "master_record_id": "301",
+        "master_xbrl_url": "https://nsearchives.nseindia.com/corporate/xbrl/abc.xml",
+        "bse_isin": "INE000A01001",
+        "bse_crosswalk_status": "verified_exact_dated_bse_scripcode_isin_match",
+        "bse_bhavcopy_sha256": "a" * 64,
+        "xbrl_sha256": "b" * 64,
+    }
+    with crosswalk.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=list(row))
+        writer.writeheader()
+        writer.writerow(row)
+    report = {
+        "reporting_date": "2026-09-30",
+        "candidate_count": 1,
+        "verified_count": 1,
+        "unresolved_count": 0,
+        "bse_source_http_status": 200,
+        "bse_source_sha256": "a" * 64,
+    }
+    crosswalk.with_suffix(".json").write_text(json.dumps(report), encoding="utf-8")
+
+    indexed, metadata = module._load_identity_crosswalk(crosswalk)
+    master = _master_row(
+        "301", "ABC", "ABC Limited", "OLDISIN",
+        "09-OCT-2026 17:00:00", "N", row["master_xbrl_url"],
+    )
+    identity = module._metadata(master, {
+        "symbol": "ABC", "company_name": "ABC Limited", "isin": "INE000A01001",
+    }, indexed["ABC"])
+
+    assert metadata["verified_count"] == 1
+    assert identity["identity_status"] == "verified"
+    assert identity["identity_join_method"] == row["bse_crosswalk_status"]
+    assert identity["isin"] == "OLDISIN"
+    assert identity["universe_isin"] == "INE000A01001"
+    assert identity["identity_evidence_xbrl_sha256"] == "b" * 64
+
+
+def test_dated_bse_crosswalk_does_not_verify_different_filing_record(tmp_path):
+    row = {
+        "reporting_date": "2026-09-30",
+        "symbol": "ABC",
+        "universe_isin": "INE000A01001",
+        "master_record_id": "301",
+        "master_xbrl_url": "https://nsearchives.nseindia.com/corporate/xbrl/abc.xml",
+        "bse_isin": "INE000A01001",
+        "bse_crosswalk_status": "verified_exact_dated_bse_symbol_isin_match",
+        "bse_bhavcopy_sha256": "a" * 64,
+        "xbrl_sha256": "b" * 64,
+    }
+    master = _master_row(
+        "302", "ABC", "ABC Limited", "OLDISIN",
+        "09-OCT-2026 17:00:00", "N", "https://nsearchives.nseindia.com/corporate/xbrl/other.xml",
+    )
+    identity = module._metadata(master, {
+        "symbol": "ABC", "company_name": "ABC Limited", "isin": "INE000A01001",
+    }, row)
+    assert identity["identity_status"] == "isin_mismatch"
+    assert identity["identity_join_method"] == "dated_bse_crosswalk_rejected"
