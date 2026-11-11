@@ -474,7 +474,7 @@ def ingest(root: Path = Path("."), identity_crosswalk_path: Path | None = None) 
     for row in decoded:
         symbol = str(row.get("symbol") or "").strip()
         stock = universe_by_symbol.get(symbol)
-        if stock is None:
+        if stock is None or symbol.upper() in index_placeholders:
             continue
         metadata = _metadata(row, stock, identity_crosswalk.get(symbol.upper()))
         record_id = metadata["record_id"]
