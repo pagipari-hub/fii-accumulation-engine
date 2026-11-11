@@ -12,9 +12,9 @@
 - **Parsed verified ownership rows:** 494.
 - **Dated BSE identity crosswalk:** 146 / 146 verified; 0 unresolved.
 - **BSE UDiFF source SHA-256:** e2b7cea2672aed05df3ce55f3c531a153cb2b5215e2b493b2735cd9be116acce.
-- **Ownership rows not found in the current NSE filing master:** 6.
+- **Tradable securities without parsed equity shareholding or separate REIT unitholding evidence:** 3.
 
-Missing current NSE ownership records: ABBOTINDIA, ALKEM, BAGMANE, BIRET, EMBASSY, MCX.
+Remaining uncovered EQ shareholding records: ABBOTINDIA, ALKEM, MCX.
 These remain N/A; no ownership values are imputed.
 
 ## REIT unitholding FPI evidence (separate ownership data type)
@@ -102,7 +102,7 @@ An HTTP 403 is an access restriction, not proof that a filing does not exist. No
 ## Reproducibility
 
 - Matrix CSV SHA-256: d96df24dc28ccb0feff1fdddfe565154b0defdc7d494f85369b66f49e845d6dd
-- BSE fallback manifest SHA-256: 90bfaaad0c65898ffe0c37c83b596e00cd46d1ee367a5fa426b379277c2b2b67
+- BSE fallback manifest SHA-256: 544528858ab7c0b4b26ef62fad3113c7d60e05099ca4e3f421ad288115c23c74
 - Ownership identity crosswalk SHA-256: 12258998e48b1203bbcbc708d6d3ee9c5fcb9f7d537d925d47ae3c392a5d52c8
 - NSDL normalized CSV SHA-256: 061bc2be35b00e26bd6250938c005ba1998fbc01044cac72c2d0e7cdf216d4c1
 - NSDL raw archive manifest SHA-256: b1f08e3af954dba8db2182464433b111311c74a2e29240893c8c5d25dc42fb3a
