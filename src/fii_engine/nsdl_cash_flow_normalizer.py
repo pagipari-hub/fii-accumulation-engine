@@ -163,7 +163,7 @@ def normalize_manifest(manifest_path: Path, output_csv: Path) -> dict:
                 for key, value in item.items():
                     if key in existing and existing[key] != value:
                         # Overlapping month responses may differ in provenance but not values.
-                        if key.endswith("_sha256") or key.endswith("_query_date"):
+                        if key.endswith(("_sha256", "_query_date")):
                             continue
                         raise ValueError(f"conflicting FPI duplicate for {day}: {key}")
                     existing[key] = value
