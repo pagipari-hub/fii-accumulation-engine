@@ -145,7 +145,7 @@ def test_rejects_multiple_daily_snapshots_for_same_trade_date(tmp_path):
         original.name.rsplit("_", 1)[0] + f"_{digest[:16]}.csv"
     )
     temporary.rename(duplicate)
-    with pytest.raises(ValueError, match="multiple immutable stock snapshots"):
+    with pytest.raises(ValueError, match="conflicting daily snapshot values"):
         build_historical_features(tmp_path)
 
 
