@@ -76,7 +76,7 @@ def test_weekly_watchlist_is_conservative_and_hash_validated(tmp_path):
         "composite_score_status": "not_scored_independent_evidence_dimensions_only",
         "as_of_trade_date": "2026-11-09",
         "nse_shareholding_history_probe": {
-            "date_range": {"from_date": "01-04-2026", "to_date": "30-09-2026"},
+            "date_range": {"from_date": "01-07-2026", "to_date": "11-11-2026"},
             "market_wide_history": {"row_count": 2460, "unique_symbol_count": 500},
             "row_counts": {"ALKEM": {"symbol_history": 2, "date_range": 2}},
             "symbols_with_multiple_records": ["ALKEM"],
