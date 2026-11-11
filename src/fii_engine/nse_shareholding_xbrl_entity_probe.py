@@ -19,6 +19,7 @@ from urllib.error import HTTPError, URLError
 from urllib.request import HTTPCookieProcessor, Request, build_opener
 
 BSE_SCRIP_SCHEME_SUFFIX = "/in-bse-shp/ScripCode"
+BSE_SYMBOL_SCHEME_SUFFIX = "/in-bse-shp/Symbol"
 BASE = "https://www.nseindia.com"
 BOOTSTRAP_PAGE = f"{BASE}/static/market-data/securities-available-for-trading"
 PAGE = f"{BASE}/companies-listing/corporate-filings-shareholding-pattern/"
@@ -58,7 +59,8 @@ def parse_xbrl_entity(payload: bytes) -> dict:
     if not unique_ids:
         raise ValueError("XBRL contains no entity identifier in contexts")
     bse_codes = [item["value"] for item in unique_ids if item["scheme"].rstrip("/").endswith(BSE_SCRIP_SCHEME_SUFFIX) and item["value"].isdigit()]
-    return {"entity_identifiers": unique_ids, "company_name_facts": unique_names, "bse_scrip_codes": sorted(set(bse_codes)), "identifier_count": len(unique_ids)}
+    bse_symbols = [item["value"] for item in unique_ids if item["scheme"].rstrip("/").endswith(BSE_SYMBOL_SCHEME_SUFFIX) and item["value"].strip()]
+    return {"entity_identifiers": unique_ids, "company_name_facts": unique_names, "bse_scrip_codes": sorted(set(bse_codes)), "bse_symbols": sorted(set(bse_symbols)), "identifier_count": len(unique_ids)}
 
 
 def _get(url: str, referer: str, accept: str = "*/*") -> tuple[bytes, dict]:

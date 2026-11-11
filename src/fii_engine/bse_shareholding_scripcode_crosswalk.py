@@ -51,34 +51,44 @@ def reconcile(candidates_csv:Path,xbrl_json:Path,output_dir:Path,reporting_date:
     reader=csv.DictReader(payload.decode("utf-8-sig").splitlines())
     if not reader.fieldnames: raise ValueError("BSE bhavcopy has no header")
     fm={h.strip():h for h in reader.fieldnames}
-    required={"TradDt","FinInstrmId","ISIN"}
+    required={"TradDt","FinInstrmId","ISIN","TckrSymb"}
     if not required.issubset(fm): raise ValueError(f"BSE bhavcopy missing columns: {sorted(required-set(fm))}")
     data=list(reader)
     dates={r[fm["TradDt"]].strip() for r in data if r.get(fm["TradDt"],"").strip()}
     if dates!={reporting_date}: raise ValueError(f"BSE source date mismatch: {sorted(dates)}")
-    bycode=defaultdict(list)
+    bycode=defaultdict(list); bysymbol=defaultdict(list)
     for r in data:
         code=r.get(fm["FinInstrmId"],"").strip()
+        symbol=r.get(fm["TckrSymb"],"").strip().upper()
         if code: bycode[code].append(r)
+        if symbol: bysymbol[symbol].append(r)
     out=[]; counts=defaultdict(int)
     for c in candidates:
         o=obs[c["symbol"]]; codes=o.get("bse_scrip_codes",[])
+        symbols=o.get("bse_symbols",[])
         row=dict(c); row.update({"xbrl_bse_scrip_code":codes[0] if len(codes)==1 else "",
-          "bse_isin":"","bse_series":"","bse_security_name":"","bse_crosswalk_status":"",
+          "xbrl_bse_symbol":symbols[0] if len(symbols)==1 else "",
+          "bse_match_method":"","bse_isin":"","bse_series":"","bse_security_name":"","bse_crosswalk_status":"",
           "bse_bhavcopy_sha256":digest,"bse_bhavcopy_url":url,"xbrl_sha256":o.get("sha256","")})
-        if len(codes)==0: status="xbrl_has_no_bse_scrip_code"
-        elif len(codes)>1: status="xbrl_has_multiple_bse_scrip_codes"
-        else:
+        if len(codes)>1: status="xbrl_has_multiple_bse_scrip_codes"; matches=[]
+        elif len(codes)==1:
             matches=bycode.get(codes[0],[])
+            row["bse_match_method"]="bse_scripcode"
+        elif len(symbols)>1: status="xbrl_has_multiple_bse_symbols"; matches=[]
+        elif len(symbols)==1:
+            matches=bysymbol.get(symbols[0].strip().upper(),[])
+            row["bse_match_method"]="bse_symbol"
+        else: status="xbrl_has_no_bse_scripcode_or_symbol"; matches=[]
+        if len(codes)<=1 and len(symbols)<=1 and (len(codes)==1 or len(symbols)==1):
             isins={r.get(fm["ISIN"],"").strip().upper() for r in matches if r.get(fm["ISIN"],"").strip()}
-            if not matches: status="bse_code_absent_from_dated_bhavcopy"
-            elif len(isins)!=1: status="ambiguous_bse_code_isin_rows"
+            if not matches: status="bse_identifier_absent_from_dated_bhavcopy"
+            elif (row["bse_match_method"]=="bse_symbol" and len(matches)!=1) or len(isins)!=1: status="ambiguous_bse_identifier_isin_rows"
             else:
                 isin=next(iter(isins)); row["bse_isin"]=isin
                 m=next(r for r in matches if r.get(fm["ISIN"],"").strip().upper()==isin)
                 row["bse_series"]=m.get(fm.get("SctySrs",""),"").strip() if "SctySrs" in fm else ""
                 row["bse_security_name"]=m.get(fm.get("FinInstrmNm",""),"").strip() if "FinInstrmNm" in fm else ""
-                status="verified_exact_dated_bse_scripcode_isin_match" if isin==c["universe_isin"].strip().upper() else "bse_isin_conflicts_with_nse_universe"
+                status=("verified_exact_dated_bse_scripcode_isin_match" if row["bse_match_method"]=="bse_scripcode" else "verified_exact_dated_bse_symbol_isin_match") if isin==c["universe_isin"].strip().upper() else "bse_isin_conflicts_with_nse_universe"
         row["bse_crosswalk_status"]=status; counts[status]+=1; out.append(row)
     outcsv=output_dir/"shareholding_bse_scripcode_isin_crosswalk.csv"
     with outcsv.open("w",encoding="utf-8",newline="") as f:
@@ -89,7 +99,7 @@ def reconcile(candidates_csv:Path,xbrl_json:Path,output_dir:Path,reporting_date:
       "bse_source_url":url,"bse_source_http_status":meta["http_status"],"bse_source_bytes":len(payload),
       "bse_source_sha256":digest,"bse_source_path":str(raw),"bse_source_rows":len(data),
       "counts":dict(sorted(counts.items())),"verified_count":verified,"unresolved_count":len(candidates)-verified,
-      "identity_safety":{"exactly_one_bse_scripcode_required":True,"dated_bse_code_to_isin_required":True,
+      "identity_safety":{"exactly_one_bse_scripcode_or_symbol_required":True,"dated_bse_identifier_to_isin_required":True,
        "exact_isin_match_to_dated_nse_universe_required":True,"no_name_only_match":True,
        "missing_bhavcopy_row_remains_unresolved":True},"output_csv":str(outcsv)}
     (output_dir/"shareholding_bse_scripcode_isin_crosswalk.json").write_text(json.dumps(report,indent=2)+"\n",encoding="utf-8")
