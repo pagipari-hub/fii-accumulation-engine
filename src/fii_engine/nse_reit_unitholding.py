@@ -23,7 +23,7 @@ OUTPUT = Path("data/raw/shareholding/reit_unitholding_current.csv")
 MANIFEST = Path("data/raw/shareholding/reit_unitholding_current_manifest.json")
 REPORTING_DATE = "2026-09-30"
 FPI_ROW = re.compile(
-    r"Foreign\\s+Portfolio\\s+Investors\\s+([0-9,]+|-)\\s+([0-9]+(?:\\.[0-9]+)?|-)",
+    r"Foreign\s+Portfolio\s+Investors\s+([0-9,]+|-)\s+([0-9]+(?:\.[0-9]+)?|-)",
     re.IGNORECASE,
 )
 
@@ -37,7 +37,7 @@ def _pdf_text(payload: bytes) -> str:
         reader = PdfReader(io.BytesIO(payload), strict=True)
         if reader.is_encrypted:
             raise ValueError("encrypted REIT unitholding PDF is not supported")
-        text = "\\n".join(page.extract_text() or "" for page in reader.pages)
+        text = "\n".join(page.extract_text() or "" for page in reader.pages)
     except Exception as exc:
         raise ValueError(f"could not extract text from official REIT PDF: {exc}") from exc
     if not text.strip():
@@ -46,7 +46,7 @@ def _pdf_text(payload: bytes) -> str:
 
 
 def _quarter_is_current(text: str) -> bool:
-    normalized = re.sub(r"\\s+", " ", text).lower()
+    normalized = re.sub(r"\s+", " ", text).lower()
     return (
         "quarter ended september 30, 2026" in normalized
         or "quarter ended 30 september 2026" in normalized
@@ -58,7 +58,7 @@ def parse_fpi_unitholding_rows(text: str) -> dict:
     """Sum explicitly reported sponsor/public FPI rows; dash means publisher-reported nil."""
     rows = []
     for line in text.splitlines():
-        match = FPI_ROW.search(re.sub(r"\\s+", " ", line).strip())
+        match = FPI_ROW.search(re.sub(r"\s+", " ", line).strip())
         if not match:
             continue
         raw_units, raw_pct = match.groups()
@@ -162,7 +162,7 @@ def normalize(root: Path = Path("."), announcements_path: Path = ANNOUNCEMENTS) 
         "announcement_seq_id", "announcement_date", "attachment_path", "attachment_sha256",
     ]
     stream = io.StringIO(newline="")
-    writer = csv.DictWriter(stream, fieldnames=fields, lineterminator="\\n")
+    writer = csv.DictWriter(stream, fieldnames=fields, lineterminator="\n")
     writer.writeheader()
     writer.writerows(output_rows)
     payload = stream.getvalue().encode("utf-8")
@@ -183,7 +183,7 @@ def normalize(root: Path = Path("."), announcements_path: Path = ANNOUNCEMENTS) 
         "scope_boundary": "REIT unit ownership is kept separate from equity shareholding XBRL; no conversion of units to equity shares is performed.",
     }
     manifest_path = root / MANIFEST
-    manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\\n", encoding="utf-8")
+    manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     return manifest
 
 
