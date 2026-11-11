@@ -321,6 +321,7 @@ def test_zero_price_index_placeholder_is_not_reported_as_missing_filing():
     abc_stock = {"symbol": "ABC", "company_name": "ABC Limited", "isin": "INE000A01001"}
     metadata = module._metadata(master, abc_stock)
     metadata["reporting_date"] = "2026-09-30"
+    metadata["metadata_sha256"] = "b" * 64
     rows = module._build_ownership_rows(
         [
             abc_stock,
