@@ -10,6 +10,8 @@ on:
     paths:
       - "src/fii_engine/nse_shareholding_xbrl.py"
       - "src/fii_engine/nse_reit_unitholding.py"
+      - "src/fii_engine/issuer_shareholding_fallback.py"
+      - "tests/test_issuer_shareholding_fallback.py"
       - "tests/test_nse_reit_unitholding.py"
       - "pyproject.toml"
       - "src/fii_engine/nse_shareholding_ingest.py"
@@ -49,6 +51,8 @@ on:
     paths:
       - "src/fii_engine/nse_shareholding_xbrl.py"
       - "src/fii_engine/nse_reit_unitholding.py"
+      - "src/fii_engine/issuer_shareholding_fallback.py"
+      - "tests/test_issuer_shareholding_fallback.py"
       - "tests/test_nse_reit_unitholding.py"
       - "pyproject.toml"
       - "src/fii_engine/nse_shareholding_ingest.py"
@@ -215,6 +219,10 @@ jobs:
           python -m fii_engine.bse_shareholding_fallback_probe --candidates data/audits/bse_shareholding_fallback_candidates_2026-09-30.csv --output-dir artifacts/bse-shareholding-fallback --bse-udiff data/raw/shareholding/identity_evidence/BhavCopy_BSE_CM_0_0_0_20260930_F_0000_*.csv
           cp artifacts/bse-shareholding-fallback/bse_shareholding_fallback_probe_manifest.json data/raw/shareholding/bse_shareholding_fallback_probe_manifest.json
 
+      - name: Probe official issuer-hosted equity shareholding fallbacks
+        if: github.event_name != 'pull_request'
+        run: python -m fii_engine.issuer_shareholding_fallback --root .
+
       - name: Capture official NSE shareholding filings and FPI ownership
         if: github.event_name != 'pull_request'
         run: python -m fii_engine.nse_shareholding_ingest --repo-root . --identity-crosswalk data/raw/shareholding/identity_evidence/shareholding_bse_scripcode_isin_crosswalk.csv
@@ -242,6 +250,14 @@ jobs:
           assert manifest["index_placeholder_count"] == 1
           assert manifest["latest_quarter_coverage_pct"] == 98.8
           bse_fallback = json.loads(Path("artifacts/bse-shareholding-fallback/bse_shareholding_fallback_probe_manifest.json").read_text(encoding="utf-8"))
+          issuer_manifest_path = root / "data/raw/shareholding/issuer_shareholding_fallback_current_manifest.json"
+          assert issuer_manifest_path.is_file(), "issuer shareholding fallback manifest missing"
+          issuer_manifest = json.loads(issuer_manifest_path.read_text(encoding="utf-8"))
+          assert issuer_manifest["reporting_date"] == "2026-09-30"
+          assert issuer_manifest["parsed_verified_count"] >= 1
+          issuer_csv = root / issuer_manifest["output_path"]
+          assert hashlib.sha256(issuer_csv.read_bytes()).hexdigest() == issuer_manifest["output_sha256"]
+          print(json.dumps({"issuer_shareholding_fallback": issuer_manifest["observations"]}, indent=2))
           reit_manifest_path = root / "data/raw/shareholding/reit_unitholding_current_manifest.json"
           assert reit_manifest_path.is_file(), "REIT unitholding normalized manifest missing"
           reit_manifest = json.loads(reit_manifest_path.read_text(encoding="utf-8"))
@@ -336,7 +352,7 @@ jobs:
         if: github.event_name != 'pull_request'
         run: |
           REPORT_DATE="$(date -u +%F)"
-          python -m fii_engine.weekly_watchlist_report --matrix data/raw/fpi_evidence_blend/fpi_evidence_matrix_current.csv --manifest data/raw/fpi_evidence_blend/fpi_evidence_matrix_current_manifest.json --bse-fallback-manifest data/raw/shareholding/bse_shareholding_fallback_probe_manifest.json --reit-manifest data/raw/shareholding/reit_unitholding_current_manifest.json --output "reports/weekly/fpi_evidence_watchlist_${REPORT_DATE}.md"
+          python -m fii_engine.weekly_watchlist_report --matrix data/raw/fpi_evidence_blend/fpi_evidence_matrix_current.csv --manifest data/raw/fpi_evidence_blend/fpi_evidence_matrix_current_manifest.json --bse-fallback-manifest data/raw/shareholding/bse_shareholding_fallback_probe_manifest.json --reit-manifest data/raw/shareholding/reit_unitholding_current_manifest.json --issuer-fallback-manifest data/raw/shareholding/issuer_shareholding_fallback_current_manifest.json --output "reports/weekly/fpi_evidence_watchlist_${REPORT_DATE}.md"
           test -s "reports/weekly/fpi_evidence_watchlist_${REPORT_DATE}.md"
 
       - name: Upload raw master, XBRL and normalized filing evidence
@@ -378,6 +394,7 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add data/snapshots/shareholding_master data/snapshots/shareholding_filings data/snapshots/shareholding_ownership data/raw/shareholding/current_manifest.json data/raw/shareholding/shareholding_ownership_current.csv data/raw/fpi_evidence_blend data/snapshots/fpi_evidence_blend
             git add -f data/raw/shareholding/reit_unitholding_current.csv data/raw/shareholding/reit_unitholding_current_manifest.json
+            git add -f data/raw/shareholding/issuer_shareholding_fallback_current.csv data/raw/shareholding/issuer_shareholding_fallback_current_manifest.json data/raw/shareholding/issuer_fallback
             git add reports/weekly/
             git add data/processed/nsdl_cash_flows.csv data/processed/nsdl_cash_flow_context.json data/raw/nsdl_cash_flows
             git add data/raw/cdsl_fpi_registry data/snapshots/cdsl_fpi_registry
