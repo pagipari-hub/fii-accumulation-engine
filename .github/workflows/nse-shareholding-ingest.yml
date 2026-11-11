@@ -292,6 +292,8 @@ jobs:
             artifacts/missing-isin-identity/
             artifacts/bse-shareholding-fallback/
             data/raw/shareholding/identity_evidence/
+            data/raw/nsdl_cash_flows/
+            data/processed/
             data/snapshots/shareholding_master/
             data/snapshots/shareholding_filings/
             data/snapshots/shareholding_ownership/
@@ -304,7 +306,7 @@ jobs:
       - name: Commit normalized append-only filings and ownership snapshots
         if: github.event_name != 'pull_request'
         run: |
-          if [[ -n "$(git status --porcelain data/snapshots/shareholding_master data/snapshots/shareholding_filings data/snapshots/shareholding_ownership data/raw/shareholding/current_manifest.json data/raw/shareholding/shareholding_ownership_current.csv data/raw/shareholding/identity_evidence data/raw/fpi_evidence_blend data/snapshots/fpi_evidence_blend)" ]]; then
+          if [[ -n "$(git status --porcelain data/snapshots/shareholding_master data/snapshots/shareholding_filings data/snapshots/shareholding_ownership data/raw/shareholding/current_manifest.json data/raw/shareholding/shareholding_ownership_current.csv data/raw/shareholding/identity_evidence data/raw/shareholding/bse_shareholding_fallback_probe_manifest.json data/raw/nsdl_cash_flows data/processed/nsdl_cash_flows.csv data/processed/nsdl_cash_flow_context.json reports/weekly data/raw/fpi_evidence_blend data/snapshots/fpi_evidence_blend)" ]]; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add data/snapshots/shareholding_master data/snapshots/shareholding_filings data/snapshots/shareholding_ownership data/raw/shareholding/current_manifest.json data/raw/shareholding/shareholding_ownership_current.csv data/raw/fpi_evidence_blend data/snapshots/fpi_evidence_blend
