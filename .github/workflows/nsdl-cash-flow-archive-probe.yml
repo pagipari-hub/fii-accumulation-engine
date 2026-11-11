@@ -1,0 +1,82 @@
+name: NSDL historical cash-flow archive probe
+
+on:
+  push:
+    branches: [research/nsdl-historical-cash-flow-probe]
+    paths:
+      - "src/fii_engine/nsdl_cash_flow_archive_probe.py"
+      - "tests/test_nsdl_cash_flow_archive_probe.py"
+      - ".github/workflows/nsdl-cash-flow-archive-probe.yml"
+  pull_request:
+    paths:
+      - "src/fii_engine/nsdl_cash_flow_archive_probe.py"
+      - "tests/test_nsdl_cash_flow_archive_probe.py"
+      - ".github/workflows/nsdl-cash-flow-archive-probe.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nsdl-cash-flow-archive-probe
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install -e ".[dev]"
+      - run: pytest tests/test_nsdl_cash_flow_archive_probe.py
+      - run: ruff check src/fii_engine/nsdl_cash_flow_archive_probe.py tests/test_nsdl_cash_flow_archive_probe.py
+
+  live-probe:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install -e .
+      - run: python -m fii_engine.nsdl_cash_flow_archive_probe --start-date 2026-08-17 --end-date 2026-11-10 --delay 1.0
+      - name: Validate captured raw responses and hashes
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          root = Path("data/raw/nsdl_cash_flows")
+          manifest = json.loads((root / "manifest.json").read_text(encoding="utf-8"))
+          observations = manifest["observations"]
+          assert manifest["fpi_query_count"] == 4
+          assert manifest["dii_query_count"] >= 55
+          for row in observations:
+              path = Path(row["raw_path"])
+              assert path.is_file(), f"missing raw response: {path}"
+              assert hashlib.sha256(path.read_bytes()).hexdigest() == row["response_sha256"]
+              assert row["http_status"] == 200
+              assert row["response_bytes"] > 0
+          fpi = [r for r in observations if r["dataset"] == "fpi"]
+          dii = [r for r in observations if r["dataset"] == "dii"]
+          assert all(r["response_type"] == "data" for r in fpi)
+          assert sum(r["response_type"] == "data" for r in dii) >= 40
+          print(json.dumps({
+              "fpi_queries": len(fpi),
+              "dii_queries": len(dii),
+              "dii_data_days": sum(r["response_type"] == "data" for r in dii),
+              "dii_no_data_days": sum(r["response_type"] == "no_data" for r in dii),
+              "raw_response_count": len(observations),
+          }, indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nsdl-cash-flow-archive-probe-${{ github.run_id }}
+          path: data/raw/nsdl_cash_flows
+          if-no-files-found: error
+          retention-days: 90
