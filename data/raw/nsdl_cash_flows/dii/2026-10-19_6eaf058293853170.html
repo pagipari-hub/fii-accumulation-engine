@@ -1,0 +1,581 @@
+
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>
+	DII Generate Report
+</title>
+    <script src="https://www.fpi.nsdl.co.in/web/Scripts/jquery-1.10.2.js?20180306" type="text/javascript"></script>
+    <script type="text/javascript" src="https://www.fpi.nsdl.co.in/web/Scripts/calendar2.js?ref=20180306"></script>
+    <script type="text/javascript">
+        function Confirm() {
+            var status = true;
+            status = confirm("Are you sure , you want to publish the report on Site?");
+            if (status == true) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        function Confirm_GenerateReport() {
+            var status = true;
+            status = confirm("Are you sure you want to proceed?");
+            if (status == true) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+    </script>
+    <script type="text/javascript">
+        function ExportDIVtoExcel() {
+            var html = '';
+            html += $("#rpt").html();
+            html = $.trim(html);
+            html = html.replace(/>/g, '&gt;');
+            html = html.replace(/</g, '&lt;');
+            $("input[id$='HdnValexceldata']").val(html);
+        }
+
+$(document).ready(function () {
+			$(".tbls01").eq(1).find("tr").each(function () {
+				if ($(this).text().trim().includes("TOTAL")) {
+					$(this).hide();
+				}
+			});
+
+		});
+    </script>
+</head>
+<body>
+    <link href="https://www.fpi.nsdl.co.in/web/Css/nsdl.css?ref=20180306" rel="stylesheet" />
+    <link href="https://www.fpi.nsdl.co.in/web/Css/calender.css?ref=20180306" rel="stylesheet" />
+
+    <script type="text/javascript">
+        function DIINote() {
+
+            var left = (screen.width / 2) - (600 / 2);
+            var top = (screen.height / 2) - (400 / 2);
+
+            popupWindow = window.open('DIINotes.htm', 'popUpWindow', 'height=400,width=600,top=' + top + ',left=' + left + ',titlebar=yes,resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=yes,directories=no,status=no')
+
+        }
+    </script>
+
+    <form method="post" action="./DIIGenerateReport.aspx?Rep=A" id="form1">
+<div class="aspNetHidden">
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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" />
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['form1'];
+if (!theForm) {
+    theForm = document.form1;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<div class="aspNetHidden">
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="0A739F36" />
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="NS2FDtn+0D4Gu2/mbuAquBqQd93y3ksGkncC4hvqeiVIYtvZIBCmDBueiz3xn9OUOYjtCge0g6fR4reQD0Q5YQMxG7P3kS5Go/wxqVfD5NrdJ+jo3OyRne+LaxxUut5lK9/8woxfzzncuSGeyQmTG0m5ftkerUYhRm6BrzSfFgT9ZlFl/tPIOSnlZshR1wk9E4Ky39UrWdeUMR4sN/CTYzrrXwi2DoLzIZDFp0sX+Mg=" />
+</div>
+        <div class="mainWrapper">
+            
+
+    <script type="text/javascript" src="https://www.fpi.nsdl.co.in/web/Scripts/dw_event.js"></script>
+    <script type="text/javascript" src="https://www.fpi.nsdl.co.in/web/Scripts/font.js"></script>
+
+<script type="text/javascript" language="javascript">
+    //function DisableBackButton() {
+    //    window.history.forward()
+    //}
+    //DisableBackButton();
+    //window.onload = DisableBackButton;
+    //window.onpageshow = function (evt) { if (evt.persisted) DisableBackButton() }
+    //window.onunload = function () { void (0) }
+ </script>
+
+
+
+<script type="text/javascript">
+    //window.history.pushState(null, null, window.location.href);
+    //window.onpopstate = function () {
+    //    window.history.go(1);
+    //};
+    window.history.forward();
+    window.onload = function () {
+        window.history.forward();
+    };
+
+    window.onunload = function () {
+        null;
+    };
+    </script>
+
+
+<script type="text/javascript">
+
+
+    /**
+      * Disable right-click of mouse, F12 key, and save key combinations on page
+      * By Arthur Gareginyan (arthurgareginyan[at]gmail[dot]com)
+      * For full source code, visit https://mycyberuniverse.com
+      */
+    window.onload = function () {
+        document.addEventListener("contextmenu", function (e) {
+            e.preventDefault();
+        }, false);
+        document.addEventListener("keydown", function (e) {
+            //document.onkeydown = function(e) {
+            // "I" key
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 73) {
+                disabledEvent(e);
+            }
+            // "J" key
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 74) {
+                disabledEvent(e);
+            }
+            // "S" key + macOS
+            if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+                disabledEvent(e);
+            }
+            // "U" key
+            if (e.ctrlKey && e.keyCode == 85) {
+                disabledEvent(e);
+            }
+            // "F12" key
+            if (event.keyCode == 123) {
+                disabledEvent(e);
+            }
+        }, false);
+        function disabledEvent(e) {
+            if (e.stopPropagation) {
+                e.stopPropagation();
+            } else if (window.event) {
+                window.event.cancelBubble = true;
+            }
+            e.preventDefault();
+            return false;
+        }
+    };
+</script>
+
+<div class="main_header position_R">
+			<div class="fL" style="background:#f5ecc4;height:100px;width:165px;">
+				<a href="https://www.fpi.nsdl.co.in/web/Default.aspx" ><img  class="mL5 mT25" src="https://www.fpi.nsdl.co.in/web/Images/nsdl_logo.png" alt="NSDL logo" height="52" width="152" /></a>
+			</div>
+			<div id="HeaderControl_fpilogo" class="fL mL20 mT50" style="display:;">
+				<a href="https://www.fpi.nsdl.co.in/web/Default.aspx"><img src="https://www.fpi.nsdl.co.in/web/Images/subhead_new.png" alt="NSDL Logo"  /></a>
+			</div>
+    		<div id="HeaderControl_tradelogo" class="fL mL20 mT50" style="display:none;">
+				<a href="https://www.fpi.nsdl.co.in/web/Default.aspx"><img src="https://www.fpi.nsdl.co.in/web/Images/subhead_new1.png" alt="NSDL Logo"  /></a>
+			</div>
+    
+			<div class="fR mT45 w350">
+				<div id="HeaderControl_dvHlinks" class="fL mR5 tabs01 mT5">
+					
+                    <div id="HeaderControl_headmenu">
+						<div class="tabslist"><a class="tabslist" href="https://www.fpi.nsdl.co.in/web/Reports/ReportsListing.aspx">FPI Investments</a></div>
+						<div class="pp1" style="color:floralwhite">|</div>
+                        <div class="tabslist"><a class="tabslist" title="Foreign Investment Limit Monitoring(FILM)" href="https://www.fpi.nsdl.co.in/web/Reports/ForeignInvestmentLimitMonitoringListing.aspx">Foreign Investment Limit Monitoring</a> </div>
+						<div class="pp1" style="color:floralwhite">|</div>
+						<div class="tabslist"> <a class="tabslist" href="https://www.fpi.nsdl.co.in/web/HomePage/FrmHomePage.aspx">Common Application Form</a></div>
+                        <div style="clear:both;"></div>
+					</div>
+                   
+				 </div>
+				
+				<div id="HeaderControl_dvLogin" class="fL mR5"><a id="HeaderControl_btnLogin" href="javascript:__doPostBack(&#39;HeaderControl$btnLogin&#39;,&#39;&#39;)"><img src="https://www.fpi.nsdl.co.in/web/Images/login.png" height="38" width="63" alt="Login" /></a></div>
+                
+				<div class="clr"></div>
+                <div class="position_A clr fontAdjust" id="sizer">
+					<div class="display_B mT4 s11 b clrYellow fL">Font Size :</div>
+					<a title="Decrease text size" href="#" class="decrease mT5 display_B fL"><img alt="" src="https://www.fpi.nsdl.co.in/web/Images/Sm_A.png"></a>
+					<a title="Restore default font-sizes" href="#" class="reset mT4 display_B fL"><img alt="" src="https://www.fpi.nsdl.co.in/web/Images/Md_A.png"></a>
+					<a title="Increase text size" href="#" class="increase mT4 display_B fL"><img alt="" src="https://www.fpi.nsdl.co.in/web/Images/Bg_A.png"></a>
+				</div>
+			</div>
+			<div class="clr"></div>
+		</div>
+
+<script type="text/javascript">
+    //Prevents backspace except in the case of textareas and text inputs to prevent user navigation.
+    $(document).keydown(function (e) {
+        var preventKeyPress;
+        if (e.keyCode == 8) {
+            var d = e.srcElement || e.target;
+            switch (d.tagName.toUpperCase()) {
+                case 'TEXTAREA':
+                    preventKeyPress = d.readOnly || d.disabled;
+                    break;
+                case 'INPUT':
+                    preventKeyPress = d.readOnly || d.disabled ||
+                        (d.attributes["type"] && $.inArray(d.attributes["type"].value.toLowerCase(), ["radio", "checkbox", "submit", "button"]) >= 0);
+                    break;
+                case 'DIV':
+                    preventKeyPress = d.readOnly || d.disabled || !(d.attributes["contentEditable"] && d.attributes["contentEditable"].value == "true");
+                    break;
+                default:
+                    preventKeyPress = true;
+                    break;
+            }
+        }
+        else
+            preventKeyPress = false;
+
+        if (preventKeyPress)
+            e.preventDefault();
+    });
+</script> 
+
+            <div id="mainContent" class="main_content" style="margin-bottom: 25px;">
+                
+
+<div style="padding-bottom:10px;border-bottom:1px solid #edeeee;"><!-- Breadcrumbs -->
+    <div class="fL">
+	    <div id="BrdControl_dvBreadcrumbs" class="tabs03"><ul><li><a href='https://www.fpi.nsdl.co.in/web/Default.aspx'>Home</a></li><li><a href='https://www.fpi.nsdl.co.in/web/Reports/ReportsListing.aspx'>FPI Investments</a></li><li><span class='last s12'>View Report</span></li></ul></div>
+    </div>
+    <div class="clr"></div>
+</div>
+
+                <div id="Div1" class="heading01 mT10">DII Report</div>
+                <div id="Div2" class="" style="background: url(&#39;../Images/top_arrow.png&#39;) no-repeat 30px 1px; padding-top: 6px; height: 5px;">
+                    <div style="border-bottom: 3px solid #4d4d4d; padding-bottom: 2px;"></div>
+                </div>
+
+                <div id="ShowDtae" class="mT20">
+                    <table width="100%" class="table_form01" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="10%"><span class="label02">Enter Date : </span></td>
+                            <td width="20%">
+                                <input name="txtDate" type="text" value="19-Oct-2026" maxlength="10" id="txtDate" disabled="disabled" class="aspNetDisabled fii_textbox" style="width: 150px;" />
+                                <img border="0" src="../images/calender.gif" class="aM" alt="Calendar" id="imgtxtDate" />
+                                <input name="hdnDate" type="hidden" id="hdnDate" value="19-Oct-2026" />
+
+                            </td>
+                            <td width="15%">
+
+                                <a id="btnSubmit1" class="mL10 fL mT5" style="text-decoration: none;" onclick="return fnVal();" href="javascript:__doPostBack(&#39;btnSubmit1&#39;,&#39;&#39;)">
+                                    <div class="blu_left01"></div>
+                                    <div class="blu_center01 btn_Text">View Report</div>
+                                    <div class="blu_right01"></div>
+                                    <div class="clr"></div>
+                                </a>
+                            </td>
+                            <td colspan="3">
+                                
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div id="rpt" class="mT10"><table cellspacing='0' cellpadding='0' width='100%' class='tbls01'><tr><th  style='font-size:9pt;background-color:white;text-align:center;' colspan='9'><br/>Stock exchanges compile the provisional DII trade data on the basis of information provided by trading members during trading activities on T day. The data in respect of confirmed DII trades is compiled on the basis of reports submitted to depositories by Custodians constitutes trades conducted by DII on and up to the previous trading day(s).<br/><br/></th></tr><tr><th  style='font-size:9pt;background-color:white;text-align:center;' colspan='9'><br/>This data focuses on tracking transaction trends of Domestic Institutional Investors.  Users of this data should be aware that Mutual Funds and Alternative Investment Funds are included both in Investor and Investment categories and hence sub-totals cannot be summed up to arrive at total resource mobilization.<br/><br/></th></tr><tr><th  style='font-size:9pt;background-color:white;text-align:center;' colspan='9'><br/>The Total and Grand Total figures provided at the end of this table exclude investments in Mutual Funds, AIFs and Bullions by various investor categories to avoid data duplication.<br/><br/></th></tr><div style='text-align:center;font-size:10pt;color:blue;padding:6px;padding-left: 15%;background: url(../Images/header_bg.png);font-weight:bold;'>DII Report on 19-Oct-2026 <span style='float:right;color:black;'> Conversion(1 USD TO INR):95.0194</span></div><table class='tbls01' style='border-collapse:collapse;'><tr><th>Type of DII</th><th>Instrument Type</th><th>Investment Route</th><th>Gross Purchases (Rs. Crore)</th><th>Gross Sales (Rs. Crore)</th><th>Net Investment (Rs. Crore)</th><th>Net Investment US ($) million</th></tr><tr><td rowspan='12'>Bank</td><td rowspan='2'>Equity</td><td>Stock Exchange</td><td>177.18</td><td>190.27</td><td> (13.1)</td><td> (1.38)</td></tr><tr><td>Primary market & others</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td rowspan='2'>Corporate Debt</td><td>Stock Exchange</td><td>223.49</td><td>181.55</td><td>41.94</td><td>4.41</td></tr><tr><td>Primary market & others</td><td>200.14</td><td>597.88</td><td> (397.74)</td><td> (41.86)</td></tr><tr><td rowspan='2'>Government Debt</td><td>Stock Exchange</td><td>1.28</td><td>0</td><td>1.28</td><td>0.13</td></tr><tr><td>Primary market & others</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td rowspan='2'>Hybrid</td><td>Stock Exchange</td><td>0</td><td>42.44</td><td> (42.44)</td><td> (4.47)</td></tr><tr><td>Primary market & others</td><td>5</td><td>0</td><td>5</td><td>0.53</td></tr><tr><td rowspan='2'>AIFs</td><td>Stock Exchange</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>Primary market & others</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td rowspan='2'>MF</td><td>Stock Exchange</td><td>26.9</td><td>0.26</td><td>26.64</td><td>2.8</td></tr><tr><td>Primary market & others</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr style='display:none;'><td rowspan='2'>Bullion</td><td>Stock Exchange</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr style='display:none;'><td>Primary market & others</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr style='font-weight:bold;background:#f3f3f3;'><td></td><td></td><td>Bank-Total</td><td>633.99</td><td>1012.4</td><td> (378.42)</td><td> (39.84)</td></tr><tr><td rowspan='12'>Insurance</td><td rowspan='2'>Equity</td><td>Stock Exchange</td><td>2752.22</td><td>3016.82</td><td> (264.61)</td><td> (27.85)</td></tr><tr><td>Primary market & others</td><td>0.01</td><td>0.01</td><td>0</td><td>0</td></tr><tr><td rowspan='2'>Corporate Debt</td><td>Stock Exchange</td><td>391.45</td><td>202.68</td><td>188.77</td><td>19.87</td></tr><tr><td>Primary market & others</td><td>193.66</td><td>1901.53</td><td> (1707.87)</td><td> (179.74)</td></tr><tr><td rowspan='2'>Government Debt</td><td>Stock Exchange</td><td>5337.67</td><td>4813</td><td>524.66</td><td>55.22</td></tr><tr><td>Primary market & others</td><td>491.87</td><td>587.91</td><td> (96.05)</td><td> (10.11)</td></tr><tr><td rowspan='2'>Hybrid</td><td>Stock Exchange</td><td>1.99</td><td>0.01</td><td>1.98</td><td>0.21</td></tr><tr><td>Primary market & others</td><td>125</td><td>0</td><td>125</td><td>13.16</td></tr><tr><td rowspan='2'>AIFs</td><td>Stock Exchange</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>Primary market & others</td><td>3.31</td><td>0</td><td>3.31</td><td>0.35</td></tr><tr><td rowspan='2'>MF</td><td>Stock Exchange</td><td>98.81</td><td>34.94</td><td>63.87</td><td>6.72</td></tr><tr><td>Primary market & others</td><td>980.07</td><td>895.34</td><td>84.73</td><td>8.92</td></tr><tr style='display:none;'><td rowspan='2'>Bullion</td><td>Stock Exchange</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr style='display:none;'><td>Primary market & others</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr style='font-weight:bold;background:#f3f3f3;'><td></td><td></td><td>Insurance-Total</td><td>10376.06</td><td>11452.24</td><td> (1076.21)</td><td> (113.25)</td></tr><tr><td rowspan='14'>MFs</td><td rowspan='2'>Equity</td><td>Stock Exchange</td><td>13053.73</td><td>14688.79</td><td> (1635.06)</td><td> (172.08)</td></tr><tr><td>Primary market & others</td><td>39.02</td><td>21.55</td><td>17.47</td><td>1.84</td></tr><tr><td rowspan='2'>Corporate Debt</td><td>Stock Exchange</td><td>8247.26</td><td>8942.54</td><td> (695.27)</td><td> (73.17)</td></tr><tr><td>Primary market & others</td><td>20097.3</td><td>20185.83</td><td> (88.53)</td><td> (9.32)</td></tr><tr><td rowspan='2'>Government Debt</td><td>Stock Exchange</td><td>3486.52</td><td>3587.31</td><td> (100.79)</td><td> (10.61)</td></tr><tr><td>Primary market & others</td><td>1145.92</td><td>1100.29</td><td>45.62</td><td>4.8</td></tr><tr><td rowspan='2'>Hybrid</td><td>Stock Exchange</td><td>3.16</td><td>9.81</td><td> (6.65)</td><td> (0.7)</td></tr><tr><td>Primary market & others</td><td>235.68</td><td>0.06</td><td>235.62</td><td>24.8</td></tr><tr><td rowspan='2'>AIFs</td><td>Stock Exchange</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>Primary market & others</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td rowspan='2'>MF</td><td>Stock Exchange</td><td>422.95</td><td>2249.06</td><td> (1826.1)</td><td> (192.18)</td></tr><tr><td>Primary market & others</td><td>315.2</td><td>209.84</td><td>105.36</td><td>11.09</td></tr><tr><td rowspan='2'>Bullion</td><td>Stock Exchange</td><td>306.4</td><td>457.11</td><td> (150.71)</td><td> (15.86)</td></tr><tr><td>Primary market & others</td><td>245.68</td><td>150.88</td><td>94.8</td><td>9.98</td></tr><tr style='font-weight:bold;background:#f3f3f3;'><td></td><td></td><td>MFs-Total</td><td>47598.82</td><td>51603.07</td><td> (4004.24)</td><td> (421.41)</td></tr><tr><td rowspan='12'>AIFs</td><td rowspan='2'>Equity</td><td>Stock Exchange</td><td>908.03</td><td>341.76</td><td>566.26</td><td>59.59</td></tr><tr><td>Primary market & others</td><td>105.03</td><td>7.95</td><td>97.08</td><td>10.22</td></tr><tr><td rowspan='2'>Corporate Debt</td><td>Stock Exchange</td><td>28.88</td><td>93.18</td><td> (64.3)</td><td> (6.77)</td></tr><tr><td>Primary market & others</td><td>279.84</td><td>156.94</td><td>122.9</td><td>12.93</td></tr><tr><td rowspan='2'>Government Debt</td><td>Stock Exchange</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>Primary market & others</td><td>0</td><td>30</td><td> (30)</td><td> (3.16)</td></tr><tr><td rowspan='2'>Hybrid</td><td>Stock Exchange</td><td>58.58</td><td>2.34</td><td>56.24</td><td>5.92</td></tr><tr><td>Primary market & others</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td rowspan='2'>AIFs</td><td>Stock Exchange</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>Primary market & others</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td rowspan='2'>MF</td><td>Stock Exchange</td><td>0.1</td><td>4.82</td><td> (4.72)</td><td> (0.5)</td></tr><tr><td>Primary market & others</td><td>777.59</td><td>1475.06</td><td> (697.48)</td><td> (73.4)</td></tr><tr style='display:none;'><td rowspan='2'>Bullion</td><td>Stock Exchange</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr style='display:none;'><td>Primary market & others</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr style='font-weight:bold;background:#f3f3f3;'><td></td><td></td><td>AIFs-Total</td><td>2158.05</td><td>2112.05</td><td>45.98</td><td>4.83</td></tr><tr><td rowspan='12'>Others</td><td rowspan='2'>Equity</td><td>Stock Exchange</td><td>608.84</td><td>577.51</td><td>31.33</td><td>3.3</td></tr><tr><td>Primary market & others</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td rowspan='2'>Corporate Debt</td><td>Stock Exchange</td><td>329</td><td>535.91</td><td> (206.91)</td><td> (21.78)</td></tr><tr><td>Primary market & others</td><td>3733.87</td><td>1186.79</td><td>2547.08</td><td>268.06</td></tr><tr><td rowspan='2'>Government Debt</td><td>Stock Exchange</td><td>1561.72</td><td>1645.22</td><td> (83.5)</td><td> (8.79)</td></tr><tr><td>Primary market & others</td><td>54.46</td><td>30.81</td><td>23.65</td><td>2.49</td></tr><tr><td rowspan='2'>Hybrid</td><td>Stock Exchange</td><td>6.07</td><td>0</td><td>6.07</td><td>0.64</td></tr><tr><td>Primary market & others</td><td>0</td><td>1.83</td><td> (1.83)</td><td> (0.19)</td></tr><tr><td rowspan='2'>AIFs</td><td>Stock Exchange</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>Primary market & others</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td rowspan='2'>MF</td><td>Stock Exchange</td><td>74.94</td><td>21.02</td><td>53.93</td><td>5.68</td></tr><tr><td>Primary market & others</td><td>414.69</td><td>373.83</td><td>40.86</td><td>4.3</td></tr><tr style='display:none;'><td rowspan='2'>Bullion</td><td>Stock Exchange</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr style='display:none;'><td>Primary market & others</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr style='font-weight:bold;background:#f3f3f3;'><td></td><td></td><td>Others-Total</td><td>6783.59</td><td>4372.92</td><td>2410.68</td><td>253.71</td></tr><tr><td rowspan='12'>Total</td><td rowspan='3'>Equity</td><td>Stock Exchange</td><td>17499.99</td><td>18815.16</td><td> (1315.17)</td><td> (138.41)</td></tr><tr><td>Primary market & others</td><td>144.06</td><td>29.51</td><td>114.55</td><td>12.05</td></tr><tr><td style='font-weight:bold;background:#f3f3f3;'>Equity Total</td><td>17644.05</td><td>18844.67</td><td> (1200.62)</td><td> (126.36)</td></tr><tr><td rowspan='3'>Corporate Debt</td><td>Stock Exchange</td><td>9220.08</td><td>9955.86</td><td> (735.78)</td><td> (77.43)</td></tr><tr><td>Primary market & others</td><td>24504.81</td><td>24028.96</td><td>475.84</td><td>50.08</td></tr><tr><td style='font-weight:bold;background:#f3f3f3;'>Corporate Debt Total</td><td>33724.89</td><td>33984.82</td><td> (259.94)</td><td> (27.35)</td></tr><tr><td rowspan='3'>Government Debt</td><td>Stock Exchange</td><td>10387.18</td><td>10045.53</td><td>341.65</td><td>35.96</td></tr><tr><td>Primary market & others</td><td>1692.24</td><td>1749.02</td><td> (56.78)</td><td> (5.98)</td></tr><tr><td style='font-weight:bold;background:#f3f3f3;'>Government Debt Total</td><td>12079.42</td><td>11794.55</td><td>284.87</td><td>29.98</td></tr><tr><td rowspan='3'>Hybrid</td><td>Stock Exchange</td><td>69.81</td><td>54.6</td><td>15.21</td><td>1.6</td></tr><tr><td>Primary market & others</td><td>365.68</td><td>1.89</td><td>363.79</td><td>38.29</td></tr><tr><td style='font-weight:bold;background:#f3f3f3;'>Hybrid Total</td><td>435.49</td><td>56.49</td><td>379</td><td>39.89</td></tr><tr style='display:none;'><td rowspan='3'>AIFs</td><td>Stock Exchange</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr style='display:none;'><td>Primary market & others</td><td>3.31</td><td>0</td><td>3.31</td><td>0.35</td></tr><tr style='display:none;'><td style='font-weight:bold;background:#f3f3f3;'>AIFs Total</td><td>3.31</td><td>0</td><td>3.31</td><td>0.35</td></tr><tr style='display:none;'><td rowspan='3'>MF</td><td>Stock Exchange</td><td>623.71</td><td>2310.11</td><td> (1686.4)</td><td> (177.48)</td></tr><tr style='display:none;'><td>Primary market & others</td><td>2487.55</td><td>2954.08</td><td> (466.53)</td><td> (49.1)</td></tr><tr style='display:none;'><td style='font-weight:bold;background:#f3f3f3;'>MF Total</td><td>3111.26</td><td>5264.19</td><td> (2152.93)</td><td> (226.58)</td></tr><tr style='display:none;'><td rowspan='3'>Bullion</td><td>Stock Exchange</td><td>306.4</td><td>457.11</td><td> (150.71)</td><td> (15.86)</td></tr><tr style='display:none;'><td>Primary market & others</td><td>245.68</td><td>150.88</td><td>94.8</td><td>9.98</td></tr><tr style='display:none;'><td style='font-weight:bold;background:#f3f3f3;'>Bullion Total</td><td>552.08</td><td>607.99</td><td> (55.91)</td><td> (5.88)</td></tr><tr><td rowspan='3' colspan='2' style='text-align: center;'>Grand-Total</td><td>Stock Exchange</td><td>37177.06</td><td>38871.15</td><td> (1694.09)</td><td> (178.28)</td></tr><tr><td>Primary market & others</td><td>26706.79</td><td>25809.38</td><td>897.4</td><td>94.44</td></tr><tr><td style='font-weight:bold;background:#f3f3f3;'>Total</td><td>63883.85</td><td>64680.53</td><td> (796.69)</td><td> (83.84)</td></tr><tr><td align='center' colspan='8'><a onclick='DIINote()' style='cursor:pointer;'><i style=font-weight:bold;font-size:10pt;>Note</i></a></td></tr></table></div>
+
+                </br>
+
+                <input type="hidden" name="HdnValexceldata" id="HdnValexceldata" />
+
+                <a id="btnExcel" class="mL10 fL" style="text-decoration: none;" onclick="ExportDIVtoExcel();" href="javascript:__doPostBack(&#39;btnExcel&#39;,&#39;&#39;)">
+                    <div class="gry_left01"></div>
+                    <div class="gry_center01 btn_Text">Export to Excel</div>
+                    <div class="gry_right01"></div>
+                    <div class="clr"></div>
+                </a>
+
+                
+
+                                
+            </div>
+            </br>
+            </br>
+            
+<link href="../Css/footer.css" rel="stylesheet" />
+<script src="../Scripts/bootstrap.min.js"></script>
+<script type="text/javascript">
+    function ContactNote() {
+        var left = (screen.width / 2) - (600 / 2);
+        var top = (screen.height / 2) - (300 / 2);
+        popupWindow = window.open('/ContactUs.html', 'popUpWindow', 'height=400,width=600,top=' + top + ',left=' + left + ',titlebar=yes,resizable=no,scrollbars=no,toolbar=no,menubar=no,location=yes,directories=no,status=no');
+    }
+    function TermsAndConditionNote() {
+        var left = (screen.width / 2) - (600 / 2);
+        var top = (screen.height / 2) - (300 / 2);
+        popupWindow = window.open('/TermsAndCondition.html', 'popUpWindow', 'top=' + top + ',left=' + left + ',titlebar=yes,resizable=no,scrollbars=yes,toolbar=no,menubar=no,location=yes,directories=no,status=no');
+    }
+    function PrivacyPolicy() {
+        var left = (screen.width / 2) - (600 / 2);
+        var top = (screen.height / 2) - (300 / 2);
+        popupWindow = window.open('/PrivacyPolicy.html', 'popUpWindow', 'top=' + top + ',left=' + left + ',titlebar=yes,resizable=no,scrollbars=yes,toolbar=no,menubar=no,location=yes,directories=no,status=no');
+    }
+    function Feedback() {
+        var left = (screen.width / 2) - (900 / 2);
+        var top = (screen.height / 2) - (450 / 2);
+        popupWindow = window.open('/Feedback.aspx', 'popUpWindow', 'height=700,width=700,top=' + top + ',left=' + left + ',titlebar=yes,resizable=yes,scrollbars=yes,toolbar=yes,menubar=yes,location=yes,directories=no,status=no');//KETAN SHAH||15112022
+    }
+</script>
+<div class="main_footer">
+	
+		<div class="fR mR10 mT10">
+			
+
+            <div class="bottonlinks">
+              
+			    <a href="#" id="contactuslink" data-target="#modalcontactus" tabindex="19" onkeypress="" style="cursor: pointer;" data-toggle="modal" class="footlink">Contact Us:</a>
+				
+				
+				
+				
+                <a href="#" id="termsadncondition" tabindex="21" data-target="#modaltermscondition" style="cursor: pointer;" data-toggle="modal" class="footlink">Terms and Condition:</a>
+
+				  <a href="#" id="termsprivacylink" tabindex="22" data-target="#modalprivacypolicy" style="cursor: pointer;" data-toggle="modal" class="footlink">Privacy Policy:</a>
+                  
+
+                  
+			    
+				
+            <a href="#" tabindex="25" onclick="Feedback();" class="footlink">Feedback</a>
+			</div>
+
+
+			<div class="clr"></div>
+			<div class="s11 clraaa aR">
+			<label id="FooterControl_lblReleaseDate" name="lblReleaseDate">Website updated as on: 01 Oct 2026</label>&nbsp &nbsp &nbsp &nbsp	© Copyright 2014, National Securities Depository Ltd. (NSDL)
+			</div>
+		</div>
+
+     <div class="fL mL10 mT10" >
+            <div class="bottonlinks">
+               <a href="https://twitter.com/NSDL_Depository" target="_blank"> <img style="margin: 0px;border-radius: 15px;" alt="twitter" src="../Images/25X25PixTweet.jpg"></a>
+               <a href="https://www.linkedin.com/company/national-securities-depository-limited/" target="_blank"> <img style="border-radius: 15px;" alt="linkedin" src="../Images/25X25PixIn.jpg"></a>
+            <a href="https://www.facebook.com/NSDL-National-Securities-Depository-Limited-101492279013266" target="_blank"> <img style="border-radius: 15px;" alt="facebook" src="../Images/25X25PixFB.jpg"></a>     
+            <a href="https://www.youtube.com/c/NSDLNationalSecuritiesDepositoryLimited" target="_blank"> <img style="border-radius: 15px;" alt="youtube" src="../Images/25X25PixYt.jpg"></a>
+                
+                 <//div>
+            </div>
+
+      
+          <div class="modal fade" id="modalcontactus" role="dialog" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header" style="background:#882017;color:white;">
+                                 <button type="button" class="close" data-dismiss="modal">X</button>
+                  
+
+                        <h3 style="margin-top:0px;margin-bottom:0px"><b>Contact Us</b></h3>
+                    </div>
+                    <div class="modal-header">
+                       
+                        <h4 style="margin-top:0px;margin-bottom:0px"><b>For any queries, you can contact NSDL at</b></h4>
+                    </div>
+                    <div class="modal-body" >
+
+                        
+                          <b>Address:</b><br />
+                          <!--Changed by Shivani on 26/08/2024-->
+                          National Securities Depository Limited<br />
+                          3rd Floor, Naman Chamber,<br />
+                          Plot C-32, G-Block,<br />
+                          Bandra Kurla Complex,<br />
+                          Bandra East, Mumbai - 400 013,<br />
+                          India.<br />
+                          Tel No: 91-22-6944-8400/ 8500<br />
+                          
+                          Email :<span style="color:blue;">fpiassist[at]nsdl[dot]com</span>
+                        
+                        
+                          
+                     
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+            
+
+            <div class="modal fade" id="modalprivacypolicy" role="dialog" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header" style="background:#882017;color:white;">
+                       <button type="button" class="close" data-dismiss="modal">X</button>
+                        <h3><b>Privacy Policy</b></h3>
+                    </div>
+                    <div class="modal-header">
+                      
+                        <h4><b>Privacy Policy for the use of <strong>FPI</strong> services of NSDL by Shareholder.</b></h4>
+                    </div>
+                    <div class="modal-body" style="list-style: none;">
+
+                        <ul>
+                          <li>1.<strong>Definitions:</strong> In this document, the following words and phrases have the meaning set opposite them unless the context indicates otherwise:</li>
+                          <li style="margin-left: 2%;">A) <strong>NSDL:</strong> means National Securities Depository Limited, a company incorporated under the Companies Act, 1956 and registered under the Depositories Act, 1996 with Securities and Exchange Board of India.</li>
+                          <li style="margin-left: 2%;">B) <strong>FPI:</strong> means a process for recording votes by the members/shareholders using a computer based machine to display an electronic ballot and to record the vote and also the number of votes polled in favour or against such that the entire voting gets registered and counted in an electronic registry in a centralized server.</li>
+                          <li style="margin-left: 2%;">C) <strong>Internet:</strong> refers to a Global network of inter connected Computers network, each using Transmission Control Protocol / Internet Protocol or any combination thereof or such other standard network inter connection protocols as is used to transmit data that is directly or indirectly delivered to a Computer.</li>
+                          <li style="margin-left: 2%;">D) <strong>User:</strong> The User could be anyone from the following entities:-</li>
+                          <li style="margin-left: 3%;">i) Issuer who places its resolutions for voting on the <strong>FPI</strong> system of NSDL.</li>
+                          <li style="margin-left: 3%;">ii) Registrar &amp; Transfer Agent through which the Issuer has established electronic connectivity with NSDL and has been authorised by the Issuer for taking necessary actions on its behalf in respect of activities pertaining to <strong>FPI</strong> system of NSDL.</li>
+                          <li style="margin-left: 3%;">iii) Scrutinizer appointed by the Issuer to conduct the voting process in <strong>FPI</strong> system of NSDL.</li>
+                          <li style="margin-left: 3%;">iv) Shareholders who casts vote in the <strong>FPI</strong> system of NSDL.</li>
+                          <li>2.<strong>Disclosure of Personal Information:</strong> The User agrees that NSDL may hold and process its Personal Information on computer or otherwise in connection with <strong>FPI</strong> as well as for statistical analysis. The User also agrees that NSDL may disclose, in strict confidence, to other institutions, such Personal Information as may be reasonably necessary for reasons inclusive of but not limited to the following:</li>
+                          <li style="margin-left: 3%;">i) In compliance with a legal directive &amp; For fraud prevention purposes, etc.</li>
+                          <li>3.<strong>Proprietary Rights:</strong> The User acknowledges that the software underlying <strong>FPI</strong> is the legal property of NSDL. The permission given by NSDL to access&nbsp;&nbsp;&nbsp; <strong>FPI</strong> will not convey any proprietary or ownership rights in the above software. The User shall not attempt to modify, translate, disassemble, decompile or reverse engineer the software underlying <strong>FPI</strong> or create any derivative product based on that software.</li>
+                          <li>4.<strong>Safeguards:</strong></li>
+                          <li style="margin-left: 3%;">i) The User agrees to commit the password/PIN to memory and not record it in any form including written or electronic.</li>
+                             <li style="margin-left: 3%;">ii) The User agrees to keep the password/PIN confidential and to not reveal the same to any third party.</li>
+                             <li style="margin-left: 3%;">iii) The User agrees that he shall not let any unauthorised person to have access to computers or leave them unattended while accessing<strong>FPI</strong>.</li>
+                          <li>5.<strong>Voting in respect of Demat Accounts/folios held in joint name:</strong> User agrees that in respect of account/folios held in joint holding pattern, the vote casted using the User ID and password sent to first holder shall be recognized on behalf of all joint holders of that account/folio.</li>
+                          <li>6.<strong>Recognition of Vote:</strong> User agrees that by casting the vote through <strong>FPI</strong>, the same shall only be considered for voting, where any other means of voting is also undertaken by him.</li>
+                          <li>7.<strong>Change of Terms and Conditions:</strong> NSDL reserves the absolute discretion to amend or supplement any of the terms and conditions at any time and will endeavour to give prior notice of fifteen days wherever feasible for such changes. NSDL may introduce new services within <strong>FPI</strong> from time to time. The existence and availability of the new services will be notified to the Users as and when they become available. The changed terms and conditions applicable to the new features in <strong>FPI</strong> shall be communicated to the User. By using these new services, the User agrees to be bound by the revised terms and conditions as may be applicable. The availability / non-availability of a particular service shall be advised either through email, web page of NSDL or written communication.</li>
+                          <li>8.<strong>Non-Transferability:</strong> The right of use of <strong>FPI</strong> service of NSDL is not transferable by a User under any circumstance and shall be used by the concerned User only.</li>
+                          <li>9.<strong>Liability:</strong> NSDL shall not be liable to the User for any transactions executed on the <strong>FPI</strong> system and the User hereby fully indemnifies and hold NSDL harmless against any action, suit, proceeding initiated against it or any loss, cost or damage incurred by it as a result thereof. NSDL shall under no circumstance be liable to the User if the access is not available in the desired manner for reasons including but not limited to natural calamities, legal restraints, faults in the telecommunication network or network failure or any other reason beyond the control of NSDL. Under no circumstance shall NSDL be liable for damages whatsoever whether such damages are direct, indirect, incidental, consequential and irrespective whether any claim is based on loss of revenue, interruption of business, or any loss of any character or nature and whether sustained by the user or any other person. Illegal or improper use of <strong>FPI</strong> system of NSDL shall render the User liable for payment of financial charges as decided by NSDL and may result in suspension of the access to <strong>FPI</strong> system.</li>
+                          <li>10.<strong>Governing Law:</strong> These terms and conditions and / or the use of the services provided through <strong>FPI</strong> shall be governed by the laws of the Republic of India and no other nation. The User agrees to submit to the exclusive jurisdiction of the Courts located in Mumbai, India as regards any claims or matters arising under these terms and conditions. Any dispute or difference arising between the User shall be settled by mutual consultation / discussion, failing which the same shall be referred to arbitration. The Arbitration proceedings shall be governed and conducted in accordance with the Indian Arbitration and Conciliation Act, 1996 and that the Arbitration proceedings shall take place in Mumbai. NSDL accepts no liability whatsoever, direct or indirect, for non-compliance with the laws of any country other than the Republic of India. The mere fact that <strong>FPI</strong> can be accessed through Internet by a User in a country other than India shall not be interpreted to imply that the laws of the said country govern these terms and conditions.</li>
+                          <li><strong>Disclaimer:</strong></li>
+                          <li style="margin-left: 4%;">All information provided in <strong>FPI</strong> system of NSDL is obtained by NSDL from sources believed to be accurate and reliable. Access and use of <strong>FPI</strong> system of NSDL is a confirmation by the Users that they have understood and accepted the terms and conditions for using this service. All proprietary rights in the information received shall remain the property of NSDL. Reproduction, redistribution and transmission of any information contained on the website are strictly prohibited. The information provided in <strong>FPI</strong> system is without warranty of any kind and NSDL shall not be liable for any damages, losses (direct or indirect) whatsoever, due to disruption or non availability of any of services/facility(ies) due to maintenance/technical fault/error or any failure in telecommunication network or any error in any software or hardware systems. NSDL makes no representation and disclaims all express, implied and statutory warranties of any kind to the user and/or any third party including warranties as to accuracy, timeliness, completeness, merchantability or fitness of the information for any particular purpose.</li>
+                          </ul>                    
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+            
+            <div class="modal fade" id="modaltermscondition" role="dialog" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header" style="background:#882017;color:white;">
+               <button type="button" class="close" data-dismiss="modal">X</button>
+                        <h3><b>Terms &amp; Conditions</b></h3>
+                    </div>
+                    <div class="modal-header">
+                      
+                        <h4><b>Terms and Conditions for the use of <strong>FPI</strong> services of NSDL by Shareholder.</b></h4>
+                    </div>
+                    <div class="modal-body" style="list-style: none;">
+
+                        <ul>
+                          <li>1.<strong>Definitions:</strong> In this document, the following words and phrases have the meaning set opposite them unless the context indicates otherwise:</li>
+                          <li style="margin-left: 2%;">A) <strong>NSDL:</strong> means National Securities Depository Limited, a company incorporated under the Companies Act, 1956 and registered under the Depositories Act, 1996 with Securities and Exchange Board of India.</li>
+                          <li style="margin-left: 2%;">B) <strong>FPI:</strong> means a process for recording votes by the members/shareholders using a computer based machine to display an electronic ballot and to record the vote and also the number of votes polled in favour or against such that the entire voting gets registered and counted in an electronic registry in a centralized server.</li>
+                          <li style="margin-left: 2%;">C) <strong>Internet:</strong> refers to a Global network of inter connected Computers network, each using Transmission Control Protocol / Internet Protocol or any combination thereof or such other standard network inter connection protocols as is used to transmit data that is directly or indirectly delivered to a Computer.</li>
+                          <li style="margin-left: 2%;">D) <strong>User:</strong> The User could be anyone from the following entities:-</li>
+                          <li style="margin-left: 3%;">i) Issuer who places its resolutions for voting on the <strong>FPI</strong> system of NSDL.</li>
+                          <li style="margin-left: 3%;">ii) Registrar &amp; Transfer Agent through which the Issuer has established electronic connectivity with NSDL and has been authorised by the Issuer for taking necessary actions on its behalf in respect of activities pertaining to <strong>FPI</strong> system of NSDL.</li>
+                          <li style="margin-left: 3%;">iii) Scrutinizer appointed by the Issuer to conduct the voting process in <strong>FPI</strong> system of NSDL.</li>
+                          <li style="margin-left: 3%;">iv) Shareholders who casts vote in the <strong>FPI</strong> system of NSDL.</li>
+                          <li>2.<strong>Disclosure of Personal Information:</strong> The User agrees that NSDL may hold and process its Personal Information on computer or otherwise in connection with <strong>FPI</strong> as well as for statistical analysis. The User also agrees that NSDL may disclose, in strict confidence, to other institutions, such Personal Information as may be reasonably necessary for reasons inclusive of but not limited to the following:</li>
+                          <li style="margin-left: 3%;">i) In compliance with a legal directive &amp; For fraud prevention purposes, etc.</li>
+                          <li>3.<strong>Proprietary Rights:</strong> The User acknowledges that the software underlying <strong>FPI</strong> is the legal property of NSDL. The permission given by NSDL to access&nbsp;&nbsp;&nbsp; <strong>FPI</strong> will not convey any proprietary or ownership rights in the above software. The User shall not attempt to modify, translate, disassemble, decompile or reverse engineer the software underlying <strong>FPI</strong> or create any derivative product based on that software.</li>
+                          <li>4.<strong>Safeguards:</strong></li>
+                          <li style="margin-left: 3%;">i) The User agrees to commit the password/PIN to memory and not record it in any form including written or electronic.</li>
+                             <li style="margin-left: 3%;">ii) The User agrees to keep the password/PIN confidential and to not reveal the same to any third party.</li>
+                             <li style="margin-left: 3%;">iii) The User agrees that he shall not let any unauthorised person to have access to computers or leave them unattended while accessing<strong>FPI</strong>.</li>
+                          <li>5.<strong>Voting in respect of Demat Accounts/folios held in joint name:</strong> User agrees that in respect of account/folios held in joint holding pattern, the vote casted using the User ID and password sent to first holder shall be recognized on behalf of all joint holders of that account/folio.</li>
+                          <li>6.<strong>Recognition of Vote:</strong> User agrees that by casting the vote through <strong>FPI</strong>, the same shall only be considered for voting, where any other means of voting is also undertaken by him.</li>
+                          <li>7.<strong>Change of Terms and Conditions:</strong> NSDL reserves the absolute discretion to amend or supplement any of the terms and conditions at any time and will endeavour to give prior notice of fifteen days wherever feasible for such changes. NSDL may introduce new services within <strong>FPI</strong> from time to time. The existence and availability of the new services will be notified to the Users as and when they become available. The changed terms and conditions applicable to the new features in <strong>FPI</strong> shall be communicated to the User. By using these new services, the User agrees to be bound by the revised terms and conditions as may be applicable. The availability / non-availability of a particular service shall be advised either through email, web page of NSDL or written communication.</li>
+                          <li>8.<strong>Non-Transferability:</strong> The right of use of <strong>FPI</strong> service of NSDL is not transferable by a User under any circumstance and shall be used by the concerned User only.</li>
+                          <li>9.<strong>Liability:</strong> NSDL shall not be liable to the User for any transactions executed on the <strong>FPI</strong> system and the User hereby fully indemnifies and hold NSDL harmless against any action, suit, proceeding initiated against it or any loss, cost or damage incurred by it as a result thereof. NSDL shall under no circumstance be liable to the User if the access is not available in the desired manner for reasons including but not limited to natural calamities, legal restraints, faults in the telecommunication network or network failure or any other reason beyond the control of NSDL. Under no circumstance shall NSDL be liable for damages whatsoever whether such damages are direct, indirect, incidental, consequential and irrespective whether any claim is based on loss of revenue, interruption of business, or any loss of any character or nature and whether sustained by the user or any other person. Illegal or improper use of <strong>FPI</strong> system of NSDL shall render the User liable for payment of financial charges as decided by NSDL and may result in suspension of the access to <strong>FPI</strong> system.</li>
+                          <li>10.<strong>Governing Law:</strong> These terms and conditions and / or the use of the services provided through <strong>FPI</strong> shall be governed by the laws of the Republic of India and no other nation. The User agrees to submit to the exclusive jurisdiction of the Courts located in Mumbai, India as regards any claims or matters arising under these terms and conditions. Any dispute or difference arising between the User shall be settled by mutual consultation / discussion, failing which the same shall be referred to arbitration. The Arbitration proceedings shall be governed and conducted in accordance with the Indian Arbitration and Conciliation Act, 1996 and that the Arbitration proceedings shall take place in Mumbai. NSDL accepts no liability whatsoever, direct or indirect, for non-compliance with the laws of any country other than the Republic of India. The mere fact that <strong>FPI</strong> can be accessed through Internet by a User in a country other than India shall not be interpreted to imply that the laws of the said country govern these terms and conditions.</li>
+                          <li><strong>Disclaimer:</strong></li>
+                          <li style="margin-left: 4%;">All information provided in <strong>FPI</strong> system of NSDL is obtained by NSDL from sources believed to be accurate and reliable. Access and use of <strong>FPI</strong> system of NSDL is a confirmation by the Users that they have understood and accepted the terms and conditions for using this service. All proprietary rights in the information received shall remain the property of NSDL. Reproduction, redistribution and transmission of any information contained on the website are strictly prohibited. The information provided in <strong>FPI</strong> system is without warranty of any kind and NSDL shall not be liable for any damages, losses (direct or indirect) whatsoever, due to disruption or non availability of any of services/facility(ies) due to maintenance/technical fault/error or any failure in telecommunication network or any error in any software or hardware systems. NSDL makes no representation and disclaims all express, implied and statutory warranties of any kind to the user and/or any third party including warranties as to accuracy, timeliness, completeness, merchantability or fitness of the information for any particular purpose.</li>
+                            </ul>                    
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+          <div class="modal fade" id="aboutus" role="dialog" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header" style="background:#882017;color:white;">
+                       <button type="button" class="close" data-dismiss="modal"">X</button>
+                        <h3><b>About Us</b></h3>
+                    </div>
+                    <div class="modal-header">
+                      
+                        <h4><b>For any queries, you can contact NSDL at</b></h4>
+                    </div>
+                    
+                </div>
+
+            </div>
+        </div>
+
+            <div class="modal fade" id="help" role="dialog" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header" style="background:#882017;color:white;">
+                        <button type="button" class="close" data-dismiss="modal" style="color:white;"><b>&times;</b></button>
+                        <h3><b>Help</b></h3>
+                    </div>
+                    <div class="modal-header">
+                      
+                        <h4><b>For any queries, you can contact NSDL at</b></h4>
+                    </div>
+                    
+                </div>
+
+            </div>
+        </div>
+</div>
+        </div>
+    </form>
+    <script type="text/javascript">       
+        function fnVal() {
+            if ($('#txtDate').val() == '') {
+                $('#hdnFlag').val('F');
+                alert("Please enter Date.");
+                $('#txtDate').focus();
+                return false;
+            }
+            else {
+                $('#hdnFlag').val('');
+                return true;
+            }
+        }
+    </script>
+    <script type="text/javascript">
+        Calendar.setup({
+            inputField: "txtDate", // id of the input field
+            dateFormat: "%d-%b-%Y", // format of the input field
+            trigger: "imgtxtDate", // trigger for the calendar (button ID)
+            weekNumbers: false,
+            bottomBar: false,
+            onSelect: function () {
+                $('#hdnDate').val($('#txtDate').val().trim());
+                this.hide();
+            }
+        });
+
+	    
+		
+
+    </script>
+</body>
+</html>

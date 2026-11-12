@@ -129,6 +129,7 @@ def test_ingests_fpi_categories_and_selects_latest_revision(tmp_path, monkeypatc
     assert result["eligible_filing_count"] == 3
     assert result["fetched_filing_count"] == 3
     assert result["fetch_error_count"] == 0
+    assert result["identity_status_counts"]["not_found_in_current_master"] == 498
     assert result["latest_quarter_parsed_count"] == 2
     assert result["latest_quarter_coverage_pct"] == 0.4
 
@@ -211,3 +212,133 @@ def test_company_name_fallback_normalizes_only_common_legal_suffix_variants():
     assert module._normal_name("ABC Limited") != module._normal_name(
         "ABC Holdings Limited"
     )
+
+
+
+def test_dated_bse_crosswalk_verifies_exact_identity_without_changing_source_isin(tmp_path):
+    crosswalk = tmp_path / "shareholding_bse_scripcode_isin_crosswalk.csv"
+    raw_source = tmp_path / "bse_source.csv"
+    raw_source.write_bytes(b"verified dated BSE source")
+    source_hash = __import__("hashlib").sha256(raw_source.read_bytes()).hexdigest()
+    row = {
+        "reporting_date": "2026-09-30",
+        "symbol": "ABC",
+        "universe_isin": "INE000A01001",
+        "master_record_id": "301",
+        "master_xbrl_url": "https://nsearchives.nseindia.com/corporate/xbrl/abc.xml",
+        "bse_isin": "INE000A01001",
+        "bse_crosswalk_status": "verified_exact_dated_bse_scripcode_isin_match",
+        "bse_bhavcopy_sha256": source_hash,
+        "xbrl_sha256": "b" * 64,
+    }
+    with crosswalk.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=list(row))
+        writer.writeheader()
+        writer.writerow(row)
+    report = {
+        "reporting_date": "2026-09-30",
+        "candidate_count": 1,
+        "verified_count": 1,
+        "unresolved_count": 0,
+        "bse_source_http_status": 200,
+        "bse_source_sha256": source_hash,
+        "bse_source_path": "bse_source.csv",
+    }
+    crosswalk.with_suffix(".json").write_text(json.dumps(report), encoding="utf-8")
+
+    indexed, metadata = module._load_identity_crosswalk(crosswalk)
+    master = _master_row(
+        "301", "ABC", "ABC Limited", "OLDISIN",
+        "09-OCT-2026 17:00:00", "N", row["master_xbrl_url"],
+    )
+    identity = module._metadata(master, {
+        "symbol": "ABC", "company_name": "ABC Limited", "isin": "INE000A01001",
+    }, indexed["ABC"])
+
+    assert metadata["verified_count"] == 1
+    assert identity["identity_status"] == "verified"
+    assert identity["identity_join_method"] == row["bse_crosswalk_status"]
+    assert identity["isin"] == "OLDISIN"
+    assert identity["universe_isin"] == "INE000A01001"
+    assert identity["identity_evidence_xbrl_sha256"] == "b" * 64
+
+
+def test_dated_bse_crosswalk_does_not_verify_different_filing_record(tmp_path):
+    row = {
+        "reporting_date": "2026-09-30",
+        "symbol": "ABC",
+        "universe_isin": "INE000A01001",
+        "master_record_id": "301",
+        "master_xbrl_url": "https://nsearchives.nseindia.com/corporate/xbrl/abc.xml",
+        "bse_isin": "INE000A01001",
+        "bse_crosswalk_status": "verified_exact_dated_bse_symbol_isin_match",
+        "bse_bhavcopy_sha256": "a" * 64,
+        "xbrl_sha256": "b" * 64,
+    }
+    master = _master_row(
+        "302", "ABC", "ABC Limited", "OLDISIN",
+        "09-OCT-2026 17:00:00", "N", "https://nsearchives.nseindia.com/corporate/xbrl/other.xml",
+    )
+    identity = module._metadata(master, {
+        "symbol": "ABC", "company_name": "ABC Limited", "isin": "INE000A01001",
+    }, row)
+    assert identity["identity_status"] == "isin_mismatch"
+    assert identity["identity_join_method"] == "dated_bse_crosswalk_rejected"
+
+
+
+def test_dated_bse_crosswalk_can_verify_missing_master_isin_without_name_match():
+    evidence = {
+        "reporting_date": "2026-09-30",
+        "master_record_id": "201",
+        "master_xbrl_url": "https://nsearchives.nseindia.com/corporate/xbrl/xyz.xml",
+        "universe_isin": "INE000B01001",
+        "bse_isin": "INE000B01001",
+        "bse_crosswalk_status": "verified_exact_dated_bse_symbol_isin_match",
+        "xbrl_sha256": "b" * 64,
+        "bse_bhavcopy_sha256": "a" * 64,
+    }
+    master = _master_row(
+        "201", "XYZ", "The XYZ Company Limited", None,
+        "08-OCT-2026 17:00:00", "N", evidence["master_xbrl_url"],
+    )
+    identity = module._metadata(master, {
+        "symbol": "XYZ", "company_name": "XYZ Limited", "isin": "INE000B01001",
+    }, evidence)
+    assert identity["identity_status"] == "verified"
+    assert identity["identity_join_method"] == evidence["bse_crosswalk_status"]
+    assert identity["isin"] is None
+    assert identity["universe_isin"] == "INE000B01001"
+    assert identity["identity_evidence_xbrl_sha256"] == "b" * 64
+
+
+
+def test_zero_price_index_placeholder_is_not_reported_as_missing_filing():
+    master = _master_row(
+        "100", "ABC", "ABC Limited", "INE000A01001",
+        "09-OCT-2026 17:00:00", "N", "https://nsearchives.nseindia.com/corporate/xbrl/abc.xml",
+    )
+    abc_stock = {"symbol": "ABC", "company_name": "ABC Limited", "isin": "INE000A01001"}
+    metadata = module._metadata(master, abc_stock)
+    metadata["reporting_date"] = "2026-09-30"
+    metadata["metadata_sha256"] = "b" * 64
+    rows = module._build_ownership_rows(
+        [
+            abc_stock,
+            {"symbol": "DUMMYHEG", "company_name": "Dummy HEG Ltd.", "isin": "DUM545A01024"},
+        ],
+        [metadata],
+        {},
+        "c" * 64,
+        {"DUMMYHEG": {
+            "classification": "demerged_index_placeholder",
+            "reason": "Non-tradable zero-price index placeholder",
+        }},
+    )
+    placeholder = next(row for row in rows if row["symbol"] == "DUMMYHEG")
+    assert placeholder["identity_status"] == "not_applicable_index_placeholder"
+    assert placeholder["filing_status"] == "not_applicable_index_placeholder"
+    assert placeholder["universe_member_type"] == "index_adjustment_placeholder"
+    assert placeholder["tradability_status"] == "non_tradable_zero_price"
+    assert placeholder["fpi_scoring_eligible"] == "false"
+    assert placeholder["universe_exclusion_reason"] == "Non-tradable zero-price index placeholder"

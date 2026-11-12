@@ -1,0 +1,53 @@
+{
+  "publisher": "National Securities Depository Limited",
+  "scope": "aggregate_market_wide_cash_equity_context_only",
+  "stock_level_attribution": false,
+  "start_date": "2026-08-10",
+  "end_date": "2026-11-09",
+  "normalized_date_count": 62,
+  "fpi": {
+    "observed_days": 62,
+    "cumulative_net_inr_crore": -255.21,
+    "positive_net_days": 28,
+    "negative_net_days": 34,
+    "zero_net_days": 0,
+    "max_daily_net_inr_crore": 16277.99,
+    "min_daily_net_inr_crore": -12884.07,
+    "gross_purchases_inr_crore": 1081290.98,
+    "gross_sales_inr_crore": 1081546.19
+  },
+  "dii": {
+    "observed_days": 62,
+    "cumulative_net_inr_crore": 231298.85,
+    "positive_net_days": 54,
+    "negative_net_days": 8,
+    "zero_net_days": 0,
+    "max_daily_net_inr_crore": 18491.7,
+    "min_daily_net_inr_crore": -11560.6,
+    "gross_purchases_inr_crore": 1219903.88,
+    "gross_sales_inr_crore": 988605.12
+  },
+  "overlapping_fpi_dii_days": 62,
+  "dii_no_data_days": [
+    "2026-08-26",
+    "2026-09-14",
+    "2026-10-02",
+    "2026-10-20",
+    "2026-11-10"
+  ],
+  "raw_response_counts": {
+    "data": 66,
+    "no_data": 5
+  },
+  "verified_raw_response_count": 71,
+  "raw_archive_manifest_sha256": "b1f08e3af954dba8db2182464433b111311c74a2e29240893c8c5d25dc42fb3a",
+  "normalized_csv_sha256": "061bc2be35b00e26bd6250938c005ba1998fbc01044cac72c2d0e7cdf216d4c1",
+  "raw_archive_manifest_path": "data/raw/nsdl_cash_flows/manifest.json",
+  "normalized_csv_path": "data/processed/nsdl_cash_flows.csv",
+  "source_boundaries": [
+    "FPI rows are NSDL Equity Sub-total cash investment values; derivatives and debt are excluded.",
+    "DII rows use NSDL Equity Total and do not sum investor/institution subtotals.",
+    "Explicit No Data responses remain missing and are never converted to zero.",
+    "These market-wide flows do not prove purchases or sales in any individual stock."
+  ]
+}

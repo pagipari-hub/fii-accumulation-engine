@@ -195,3 +195,10 @@ data/raw/shareholding/*
 # Preserve immutable NSE historical F&O aggregate report payloads and coverage manifest.
 !data/raw/nse_fo_historical/
 !data/raw/nse_fo_historical/**
+
+
+# Preserve the hash-verified NSDL aggregate cash-equity archive and normalized context.
+!data/raw/nsdl_cash_flows/
+!data/raw/nsdl_cash_flows/**
+!data/processed/nsdl_cash_flows.csv
+!data/processed/nsdl_cash_flow_context.json

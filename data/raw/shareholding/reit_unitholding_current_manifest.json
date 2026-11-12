@@ -1,0 +1,75 @@
+{
+  "dataset": "official_nse_reit_unitholding_fpi_ownership",
+  "publisher": "National Stock Exchange of India",
+  "reporting_date": "2026-09-30",
+  "status": "complete",
+  "expected_reit_count": 3,
+  "parsed_reit_count": 3,
+  "rows": [
+    {
+      "reporting_date": "2026-09-30",
+      "symbol": "BAGMANE",
+      "company_name": "Bagmane Prime Office REIT",
+      "isin": "INE2OVN25015",
+      "ownership_data_type": "reit_unitholding_pattern",
+      "fpi_units": 7486373,
+      "fpi_ownership_percentage_points": "0.22",
+      "reported_fpi_row_count": 2,
+      "announcement_seq_id": "106815675",
+      "announcement_date": "13-Oct-2026 13:02:37",
+      "attachment_path": "artifacts/nse-shareholding-announcements/attachments/BAGMANE_106815675_f8cedb88375d56ad.pdf",
+      "attachment_sha256": "f8cedb88375d56ad7a50453cbfd438cce150d8408d6da5cab98e30e5b81f9a4c"
+    },
+    {
+      "reporting_date": "2026-09-30",
+      "symbol": "BIRET",
+      "company_name": "Brookfield India Real Estate Trust",
+      "isin": "INE0FDU25010",
+      "ownership_data_type": "reit_unitholding_pattern",
+      "fpi_units": 88393039,
+      "fpi_ownership_percentage_points": "10.65",
+      "reported_fpi_row_count": 2,
+      "announcement_seq_id": "106823639",
+      "announcement_date": "21-Oct-2026 17:33:24",
+      "attachment_path": "artifacts/nse-shareholding-announcements/attachments/BIRET_106823639_667ae75caf0d68d0.pdf",
+      "attachment_sha256": "667ae75caf0d68d0c3e703fa648cea693ce8e7f4783efe553ae39a2bce9fd8e1"
+    },
+    {
+      "reporting_date": "2026-09-30",
+      "symbol": "EMBASSY",
+      "company_name": "EMBASSY OFFICE PARKS REIT",
+      "isin": "INE041025011",
+      "ownership_data_type": "reit_unitholding_pattern",
+      "fpi_units": 302751052,
+      "fpi_ownership_percentage_points": "31.94",
+      "reported_fpi_row_count": 2,
+      "announcement_seq_id": "106812865",
+      "announcement_date": "09-Oct-2026 18:02:35",
+      "attachment_path": "artifacts/nse-shareholding-announcements/attachments/EMBASSY_106812865_bf299766b4a206da.pdf",
+      "attachment_sha256": "bf299766b4a206da6ba32ac654a42dbb30707a265b9244e8240e050bc44950b0"
+    }
+  ],
+  "source_evidence": [
+    {
+      "symbol": "EMBASSY",
+      "seq_id": "106812865",
+      "attachment_path": "artifacts/nse-shareholding-announcements/attachments/EMBASSY_106812865_bf299766b4a206da.pdf",
+      "attachment_sha256": "bf299766b4a206da6ba32ac654a42dbb30707a265b9244e8240e050bc44950b0"
+    },
+    {
+      "symbol": "BIRET",
+      "seq_id": "106823639",
+      "attachment_path": "artifacts/nse-shareholding-announcements/attachments/BIRET_106823639_667ae75caf0d68d0.pdf",
+      "attachment_sha256": "667ae75caf0d68d0c3e703fa648cea693ce8e7f4783efe553ae39a2bce9fd8e1"
+    },
+    {
+      "symbol": "BAGMANE",
+      "seq_id": "106815675",
+      "attachment_path": "artifacts/nse-shareholding-announcements/attachments/BAGMANE_106815675_f8cedb88375d56ad.pdf",
+      "attachment_sha256": "f8cedb88375d56ad7a50453cbfd438cce150d8408d6da5cab98e30e5b81f9a4c"
+    }
+  ],
+  "output_path": "data/raw/shareholding/reit_unitholding_current.csv",
+  "output_sha256": "c40a017ba1ba0cf6d5dc62ad96868d25cf7e30aee0d23a0ac5c4d8fdff61353a",
+  "scope_boundary": "REIT unit ownership is kept separate from equity shareholding XBRL; no conversion of units to equity shares is performed."
+}
