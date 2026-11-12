@@ -64,33 +64,53 @@ class _TextExtractor(HTMLParser):
 
 
 def _verified_identity(root: Path, symbol: str, expected_scrip: str) -> dict:
+    """Join issuer data to the dated universe using the official BSE UDiFF row.
+
+    The XBRL-derived crosswalk only contains issuers that filed an NSE XBRL
+    disclosure. It therefore cannot be used to validate the very missing
+    issuers this fallback is intended to recover.
+    """
     universe_path = root / UNIVERSE
-    crosswalk_path = root / CROSSWALK
     with universe_path.open(newline="", encoding="utf-8-sig") as handle:
         universe = {row["symbol"].strip().upper(): row for row in csv.DictReader(handle)}
-    with crosswalk_path.open(newline="", encoding="utf-8-sig") as handle:
-        crosswalk = {row["symbol"].strip().upper(): row for row in csv.DictReader(handle)}
     stock = universe.get(symbol)
-    row = crosswalk.get(symbol)
-    if not stock or not row:
-        raise ValueError(f"missing dated universe/crosswalk identity for {symbol}")
-    if row.get("reporting_date") != REPORTING_DATE:
-        raise ValueError(f"crosswalk reporting date mismatch for {symbol}")
-    if row.get("bse_scrip_code", "").strip() != expected_scrip:
+    if not stock:
+        raise ValueError(f"symbol is absent from dated Nifty 500 universe: {symbol}")
+
+    udiff_paths = sorted(
+        (root / "data/raw/shareholding/identity_evidence").glob(
+            f"BhavCopy_BSE_CM_0_0_0_{REPORTING_DATE.replace('-', '')}_F_0000_*.csv"
+        )
+    )
+    if len(udiff_paths) != 1:
+        raise ValueError(f"expected one dated BSE UDiFF file, found {len(udiff_paths)}")
+    udiff_path = udiff_paths[0]
+    with udiff_path.open(newline="", encoding="utf-8-sig") as handle:
+        matches = [
+            row for row in csv.DictReader(handle)
+            if row.get("Sgmt") == "CM"
+            and row.get("Src") == "BSE"
+            and row.get("FinInstrmTp") == "STK"
+            and row.get("TckrSymb", "").strip().upper() == symbol
+        ]
+    if len(matches) != 1:
+        raise ValueError(f"expected one dated BSE UDiFF identity row for {symbol}, found {len(matches)}")
+    row = matches[0]
+    universe_isin = stock["isin"].strip().upper()
+    if row.get("TradDt") != REPORTING_DATE:
+        raise ValueError(f"BSE UDiFF trade date mismatch for {symbol}")
+    if row.get("FinInstrmId", "").strip() != expected_scrip:
         raise ValueError(f"dated BSE scrip code mismatch for {symbol}")
-    if row.get("universe_isin", "").strip().upper() != stock["isin"].strip().upper():
-        raise ValueError(f"crosswalk universe ISIN mismatch for {symbol}")
-    if row.get("bse_isin", "").strip().upper() != stock["isin"].strip().upper():
-        raise ValueError(f"dated BSE ISIN mismatch for {symbol}")
-    if row.get("bse_crosswalk_status") not in {
-        "verified_exact_dated_bse_scripcode_isin_match",
-        "verified_exact_dated_bse_symbol_isin_match",
-    }:
-        raise ValueError(f"dated BSE identity is not verified for {symbol}")
+    if row.get("ISIN", "").strip().upper() != universe_isin:
+        raise ValueError(f"dated BSE UDiFF ISIN does not match Nifty 500 universe for {symbol}")
+    if row.get("TckrSymb", "").strip().upper() != symbol:
+        raise ValueError(f"dated BSE UDiFF symbol mismatch for {symbol}")
     return {
         "company_name": stock["company_name"],
         "isin": stock["isin"],
-        "identity_join_method": row["bse_crosswalk_status"],
+        "identity_join_method": "verified_exact_dated_bse_udiff_symbol_scripcode_isin_match",
+        "identity_evidence_path": str(udiff_path.relative_to(root)),
+        "identity_evidence_sha256": _sha256(udiff_path.read_bytes()),
     }
 
 
