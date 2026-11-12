@@ -232,7 +232,7 @@ def probe(root: Path = Path(".")) -> dict:
 
     fields = [
         "reporting_date", "symbol", "company_name", "isin", "identity_join_method",
-        "ownership_data_type", "fpi_category_i_shares", "fpi_category_ii_shares",
+        "identity_evidence_path", "identity_evidence_sha256", "ownership_data_type", "fpi_category_i_shares", "fpi_category_ii_shares",
         "fpi_total_shares", "fpi_category_i_ownership_percentage_points",
         "fpi_category_ii_ownership_percentage_points", "fpi_total_ownership_percentage_points",
         "category_breakdown_status", "source_url", "source_content_type",
