@@ -331,3 +331,38 @@ def test_classifier_writes_auditable_outputs_and_deduplicates_cross_report(tmp_p
     assert result["universe_row_count"] == 501
     assert result["nifty500_snapshot_verified_event_count"] == 1
     assert result["universe_effective_date_status"] == "exact constituent effective date not supplied here"
+
+    # An identical repeat run must reuse the same immutable snapshot paths.
+    repeated = classify(tmp_path, lookback_days=7)
+    assert repeated["snapshot_manifest_path"] == result["snapshot_manifest_path"]
+    assert repeated["event_snapshot_path"] == result["event_snapshot_path"]
+    assert repeated["stock_summary_snapshot_path"] == result["stock_summary_snapshot_path"]
+
+    # Changed source-manifest provenance with unchanged deal CSV content must
+    # produce a new immutable manifest identity, not overwrite or collide.
+    source_manifest = manifest_dir / "bulk_2026-11-06.json"
+    source_data = json.loads(source_manifest.read_text(encoding="utf-8"))
+    source_data["retrieved_at_utc"] = "2026-11-06T19:30:00+00:00"
+    source_manifest.write_text(json.dumps(source_data), encoding="utf-8")
+    provenance_changed = classify(tmp_path, lookback_days=7)
+    assert provenance_changed["snapshot_manifest_path"] != result["snapshot_manifest_path"]
+    assert (tmp_path / result["snapshot_manifest_path"]).is_file()
+    assert (tmp_path / provenance_changed["snapshot_manifest_path"]).is_file()
+
+    # Changed source data must also result in a distinct immutable snapshot.
+    source_csv = tmp_path / source_data["snapshot_path"]
+    with source_csv.open(encoding="utf-8", newline="") as handle:
+        source_rows = list(csv.DictReader(handle))
+    source_rows[0]["quantity"] = "200"
+    with source_csv.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=list(source_rows[0]))
+        writer.writeheader()
+        writer.writerows(source_rows)
+    source_data["snapshot_sha256"] = hashlib.sha256(source_csv.read_bytes()).hexdigest()
+    source_manifest.write_text(json.dumps(source_data), encoding="utf-8")
+    changed_content = classify(tmp_path, lookback_days=7)
+    assert changed_content["snapshot_manifest_path"] not in {
+        result["snapshot_manifest_path"], provenance_changed["snapshot_manifest_path"]
+    }
+    assert (tmp_path / result["snapshot_manifest_path"]).is_file()
+    assert (tmp_path / provenance_changed["snapshot_manifest_path"]).is_file()
