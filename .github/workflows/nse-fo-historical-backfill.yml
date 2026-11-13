@@ -1,0 +1,95 @@
+name: NSE historical F&O aggregate report backfill
+
+on:
+  push:
+    branches: [research/nse-fo-historical-archive-probe]
+    paths:
+      - "src/fii_engine/nse_fo_historical_archive_probe.py"
+      - "src/fii_engine/nse_fo_aggregate_reports.py"
+      - "tests/test_nse_fo_historical_archive_probe.py"
+      - ".github/workflows/nse-fo-historical-backfill.yml"
+      - ".gitignore"
+  workflow_dispatch:
+    inputs:
+      sessions:
+        description: "Number of complete historical trading sessions to collect"
+        required: true
+        type: choice
+        options: ["3", "60", "120"]
+        default: "60"
+      end_date:
+        description: "Last date to scan (YYYY-MM-DD)"
+        required: true
+        type: string
+        default: "2026-11-10"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: nse-fo-historical-backfill
+  cancel-in-progress: false
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install project and test dependencies
+        run: python -m pip install -e ".[dev]"
+
+      - name: Run complete project tests
+        run: pytest
+
+      - name: Verify historical archive selector on three recent sessions
+        id: probe
+        if: github.event_name == 'push'
+        run: |
+          python -m fii_engine.nse_fo_historical_archive_probe \
+            --repo-root . --sessions 3 --end-date 2026-11-10 \
+            --max-calendar-days 30
+
+      - name: Backfill requested historical coverage
+        id: backfill
+        if: github.event_name == 'workflow_dispatch' || steps.probe.outcome == 'success'
+        env:
+          REQUESTED_SESSIONS: ${{ inputs.sessions || '60' }}
+          END_DATE: ${{ inputs.end_date || '2026-11-10' }}
+        run: |
+          python -m fii_engine.nse_fo_historical_archive_probe \
+            --repo-root . \
+            --sessions "$REQUESTED_SESSIONS" \
+            --end-date "$END_DATE" \
+            --max-calendar-days 180
+
+      - name: Commit immutable historical report payloads and manifests
+        if: steps.backfill.outcome == 'success'
+        run: |
+          if [[ -n "$(git status --porcelain data/raw/nse_fo_historical)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add data/raw/nse_fo_historical
+            git commit -m "data: backfill verified NSE F&O historical reports"
+            bash scripts/retry_git_push.sh "$GITHUB_REF_NAME"
+          else
+            echo "No new historical report payloads."
+          fi
+
+      - name: Upload raw archives and coverage manifest
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nse-fo-historical-backfill-${{ github.run_id }}
+          path: data/raw/nse_fo_historical/
+          if-no-files-found: warn
+          retention-days: 90
