@@ -5,14 +5,14 @@
     "error_type": "ValueError",
     "error": "multiple immutable stock snapshots exist for 2026-11-09; resolve the corrected/revised snapshot explicitly before rolling analysis"
   },
-  "generated_at_utc": "2026-11-12T22:49:22.877847+00:00",
+  "generated_at_utc": "2026-11-13T22:45:29.620508+00:00",
   "collectors": {
     "nifty500_universe": {
       "status": "success",
-      "started_at_utc": "2026-11-12T22:49:08.536975+00:00",
-      "completed_at_utc": "2026-11-12T22:49:09.910364+00:00",
+      "started_at_utc": "2026-11-13T22:45:15.145603+00:00",
+      "completed_at_utc": "2026-11-13T22:45:16.146681+00:00",
       "result": {
-        "retrieved_at_utc": "2026-11-12T22:49:09.909943+00:00",
+        "retrieved_at_utc": "2026-11-13T22:45:16.146157+00:00",
         "constituent_count": 501,
         "source_freshness_statement": "Data as on last trading day of the previous month",
         "raw_sha256": "31b764a95cc03ad1d7ddb6c42340de9125ed2c78b3d436bf0dbc8440e4e38c5e",
@@ -25,10 +25,10 @@
     },
     "nse_fo_underlyings": {
       "status": "success",
-      "started_at_utc": "2026-11-12T22:49:09.910652+00:00",
-      "completed_at_utc": "2026-11-12T22:49:12.010910+00:00",
+      "started_at_utc": "2026-11-13T22:45:16.146986+00:00",
+      "completed_at_utc": "2026-11-13T22:45:18.779076+00:00",
       "result": {
-        "retrieved_at_utc": "2026-11-12T22:49:11Z",
+        "retrieved_at_utc": "2026-11-13T22:45:18Z",
         "index_underlying_count": 6,
         "individual_stock_underlying_count": 218,
         "raw_sha256": "651a602baba006be3d97b648626a02f37b2c0b91db7fb7385d43bcd7ba844cd6",
@@ -40,7 +40,7 @@
         "current_manifest_path": "data/raw/fno_underlyings/fno_underlyings_current_manifest.json",
         "reconciliation": {
           "status": "pass",
-          "as_of_date_ist": "2026-11-13",
+          "as_of_date_ist": "2026-11-14",
           "current_individual_stock_count": 218,
           "tracker_symbols_checked": 139,
           "baseline_symbols_without_tracker_events": 136,
@@ -89,14 +89,14 @@
           "tracker_raw_sha256": "eb1ed2aecab8f5236689224cf81df1696ca0e86fb607fe4bb6fbbfee62e1f301",
           "symbol_aliases_sha256": "d6a72ee7ea05ae3a34e827e4aac262c4d62bbe457a199cf9756db570612d45c8"
         },
-        "reconciliation_path": "data/snapshots/fno_underlyings/fno_tracker_reconciliation_20261113_0d3a88e4ce0a.json",
+        "reconciliation_path": "data/snapshots/fno_underlyings/fno_tracker_reconciliation_20261114_238fbe22151c.json",
         "reconciliation_current_path": "data/raw/fno_underlyings/fno_tracker_reconciliation_current.json"
       }
     },
     "nifty500_fno_status": {
       "status": "success",
-      "started_at_utc": "2026-11-12T22:49:12.011428+00:00",
-      "completed_at_utc": "2026-11-12T22:49:12.015348+00:00",
+      "started_at_utc": "2026-11-13T22:45:18.779475+00:00",
+      "completed_at_utc": "2026-11-13T22:45:18.782976+00:00",
       "result": {
         "counts": {
           "nifty500_count": 501,
@@ -114,15 +114,15 @@
     },
     "nse_fii_dii": {
       "status": "success",
-      "started_at_utc": "2026-11-12T22:49:12.015641+00:00",
-      "completed_at_utc": "2026-11-12T22:49:12.944124+00:00",
+      "started_at_utc": "2026-11-13T22:45:18.783182+00:00",
+      "completed_at_utc": "2026-11-13T22:45:21.022145+00:00",
       "result": {
         "dataset": "nse_fii_dii_cash_activity",
         "publisher": "National Stock Exchange of India",
-        "retrieved_at_utc": "2026-11-12T22:49:12Z",
-        "raw_response_path": "data/raw/fii_dii/nse_fii_dii_878f59bf3be0452a.json",
-        "raw_response_sha256": "878f59bf3be0452a4fa1774da1f5e9d3e88d2b028ff1985a189694e0a16f6870",
-        "raw_response_bytes": 216,
+        "retrieved_at_utc": "2026-11-13T22:45:21Z",
+        "raw_response_path": "data/raw/fii_dii/nse_fii_dii_d2b53ffc75009ccc.json",
+        "raw_response_sha256": "d2b53ffc75009ccccc1f174fd6d89984e470f86906a94255bcda82d034b22ce4",
+        "raw_response_bytes": 218,
         "scope": "NSE_only",
         "segment": "capital_market",
         "snapshots_count": 1
@@ -130,14 +130,14 @@
     },
     "nse_cash_market": {
       "status": "success",
-      "started_at_utc": "2026-11-12T22:49:12.944220+00:00",
-      "completed_at_utc": "2026-11-12T22:49:15.242100+00:00",
+      "started_at_utc": "2026-11-13T22:45:21.022236+00:00",
+      "completed_at_utc": "2026-11-13T22:45:23.181273+00:00",
       "result": {
         "publisher": "National Stock Exchange of India",
-        "retrieved_at_utc": "2026-11-12T22:49:14Z",
-        "catalogue_current_date": "12-Nov-2026",
-        "catalogue_previous_date": "11-Nov-2026",
-        "trade_date": "2026-11-12",
+        "retrieved_at_utc": "2026-11-13T22:45:22Z",
+        "catalogue_current_date": "13-Nov-2026",
+        "catalogue_previous_date": "12-Nov-2026",
+        "trade_date": "2026-11-13",
         "finality": "final",
         "datasets_count": 2,
         "data_boundaries_count": 3
@@ -145,39 +145,39 @@
     },
     "nse_fo_bhavcopy": {
       "status": "success",
-      "started_at_utc": "2026-11-12T22:49:15.242135+00:00",
-      "completed_at_utc": "2026-11-12T22:49:17.728615+00:00",
+      "started_at_utc": "2026-11-13T22:45:23.181303+00:00",
+      "completed_at_utc": "2026-11-13T22:45:25.100233+00:00",
       "result": {
-        "trade_date": "2026-11-12",
-        "row_count": 42967,
-        "raw_zip_sha256": "79285823ee47f0e6406e0a69c544071178d2337e6538ae32b0f9b1b94530f9b3",
-        "csv_sha256": "1b7695a697eef4bbeaefc2595f82103c66a3a7ed58861d24725ebe916a3030df",
-        "manifest_path": "data/raw/fno_bhavcopy/manifests/2026-11-12_79285823ee47f0e6.json",
-        "raw_zip_path": "data/raw/fno_bhavcopy/2026-11-12_79285823ee47f0e6_BhavCopy_NSE_FO_0_0_0_20261112_F_0000.csv.zip",
-        "csv_path": "data/processed/fno_bhavcopy/nse_fo_udiff_2026-11-12_79285823ee47f0e6.csv",
-        "retrieved_at_utc": "2026-11-12T22:49:17Z"
+        "trade_date": "2026-11-13",
+        "row_count": 43553,
+        "raw_zip_sha256": "7455447c19eb138dd6799d701aab4fed7d94f0bf0dbac3a3f14ebe257bdeab2c",
+        "csv_sha256": "8141ce285902cfa734ab5440c75ea51902b01e00a244954b90cf7ce0ed506c48",
+        "manifest_path": "data/raw/fno_bhavcopy/manifests/2026-11-13_7455447c19eb138d.json",
+        "raw_zip_path": "data/raw/fno_bhavcopy/2026-11-13_7455447c19eb138d_BhavCopy_NSE_FO_0_0_0_20261113_F_0000.csv.zip",
+        "csv_path": "data/processed/fno_bhavcopy/nse_fo_udiff_2026-11-13_7455447c19eb138d.csv",
+        "retrieved_at_utc": "2026-11-13T22:45:25Z"
       }
     },
     "nse_fo_aggregate_reports": {
       "status": "success",
-      "started_at_utc": "2026-11-12T22:49:17.728826+00:00",
-      "completed_at_utc": "2026-11-12T22:49:19.951292+00:00",
+      "started_at_utc": "2026-11-13T22:45:25.100441+00:00",
+      "completed_at_utc": "2026-11-13T22:45:26.502600+00:00",
       "result": {
         "publisher": "National Stock Exchange of India",
-        "retrieved_at_utc": "2026-11-12T22:49:19Z",
+        "retrieved_at_utc": "2026-11-13T22:45:26Z",
         "datasets_count": 3,
         "attribution_boundary": "Participant reports are category aggregates, not participant-by-stock positions. FII statistics are aggregate FII derivatives data only."
       }
     },
     "nse_bulk_block_deals": {
       "status": "success",
-      "started_at_utc": "2026-11-12T22:49:19.951326+00:00",
-      "completed_at_utc": "2026-11-12T22:49:22.174212+00:00",
+      "started_at_utc": "2026-11-13T22:45:26.502625+00:00",
+      "completed_at_utc": "2026-11-13T22:45:28.962360+00:00",
       "result": {
         "publisher": "National Stock Exchange of India",
         "source_page": "https://www.nseindia.com/report-detail/display-bulk-and-block-deals",
         "api_url": "https://www.nseindia.com/api/historicalOR/bulk-block-short-deals",
-        "retrieved_at_utc": "2026-11-12T22:49:20Z",
+        "retrieved_at_utc": "2026-11-13T22:45:27Z",
         "requested_from": "2026-11-06",
         "requested_to": "2026-11-13",
         "session_bootstrap_http_status": 200,
@@ -187,15 +187,15 @@
     },
     "pipeline": {
       "status": "complete",
-      "generated_at_utc": "2026-11-12T22:49:22.174256+00:00",
+      "generated_at_utc": "2026-11-13T22:45:28.962401+00:00",
       "core_market_source_available": true
     }
   },
   "matrix": {
-    "trade_date": "2026-11-12",
+    "trade_date": "2026-11-13",
     "row_count": 501,
-    "output_sha256": "569cc144dbe8195f83854e5cb2acade0794acd55ad235104ae8d61b8d13dd0ea",
-    "snapshot_path": "data/snapshots/daily_stock_features/daily_stock_features_2026-11-12_569cc144dbe8195f.csv",
+    "output_sha256": "16132c7957880458df4cfca9bdc6c24b871620741fe47e9f7b08e595027e8fe7",
+    "snapshot_path": "data/snapshots/daily_stock_features/daily_stock_features_2026-11-13_16132c7957880458.csv",
     "scoring_status": "input_matrix_only_no_production_scores"
   }
 }
