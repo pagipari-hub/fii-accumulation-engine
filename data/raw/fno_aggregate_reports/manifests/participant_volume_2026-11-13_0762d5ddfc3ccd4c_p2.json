@@ -1,0 +1,795 @@
+{
+  "dataset": "participant_volume",
+  "publisher": "National Stock Exchange of India",
+  "reference_url": "https://www.nseindia.com/all-reports-derivatives",
+  "report_key": "FO-PARTICIPANTWISE-TRADING-VOL",
+  "display_name": "F&O-Participant wise Trading Volumes (csv)",
+  "catalogue_group": "CurrentDay",
+  "trading_date": "2026-11-13",
+  "filename": "fao_participant_vol_13112026.csv",
+  "download_url": "https://nsearchives.nseindia.com/content/nsccl/fao_participant_vol_13112026.csv",
+  "reported_file_size": "0.95 KB",
+  "file_position": 12,
+  "file_hash_key": "FO-PARTICIPANTWISE-TRADING-VOL-2",
+  "attribution_scope": "participant_category_aggregate_not_stock_specific",
+  "retrieved_at_utc": "2026-11-13T21:55:15Z",
+  "raw_path": "data/raw/fno_aggregate_reports/2026-11-13_0762d5ddfc3ccd4c_fao_participant_vol_13112026.csv",
+  "raw_bytes": 977,
+  "raw_sha256": "0762d5ddfc3ccd4c477982ca6576201146a5f4eae068f834c174a2eed6fe8a3a",
+  "processed_path": "data/processed/fno_aggregate_reports/participant_volume_2026-11-13_0762d5ddfc3ccd4c_p2.csv",
+  "processed_sha256": "0caa30c09203bbd322156670d92799ece196077fea4d96ffae452b1bcbef4111",
+  "snapshot_path": "data/snapshots/fno_aggregate_reports/participant_volume_2026-11-13_0caa30c09203bbd3_p2.csv",
+  "snapshot_sha256": "0caa30c09203bbd322156670d92799ece196077fea4d96ffae452b1bcbef4111",
+  "normalized_row_count": 48,
+  "inspection": {
+    "format": "csv",
+    "title": "Participant wise Trading Volume (no. of contracts) in Equity Derivatives as on Nov 13, 2026",
+    "trade_date_in_title": "2026-11-13",
+    "units_as_labelled": "number_of_contracts",
+    "row_count": 5,
+    "participant_categories": [
+      "Client",
+      "DII",
+      "FII",
+      "Pro",
+      "TOTAL"
+    ],
+    "column_count": 15,
+    "columns": [
+      "Client Type",
+      "Future Index Long",
+      "Future Index Short",
+      "Future Stock Long",
+      "Future Stock Short",
+      "Option Index Call Long",
+      "Option Index Put Long",
+      "Option Index Call Short",
+      "Option Index Put Short",
+      "Option Stock Call Long",
+      "Option Stock Put Long",
+      "Option Stock Call Short",
+      "Option Stock Put Short",
+      "Total Long Contracts",
+      "Total Short Contracts"
+    ],
+    "header_sha256": "18f3a9d408c28f7a328ddf2fd3b30777cc0d9d1010d58628587e88fd9a84d3ec",
+    "participant_rows": [
+      {
+        "participant_category": "Client",
+        "Future Index Long": 47722,
+        "Future Index Short": 43091,
+        "Future Stock Long": 328820,
+        "Future Stock Short": 313533,
+        "Option Index Call Long": 24307469,
+        "Option Index Put Long": 25293612,
+        "Option Index Call Short": 24323812,
+        "Option Index Put Short": 25348899,
+        "Option Stock Call Long": 2167648,
+        "Option Stock Put Long": 876550,
+        "Option Stock Call Short": 2089448,
+        "Option Stock Put Short": 920509,
+        "Total Long Contracts": 53021821,
+        "Total Short Contracts": 53039292
+      },
+      {
+        "participant_category": "DII",
+        "Future Index Long": 262,
+        "Future Index Short": 1129,
+        "Future Stock Long": 90747,
+        "Future Stock Short": 86090,
+        "Option Index Call Long": 1835,
+        "Option Index Put Long": 2200,
+        "Option Index Call Short": 1883,
+        "Option Index Put Short": 5000,
+        "Option Stock Call Long": 4793,
+        "Option Stock Put Long": 8118,
+        "Option Stock Call Short": 23422,
+        "Option Stock Put Short": 8436,
+        "Total Long Contracts": 107955,
+        "Total Short Contracts": 125960
+      },
+      {
+        "participant_category": "FII",
+        "Future Index Long": 11374,
+        "Future Index Short": 17575,
+        "Future Stock Long": 275871,
+        "Future Stock Short": 300016,
+        "Option Index Call Long": 3690669,
+        "Option Index Put Long": 3466425,
+        "Option Index Call Short": 3700143,
+        "Option Index Put Short": 3458255,
+        "Option Stock Call Long": 181319,
+        "Option Stock Put Long": 121391,
+        "Option Stock Call Short": 178106,
+        "Option Stock Put Short": 125306,
+        "Total Long Contracts": 7747049,
+        "Total Short Contracts": 7779401
+      },
+      {
+        "participant_category": "Pro",
+        "Future Index Long": 21857,
+        "Future Index Short": 19420,
+        "Future Stock Long": 365195,
+        "Future Stock Short": 360994,
+        "Option Index Call Long": 26322819,
+        "Option Index Put Long": 26186089,
+        "Option Index Call Short": 26296954,
+        "Option Index Put Short": 26136172,
+        "Option Stock Call Long": 4161816,
+        "Option Stock Put Long": 2488549,
+        "Option Stock Call Short": 4224600,
+        "Option Stock Put Short": 2440357,
+        "Total Long Contracts": 59546325,
+        "Total Short Contracts": 59478497
+      }
+    ],
+    "reported_total_row": {
+      "participant_category": "TOTAL",
+      "Future Index Long": 81215,
+      "Future Index Short": 81215,
+      "Future Stock Long": 1060633,
+      "Future Stock Short": 1060633,
+      "Option Index Call Long": 54322792,
+      "Option Index Put Long": 54948326,
+      "Option Index Call Short": 54322792,
+      "Option Index Put Short": 54948326,
+      "Option Stock Call Long": 6515576,
+      "Option Stock Put Long": 3494608,
+      "Option Stock Call Short": 6515576,
+      "Option Stock Put Short": 3494608,
+      "Total Long Contracts": 120423150,
+      "Total Short Contracts": 120423150
+    },
+    "reconciliation": {
+      "status": "exact_match",
+      "max_absolute_difference": 0,
+      "column_totals": {
+        "Future Index Long": {
+          "participant_sum": 81215,
+          "reported_total": 81215,
+          "difference": 0
+        },
+        "Future Index Short": {
+          "participant_sum": 81215,
+          "reported_total": 81215,
+          "difference": 0
+        },
+        "Future Stock Long": {
+          "participant_sum": 1060633,
+          "reported_total": 1060633,
+          "difference": 0
+        },
+        "Future Stock Short": {
+          "participant_sum": 1060633,
+          "reported_total": 1060633,
+          "difference": 0
+        },
+        "Option Index Call Long": {
+          "participant_sum": 54322792,
+          "reported_total": 54322792,
+          "difference": 0
+        },
+        "Option Index Put Long": {
+          "participant_sum": 54948326,
+          "reported_total": 54948326,
+          "difference": 0
+        },
+        "Option Index Call Short": {
+          "participant_sum": 54322792,
+          "reported_total": 54322792,
+          "difference": 0
+        },
+        "Option Index Put Short": {
+          "participant_sum": 54948326,
+          "reported_total": 54948326,
+          "difference": 0
+        },
+        "Option Stock Call Long": {
+          "participant_sum": 6515576,
+          "reported_total": 6515576,
+          "difference": 0
+        },
+        "Option Stock Put Long": {
+          "participant_sum": 3494608,
+          "reported_total": 3494608,
+          "difference": 0
+        },
+        "Option Stock Call Short": {
+          "participant_sum": 6515576,
+          "reported_total": 6515576,
+          "difference": 0
+        },
+        "Option Stock Put Short": {
+          "participant_sum": 3494608,
+          "reported_total": 3494608,
+          "difference": 0
+        },
+        "Total Long Contracts": {
+          "participant_sum": 120423150,
+          "reported_total": 120423150,
+          "difference": 0
+        },
+        "Total Short Contracts": {
+          "participant_sum": 120423150,
+          "reported_total": 120423150,
+          "difference": 0
+        }
+      },
+      "row_component_totals": {
+        "Client": {
+          "long_component_sum": 53021821,
+          "reported_total_long": 53021821,
+          "long_difference": 0,
+          "short_component_sum": 53039292,
+          "reported_total_short": 53039292,
+          "short_difference": 0
+        },
+        "DII": {
+          "long_component_sum": 107955,
+          "reported_total_long": 107955,
+          "long_difference": 0,
+          "short_component_sum": 125960,
+          "reported_total_short": 125960,
+          "short_difference": 0
+        },
+        "FII": {
+          "long_component_sum": 7747049,
+          "reported_total_long": 7747049,
+          "long_difference": 0,
+          "short_component_sum": 7779401,
+          "reported_total_short": 7779401,
+          "short_difference": 0
+        },
+        "Pro": {
+          "long_component_sum": 59546325,
+          "reported_total_long": 59546325,
+          "long_difference": 0,
+          "short_component_sum": 59478497,
+          "reported_total_short": 59478497,
+          "short_difference": 0
+        },
+        "TOTAL": {
+          "long_component_sum": 120423150,
+          "reported_total_long": 120423150,
+          "long_difference": 0,
+          "short_component_sum": 120423150,
+          "reported_total_short": 120423150,
+          "short_difference": 0
+        }
+      }
+    },
+    "normalized_records": [
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "Client",
+        "instrument_group": "index_futures",
+        "option_type": "",
+        "source_side": "long",
+        "contracts": 47722
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "Client",
+        "instrument_group": "index_futures",
+        "option_type": "",
+        "source_side": "short",
+        "contracts": 43091
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "Client",
+        "instrument_group": "stock_futures",
+        "option_type": "",
+        "source_side": "long",
+        "contracts": 328820
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "Client",
+        "instrument_group": "stock_futures",
+        "option_type": "",
+        "source_side": "short",
+        "contracts": 313533
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "Client",
+        "instrument_group": "index_options",
+        "option_type": "call",
+        "source_side": "long",
+        "contracts": 24307469
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "Client",
+        "instrument_group": "index_options",
+        "option_type": "put",
+        "source_side": "long",
+        "contracts": 25293612
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "Client",
+        "instrument_group": "index_options",
+        "option_type": "call",
+        "source_side": "short",
+        "contracts": 24323812
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "Client",
+        "instrument_group": "index_options",
+        "option_type": "put",
+        "source_side": "short",
+        "contracts": 25348899
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "Client",
+        "instrument_group": "stock_options",
+        "option_type": "call",
+        "source_side": "long",
+        "contracts": 2167648
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "Client",
+        "instrument_group": "stock_options",
+        "option_type": "put",
+        "source_side": "long",
+        "contracts": 876550
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "Client",
+        "instrument_group": "stock_options",
+        "option_type": "call",
+        "source_side": "short",
+        "contracts": 2089448
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "Client",
+        "instrument_group": "stock_options",
+        "option_type": "put",
+        "source_side": "short",
+        "contracts": 920509
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "DII",
+        "instrument_group": "index_futures",
+        "option_type": "",
+        "source_side": "long",
+        "contracts": 262
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "DII",
+        "instrument_group": "index_futures",
+        "option_type": "",
+        "source_side": "short",
+        "contracts": 1129
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "DII",
+        "instrument_group": "stock_futures",
+        "option_type": "",
+        "source_side": "long",
+        "contracts": 90747
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "DII",
+        "instrument_group": "stock_futures",
+        "option_type": "",
+        "source_side": "short",
+        "contracts": 86090
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "DII",
+        "instrument_group": "index_options",
+        "option_type": "call",
+        "source_side": "long",
+        "contracts": 1835
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "DII",
+        "instrument_group": "index_options",
+        "option_type": "put",
+        "source_side": "long",
+        "contracts": 2200
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "DII",
+        "instrument_group": "index_options",
+        "option_type": "call",
+        "source_side": "short",
+        "contracts": 1883
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "DII",
+        "instrument_group": "index_options",
+        "option_type": "put",
+        "source_side": "short",
+        "contracts": 5000
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "DII",
+        "instrument_group": "stock_options",
+        "option_type": "call",
+        "source_side": "long",
+        "contracts": 4793
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "DII",
+        "instrument_group": "stock_options",
+        "option_type": "put",
+        "source_side": "long",
+        "contracts": 8118
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "DII",
+        "instrument_group": "stock_options",
+        "option_type": "call",
+        "source_side": "short",
+        "contracts": 23422
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "DII",
+        "instrument_group": "stock_options",
+        "option_type": "put",
+        "source_side": "short",
+        "contracts": 8436
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "FII",
+        "instrument_group": "index_futures",
+        "option_type": "",
+        "source_side": "long",
+        "contracts": 11374
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "FII",
+        "instrument_group": "index_futures",
+        "option_type": "",
+        "source_side": "short",
+        "contracts": 17575
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "FII",
+        "instrument_group": "stock_futures",
+        "option_type": "",
+        "source_side": "long",
+        "contracts": 275871
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "FII",
+        "instrument_group": "stock_futures",
+        "option_type": "",
+        "source_side": "short",
+        "contracts": 300016
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "FII",
+        "instrument_group": "index_options",
+        "option_type": "call",
+        "source_side": "long",
+        "contracts": 3690669
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "FII",
+        "instrument_group": "index_options",
+        "option_type": "put",
+        "source_side": "long",
+        "contracts": 3466425
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "FII",
+        "instrument_group": "index_options",
+        "option_type": "call",
+        "source_side": "short",
+        "contracts": 3700143
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "FII",
+        "instrument_group": "index_options",
+        "option_type": "put",
+        "source_side": "short",
+        "contracts": 3458255
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "FII",
+        "instrument_group": "stock_options",
+        "option_type": "call",
+        "source_side": "long",
+        "contracts": 181319
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "FII",
+        "instrument_group": "stock_options",
+        "option_type": "put",
+        "source_side": "long",
+        "contracts": 121391
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "FII",
+        "instrument_group": "stock_options",
+        "option_type": "call",
+        "source_side": "short",
+        "contracts": 178106
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "FII",
+        "instrument_group": "stock_options",
+        "option_type": "put",
+        "source_side": "short",
+        "contracts": 125306
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "Pro",
+        "instrument_group": "index_futures",
+        "option_type": "",
+        "source_side": "long",
+        "contracts": 21857
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "Pro",
+        "instrument_group": "index_futures",
+        "option_type": "",
+        "source_side": "short",
+        "contracts": 19420
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "Pro",
+        "instrument_group": "stock_futures",
+        "option_type": "",
+        "source_side": "long",
+        "contracts": 365195
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "Pro",
+        "instrument_group": "stock_futures",
+        "option_type": "",
+        "source_side": "short",
+        "contracts": 360994
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "Pro",
+        "instrument_group": "index_options",
+        "option_type": "call",
+        "source_side": "long",
+        "contracts": 26322819
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "Pro",
+        "instrument_group": "index_options",
+        "option_type": "put",
+        "source_side": "long",
+        "contracts": 26186089
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "Pro",
+        "instrument_group": "index_options",
+        "option_type": "call",
+        "source_side": "short",
+        "contracts": 26296954
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "Pro",
+        "instrument_group": "index_options",
+        "option_type": "put",
+        "source_side": "short",
+        "contracts": 26136172
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "Pro",
+        "instrument_group": "stock_options",
+        "option_type": "call",
+        "source_side": "long",
+        "contracts": 4161816
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "Pro",
+        "instrument_group": "stock_options",
+        "option_type": "put",
+        "source_side": "long",
+        "contracts": 2488549
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "Pro",
+        "instrument_group": "stock_options",
+        "option_type": "call",
+        "source_side": "short",
+        "contracts": 4224600
+      },
+      {
+        "trade_date": "2026-11-13",
+        "dataset": "participant_volume",
+        "metric": "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "Pro",
+        "instrument_group": "stock_options",
+        "option_type": "put",
+        "source_side": "short",
+        "contracts": 2440357
+      }
+    ]
+  },
+  "inspection_error": null,
+  "parser_stage": "normalized_contract_activity",
+  "parser_version": 2
+}
