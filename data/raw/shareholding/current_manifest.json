@@ -1,12 +1,12 @@
 {
   "dataset": "nse_shareholding_fpi_ownership",
   "publisher": "National Stock Exchange of India",
-  "retrieved_at_utc": "2026-11-09T23:49:35.517513+00:00",
-  "status": "partial_identity_coverage",
+  "retrieved_at_utc": "2026-11-16T23:47:26.012657+00:00",
+  "status": "partial_xbrl_coverage",
   "source_page": "https://www.nseindia.com/companies-listing/corporate-filings-shareholding-pattern/",
   "master_url": "https://www.nseindia.com/api/corporate-share-holdings-master?index=equities",
-  "master_raw_path": "data/raw/shareholding/shareholding_master_1ecf54b17994a530.json",
-  "master_raw_sha256": "1ecf54b17994a5305be2606e484362f195c3a8732156995a8641eaf25de46625",
+  "master_raw_path": "data/raw/shareholding/shareholding_master_d7cf10b1a4f3980c.json",
+  "master_raw_sha256": "d7cf10b1a4f3980c59c4426a6befcfdf2235b5165902c087c2e33b29538f2372",
   "universe_sha256": "68e2eac52f778cb8b1b63c2dd5617386a942b6313553f58ef2ef7f4260dfa469",
   "current_universe_count": 501,
   "master_records_for_current_universe": 494,
@@ -14,377 +14,2338 @@
     "2026-09-30"
   ],
   "identity_status_counts": {
-    "identity_unverified": 3,
-    "isin_mismatch": 143,
-    "verified": 348
+    "isin_mismatch": 109,
+    "verified": 385
   },
-  "eligible_filing_count": 348,
+  "eligible_filing_count": 385,
   "fetched_filing_count": 0,
-  "reused_filing_count": 348,
-  "fetch_error_count": 0,
-  "fetch_errors": [],
-  "raw_xbrl_refs": [],
-  "filing_snapshot_paths": [
-    "data/snapshots/shareholding_filings/filing_216298_1d96a71a9c0ad331_p4.json",
-    "data/snapshots/shareholding_filings/filing_216286_5b47d63738baddad_p4.json",
-    "data/snapshots/shareholding_filings/filing_216280_e497062bdca4bc8d_p4.json",
-    "data/snapshots/shareholding_filings/filing_216278_435e8814546f2f44_p4.json",
-    "data/snapshots/shareholding_filings/filing_216263_a57595c7c4022461_p4.json",
-    "data/snapshots/shareholding_filings/filing_216256_8e34ed46f4c02475_p4.json",
-    "data/snapshots/shareholding_filings/filing_216254_6ecfda4b2b2ee049_p4.json",
-    "data/snapshots/shareholding_filings/filing_216248_f1b53ba9f89089c8_p4.json",
-    "data/snapshots/shareholding_filings/filing_216245_89af0f2f79fa4359_p4.json",
-    "data/snapshots/shareholding_filings/filing_216243_9a3baabb10f60cd5_p4.json",
-    "data/snapshots/shareholding_filings/filing_216233_165dbf340df48131_p4.json",
-    "data/snapshots/shareholding_filings/filing_216227_89bfd9ddda3bafde_p4.json",
-    "data/snapshots/shareholding_filings/filing_216226_0574a738442935af_p4.json",
-    "data/snapshots/shareholding_filings/filing_216223_9c9f28f93ba85e5a_p4.json",
-    "data/snapshots/shareholding_filings/filing_216206_6b0703ac9314952c_p4.json",
-    "data/snapshots/shareholding_filings/filing_216192_c2ecc4823eae85ce_p4.json",
-    "data/snapshots/shareholding_filings/filing_216175_d05d1b4246ff7ebf_p4.json",
-    "data/snapshots/shareholding_filings/filing_216166_8f47beb41d366e9c_p4.json",
-    "data/snapshots/shareholding_filings/filing_216164_632ff4db6de5db4b_p4.json",
-    "data/snapshots/shareholding_filings/filing_216160_fdb2c1a02d872624_p4.json",
-    "data/snapshots/shareholding_filings/filing_216151_34051819d1020641_p4.json",
-    "data/snapshots/shareholding_filings/filing_216142_5aee9bceaa85d4cc_p4.json",
-    "data/snapshots/shareholding_filings/filing_216119_a366c10ab6dce738_p4.json",
-    "data/snapshots/shareholding_filings/filing_216118_5af88bdd2cea1a81_p4.json",
-    "data/snapshots/shareholding_filings/filing_216105_bb5887a7d2c3acc3_p4.json",
-    "data/snapshots/shareholding_filings/filing_216095_3c9f97f616718365_p4.json",
-    "data/snapshots/shareholding_filings/filing_216092_1d689d2f3ff054d5_p4.json",
-    "data/snapshots/shareholding_filings/filing_216084_1d819dd47c079d33_p4.json",
-    "data/snapshots/shareholding_filings/filing_216076_65b094a98436269d_p4.json",
-    "data/snapshots/shareholding_filings/filing_216074_a7adfacd15c5ad1f_p4.json",
-    "data/snapshots/shareholding_filings/filing_216041_ab32c2e1268aa217_p4.json",
-    "data/snapshots/shareholding_filings/filing_216034_0d79aa1088f8674b_p4.json",
-    "data/snapshots/shareholding_filings/filing_216033_e24f8829187a3efa_p4.json",
-    "data/snapshots/shareholding_filings/filing_216028_0a422b2925e5ea65_p4.json",
-    "data/snapshots/shareholding_filings/filing_216027_eb797847e1b3ac79_p4.json",
-    "data/snapshots/shareholding_filings/filing_216024_2d2422fb0555388f_p4.json",
-    "data/snapshots/shareholding_filings/filing_216023_916a00df53d5e789_p4.json",
-    "data/snapshots/shareholding_filings/filing_216019_5d8bdf336fc6ae43_p4.json",
-    "data/snapshots/shareholding_filings/filing_216015_d497ad9cf282c657_p4.json",
-    "data/snapshots/shareholding_filings/filing_216011_2c82bdb92f5b0ee1_p4.json",
-    "data/snapshots/shareholding_filings/filing_216010_95b00dcefb94c838_p4.json",
-    "data/snapshots/shareholding_filings/filing_215985_829a8bf85b229fae_p4.json",
-    "data/snapshots/shareholding_filings/filing_215980_ed15d440a93dfeff_p4.json",
-    "data/snapshots/shareholding_filings/filing_215975_cd0b1ebf5a29ac5e_p4.json",
-    "data/snapshots/shareholding_filings/filing_215974_af0cf6a22d68657a_p4.json",
-    "data/snapshots/shareholding_filings/filing_215941_b39ba9bcd266bf88_p4.json",
-    "data/snapshots/shareholding_filings/filing_215939_ed263789a91389ff_p4.json",
-    "data/snapshots/shareholding_filings/filing_215936_dbad3244f8676fba_p4.json",
-    "data/snapshots/shareholding_filings/filing_215934_f845568a47e5f0c3_p4.json",
-    "data/snapshots/shareholding_filings/filing_215926_ac8bef402526b59e_p4.json",
-    "data/snapshots/shareholding_filings/filing_215913_cb6e09e805ecb54a_p4.json",
-    "data/snapshots/shareholding_filings/filing_215891_7113eaf21ea488b8_p4.json",
-    "data/snapshots/shareholding_filings/filing_215884_f5d5b8bf9de67cfa_p4.json",
-    "data/snapshots/shareholding_filings/filing_215882_a6f0c51e34113b94_p4.json",
-    "data/snapshots/shareholding_filings/filing_215879_7512828246ceccb4_p4.json",
-    "data/snapshots/shareholding_filings/filing_215877_8064f1fc1076fee6_p4.json",
-    "data/snapshots/shareholding_filings/filing_215862_b83140b3b451287b_p4.json",
-    "data/snapshots/shareholding_filings/filing_215860_bb87abf2510f0bff_p4.json",
-    "data/snapshots/shareholding_filings/filing_215859_77e2a5e27353f1df_p4.json",
-    "data/snapshots/shareholding_filings/filing_215849_0844f372d377fb60_p4.json",
-    "data/snapshots/shareholding_filings/filing_215843_d21bb7268191ed4a_p4.json",
-    "data/snapshots/shareholding_filings/filing_215837_6f1228cbe83fea14_p4.json",
-    "data/snapshots/shareholding_filings/filing_215835_61ae379e84ef0f65_p4.json",
-    "data/snapshots/shareholding_filings/filing_215821_59eee9c779ba2ac6_p4.json",
-    "data/snapshots/shareholding_filings/filing_215820_133cf9796293e6d8_p4.json",
-    "data/snapshots/shareholding_filings/filing_215807_f295c9c4a05b7a92_p4.json",
-    "data/snapshots/shareholding_filings/filing_215806_baaf7f9f0a4bc4fd_p4.json",
-    "data/snapshots/shareholding_filings/filing_215805_d16ef0cc873c07e5_p4.json",
-    "data/snapshots/shareholding_filings/filing_215795_b7ccdae506160e27_p4.json",
-    "data/snapshots/shareholding_filings/filing_215787_72bb5e75ad775677_p4.json",
-    "data/snapshots/shareholding_filings/filing_215781_9b760227964593e3_p4.json",
-    "data/snapshots/shareholding_filings/filing_215767_85f7dad6e2cf5661_p4.json",
-    "data/snapshots/shareholding_filings/filing_215760_e308c5fad0867478_p4.json",
-    "data/snapshots/shareholding_filings/filing_215747_bf216a086737cf7d_p4.json",
-    "data/snapshots/shareholding_filings/filing_215746_2e5064304d7676cb_p4.json",
-    "data/snapshots/shareholding_filings/filing_215739_8078722e35f77f0f_p4.json",
-    "data/snapshots/shareholding_filings/filing_215725_2a7f1881a11108dc_p4.json",
-    "data/snapshots/shareholding_filings/filing_215717_3a5fbb18df14c3f0_p4.json",
-    "data/snapshots/shareholding_filings/filing_215711_846ac372f467d1db_p4.json",
-    "data/snapshots/shareholding_filings/filing_215708_4e044ff87a0531da_p4.json",
-    "data/snapshots/shareholding_filings/filing_215702_859433b41e774028_p4.json",
-    "data/snapshots/shareholding_filings/filing_215681_89cb840d6743e22f_p4.json",
-    "data/snapshots/shareholding_filings/filing_215672_797a20fc4d9e9b30_p4.json",
-    "data/snapshots/shareholding_filings/filing_215671_e19de9d93a1aabba_p4.json",
-    "data/snapshots/shareholding_filings/filing_215656_200931995d137703_p4.json",
-    "data/snapshots/shareholding_filings/filing_215654_e457592a30018639_p4.json",
-    "data/snapshots/shareholding_filings/filing_215653_5ddb83d155ed642e_p4.json",
-    "data/snapshots/shareholding_filings/filing_215651_63efba63132b4bbd_p4.json",
-    "data/snapshots/shareholding_filings/filing_215646_192f92fb3a51ee31_p4.json",
-    "data/snapshots/shareholding_filings/filing_215639_115687a9df48e412_p4.json",
-    "data/snapshots/shareholding_filings/filing_215634_cfec881be56d83d9_p4.json",
-    "data/snapshots/shareholding_filings/filing_215631_1e4fe57b8ff5e4cd_p4.json",
-    "data/snapshots/shareholding_filings/filing_215628_9b40c534d8c30521_p4.json",
-    "data/snapshots/shareholding_filings/filing_215622_7f26c323ccbb46cf_p4.json",
-    "data/snapshots/shareholding_filings/filing_215617_f4c20fc75ba56098_p4.json",
-    "data/snapshots/shareholding_filings/filing_215616_d9c46b07cb949de9_p4.json",
-    "data/snapshots/shareholding_filings/filing_215609_41e03fccd191d310_p4.json",
-    "data/snapshots/shareholding_filings/filing_215608_a57405fcb4ca1004_p4.json",
-    "data/snapshots/shareholding_filings/filing_215598_2308e4b92d35c70a_p4.json",
-    "data/snapshots/shareholding_filings/filing_215597_a97082162a751d52_p4.json",
-    "data/snapshots/shareholding_filings/filing_215585_d171180d0db7cb0b_p4.json",
-    "data/snapshots/shareholding_filings/filing_215579_9eed031bc0fe901f_p4.json",
-    "data/snapshots/shareholding_filings/filing_215563_7b6f71679801e23b_p4.json",
-    "data/snapshots/shareholding_filings/filing_215561_302a33e8d231849a_p4.json",
-    "data/snapshots/shareholding_filings/filing_215554_1bca658ed50af2c4_p4.json",
-    "data/snapshots/shareholding_filings/filing_215535_c1f9417007b399e6_p4.json",
-    "data/snapshots/shareholding_filings/filing_215532_8dbd747a28411964_p4.json",
-    "data/snapshots/shareholding_filings/filing_215530_a0b7f2b22aef1118_p4.json",
-    "data/snapshots/shareholding_filings/filing_215525_c4383a849c36b72f_p4.json",
-    "data/snapshots/shareholding_filings/filing_215511_e95801c6ac1c0be1_p4.json",
-    "data/snapshots/shareholding_filings/filing_215497_a5e0f1a3d1dada3f_p4.json",
-    "data/snapshots/shareholding_filings/filing_215495_2fef7ac6b6b97e2f_p4.json",
-    "data/snapshots/shareholding_filings/filing_215492_21581fafe8b4aa00_p4.json",
-    "data/snapshots/shareholding_filings/filing_215491_85f948917b42ed77_p4.json",
-    "data/snapshots/shareholding_filings/filing_215465_b9a1b65515ff1768_p4.json",
-    "data/snapshots/shareholding_filings/filing_215448_8d023bb187f3727f_p4.json",
-    "data/snapshots/shareholding_filings/filing_215440_26516e5090952d5b_p4.json",
-    "data/snapshots/shareholding_filings/filing_215431_368c6b4bea6fb59e_p4.json",
-    "data/snapshots/shareholding_filings/filing_215428_dfa8bb1b3d6eccd4_p4.json",
-    "data/snapshots/shareholding_filings/filing_215424_c6fc6476792ae51b_p4.json",
-    "data/snapshots/shareholding_filings/filing_215423_2a5ed9ae52c97a7b_p4.json",
-    "data/snapshots/shareholding_filings/filing_215417_234fefb44d2e27c4_p4.json",
-    "data/snapshots/shareholding_filings/filing_215416_7d3c53b640e2ac43_p4.json",
-    "data/snapshots/shareholding_filings/filing_215415_40d08459e47aedd1_p4.json",
-    "data/snapshots/shareholding_filings/filing_215393_d8c32378ab80080d_p4.json",
-    "data/snapshots/shareholding_filings/filing_215392_deaded1f9d4a78c7_p4.json",
-    "data/snapshots/shareholding_filings/filing_215365_6a1dd97285ee984c_p4.json",
-    "data/snapshots/shareholding_filings/filing_215362_aa61985f97c73ba9_p4.json",
-    "data/snapshots/shareholding_filings/filing_215353_b9c1fe1c688c7a44_p4.json",
-    "data/snapshots/shareholding_filings/filing_215344_8d5c3a120fc20c1e_p4.json",
-    "data/snapshots/shareholding_filings/filing_215339_19e6d83e23bfc437_p4.json",
-    "data/snapshots/shareholding_filings/filing_215338_b6e7919e923fb544_p4.json",
-    "data/snapshots/shareholding_filings/filing_215309_6e31f8a982ef5194_p4.json",
-    "data/snapshots/shareholding_filings/filing_215303_ca17687a8ed805a2_p4.json",
-    "data/snapshots/shareholding_filings/filing_215298_ac8be322e5c08cad_p4.json",
-    "data/snapshots/shareholding_filings/filing_215291_167c0bfb52ab32a9_p4.json",
-    "data/snapshots/shareholding_filings/filing_215287_0269f09a498cc0d1_p4.json",
-    "data/snapshots/shareholding_filings/filing_215275_935bf9208c001c2b_p4.json",
-    "data/snapshots/shareholding_filings/filing_215273_99cb6fd3daa99f65_p4.json",
-    "data/snapshots/shareholding_filings/filing_215247_ef4bee10aaccea2c_p4.json",
-    "data/snapshots/shareholding_filings/filing_215216_01b2f47c2eecb652_p4.json",
-    "data/snapshots/shareholding_filings/filing_215214_d52744908c03ff00_p4.json",
-    "data/snapshots/shareholding_filings/filing_215209_e4fd5ad50cb02fb3_p4.json",
-    "data/snapshots/shareholding_filings/filing_215173_1c4b85f3318fadab_p4.json",
-    "data/snapshots/shareholding_filings/filing_215170_5a1f84b30bb9fd42_p4.json",
-    "data/snapshots/shareholding_filings/filing_215153_58fb00fc187acce1_p4.json",
-    "data/snapshots/shareholding_filings/filing_215152_9a0256fdbd5f6401_p4.json",
-    "data/snapshots/shareholding_filings/filing_214755_623b9c991eda403c_p4.json",
-    "data/snapshots/shareholding_filings/filing_215136_ee2781eef346c3d2_p4.json",
-    "data/snapshots/shareholding_filings/filing_215127_62a7e84d8a63e2af_p4.json",
-    "data/snapshots/shareholding_filings/filing_215126_b006efaba194998d_p4.json",
-    "data/snapshots/shareholding_filings/filing_215115_77a0769b0ac0bf27_p4.json",
-    "data/snapshots/shareholding_filings/filing_215106_7d3a888040200681_p4.json",
-    "data/snapshots/shareholding_filings/filing_215089_fa2af43a8787ba1b_p4.json",
-    "data/snapshots/shareholding_filings/filing_215085_dc59a1267419725e_p4.json",
-    "data/snapshots/shareholding_filings/filing_215084_34371ea308221953_p4.json",
-    "data/snapshots/shareholding_filings/filing_215083_c20996ec8c638e8b_p4.json",
-    "data/snapshots/shareholding_filings/filing_215032_6c6dd7ffe5e2fdc6_p4.json",
-    "data/snapshots/shareholding_filings/filing_215028_410cbc8d38202cb6_p4.json",
-    "data/snapshots/shareholding_filings/filing_215027_845f69d288af542a_p4.json",
-    "data/snapshots/shareholding_filings/filing_215022_129844f9c5d37cd5_p4.json",
-    "data/snapshots/shareholding_filings/filing_215019_f7952826bc40ccd4_p4.json",
-    "data/snapshots/shareholding_filings/filing_215018_7b388b951dcd4020_p4.json",
-    "data/snapshots/shareholding_filings/filing_215012_c528764822277cea_p4.json",
-    "data/snapshots/shareholding_filings/filing_214999_f9e45227b5bd0542_p4.json",
-    "data/snapshots/shareholding_filings/filing_214996_6efa44b53634475b_p4.json",
-    "data/snapshots/shareholding_filings/filing_214991_72ed3ed3d534cdf5_p4.json",
-    "data/snapshots/shareholding_filings/filing_214980_37049036142a17c8_p4.json",
-    "data/snapshots/shareholding_filings/filing_214975_13aeff381e9d93d5_p4.json",
-    "data/snapshots/shareholding_filings/filing_214951_433ba66a0e47dc96_p4.json",
-    "data/snapshots/shareholding_filings/filing_214946_597ff637f85d5f4b_p4.json",
-    "data/snapshots/shareholding_filings/filing_214939_f8c042319f176276_p4.json",
-    "data/snapshots/shareholding_filings/filing_214929_24b301372eda7dd6_p4.json",
-    "data/snapshots/shareholding_filings/filing_214919_725803cddcea9469_p4.json",
-    "data/snapshots/shareholding_filings/filing_214908_669882d0d196f586_p4.json",
-    "data/snapshots/shareholding_filings/filing_214900_fe9290d230359e74_p4.json",
-    "data/snapshots/shareholding_filings/filing_214891_e1835582ec3b0864_p4.json",
-    "data/snapshots/shareholding_filings/filing_214886_955f98a9e4477d78_p4.json",
-    "data/snapshots/shareholding_filings/filing_214868_3f015c8b066705e7_p4.json",
-    "data/snapshots/shareholding_filings/filing_214861_60d8a482db69551f_p4.json",
-    "data/snapshots/shareholding_filings/filing_214853_dffdf7b8e14fde66_p4.json",
-    "data/snapshots/shareholding_filings/filing_214850_6eb3fd56cc299c78_p4.json",
-    "data/snapshots/shareholding_filings/filing_214846_bd1f1707084a0fa9_p4.json",
-    "data/snapshots/shareholding_filings/filing_214836_9c58fb19f901b46f_p4.json",
-    "data/snapshots/shareholding_filings/filing_214821_6d9852a05753fbeb_p4.json",
-    "data/snapshots/shareholding_filings/filing_214810_b40223d11726da5a_p4.json",
-    "data/snapshots/shareholding_filings/filing_214809_764a2f438ecdc9ec_p4.json",
-    "data/snapshots/shareholding_filings/filing_214804_34995f7260ddaeb1_p4.json",
-    "data/snapshots/shareholding_filings/filing_214799_e291ce9e58c2d077_p4.json",
-    "data/snapshots/shareholding_filings/filing_214798_3374bc9f5aaa97b9_p4.json",
-    "data/snapshots/shareholding_filings/filing_214794_5272d9961e2735b2_p4.json",
-    "data/snapshots/shareholding_filings/filing_214790_e1592676241a69c8_p4.json",
-    "data/snapshots/shareholding_filings/filing_214780_ad22b3162fa37cee_p4.json",
-    "data/snapshots/shareholding_filings/filing_214775_f47fd6eae8aa3079_p4.json",
-    "data/snapshots/shareholding_filings/filing_214768_a2daca827e9df78d_p4.json",
-    "data/snapshots/shareholding_filings/filing_214753_8eeac47ae892df9a_p4.json",
-    "data/snapshots/shareholding_filings/filing_214743_e1f07815c34fe093_p4.json",
-    "data/snapshots/shareholding_filings/filing_214736_7b40980753fb97d3_p4.json",
-    "data/snapshots/shareholding_filings/filing_214727_937820773fae3ef1_p4.json",
-    "data/snapshots/shareholding_filings/filing_214719_00ec4ae1722a5e6e_p4.json",
-    "data/snapshots/shareholding_filings/filing_214717_b3f69c2977aaebca_p4.json",
-    "data/snapshots/shareholding_filings/filing_214706_88d48a403c344504_p4.json",
-    "data/snapshots/shareholding_filings/filing_214700_b2330ba2572ff1f9_p4.json",
-    "data/snapshots/shareholding_filings/filing_214699_f848085588ad0045_p4.json",
-    "data/snapshots/shareholding_filings/filing_214694_a58576c98fec6ff2_p4.json",
-    "data/snapshots/shareholding_filings/filing_214689_17b5f6a9ef428c74_p4.json",
-    "data/snapshots/shareholding_filings/filing_214677_83b5dd94a065a035_p4.json",
-    "data/snapshots/shareholding_filings/filing_214672_1a0310fdf4542532_p4.json",
-    "data/snapshots/shareholding_filings/filing_214671_0b412892c18e98de_p4.json",
-    "data/snapshots/shareholding_filings/filing_214668_8bc0820397e50691_p4.json",
-    "data/snapshots/shareholding_filings/filing_214666_7b6e33149734ebd4_p4.json",
-    "data/snapshots/shareholding_filings/filing_214664_02bfa9e9c7cf78a5_p4.json",
-    "data/snapshots/shareholding_filings/filing_214663_1bb614287abf2fba_p4.json",
-    "data/snapshots/shareholding_filings/filing_214641_e3927cf9026c280d_p4.json",
-    "data/snapshots/shareholding_filings/filing_214637_a18c2cc509e47e26_p4.json",
-    "data/snapshots/shareholding_filings/filing_214632_6190f71d5065335d_p4.json",
-    "data/snapshots/shareholding_filings/filing_214631_f8f942b16d2486c9_p4.json",
-    "data/snapshots/shareholding_filings/filing_214615_0fe0478094c6e4ca_p4.json",
-    "data/snapshots/shareholding_filings/filing_214609_ebea6685331ae45f_p4.json",
-    "data/snapshots/shareholding_filings/filing_214606_ec93135b18ebbcbb_p4.json",
-    "data/snapshots/shareholding_filings/filing_214605_8439c41567abed2c_p4.json",
-    "data/snapshots/shareholding_filings/filing_214597_12f7f634adb1a25d_p4.json",
-    "data/snapshots/shareholding_filings/filing_214595_4059b1f9c80eb6cb_p4.json",
-    "data/snapshots/shareholding_filings/filing_214583_77f865090efb4c05_p4.json",
-    "data/snapshots/shareholding_filings/filing_214581_b43d26059b616a6f_p4.json",
-    "data/snapshots/shareholding_filings/filing_214571_2e89ba1f5bd235ba_p4.json",
-    "data/snapshots/shareholding_filings/filing_214569_5456b588e968b643_p4.json",
-    "data/snapshots/shareholding_filings/filing_214566_98ae97bf1b3ec519_p4.json",
-    "data/snapshots/shareholding_filings/filing_214503_1a345abc85b8cef8_p4.json",
-    "data/snapshots/shareholding_filings/filing_214487_bd157b0a1241fd49_p4.json",
-    "data/snapshots/shareholding_filings/filing_214486_1a230bfb5154fa75_p4.json",
-    "data/snapshots/shareholding_filings/filing_214480_e2ca8e32ceeb83b1_p4.json",
-    "data/snapshots/shareholding_filings/filing_214476_b75cb03f83854b31_p4.json",
-    "data/snapshots/shareholding_filings/filing_214462_e607885082a9b72e_p4.json",
-    "data/snapshots/shareholding_filings/filing_214200_cef113cd09729c2f_p4.json",
-    "data/snapshots/shareholding_filings/filing_214453_1b93f46b4e12c2aa_p4.json",
-    "data/snapshots/shareholding_filings/filing_214438_a055f7be88e26fac_p4.json",
-    "data/snapshots/shareholding_filings/filing_214436_0a6b3692e4ff34d9_p4.json",
-    "data/snapshots/shareholding_filings/filing_214398_db0b6d631ea001a4_p4.json",
-    "data/snapshots/shareholding_filings/filing_214394_ac4cfe2a10883975_p4.json",
-    "data/snapshots/shareholding_filings/filing_214390_e74502442d239ae8_p4.json",
-    "data/snapshots/shareholding_filings/filing_214382_34b25e3bf05ec84c_p4.json",
-    "data/snapshots/shareholding_filings/filing_214367_0a0ba7475978cc28_p4.json",
-    "data/snapshots/shareholding_filings/filing_214357_8abc7d1006d164c1_p4.json",
-    "data/snapshots/shareholding_filings/filing_214355_081407f643d13717_p4.json",
-    "data/snapshots/shareholding_filings/filing_214348_de315e86ff5b877e_p4.json",
-    "data/snapshots/shareholding_filings/filing_214343_34be787ff8e7884e_p4.json",
-    "data/snapshots/shareholding_filings/filing_214337_c9d670a865af4617_p4.json",
-    "data/snapshots/shareholding_filings/filing_214332_592948fe889330c3_p4.json",
-    "data/snapshots/shareholding_filings/filing_214327_7e07da2fd6d2f940_p4.json",
-    "data/snapshots/shareholding_filings/filing_214293_e99bbe6d7f9e819b_p4.json",
-    "data/snapshots/shareholding_filings/filing_214276_555cef4018963a33_p4.json",
-    "data/snapshots/shareholding_filings/filing_214271_4c427650f3d5c051_p4.json",
-    "data/snapshots/shareholding_filings/filing_214256_c261d2f96280c230_p4.json",
-    "data/snapshots/shareholding_filings/filing_214249_2c263ae471b904c9_p4.json",
-    "data/snapshots/shareholding_filings/filing_214235_085aca5c22118c54_p4.json",
-    "data/snapshots/shareholding_filings/filing_214232_007c2922b53fb4c6_p4.json",
-    "data/snapshots/shareholding_filings/filing_214229_3fc3b29dddef5c86_p4.json",
-    "data/snapshots/shareholding_filings/filing_214222_b9f8893f6cd9e3b2_p4.json",
-    "data/snapshots/shareholding_filings/filing_214221_de2dba70b49d3e4d_p4.json",
-    "data/snapshots/shareholding_filings/filing_214215_e81072d79446a1e7_p4.json",
-    "data/snapshots/shareholding_filings/filing_214211_86c2049260720fc4_p4.json",
-    "data/snapshots/shareholding_filings/filing_214205_2a24c678abd03b40_p4.json",
-    "data/snapshots/shareholding_filings/filing_214187_0f6b6fd54d6c92b2_p4.json",
-    "data/snapshots/shareholding_filings/filing_214174_5d6fe832f8c5ac67_p4.json",
-    "data/snapshots/shareholding_filings/filing_214168_5f8ac22c89ed5b98_p4.json",
-    "data/snapshots/shareholding_filings/filing_214145_9fc3c8fe0d9c9e7e_p4.json",
-    "data/snapshots/shareholding_filings/filing_214127_dd1bc00313892c03_p4.json",
-    "data/snapshots/shareholding_filings/filing_214119_5ff31aff12cdccd9_p4.json",
-    "data/snapshots/shareholding_filings/filing_214108_10b86cd6e4b54c9f_p4.json",
-    "data/snapshots/shareholding_filings/filing_214105_97cb7b53082e4e44_p4.json",
-    "data/snapshots/shareholding_filings/filing_214086_5203728afddbc21e_p4.json",
-    "data/snapshots/shareholding_filings/filing_214081_622c1566f533b520_p4.json",
-    "data/snapshots/shareholding_filings/filing_214074_3118d8de110e41c0_p4.json",
-    "data/snapshots/shareholding_filings/filing_214070_fef64c241aef1d10_p4.json",
-    "data/snapshots/shareholding_filings/filing_214064_03793a313e5c00d7_p4.json",
-    "data/snapshots/shareholding_filings/filing_214062_ac58623ce2f5bb96_p4.json",
-    "data/snapshots/shareholding_filings/filing_214057_b871774b8940ab8c_p4.json",
-    "data/snapshots/shareholding_filings/filing_214050_c9bd3a8b5d26427c_p4.json",
-    "data/snapshots/shareholding_filings/filing_214047_5f6337c74c7fe67a_p4.json",
-    "data/snapshots/shareholding_filings/filing_214044_4c5b16d5bf126335_p4.json",
-    "data/snapshots/shareholding_filings/filing_214043_b7fffebfcd6d1d54_p4.json",
-    "data/snapshots/shareholding_filings/filing_214034_4323013349d71943_p4.json",
-    "data/snapshots/shareholding_filings/filing_214025_3e4acc2e60978f0e_p4.json",
-    "data/snapshots/shareholding_filings/filing_214008_be6c682e87c874ec_p4.json",
-    "data/snapshots/shareholding_filings/filing_213995_ee493629f19fb6c3_p4.json",
-    "data/snapshots/shareholding_filings/filing_213990_edf13a557b13cdf6_p4.json",
-    "data/snapshots/shareholding_filings/filing_213965_11e8996d53c4f0c0_p4.json",
-    "data/snapshots/shareholding_filings/filing_213939_9c4a132100db4692_p4.json",
-    "data/snapshots/shareholding_filings/filing_213890_4edf1735274250c5_p4.json",
-    "data/snapshots/shareholding_filings/filing_213884_c6c4d243e4eb5094_p4.json",
-    "data/snapshots/shareholding_filings/filing_213882_100cca751e00b76a_p4.json",
-    "data/snapshots/shareholding_filings/filing_213881_e5930e61af86a178_p4.json",
-    "data/snapshots/shareholding_filings/filing_213872_d346414ec1e331cd_p4.json",
-    "data/snapshots/shareholding_filings/filing_213869_55a0b234b4b0dbe4_p4.json",
-    "data/snapshots/shareholding_filings/filing_213853_1e74999f7e4cb501_p4.json",
-    "data/snapshots/shareholding_filings/filing_213848_5a2fee4af76304c1_p4.json",
-    "data/snapshots/shareholding_filings/filing_213840_d18abbd084e137e5_p4.json",
-    "data/snapshots/shareholding_filings/filing_213817_59f390a8b74eaafc_p4.json",
-    "data/snapshots/shareholding_filings/filing_213811_23caed29294d0540_p4.json",
-    "data/snapshots/shareholding_filings/filing_213805_dc24f704c34bf49c_p4.json",
-    "data/snapshots/shareholding_filings/filing_213789_c6a2f7c379955f3a_p4.json",
-    "data/snapshots/shareholding_filings/filing_213786_3913f4e02214a625_p4.json",
-    "data/snapshots/shareholding_filings/filing_213752_c0e68d3ef7933dba_p4.json",
-    "data/snapshots/shareholding_filings/filing_213745_db1463599d1fc706_p4.json",
-    "data/snapshots/shareholding_filings/filing_213718_570ac1a2eb6971d7_p4.json",
-    "data/snapshots/shareholding_filings/filing_213708_67fc632caa1379e3_p4.json",
-    "data/snapshots/shareholding_filings/filing_213704_b872bfb5f5f995aa_p4.json",
-    "data/snapshots/shareholding_filings/filing_213702_98287fc169175953_p4.json",
-    "data/snapshots/shareholding_filings/filing_213656_0c9ef6c9392f3ff2_p4.json",
-    "data/snapshots/shareholding_filings/filing_213655_d00433bdd0256c1a_p4.json",
-    "data/snapshots/shareholding_filings/filing_213650_7b157bc9abcce8d5_p4.json",
-    "data/snapshots/shareholding_filings/filing_213640_f06a9d8eea6a7771_p4.json",
-    "data/snapshots/shareholding_filings/filing_213604_bdaabed10a0fade6_p4.json",
-    "data/snapshots/shareholding_filings/filing_213596_86ec6c8f8ec4c17b_p4.json",
-    "data/snapshots/shareholding_filings/filing_213587_2cf91d5d5fadac18_p4.json",
-    "data/snapshots/shareholding_filings/filing_213554_2f62c4389b8092a9_p4.json",
-    "data/snapshots/shareholding_filings/filing_213539_0072dad8880126df_p4.json",
-    "data/snapshots/shareholding_filings/filing_213420_13d3365a23686b8d_p4.json",
-    "data/snapshots/shareholding_filings/filing_213527_51a1961e355fff72_p4.json",
-    "data/snapshots/shareholding_filings/filing_213522_b0ce65e1ae8026c3_p4.json",
-    "data/snapshots/shareholding_filings/filing_213503_1e81a4cfc6817b74_p4.json",
-    "data/snapshots/shareholding_filings/filing_213493_e2584825b24301b5_p4.json",
-    "data/snapshots/shareholding_filings/filing_213485_83466124f221d7f2_p4.json",
-    "data/snapshots/shareholding_filings/filing_213483_1406d29872ddbc46_p4.json",
-    "data/snapshots/shareholding_filings/filing_213480_dfcd047c7d15bedb_p4.json",
-    "data/snapshots/shareholding_filings/filing_213475_07cb5f726058ef43_p4.json",
-    "data/snapshots/shareholding_filings/filing_213473_a346ac0b6ec53c22_p4.json",
-    "data/snapshots/shareholding_filings/filing_213472_df350276084358c7_p4.json",
-    "data/snapshots/shareholding_filings/filing_213468_17adf8a118bccbdc_p4.json",
-    "data/snapshots/shareholding_filings/filing_213466_b28219621c4b7f69_p4.json",
-    "data/snapshots/shareholding_filings/filing_213445_fec4a3bcd74f5d2c_p4.json",
-    "data/snapshots/shareholding_filings/filing_213435_086274a143c5f5e2_p4.json",
-    "data/snapshots/shareholding_filings/filing_213429_e1007bfd977e0e3a_p4.json",
-    "data/snapshots/shareholding_filings/filing_213414_8b581424985c15b2_p4.json",
-    "data/snapshots/shareholding_filings/filing_213405_6da78c65311a9398_p4.json",
-    "data/snapshots/shareholding_filings/filing_213378_c39e4c2ef2d0dd0a_p4.json",
-    "data/snapshots/shareholding_filings/filing_213371_eac97237c166825d_p4.json",
-    "data/snapshots/shareholding_filings/filing_213366_8efa779cfb226941_p4.json",
-    "data/snapshots/shareholding_filings/filing_213332_2e4d368322e58e35_p4.json",
-    "data/snapshots/shareholding_filings/filing_213292_6a81d5aee374991e_p4.json",
-    "data/snapshots/shareholding_filings/filing_213283_47982c7f2c6b7035_p4.json",
-    "data/snapshots/shareholding_filings/filing_213281_1f95899c576b125b_p4.json",
-    "data/snapshots/shareholding_filings/filing_213277_1f7937bc69891cda_p4.json",
-    "data/snapshots/shareholding_filings/filing_213275_0b1c9eb640dab658_p4.json",
-    "data/snapshots/shareholding_filings/filing_213264_d692ba7c4541b4d1_p4.json",
-    "data/snapshots/shareholding_filings/filing_213263_902de7905bfb6606_p4.json",
-    "data/snapshots/shareholding_filings/filing_213249_1ac6404446befb60_p4.json"
+  "reused_filing_count": 0,
+  "fetch_error_count": 385,
+  "fetch_errors": [
+    {
+      "record_id": "216298",
+      "symbol": "HONASA",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743656_22102026121924_WEB.xml"
+    },
+    {
+      "record_id": "216293",
+      "symbol": "COFORGE",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743643_21102026105431_WEB.xml"
+    },
+    {
+      "record_id": "216286",
+      "symbol": "GRAVITA",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743625_21102026095332_WEB.xml"
+    },
+    {
+      "record_id": "216280",
+      "symbol": "CIPLA",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743615_21102026092948_WEB.xml"
+    },
+    {
+      "record_id": "216278",
+      "symbol": "SONACOMS",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743608_21102026092126_WEB.xml"
+    },
+    {
+      "record_id": "216274",
+      "symbol": "COROMANDEL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743599_21102026091803_WEB.xml"
+    },
+    {
+      "record_id": "216263",
+      "symbol": "HBLENGINE",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743556_21102026082148_WEB.xml"
+    },
+    {
+      "record_id": "216256",
+      "symbol": "ICICILIFE",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743528_21102026080538_WEB.xml"
+    },
+    {
+      "record_id": "216254",
+      "symbol": "KFINTECH",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743521_21102026075922_WEB.xml"
+    },
+    {
+      "record_id": "216248",
+      "symbol": "JSWENERGY",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743505_21102026074527_WEB.xml"
+    },
+    {
+      "record_id": "216245",
+      "symbol": "ICICIAMC",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743496_21102026073755_WEB.xml"
+    },
+    {
+      "record_id": "216243",
+      "symbol": "KIRLOSENG",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743494_21102026073729_WEB.xml"
+    },
+    {
+      "record_id": "216233",
+      "symbol": "CHOICEIN",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743468_21102026071752_WEB.xml"
+    },
+    {
+      "record_id": "216227",
+      "symbol": "BIOCON",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743438_21102026070347_WEB.xml"
+    },
+    {
+      "record_id": "216226",
+      "symbol": "TORNTPOWER",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743436_21102026070322_WEB.xml"
+    },
+    {
+      "record_id": "216223",
+      "symbol": "TECHM",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743431_21102026070029_WEB.xml"
+    },
+    {
+      "record_id": "216206",
+      "symbol": "JSWCEMENT",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743380_21102026063448_WEB.xml"
+    },
+    {
+      "record_id": "216192",
+      "symbol": "INDUSTOWER",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743312_21102026061216_WEB.xml"
+    },
+    {
+      "record_id": "216166",
+      "symbol": "RAILTEL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743190_21102026054740_WEB.xml"
+    },
+    {
+      "record_id": "216164",
+      "symbol": "CROMPTON",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743188_21102026054422_WEB.xml"
+    },
+    {
+      "record_id": "216160",
+      "symbol": "SHRIPISTON",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743176_21102026053744_WEB.xml"
+    },
+    {
+      "record_id": "216151",
+      "symbol": "AIIL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743165_21102026053240_WEB.xml"
+    },
+    {
+      "record_id": "216142",
+      "symbol": "ABDL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743149_21102026052359_WEB.xml"
+    },
+    {
+      "record_id": "216119",
+      "symbol": "GODREJCP",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743116_21102026050506_WEB.xml"
+    },
+    {
+      "record_id": "216118",
+      "symbol": "NUVOCO",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743115_21102026050451_WEB.xml"
+    },
+    {
+      "record_id": "216105",
+      "symbol": "POLICYBZR",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743089_21102026045244_WEB.xml"
+    },
+    {
+      "record_id": "216095",
+      "symbol": "ABCAPITAL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743057_21102026044315_WEB.xml"
+    },
+    {
+      "record_id": "216092",
+      "symbol": "BLS",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743046_21102026044149_WEB.xml"
+    },
+    {
+      "record_id": "216084",
+      "symbol": "LTM",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743015_21102026043212_WEB.xml"
+    },
+    {
+      "record_id": "216076",
+      "symbol": "DEEPAKFERT",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742995_21102026042546_WEB.xml"
+    },
+    {
+      "record_id": "216074",
+      "symbol": "RELIANCE",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742991_21102026042504_WEB.xml"
+    },
+    {
+      "record_id": "216041",
+      "symbol": "LTTS",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742896_21102026034709_WEB.xml"
+    },
+    {
+      "record_id": "216039",
+      "symbol": "ZENSARTECH",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742890_21102026034402_WEB.xml"
+    },
+    {
+      "record_id": "216035",
+      "symbol": "DRREDDY",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742881_21102026034106_WEB.xml"
+    },
+    {
+      "record_id": "216034",
+      "symbol": "SAIL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742880_21102026034028_WEB.xml"
+    },
+    {
+      "record_id": "216033",
+      "symbol": "LEMONTREE",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742878_21102026033846_WEB.xml"
+    },
+    {
+      "record_id": "216028",
+      "symbol": "CAPLIPOINT",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742873_21102026033543_WEB.xml"
+    },
+    {
+      "record_id": "216027",
+      "symbol": "OLAELEC",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742867_21102026033254_WEB.xml"
+    },
+    {
+      "record_id": "216024",
+      "symbol": "NBCC",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742859_21102026032935_WEB.xml"
+    },
+    {
+      "record_id": "216023",
+      "symbol": "PPLPHARMA",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742857_21102026032628_WEB.xml"
+    },
+    {
+      "record_id": "216019",
+      "symbol": "ASTERDM",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742841_21102026031953_WEB.xml"
+    },
+    {
+      "record_id": "216015",
+      "symbol": "ONESOURCE",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742818_21102026031128_WEB.xml"
+    },
+    {
+      "record_id": "216011",
+      "symbol": "JPPOWER",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742809_21102026030754_WEB.xml"
+    },
+    {
+      "record_id": "216010",
+      "symbol": "JINDALSTEL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742806_21102026030632_WEB.xml"
+    },
+    {
+      "record_id": "216008",
+      "symbol": "LAURUSLABS",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742798_21102026030442_WEB.xml"
+    },
+    {
+      "record_id": "215986",
+      "symbol": "JINDALSAW",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742735_21102026023519_WEB.xml"
+    },
+    {
+      "record_id": "215985",
+      "symbol": "BELRISE",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742730_21102026023230_WEB.xml"
+    },
+    {
+      "record_id": "215980",
+      "symbol": "OIL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742722_21102026022457_WEB.xml"
+    },
+    {
+      "record_id": "215975",
+      "symbol": "PTCIL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742714_21102026021404_WEB.xml"
+    },
+    {
+      "record_id": "215974",
+      "symbol": "AFCONS",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742713_21102026021326_WEB.xml"
+    },
+    {
+      "record_id": "215941",
+      "symbol": "JIOFIN",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742627_21102026125748_WEB.xml"
+    },
+    {
+      "record_id": "215939",
+      "symbol": "IOB",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742616_21102026125144_WEB.xml"
+    },
+    {
+      "record_id": "215936",
+      "symbol": "NAVINFLUOR",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742609_21102026124907_WEB.xml"
+    },
+    {
+      "record_id": "215934",
+      "symbol": "DALBHARAT",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742601_21102026124726_WEB.xml"
+    },
+    {
+      "record_id": "215932",
+      "symbol": "HINDPETRO",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742599_21102026124617_WEB.xml"
+    },
+    {
+      "record_id": "215926",
+      "symbol": "POLYCAB",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742582_21102026123532_WEB.xml"
+    },
+    {
+      "record_id": "215913",
+      "symbol": "VEDPOWER",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742537_21102026121042_WEB.xml"
+    },
+    {
+      "record_id": "215891",
+      "symbol": "TMPV",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742472_21102026112027_WEB.xml"
+    },
+    {
+      "record_id": "215884",
+      "symbol": "PIIND",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742461_21102026111041_WEB.xml"
+    },
+    {
+      "record_id": "215882",
+      "symbol": "TBOTEK",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742459_21102026110846_WEB.xml"
+    },
+    {
+      "record_id": "215879",
+      "symbol": "MRF",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742450_21102026110106_WEB.xml"
+    },
+    {
+      "record_id": "215877",
+      "symbol": "ESCORTS",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742447_21102026105846_WEB.xml"
+    },
+    {
+      "record_id": "215868",
+      "symbol": "GVT&D",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742427_21102026103104_WEB.xml"
+    },
+    {
+      "record_id": "215862",
+      "symbol": "MARUTI",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742414_21102026100118_WEB.xml"
+    },
+    {
+      "record_id": "215860",
+      "symbol": "MINDACORP",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742411_21102026094206_WEB.xml"
+    },
+    {
+      "record_id": "215859",
+      "symbol": "WHIRLPOOL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742410_21102026094101_WEB.xml"
+    },
+    {
+      "record_id": "215849",
+      "symbol": "NAM-INDIA",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742396_20102026110543_WEB.xml"
+    },
+    {
+      "record_id": "215843",
+      "symbol": "OBEROIRLTY",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742378_20102026081828_WEB.xml"
+    },
+    {
+      "record_id": "215837",
+      "symbol": "JUBLINGREA",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742361_20102026065019_WEB.xml"
+    },
+    {
+      "record_id": "215835",
+      "symbol": "NYKAA",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742358_20102026064551_WEB.xml"
+    },
+    {
+      "record_id": "215820",
+      "symbol": "WELSPUNLIV",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742331_20102026052045_WEB.xml"
+    },
+    {
+      "record_id": "215807",
+      "symbol": "PAGEIND",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742311_20102026042929_WEB.xml"
+    },
+    {
+      "record_id": "215806",
+      "symbol": "AEGISVOPAK",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742309_20102026042436_WEB.xml"
+    },
+    {
+      "record_id": "215805",
+      "symbol": "ZFCVINDIA",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742307_20102026042404_WEB.xml"
+    },
+    {
+      "record_id": "215803",
+      "symbol": "GABRIEL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742302_20102026041246_WEB.xml"
+    },
+    {
+      "record_id": "215787",
+      "symbol": "TIINDIA",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742269_20102026031745_WEB.xml"
+    },
+    {
+      "record_id": "215781",
+      "symbol": "ASHOKLEY",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742256_20102026024923_WEB.xml"
+    },
+    {
+      "record_id": "215767",
+      "symbol": "ITCHOTELS",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742227_20102026125238_WEB.xml"
+    },
+    {
+      "record_id": "215760",
+      "symbol": "PWL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742214_20102026123105_WEB.xml"
+    },
+    {
+      "record_id": "215753",
+      "symbol": "INFY",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742200_20102026120732_WEB.xml"
+    },
+    {
+      "record_id": "215747",
+      "symbol": "GILLETTE",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742188_20102026113335_WEB.xml"
+    },
+    {
+      "record_id": "215746",
+      "symbol": "WELCORP",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742187_20102026113326_WEB.xml"
+    },
+    {
+      "record_id": "215739",
+      "symbol": "JAINREC",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742175_20102026103819_WEB.xml"
+    },
+    {
+      "record_id": "215735",
+      "symbol": "BSOFT",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742171_20102026100017_WEB.xml"
+    },
+    {
+      "record_id": "215725",
+      "symbol": "HINDUNILVR",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742125_19102026102752_WEB.xml"
+    },
+    {
+      "record_id": "215722",
+      "symbol": "INDHOTEL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742116_19102026094034_WEB.xml"
+    },
+    {
+      "record_id": "215718",
+      "symbol": "ABREL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742103_19102026090804_WEB.xml"
+    },
+    {
+      "record_id": "215717",
+      "symbol": "ANURAS",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742099_19102026090252_WEB.xml"
+    },
+    {
+      "record_id": "215711",
+      "symbol": "TMCV",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742077_19102026083235_WEB.xml"
+    },
+    {
+      "record_id": "215708",
+      "symbol": "CLEANMAX",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742065_19102026081910_WEB.xml"
+    },
+    {
+      "record_id": "215706",
+      "symbol": "ASIANPAINT",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742053_19102026080927_WEB.xml"
+    },
+    {
+      "record_id": "215702",
+      "symbol": "JMFINANCIL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742042_19102026080131_WEB.xml"
+    },
+    {
+      "record_id": "215681",
+      "symbol": "GMRAIRPORT",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741974_19102026071903_WEB.xml"
+    },
+    {
+      "record_id": "215672",
+      "symbol": "DOMS",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741957_19102026070903_WEB.xml"
+    },
+    {
+      "record_id": "215671",
+      "symbol": "ACMESOLAR",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741955_19102026070634_WEB.xml"
+    },
+    {
+      "record_id": "215656",
+      "symbol": "DMART",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741908_19102026063955_WEB.xml"
+    },
+    {
+      "record_id": "215653",
+      "symbol": "TCS",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741905_19102026063741_WEB.xml"
+    },
+    {
+      "record_id": "215651",
+      "symbol": "IDEA",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741899_19102026063613_WEB.xml"
+    },
+    {
+      "record_id": "215646",
+      "symbol": "RUBICON",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741890_19102026062951_WEB.xml"
+    },
+    {
+      "record_id": "215639",
+      "symbol": "TENNIND",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741878_19102026062441_WEB.xml"
+    },
+    {
+      "record_id": "215634",
+      "symbol": "SYRMA",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741868_19102026062019_WEB.xml"
+    },
+    {
+      "record_id": "215631",
+      "symbol": "HDFCLIFE",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741860_19102026061629_WEB.xml"
+    },
+    {
+      "record_id": "215628",
+      "symbol": "SOLARINDS",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741853_19102026061408_WEB.xml"
+    },
+    {
+      "record_id": "215617",
+      "symbol": "ASTRAL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741816_19102026060057_WEB.xml"
+    },
+    {
+      "record_id": "215616",
+      "symbol": "MOTILALOFS",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741815_19102026060037_WEB.xml"
+    },
+    {
+      "record_id": "215609",
+      "symbol": "WOCKPHARMA",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741805_19102026055732_WEB.xml"
+    },
+    {
+      "record_id": "215608",
+      "symbol": "CANHLIFE",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741804_19102026055717_WEB.xml"
+    },
+    {
+      "record_id": "215598",
+      "symbol": "PFOCUS",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741760_19102026053815_WEB.xml"
+    },
+    {
+      "record_id": "215597",
+      "symbol": "INDIGO",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741759_19102026053811_WEB.xml"
+    },
+    {
+      "record_id": "215585",
+      "symbol": "JKTYRE",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741732_19102026052647_WEB.xml"
+    },
+    {
+      "record_id": "215563",
+      "symbol": "EMMVEE",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741662_19102026050117_WEB.xml"
+    },
+    {
+      "record_id": "215561",
+      "symbol": "ACE",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741660_19102026050042_WEB.xml"
+    },
+    {
+      "record_id": "215554",
+      "symbol": "BHARTIARTL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741646_19102026045340_WEB.xml"
+    },
+    {
+      "record_id": "215547",
+      "symbol": "CONCOR",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741633_19102026045114_WEB.xml"
+    },
+    {
+      "record_id": "215535",
+      "symbol": "HOMEFIRST",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741595_19102026043910_WEB.xml"
+    },
+    {
+      "record_id": "215532",
+      "symbol": "BHARTIHEXA",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741591_19102026043823_WEB.xml"
+    },
+    {
+      "record_id": "215530",
+      "symbol": "DEVYANI",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741588_19102026043645_WEB.xml"
+    },
+    {
+      "record_id": "215527",
+      "symbol": "HEROMOTOCO",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741580_19102026043440_WEB.xml"
+    },
+    {
+      "record_id": "215525",
+      "symbol": "SCI",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741573_19102026043207_WEB.xml"
+    },
+    {
+      "record_id": "215511",
+      "symbol": "INOXINDIA",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741540_19102026041339_WEB.xml"
+    },
+    {
+      "record_id": "215497",
+      "symbol": "MEDANTA",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741502_19102026035252_WEB.xml"
+    },
+    {
+      "record_id": "215495",
+      "symbol": "AMBER",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741496_19102026035132_WEB.xml"
+    },
+    {
+      "record_id": "215492",
+      "symbol": "EMCURE",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741485_19102026034802_WEB.xml"
+    },
+    {
+      "record_id": "215491",
+      "symbol": "GODREJIND",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741484_19102026034723_WEB.xml"
+    },
+    {
+      "record_id": "215465",
+      "symbol": "INDIAMART",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741416_19102026031659_WEB.xml"
+    },
+    {
+      "record_id": "215448",
+      "symbol": "ICICIGI",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741386_19102026030219_WEB.xml"
+    },
+    {
+      "record_id": "215440",
+      "symbol": "UNIONBANK",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741370_19102026024233_WEB.xml"
+    },
+    {
+      "record_id": "215434",
+      "symbol": "IRB",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741352_19102026022706_WEB.xml"
+    },
+    {
+      "record_id": "215431",
+      "symbol": "VOGL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741341_19102026021711_WEB.xml"
+    },
+    {
+      "record_id": "215428",
+      "symbol": "DELHIVERY",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741328_19102026020401_WEB.xml"
+    },
+    {
+      "record_id": "215424",
+      "symbol": "UNOMINDA",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741318_19102026015727_WEB.xml"
+    },
+    {
+      "record_id": "215423",
+      "symbol": "POLYMED",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741316_19102026015553_WEB.xml"
+    },
+    {
+      "record_id": "215421",
+      "symbol": "BATAINDIA",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741313_19102026014658_WEB.xml"
+    },
+    {
+      "record_id": "215417",
+      "symbol": "IEX",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741298_19102026013139_WEB.xml"
+    },
+    {
+      "record_id": "215416",
+      "symbol": "RVNL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741297_19102026013046_WEB.xml"
+    },
+    {
+      "record_id": "215415",
+      "symbol": "PETRONET",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741295_19102026013005_WEB.xml"
+    },
+    {
+      "record_id": "215393",
+      "symbol": "CPPLUS",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741247_19102026125104_WEB.xml"
+    },
+    {
+      "record_id": "215392",
+      "symbol": "GICRE",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741246_19102026124915_WEB.xml"
+    },
+    {
+      "record_id": "215362",
+      "symbol": "LUPIN",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741171_19102026114146_WEB.xml"
+    },
+    {
+      "record_id": "215355",
+      "symbol": "TATACONSUM",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741158_19102026112604_WEB.xml"
+    },
+    {
+      "record_id": "215344",
+      "symbol": "BSE",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741125_19102026104829_WEB.xml"
+    },
+    {
+      "record_id": "215339",
+      "symbol": "JSWINFRA",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741119_19102026103627_WEB.xml"
+    },
+    {
+      "record_id": "215338",
+      "symbol": "PNBHOUSING",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741115_19102026101907_WEB.xml"
+    },
+    {
+      "record_id": "215309",
+      "symbol": "INOXWIND",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741002_17102026081653_WEB.xml"
+    },
+    {
+      "record_id": "215303",
+      "symbol": "KIRLOSBROS",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740983_17102026071521_WEB.xml"
+    },
+    {
+      "record_id": "215298",
+      "symbol": "AUBANK",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740975_17102026070318_WEB.xml"
+    },
+    {
+      "record_id": "215291",
+      "symbol": "VISL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740959_17102026062957_WEB.xml"
+    },
+    {
+      "record_id": "215287",
+      "symbol": "ITI",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740934_17102026060658_WEB.xml"
+    },
+    {
+      "record_id": "215275",
+      "symbol": "M&MFIN",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740882_17102026052416_WEB.xml"
+    },
+    {
+      "record_id": "215273",
+      "symbol": "NLCINDIA",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740876_17102026051531_WEB.xml"
+    },
+    {
+      "record_id": "215247",
+      "symbol": "SIGNATURE",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740812_17102026041951_WEB.xml"
+    },
+    {
+      "record_id": "215216",
+      "symbol": "KAYNES",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740726_17102026025027_WEB.xml"
+    },
+    {
+      "record_id": "215214",
+      "symbol": "CLEAN",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740711_17102026024216_WEB.xml"
+    },
+    {
+      "record_id": "215209",
+      "symbol": "BHARATCOAL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740686_17102026021909_WEB.xml"
+    },
+    {
+      "record_id": "215170",
+      "symbol": "VAML",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740603_17102026122959_WEB.xml"
+    },
+    {
+      "record_id": "215153",
+      "symbol": "CONCORDBIO",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740544_17102026102420_WEB.xml"
+    },
+    {
+      "record_id": "215152",
+      "symbol": "LT",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740540_17102026101104_WEB.xml"
+    },
+    {
+      "record_id": "215149",
+      "symbol": "COCHINSHIP",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740537_17102026093742_WEB.xml"
+    },
+    {
+      "record_id": "214755",
+      "symbol": "RRKABEL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739466_16102026081136_WEB.xml"
+    },
+    {
+      "record_id": "215136",
+      "symbol": "TEJASNET",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740492_16102026090805_WEB.xml"
+    },
+    {
+      "record_id": "215132",
+      "symbol": "ZEEL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740483_16102026085634_WEB.xml"
+    },
+    {
+      "record_id": "215127",
+      "symbol": "FRACTAL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1744470_23102026015446_WEB.xml"
+    },
+    {
+      "record_id": "215126",
+      "symbol": "KEC",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740470_16102026083259_WEB.xml"
+    },
+    {
+      "record_id": "215115",
+      "symbol": "TATACOMM",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740422_16102026072955_WEB.xml"
+    },
+    {
+      "record_id": "215106",
+      "symbol": "RPOWER",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740388_16102026071007_WEB.xml"
+    },
+    {
+      "record_id": "215096",
+      "symbol": "CAMS",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740350_16102026064848_WEB.xml"
+    },
+    {
+      "record_id": "215089",
+      "symbol": "BAJAJFINSV",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740318_16102026063210_WEB.xml"
+    },
+    {
+      "record_id": "215085",
+      "symbol": "BALKRISIND",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740308_16102026062546_WEB.xml"
+    },
+    {
+      "record_id": "215084",
+      "symbol": "PRESTIGE",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740306_16102026062520_WEB.xml"
+    },
+    {
+      "record_id": "215083",
+      "symbol": "UNITDSPR",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740305_16102026062518_WEB.xml"
+    },
+    {
+      "record_id": "215032",
+      "symbol": "JKCEMENT",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740154_16102026052359_WEB.xml"
+    },
+    {
+      "record_id": "215030",
+      "symbol": "VEDL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740148_16102026052137_WEB.xml"
+    },
+    {
+      "record_id": "215028",
+      "symbol": "LGEINDIA",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740146_16102026052133_WEB.xml"
+    },
+    {
+      "record_id": "215027",
+      "symbol": "MANKIND",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740145_16102026052126_WEB.xml"
+    },
+    {
+      "record_id": "215022",
+      "symbol": "NETWEB",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740134_16102026051345_WEB.xml"
+    },
+    {
+      "record_id": "215018",
+      "symbol": "PIRAMALFIN",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740128_16102026051023_WEB.xml"
+    },
+    {
+      "record_id": "215013",
+      "symbol": "MAZDOCK",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740106_16102026050154_WEB.xml"
+    },
+    {
+      "record_id": "215012",
+      "symbol": "TRITURBINE",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740105_16102026050119_WEB.xml"
+    },
+    {
+      "record_id": "215000",
+      "symbol": "NATCOPHARM",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740079_16102026045222_WEB.xml"
+    },
+    {
+      "record_id": "214999",
+      "symbol": "FIVESTAR",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740072_16102026044922_WEB.xml"
+    },
+    {
+      "record_id": "214996",
+      "symbol": "MAXHEALTH",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740060_16102026044443_WEB.xml"
+    },
+    {
+      "record_id": "214991",
+      "symbol": "IDBI",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740051_16102026044138_WEB.xml"
+    },
+    {
+      "record_id": "214990",
+      "symbol": "EIHOTEL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740050_16102026044132_WEB.xml"
+    },
+    {
+      "record_id": "214980",
+      "symbol": "ENRIN",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740034_16102026043448_WEB.xml"
+    },
+    {
+      "record_id": "214975",
+      "symbol": "STARHEALTH",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740021_16102026043036_WEB.xml"
+    },
+    {
+      "record_id": "214951",
+      "symbol": "HYUNDAI",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739965_16102026041555_WEB.xml"
+    },
+    {
+      "record_id": "214946",
+      "symbol": "TVSMOTOR",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739943_16102026041050_WEB.xml"
+    },
+    {
+      "record_id": "214939",
+      "symbol": "SUNTV",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739912_16102026035750_WEB.xml"
+    },
+    {
+      "record_id": "214929",
+      "symbol": "LTFOODS",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739896_16102026034850_WEB.xml"
+    },
+    {
+      "record_id": "214919",
+      "symbol": "APTUS",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739880_16102026034147_WEB.xml"
+    },
+    {
+      "record_id": "214908",
+      "symbol": "DABUR",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739859_16102026033110_WEB.xml"
+    },
+    {
+      "record_id": "214900",
+      "symbol": "KEI",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739839_16102026031946_WEB.xml"
+    },
+    {
+      "record_id": "214894",
+      "symbol": "ASAHIINDIA",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739818_16102026030835_WEB.xml"
+    },
+    {
+      "record_id": "214891",
+      "symbol": "LALPATHLAB",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739810_16102026030639_WEB.xml"
+    },
+    {
+      "record_id": "214886",
+      "symbol": "TATATECH",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739800_16102026030236_WEB.xml"
+    },
+    {
+      "record_id": "214868",
+      "symbol": "LODHA",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739751_16102026023743_WEB.xml"
+    },
+    {
+      "record_id": "214861",
+      "symbol": "BHARATFORG",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739723_16102026021746_WEB.xml"
+    },
+    {
+      "record_id": "214850",
+      "symbol": "IKS",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739706_16102026020213_WEB.xml"
+    },
+    {
+      "record_id": "214846",
+      "symbol": "MGL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739698_16102026015439_WEB.xml"
+    },
+    {
+      "record_id": "214836",
+      "symbol": "BANDHANBNK",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739681_16102026012227_WEB.xml"
+    },
+    {
+      "record_id": "214821",
+      "symbol": "HINDCOPPER",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739634_16102026124751_WEB.xml"
+    },
+    {
+      "record_id": "214810",
+      "symbol": "HEXT",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739594_16102026122435_WEB.xml"
+    },
+    {
+      "record_id": "214809",
+      "symbol": "MSUMI",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739590_16102026122229_WEB.xml"
+    },
+    {
+      "record_id": "214804",
+      "symbol": "CDSL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739584_16102026121818_WEB.xml"
+    },
+    {
+      "record_id": "214799",
+      "symbol": "GLAND",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739563_16102026115909_WEB.xml"
+    },
+    {
+      "record_id": "214798",
+      "symbol": "EIDPARRY",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739560_16102026115716_WEB.xml"
+    },
+    {
+      "record_id": "214790",
+      "symbol": "CENTRALBK",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739544_16102026114629_WEB.xml"
+    },
+    {
+      "record_id": "214780",
+      "symbol": "HFCL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739523_16102026112900_WEB.xml"
+    },
+    {
+      "record_id": "214775",
+      "symbol": "ZENTEC",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739515_16102026112552_WEB.xml"
+    },
+    {
+      "record_id": "214768",
+      "symbol": "TATACHEM",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739495_16102026104315_WEB.xml"
+    },
+    {
+      "record_id": "214753",
+      "symbol": "SYNGENE",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739456_15102026103042_WEB.xml"
+    },
+    {
+      "record_id": "214747",
+      "symbol": "TORNTPHARM",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739383_15102026075118_WEB.xml"
+    },
+    {
+      "record_id": "214743",
+      "symbol": "COHANCE",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739335_15102026071315_WEB.xml"
+    },
+    {
+      "record_id": "214736",
+      "symbol": "SBILIFE",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739296_15102026065450_WEB.xml"
+    },
+    {
+      "record_id": "214727",
+      "symbol": "SUNDARMFIN",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739250_15102026062428_WEB.xml"
+    },
+    {
+      "record_id": "214719",
+      "symbol": "DEEPAKNTR",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739232_15102026061215_WEB.xml"
+    },
+    {
+      "record_id": "214717",
+      "symbol": "KPITTECH",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739221_15102026060712_WEB.xml"
+    },
+    {
+      "record_id": "214700",
+      "symbol": "ANANTRAJ",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739157_15102026054726_WEB.xml"
+    },
+    {
+      "record_id": "214699",
+      "symbol": "AIAENG",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739156_15102026054603_WEB.xml"
+    },
+    {
+      "record_id": "214694",
+      "symbol": "GALLANTT",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739147_15102026054243_WEB.xml"
+    },
+    {
+      "record_id": "214689",
+      "symbol": "ECLERX",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739129_15102026053801_WEB.xml"
+    },
+    {
+      "record_id": "214687",
+      "symbol": "ARE&M",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739121_15102026053436_WEB.xml"
+    },
+    {
+      "record_id": "214677",
+      "symbol": "SUZLON",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739068_15102026051415_WEB.xml"
+    },
+    {
+      "record_id": "214672",
+      "symbol": "BRIGADE",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739055_15102026050920_WEB.xml"
+    },
+    {
+      "record_id": "214671",
+      "symbol": "OLECTRA",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739053_15102026050851_WEB.xml"
+    },
+    {
+      "record_id": "214668",
+      "symbol": "FORCEMOT",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739049_15102026050742_WEB.xml"
+    },
+    {
+      "record_id": "214666",
+      "symbol": "CARTRADE",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739041_15102026050504_WEB.xml"
+    },
+    {
+      "record_id": "214664",
+      "symbol": "SANSERA",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739030_15102026045753_WEB.xml"
+    },
+    {
+      "record_id": "214663",
+      "symbol": "ATHERENERG",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739029_15102026045742_WEB.xml"
+    },
+    {
+      "record_id": "214641",
+      "symbol": "ENDURANCE",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738971_15102026043604_WEB.xml"
+    },
+    {
+      "record_id": "214637",
+      "symbol": "IOC",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738964_15102026043209_WEB.xml"
+    },
+    {
+      "record_id": "214631",
+      "symbol": "APARINDS",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738950_15102026042538_WEB.xml"
+    },
+    {
+      "record_id": "214615",
+      "symbol": "NSLNISP",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738893_15102026040407_WEB.xml"
+    },
+    {
+      "record_id": "214609",
+      "symbol": "KOTAKBANK",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738874_15102026035632_WEB.xml"
+    },
+    {
+      "record_id": "214606",
+      "symbol": "NMDC",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738864_15102026035331_WEB.xml"
+    },
+    {
+      "record_id": "214605",
+      "symbol": "TIMKEN",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738863_15102026035053_WEB.xml"
+    },
+    {
+      "record_id": "214597",
+      "symbol": "BAJAJ-AUTO",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738840_15102026033814_WEB.xml"
+    },
+    {
+      "record_id": "214595",
+      "symbol": "CUMMINSIND",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738833_15102026033455_WEB.xml"
+    },
+    {
+      "record_id": "214581",
+      "symbol": "REDINGTON",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738776_15102026030911_WEB.xml"
+    },
+    {
+      "record_id": "214571",
+      "symbol": "PHOENIXLTD",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738741_15102026024843_WEB.xml"
+    },
+    {
+      "record_id": "214569",
+      "symbol": "PNB",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738738_15102026024246_WEB.xml"
+    },
+    {
+      "record_id": "214566",
+      "symbol": "HDBFS",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738727_15102026023026_WEB.xml"
+    },
+    {
+      "record_id": "214559",
+      "symbol": "GLAXO",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738702_15102026021804_WEB.xml"
+    },
+    {
+      "record_id": "214550",
+      "symbol": "HAL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738658_15102026013209_WEB.xml"
+    },
+    {
+      "record_id": "214513",
+      "symbol": "HEGAM",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738553_15102026122031_WEB.xml"
+    },
+    {
+      "record_id": "214503",
+      "symbol": "WAAREEENER",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738518_15102026120211_WEB.xml"
+    },
+    {
+      "record_id": "214486",
+      "symbol": "SRF",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738472_15102026111004_WEB.xml"
+    },
+    {
+      "record_id": "214480",
+      "symbol": "NTPC",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738456_15102026105458_WEB.xml"
+    },
+    {
+      "record_id": "214476",
+      "symbol": "POWERGRID",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738451_15102026105019_WEB.xml"
+    },
+    {
+      "record_id": "214467",
+      "symbol": "LICHSGFIN",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738422_15102026094914_WEB.xml"
+    },
+    {
+      "record_id": "214462",
+      "symbol": "CRAFTSMAN",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738411_15102026090509_WEB.xml"
+    },
+    {
+      "record_id": "214200",
+      "symbol": "PAYTM",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737329_14102026080305_WEB.xml"
+    },
+    {
+      "record_id": "214453",
+      "symbol": "TTML",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738192_14102026100812_WEB.xml"
+    },
+    {
+      "record_id": "214441",
+      "symbol": "BAJAJHLDNG",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738099_14102026065841_WEB.xml"
+    },
+    {
+      "record_id": "214438",
+      "symbol": "MTARTECH",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738079_14102026063605_WEB.xml"
+    },
+    {
+      "record_id": "214436",
+      "symbol": "DATAPATTNS",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738068_14102026063149_WEB.xml"
+    },
+    {
+      "record_id": "214415",
+      "symbol": "HINDZINC",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737993_14102026055738_WEB.xml"
+    },
+    {
+      "record_id": "214398",
+      "symbol": "AADHARHFC",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737917_14102026052530_WEB.xml"
+    },
+    {
+      "record_id": "214394",
+      "symbol": "NHPC",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737909_14102026052303_WEB.xml"
+    },
+    {
+      "record_id": "214390",
+      "symbol": "CEATLTD",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737895_14102026051722_WEB.xml"
+    },
+    {
+      "record_id": "214377",
+      "symbol": "ANGELONE",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737867_14102026045751_WEB.xml"
+    },
+    {
+      "record_id": "214373",
+      "symbol": "NATIONALUM",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737856_14102026045149_WEB.xml"
+    },
+    {
+      "record_id": "214367",
+      "symbol": "LINDEINDIA",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737836_14102026044134_WEB.xml"
+    },
+    {
+      "record_id": "214363",
+      "symbol": "STLTECH",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737819_14102026043803_WEB.xml"
+    },
+    {
+      "record_id": "214357",
+      "symbol": "INTELLECT",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737801_14102026043150_WEB.xml"
+    },
+    {
+      "record_id": "214355",
+      "symbol": "BAJAJHFL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737797_14102026042924_WEB.xml"
+    },
+    {
+      "record_id": "214348",
+      "symbol": "GAIL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737784_14102026042249_WEB.xml"
+    },
+    {
+      "record_id": "214343",
+      "symbol": "EMAMILTD",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737769_14102026041654_WEB.xml"
+    },
+    {
+      "record_id": "214337",
+      "symbol": "GODREJPROP",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737751_14102026040830_WEB.xml"
+    },
+    {
+      "record_id": "214332",
+      "symbol": "ATUL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737735_14102026040258_WEB.xml"
+    },
+    {
+      "record_id": "214327",
+      "symbol": "BOSCHLTD",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737716_14102026034514_WEB.xml"
+    },
+    {
+      "record_id": "214310",
+      "symbol": "BEML",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737648_14102026030717_WEB.xml"
+    },
+    {
+      "record_id": "214293",
+      "symbol": "LICI",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737591_14102026022441_WEB.xml"
+    },
+    {
+      "record_id": "214276",
+      "symbol": "AVANTIFEED",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737523_14102026010733_WEB.xml"
+    },
+    {
+      "record_id": "214271",
+      "symbol": "RITES",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737497_14102026124853_WEB.xml"
+    },
+    {
+      "record_id": "214256",
+      "symbol": "SBICARD",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737457_14102026121442_WEB.xml"
+    },
+    {
+      "record_id": "214250",
+      "symbol": "ICICIBANK",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743956_22102026042725_WEB.xml"
+    },
+    {
+      "record_id": "214242",
+      "symbol": "AUROPHARMA",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737425_14102026114826_WEB.xml"
+    },
+    {
+      "record_id": "214235",
+      "symbol": "RHIM",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737404_14102026112540_WEB.xml"
+    },
+    {
+      "record_id": "214229",
+      "symbol": "AZAD",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737385_14102026110317_WEB.xml"
+    },
+    {
+      "record_id": "214221",
+      "symbol": "PINELABS",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737372_14102026103557_WEB.xml"
+    },
+    {
+      "record_id": "214215",
+      "symbol": "RAINBOW",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737357_14102026101847_WEB.xml"
+    },
+    {
+      "record_id": "214211",
+      "symbol": "CHAMBLFERT",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737347_14102026100243_WEB.xml"
+    },
+    {
+      "record_id": "214205",
+      "symbol": "PATANJALI",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737336_14102026094232_WEB.xml"
+    },
+    {
+      "record_id": "214187",
+      "symbol": "ANANDRATHI",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737231_13102026064115_WEB.xml"
+    },
+    {
+      "record_id": "214185",
+      "symbol": "DIXON",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737227_13102026063951_WEB.xml"
+    },
+    {
+      "record_id": "214174",
+      "symbol": "FIRSTCRY",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737199_13102026061712_WEB.xml"
+    },
+    {
+      "record_id": "214168",
+      "symbol": "SAGILITY",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737173_13102026055925_WEB.xml"
+    },
+    {
+      "record_id": "214135",
+      "symbol": "YESBANK",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737065_13102026050518_WEB.xml"
+    },
+    {
+      "record_id": "214129",
+      "symbol": "ITC",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737048_13102026050138_WEB.xml"
+    },
+    {
+      "record_id": "214127",
+      "symbol": "CASTROLIND",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737040_13102026045731_WEB.xml"
+    },
+    {
+      "record_id": "214119",
+      "symbol": "SWANCORP",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737019_13102026044828_WEB.xml"
+    },
+    {
+      "record_id": "214115",
+      "symbol": "J&KBANK",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737009_13102026044456_WEB.xml"
+    },
+    {
+      "record_id": "214108",
+      "symbol": "PARADEEP",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736997_13102026043703_WEB.xml"
+    },
+    {
+      "record_id": "214105",
+      "symbol": "IGL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736988_13102026043316_WEB.xml"
+    },
+    {
+      "record_id": "214091",
+      "symbol": "EXIDEIND",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736957_13102026041727_WEB.xml"
+    },
+    {
+      "record_id": "214086",
+      "symbol": "FSL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736948_13102026041109_WEB.xml"
+    },
+    {
+      "record_id": "214081",
+      "symbol": "COLPAL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736932_13102026040415_WEB.xml"
+    },
+    {
+      "record_id": "214074",
+      "symbol": "TITAGARH",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736913_13102026035219_WEB.xml"
+    },
+    {
+      "record_id": "214070",
+      "symbol": "UBL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736891_13102026033642_WEB.xml"
+    },
+    {
+      "record_id": "214064",
+      "symbol": "MPHASIS",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736857_13102026031930_WEB.xml"
+    },
+    {
+      "record_id": "214062",
+      "symbol": "CHOLAHLDNG",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736852_13102026031724_WEB.xml"
+    },
+    {
+      "record_id": "214057",
+      "symbol": "HSCL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736844_13102026031321_WEB.xml"
+    },
+    {
+      "record_id": "214050",
+      "symbol": "NH",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736827_13102026030512_WEB.xml"
+    },
+    {
+      "record_id": "214047",
+      "symbol": "ANTHEM",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736823_13102026025758_WEB.xml"
+    },
+    {
+      "record_id": "214044",
+      "symbol": "PRIVISCL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736808_13102026024532_WEB.xml"
+    },
+    {
+      "record_id": "214043",
+      "symbol": "SCHNEIDER",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736806_13102026024522_WEB.xml"
+    },
+    {
+      "record_id": "214036",
+      "symbol": "BBOX",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736789_13102026023115_WEB.xml"
+    },
+    {
+      "record_id": "214034",
+      "symbol": "HDFCAMC",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736786_13102026022428_WEB.xml"
+    },
+    {
+      "record_id": "214025",
+      "symbol": "KALYANKJIL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736765_13102026015914_WEB.xml"
+    },
+    {
+      "record_id": "214015",
+      "symbol": "IPCALAB",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736726_13102026011741_WEB.xml"
+    },
+    {
+      "record_id": "214008",
+      "symbol": "NTPCGREEN",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736696_13102026125628_WEB.xml"
+    },
+    {
+      "record_id": "213995",
+      "symbol": "ETERNAL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736668_13102026124040_WEB.xml"
+    },
+    {
+      "record_id": "213990",
+      "symbol": "SOBHA",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736649_13102026122918_WEB.xml"
+    },
+    {
+      "record_id": "213965",
+      "symbol": "UTIAMC",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736593_13102026114809_WEB.xml"
+    },
+    {
+      "record_id": "213939",
+      "symbol": "CREDITACC",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736521_13102026103700_WEB.xml"
+    },
+    {
+      "record_id": "213890",
+      "symbol": "THANGAMAYL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736295_12102026054310_WEB.xml"
+    },
+    {
+      "record_id": "213882",
+      "symbol": "CIEINDIA",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736250_12102026051909_WEB.xml"
+    },
+    {
+      "record_id": "213881",
+      "symbol": "OFSS",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736248_12102026051824_WEB.xml"
+    },
+    {
+      "record_id": "213872",
+      "symbol": "CMPDI",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736201_12102026044611_WEB.xml"
+    },
+    {
+      "record_id": "213869",
+      "symbol": "ULTRACEMCO",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736194_12102026043923_WEB.xml"
+    },
+    {
+      "record_id": "213853",
+      "symbol": "MFSL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736151_12102026041358_WEB.xml"
+    },
+    {
+      "record_id": "213850",
+      "symbol": "APLAPOLLO",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736137_12102026041019_WEB.xml"
+    },
+    {
+      "record_id": "213848",
+      "symbol": "PREMIERENE",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736115_12102026040148_WEB.xml"
+    },
+    {
+      "record_id": "213840",
+      "symbol": "NEULANDLAB",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736092_12102026034744_WEB.xml"
+    },
+    {
+      "record_id": "213817",
+      "symbol": "TEGA",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736007_12102026025059_WEB.xml"
+    },
+    {
+      "record_id": "213811",
+      "symbol": "LENSKART",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735992_12102026022956_WEB.xml"
+    },
+    {
+      "record_id": "213805",
+      "symbol": "VIJAYA",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735976_12102026015530_WEB.xml"
+    },
+    {
+      "record_id": "213800",
+      "symbol": "BANKINDIA",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735949_12102026012506_WEB.xml"
+    },
+    {
+      "record_id": "213789",
+      "symbol": "TECHNOE",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735913_12102026010105_WEB.xml"
+    },
+    {
+      "record_id": "213786",
+      "symbol": "SWIGGY",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735908_12102026125855_WEB.xml"
+    },
+    {
+      "record_id": "213752",
+      "symbol": "GESHIP",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735777_12102026102855_WEB.xml"
+    },
+    {
+      "record_id": "213745",
+      "symbol": "URBANCO",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735757_11102026045751_WEB.xml"
+    },
+    {
+      "record_id": "213740",
+      "symbol": "PGEL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735493_10102026064831_WEB.xml"
+    },
+    {
+      "record_id": "213723",
+      "symbol": "VTL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735438_10102026043610_WEB.xml"
+    },
+    {
+      "record_id": "213718",
+      "symbol": "ADANIPORTS",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735409_10102026035052_WEB.xml"
+    },
+    {
+      "record_id": "213708",
+      "symbol": "JSL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735365_10102026025011_WEB.xml"
+    },
+    {
+      "record_id": "213704",
+      "symbol": "ADANIENSOL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735355_10102026020737_WEB.xml"
+    },
+    {
+      "record_id": "213702",
+      "symbol": "ATGL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735353_10102026015343_WEB.xml"
+    },
+    {
+      "record_id": "213676",
+      "symbol": "BALRAMCHIN",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735220_09102026074157_WEB.xml"
+    },
+    {
+      "record_id": "213667",
+      "symbol": "AXISBANK",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735162_09102026064511_WEB.xml"
+    },
+    {
+      "record_id": "213656",
+      "symbol": "PVRINOX",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735125_09102026061731_WEB.xml"
+    },
+    {
+      "record_id": "213655",
+      "symbol": "AMBUJACEM",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735122_09102026061302_WEB.xml"
+    },
+    {
+      "record_id": "213640",
+      "symbol": "POWERINDIA",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735055_09102026053840_WEB.xml"
+    },
+    {
+      "record_id": "213604",
+      "symbol": "GRANULES",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734932_09102026041953_WEB.xml"
+    },
+    {
+      "record_id": "213596",
+      "symbol": "FACT",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734876_09102026034154_WEB.xml"
+    },
+    {
+      "record_id": "213587",
+      "symbol": "FLUOROCHEM",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734845_09102026031625_WEB.xml"
+    },
+    {
+      "record_id": "213554",
+      "symbol": "HONAUT",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734704_09102026122756_WEB.xml"
+    },
+    {
+      "record_id": "213539",
+      "symbol": "NIACL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734639_09102026105613_WEB.xml"
+    },
+    {
+      "record_id": "213420",
+      "symbol": "TARIL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734076_08102026101824_WEB.xml"
+    },
+    {
+      "record_id": "213527",
+      "symbol": "CCL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734566_08102026071456_WEB.xml"
+    },
+    {
+      "record_id": "213522",
+      "symbol": "RBLBANK",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734526_08102026062818_WEB.xml"
+    },
+    {
+      "record_id": "213513",
+      "symbol": "HAVELLS",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734459_08102026053816_WEB.xml"
+    },
+    {
+      "record_id": "213507",
+      "symbol": "LTF",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734439_08102026052653_WEB.xml"
+    },
+    {
+      "record_id": "213503",
+      "symbol": "RADICO",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734404_08102026050721_WEB.xml"
+    },
+    {
+      "record_id": "213493",
+      "symbol": "AETHER",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734361_08102026044208_WEB.xml"
+    },
+    {
+      "record_id": "213485",
+      "symbol": "UCOBANK",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734335_08102026042244_WEB.xml"
+    },
+    {
+      "record_id": "213483",
+      "symbol": "JYOTICNC",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734330_08102026042053_WEB.xml"
+    },
+    {
+      "record_id": "213480",
+      "symbol": "LLOYDSME",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734633_09102026103829_WEB.xml"
+    },
+    {
+      "record_id": "213475",
+      "symbol": "AWL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734273_08102026033216_WEB.xml"
+    },
+    {
+      "record_id": "213473",
+      "symbol": "AAVAS",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734271_08102026032250_WEB.xml"
+    },
+    {
+      "record_id": "213472",
+      "symbol": "COALINDIA",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734270_08102026032238_WEB.xml"
+    },
+    {
+      "record_id": "213466",
+      "symbol": "ABSLAMC",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734239_08102026025311_WEB.xml"
+    },
+    {
+      "record_id": "213445",
+      "symbol": "MAHABANK",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734163_08102026125019_WEB.xml"
+    },
+    {
+      "record_id": "213435",
+      "symbol": "INDIANB",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734139_08102026122540_WEB.xml"
+    },
+    {
+      "record_id": "213429",
+      "symbol": "SJVN",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734117_08102026114024_WEB.xml"
+    },
+    {
+      "record_id": "213414",
+      "symbol": "SAILIFE",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1733965_07102026063003_WEB.xml"
+    },
+    {
+      "record_id": "213405",
+      "symbol": "JWL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1733873_07102026051055_WEB.xml"
+    },
+    {
+      "record_id": "213399",
+      "symbol": "MRPL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1733841_07102026043054_WEB.xml"
+    },
+    {
+      "record_id": "213378",
+      "symbol": "GROWW",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1733744_07102026023207_WEB.xml"
+    },
+    {
+      "record_id": "213371",
+      "symbol": "VMM",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1733720_07102026012928_WEB.xml"
+    },
+    {
+      "record_id": "213366",
+      "symbol": "IGIL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1733703_07102026010357_WEB.xml"
+    },
+    {
+      "record_id": "213352",
+      "symbol": "APOLLOHOSP",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1733654_07102026112959_WEB.xml"
+    },
+    {
+      "record_id": "213332",
+      "symbol": "SHYAMMETL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1733523_06102026061618_WEB.xml"
+    },
+    {
+      "record_id": "213303",
+      "symbol": "AFFLE",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1733379_06102026031849_WEB.xml"
+    },
+    {
+      "record_id": "213292",
+      "symbol": "GRSE",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1733301_06102026124203_WEB.xml"
+    },
+    {
+      "record_id": "213283",
+      "symbol": "SUMICHEM",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1733253_06102026114043_WEB.xml"
+    },
+    {
+      "record_id": "213281",
+      "symbol": "DIVISLAB",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1733233_06102026103802_WEB.xml"
+    },
+    {
+      "record_id": "213277",
+      "symbol": "DLF",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1733186_05102026073938_WEB.xml"
+    },
+    {
+      "record_id": "213275",
+      "symbol": "MEESHO",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1733161_05102026071536_WEB.xml"
+    },
+    {
+      "record_id": "213264",
+      "symbol": "CHENNPETRO",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1732947_05102026034747_WEB.xml"
+    },
+    {
+      "record_id": "213263",
+      "symbol": "MMTC",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1732944_05102026033120_WEB.xml"
+    },
+    {
+      "record_id": "213248",
+      "symbol": "CANBK",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1732749_03102026042915_WEB.xml"
+    },
+    {
+      "record_id": "213249",
+      "symbol": "ADANIGREEN",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1732768_03102026054652_WEB.xml"
+    },
+    {
+      "record_id": "213244",
+      "symbol": "CGCL",
+      "status": "untrusted_xbrl_url",
+      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1732514_01102026082308_WEB.xml"
+    }
   ],
-  "parsed_ownership_row_count": 348,
+  "raw_xbrl_refs": [],
+  "filing_snapshot_paths": [],
+  "parsed_ownership_row_count": 0,
   "ownership_row_count": 501,
   "latest_reporting_date": "2026-09-30",
-  "latest_quarter_parsed_count": 348,
-  "latest_quarter_coverage_pct": 69.46,
+  "latest_quarter_parsed_count": 0,
+  "latest_quarter_coverage_pct": 0.0,
   "ownership_current_path": "data/raw/shareholding/shareholding_ownership_current.csv",
-  "ownership_snapshot_path": "data/snapshots/shareholding_ownership/shareholding_ownership_2026-09-30_5629c60cebfd90a2.csv",
-  "ownership_snapshot_sha256": "5629c60cebfd90a2d885c9a757b9c9934af96153bd520e1fdf56b5a1612c29df",
-  "ownership_current_sha256": "5629c60cebfd90a2d885c9a757b9c9934af96153bd520e1fdf56b5a1612c29df",
-  "master_snapshot_path": "data/snapshots/shareholding_master/shareholding_master_2026-09-30_8132cd4a09ba43e3.json",
-  "master_snapshot_sha256": "8132cd4a09ba43e38bb98dd247c27451105d2fa2639d9051237921f9ac5acdeb",
+  "ownership_snapshot_path": "data/snapshots/shareholding_ownership/shareholding_ownership_2026-09-30_3270609309aebcd4.csv",
+  "ownership_snapshot_sha256": "3270609309aebcd4f2c5037e87ec79be38311ff26f5eb03b95651672c58942d7",
+  "ownership_current_sha256": "3270609309aebcd4f2c5037e87ec79be38311ff26f5eb03b95651672c58942d7",
+  "master_snapshot_path": "data/snapshots/shareholding_master/shareholding_master_2026-09-30_4397e2e9f633a615.json",
+  "master_snapshot_sha256": "4397e2e9f633a615bb5199b936eaa4499a661a6e6adcf3fe05f6b0b7ac76bf26",
   "parser_version": 4,
   "source_boundaries": [
     "Only current Nifty 500 symbols are included in the current ownership view.",
