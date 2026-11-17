@@ -197,3 +197,31 @@ def test_participant_history_reports_insufficient_sessions_and_partial_series():
     complete_dates[2]["rows"] = {}
     partial = _participant_window(complete_dates, 5, "participant_oi")[0]
     assert partial["status"] == "partial_observations"
+
+ 
+def test_selects_duplicate_daily_snapshot_only_with_explicit_revision_record(tmp_path):
+    _build_history(tmp_path)
+    directory = tmp_path / "data/snapshots/daily_stock_features"
+    original = next(directory.glob("daily_stock_features_2026-11-02_*.csv"))
+    with original.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    rows[0]["cash_close"] = "999"
+    temporary = original.with_name("temporary.csv")
+    digest = _write_snapshot(temporary, rows)
+    duplicate = original.with_name(
+        original.name.rsplit("_", 1)[0] + f"_{digest[:16]}.csv"
+    )
+    temporary.rename(duplicate)
+    (directory / "revision_selection.json").write_text(
+        __import__("json").dumps({
+            "2026-11-02": {
+                "selected_filename": original.name,
+                "selection_basis": "Selected explicitly after comparing provenance."
+            }
+        }),
+        encoding="utf-8",
+    )
+    from fii_engine.historical_features import _load_daily_snapshots
+    snapshots, dates = _load_daily_snapshots(tmp_path)
+    assert dates[0] == "2026-11-02"
+    assert snapshots[0]["filename"] == original.name
