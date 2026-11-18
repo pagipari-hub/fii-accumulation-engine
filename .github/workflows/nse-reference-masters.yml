@@ -48,7 +48,45 @@ jobs:
       - name: Capture official NSE MII security and contract masters
         run: python -m fii_engine.nse_reference --output-dir artifacts/nse-reference
 
+      - name: Print captured official NSE MII catalogue records
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          directory = Path("artifacts/nse-reference/catalogue")
+          for path in sorted(directory.glob("*.json")):
+              if path.name == "probe_manifest.json":
+                  continue
+              payload = json.loads(path.read_text(encoding="utf-8"))
+              print(f"CATALOGUE FILE: {path}")
+              print("TOP LEVEL:", sorted(payload))
+              print("CURRENT DATE:", payload.get("currentDate"))
+              for group in ("CurrentDay", "PreviousDay"):
+                  records = payload.get(group, [])
+                  selected = [
+                      {
+                          key: item.get(key)
+                          for key in (
+                              "fileKey", "fileActlName", "filePath",
+                              "tradingDate", "displayName", "filePosition", "fileSize"
+                          )
+                      }
+                      for item in records
+                      if isinstance(item, dict)
+                      and (
+                          "mii" in str(item.get("displayName", "")).casefold()
+                          or "security" in str(item.get("displayName", "")).casefold()
+                          or "contract" in str(item.get("displayName", "")).casefold()
+                      )
+                  ]
+                  print(f"{group} MII/SECURITY/CONTRACT RECORDS:")
+                  print(json.dumps(selected, indent=2, ensure_ascii=False))
+          PY
+
       - name: Validate capture manifest and source files
+        if: success()
         run: |
           python - <<'PY'
           import json
