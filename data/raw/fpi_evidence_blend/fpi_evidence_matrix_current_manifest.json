@@ -22,7 +22,7 @@
     "nse_shareholding_history_probe_manifest": "4bced3cce357b383e4884fe9faa7ffb72a5f353425f62113d7af388cbb6e47ee",
     "nse_shareholding_unitholding_announcement_probe_manifest": "033c871a657de42ac598256d9c69b588c5886049871cf8c6519dc69c6fc15b92",
     "market_flow_history": "8d962a06ddff5208d376f0e88aa7561e7960fce56edac17937c3888ea2f093cb",
-    "participant_derivatives_history": "5b1aa36580466b6aefbc910a42e15ada7f1cf45a511cc63fd40c7be61ae8fcdc"
+    "participant_derivatives_history": "d4666f0ec2263b03f1a128037899292c3f2524bb301053b872ad47cfaf69bad0"
   },
   "deal_trade_date_window": [
     "2026-11-02",
@@ -45,9 +45,9 @@
       "DUMMYHEG"
     ]
   },
-  "snapshot_identity_sha256": "e5a7537c40a147bbbd379f9c8ccd7e7b903f9326a6a22408f5ca2f50e2bb84f9",
+  "snapshot_identity_sha256": "89191684542a9db391216379a932c7cfe230f64b9dca3b7bfa62b0d10bdd6e01",
   "status": "complete",
-  "generated_at_utc": "2026-11-18T00:22:56.216236+00:00",
+  "generated_at_utc": "2026-11-18T00:25:30.206650+00:00",
   "stock_count": 501,
   "tradable_stock_count": 500,
   "index_placeholder_count": 1,
@@ -6567,8 +6567,12 @@
       "status": "insufficient_history"
     }
   ],
-  "participant_oi_session_count": 61,
-  "participant_volume_session_count": 61,
+  "participant_derivatives_as_of_trade_date": "2026-11-09",
+  "participant_derivatives_latest_observed_trade_date": "2026-11-17",
+  "participant_oi_session_count": 60,
+  "participant_volume_session_count": 60,
+  "participant_oi_available_session_count": 61,
+  "participant_volume_available_session_count": 61,
   "participant_derivatives_window_statuses": [
     {
       "dataset": "participant_oi",
@@ -9741,7 +9745,7 @@
   ],
   "composite_score_status": "not_scored_independent_evidence_dimensions_only",
   "snapshot_path": "data/snapshots/fpi_evidence_blend/fpi_evidence_matrix_20261109_38edbda9415c0e97.csv",
-  "snapshot_manifest_path": "data/snapshots/fpi_evidence_blend/fpi_evidence_matrix_20261109_38edbda9415c_e5a7537c40a1.json",
+  "snapshot_manifest_path": "data/snapshots/fpi_evidence_blend/fpi_evidence_matrix_20261109_38edbda9415c_89191684542a.json",
   "limitations": [
     "No composite score is issued; independent evidence dimensions are preserved without arbitrary weights.",
     "Demerger index placeholders included at zero price remain in the index-row count but are excluded from tradable-stock ownership coverage and FPI scoring.",
