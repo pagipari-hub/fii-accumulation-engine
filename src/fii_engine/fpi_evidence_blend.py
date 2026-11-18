@@ -441,6 +441,7 @@ def build(root: Path = Path(".")) -> dict:
     daily_join_counts = Counter()
     historical_join_counts = Counter()
     ownership_status_counts = Counter()
+    reit_unitholding_status_counts = Counter()
     deal_status_counts = Counter()
     for universe in sorted(universe_rows, key=lambda row: row["symbol"]):
         symbol = universe["symbol"].strip().upper()
@@ -513,6 +514,7 @@ def build(root: Path = Path(".")) -> dict:
         daily_join_counts[daily_status] += 1
         historical_join_counts[historical_status] += 1
         ownership_status_counts[share_status] += 1
+        reit_unitholding_status_counts[reit_status] += 1
         deal_status_counts[deal.get("deal_data_status", "unknown")] += 1
 
         row = {
@@ -607,8 +609,14 @@ def build(root: Path = Path(".")) -> dict:
             summary_parts.append("known_net_incomplete_or_counterparty_unresolved")
         if deal_data_status == "no_disclosed_deal_in_available_snapshots":
             summary_parts.append("no_named_bulk_block_deal_in_window")
-        if share_status == "parsed_verified_identity":
+        if share_status in {
+            "parsed_verified_identity",
+            "issuer_fallback_parsed_verified_identity",
+            "issuer_fallback_total_only_verified_identity",
+        }:
             summary_parts.append("quarterly_fpi_ownership_baseline_available")
+        elif reit_status == "parsed_verified_identity":
+            summary_parts.append("quarterly_fpi_unitholding_baseline_available_units_not_equity_shares")
         if row["short_term_price_context"] == "5s_positive_price_return":
             summary_parts.append("positive_5_session_price_return")
         if row["positional_price_context"] in {
@@ -619,7 +627,15 @@ def build(root: Path = Path(".")) -> dict:
             summary_parts.append("delivery_strengthening_vs_20s")
         if row["options_context"].startswith("5s_same_expiry_pcr_available"):
             summary_parts.append("5_session_options_pcr_same_expiry_available")
-        if not placeholder and row["ownership_context"] != "2026_quarterly_fpi_ownership_baseline_available;no_prior_quarter_change_series":
+        if (
+            not placeholder
+            and share_status not in {
+                "parsed_verified_identity",
+                "issuer_fallback_parsed_verified_identity",
+                "issuer_fallback_total_only_verified_identity",
+            }
+            and reit_status != "parsed_verified_identity"
+        ):
             summary_parts.append("quarterly_fpi_ownership_baseline_unavailable_or_unverified")
         if deal_data_status == "observed_disclosed_deals" and not direct_buy:
             summary_parts.append("bulk_block_deals_disclosed_without_direct_fpi_client_buy_match")
