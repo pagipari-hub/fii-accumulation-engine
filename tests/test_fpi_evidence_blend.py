@@ -44,6 +44,29 @@ def test_build_blended_matrix_preserves_missingness_and_full_universe(tmp_path):
         "publisher": "NSE Indices",
         "source_page": "https://www.niftyindices.com/indices/equity/broad-based-indices/NIFTY-500",
     })
+    _write_csv(tmp_path / "data/audits/nifty500_index_placeholders_2026-11-09.csv", [{
+        "symbol": "TEST000",
+        "security_name": "Test demerged entity",
+        "classification": "demerged_index_placeholder",
+        "effective_date": "2026-09-07",
+        "price_treatment": "zero_price_without_divisor_adjustment",
+        "source_title": "Test index placeholder notice",
+        "source_date": "2026-09-03",
+        "source_url": "https://www.niftyindices.com/press-release",
+        "reason": "Non-tradable index placeholder",
+    }])
+    _write_json(tmp_path / "data/processed/nsdl_cash_flow_context.json", {
+        "scope": "aggregate_market_wide_cash_equity_context_only",
+        "stock_level_attribution": False,
+        "normalized_date_count": 60,
+        "fpi": {"cumulative_net_inr_crore": -10.0},
+        "dii": {"cumulative_net_inr_crore": 20.0},
+    })
+    _write_json(tmp_path / "data/raw/shareholding/bse_shareholding_fallback_probe_manifest.json", {
+        "api_access_status": "http_403_blocked",
+        "candidate_count": 6,
+        "status_counts": {"probe_error": 1, "not_attempted_after_exchange_403": 5},
+    })
 
     daily_rows = []
     historical_rows = []
@@ -183,8 +206,11 @@ def test_build_blended_matrix_preserves_missingness_and_full_universe(tmp_path):
         "participant_oi_session_count": 1, "participant_volume_session_count": 1,
     })
     _write_json(tmp_path / "data/raw/fpi_deal_attribution/fpi_deal_attribution_current_manifest.json", {
-        "stock_summary_csv_sha256": deal_hash, "universe_csv_sha256": universe_hash,
+        "stock_summary_csv_sha256": deal_hash, "event_csv_sha256": "d" * 64,
+        "universe_csv_sha256": universe_hash,
         "trade_date_window_start": "2026-10-30", "trade_date_window_end": "2026-11-06",
+        "lookback_calendar_days": 7, "source_row_count": 2, "deduplicated_event_count": 1,
+        "current_registry_matched_fpi_client_event_count": 1, "unmatched_event_count": 0,
         "registry_snapshot_date": "2026-11-08",
         "registry_snapshot_sha256": "a" * 64,
     })
@@ -193,17 +219,101 @@ def test_build_blended_matrix_preserves_missingness_and_full_universe(tmp_path):
         "latest_reporting_date": "2026-09-30", "latest_quarter_coverage_pct": 0.2,
     })
 
+    issuer_fallback_rows = [
+        {
+            "reporting_date": "2026-09-30", "symbol": "TEST001",
+            "company_name": "Test Company 1", "isin": universe[2]["isin"],
+            "identity_join_method": "verified_exact_dated_bse_udiff_symbol_scripcode_isin_match",
+            "identity_evidence_path": "data/raw/shareholding/identity_evidence/test.csv",
+            "identity_evidence_sha256": "b" * 64,
+            "ownership_data_type": "issuer_published_equity_shareholding",
+            "fpi_category_i_shares": "20", "fpi_category_ii_shares": "5",
+            "fpi_total_shares": "25",
+            "fpi_category_i_ownership_percentage_points": "2.0",
+            "fpi_category_ii_ownership_percentage_points": "0.5",
+            "fpi_total_ownership_percentage_points": "2.5",
+            "category_breakdown_status": "reported_category_i_and_ii",
+            "source_url": "https://issuer.example/test001.pdf",
+            "source_content_type": "application/pdf", "source_http_status": "200",
+            "source_raw_path": "data/raw/shareholding/issuer_fallback/test001.pdf",
+            "source_sha256": "c" * 64,
+        },
+        {
+            "reporting_date": "2026-09-30", "symbol": "TEST002",
+            "company_name": "Test Company 2", "isin": universe[3]["isin"],
+            "identity_join_method": "verified_exact_dated_bse_udiff_symbol_scripcode_isin_match",
+            "identity_evidence_path": "data/raw/shareholding/identity_evidence/test.csv",
+            "identity_evidence_sha256": "b" * 64,
+            "ownership_data_type": "issuer_published_equity_shareholding",
+            "fpi_category_i_shares": "", "fpi_category_ii_shares": "",
+            "fpi_total_shares": "100",
+            "fpi_category_i_ownership_percentage_points": "",
+            "fpi_category_ii_ownership_percentage_points": "",
+            "fpi_total_ownership_percentage_points": "5.0",
+            "category_breakdown_status": "publisher_total_only_category_split_unavailable",
+            "source_url": "https://issuer.example/test002.html",
+            "source_content_type": "text/html", "source_http_status": "200",
+            "source_raw_path": "data/raw/shareholding/issuer_fallback/test002.html",
+            "source_sha256": "d" * 64,
+        },
+    ]
+    issuer_hash = _write_csv(
+        tmp_path / "data/raw/shareholding/issuer_shareholding_fallback_current.csv",
+        issuer_fallback_rows,
+    )
+    _write_json(tmp_path / "data/raw/shareholding/issuer_shareholding_fallback_current_manifest.json", {
+        "status": "complete", "expected_candidate_count": 2,
+        "parsed_verified_count": 2, "output_sha256": issuer_hash,
+        "reporting_date": "2026-09-30",
+    })
+    reit_rows = [{
+        "reporting_date": "2026-09-30", "symbol": "TEST003",
+        "company_name": "Test Company 3 REIT", "isin": universe[4]["isin"],
+        "ownership_data_type": "reit_unitholding_pattern", "fpi_units": "5000",
+        "fpi_ownership_percentage_points": "6.5", "reported_fpi_row_count": "2",
+        "announcement_seq_id": "123456", "announcement_date": "2026-10-15",
+        "attachment_path": "artifacts/test_reit.pdf", "attachment_sha256": "e" * 64,
+    }]
+    reit_hash = _write_csv(
+        tmp_path / "data/raw/shareholding/reit_unitholding_current.csv", reit_rows
+    )
+    _write_json(tmp_path / "data/raw/shareholding/reit_unitholding_current_manifest.json", {
+        "status": "complete", "expected_reit_count": 1,
+        "parsed_reit_count": 1, "output_sha256": reit_hash,
+        "reporting_date": "2026-09-30",
+    })
+
     result = build(tmp_path)
     output_path = tmp_path / result["current_output_path"]
     with output_path.open("r", encoding="utf-8", newline="") as handle:
         output = list(csv.DictReader(handle))
     assert result["stock_count"] == 501
+    assert result["tradable_stock_count"] == 500
+    assert result["index_placeholder_count"] == 1
+    assert result["nsdl_market_flow_context"]["stock_level_attribution"] is False
+    assert result["nsdl_market_flow_context"]["scope"] == "aggregate_market_wide_cash_equity_context_only"
+    assert result["bse_shareholding_fallback_probe"]["api_access_status"] == "http_403_blocked"
+    assert result["source_hashes"]["bse_shareholding_fallback_probe_manifest"]
+    assert result["ownership_coverage_pct"] == 0.2
+    assert result["ownership_index_row_coverage_pct"] == 0.2
+    assert result["equity_ownership_evidence_coverage_count"] == 3
+    assert result["equity_ownership_evidence_coverage_pct"] == 0.6
+    assert result["ownership_evidence_coverage_count"] == 4
+    assert result["ownership_evidence_coverage_pct"] == 0.8
+    assert result["ownership_unresolved_count"] == 496
+    assert result["issuer_fallback_verified_count"] == 2
+    assert result["reit_unitholding_verified_count"] == 1
+    assert result["ownership_status_counts"]["not_applicable_index_placeholder"] == 1
     assert result["composite_score_status"] == "not_scored_independent_evidence_dimensions_only"
     assert result["ownership_parsed_verified_count"] == 1
     assert len(output) == 501
 
     abc = next(row for row in output if row["symbol"] == "ABC")
-    no_data = next(row for row in output if row["symbol"] == "TEST000")
+    no_data = next(row for row in output if row["symbol"] == "TEST004")
+    issuer_fallback = next(row for row in output if row["symbol"] == "TEST001")
+    total_only_fallback = next(row for row in output if row["symbol"] == "TEST002")
+    reit = next(row for row in output if row["symbol"] == "TEST003")
+    placeholder = next(row for row in output if row["symbol"] == "TEST000")
     assert abc["direct_fpi_client_gross_buy_candidate"] == "true"
     assert abc["fpi_deal_evidence_grade"].startswith("grade_2")
     assert abc["5s_cash_return_pct"] == "2"
@@ -216,6 +326,24 @@ def test_build_blended_matrix_preserves_missingness_and_full_universe(tmp_path):
     assert no_data["shareholding_join_status"] == "isin_mismatch"
     assert no_data["shareholding_fpi_total_ownership_percentage_points"] == ""
     assert no_data["direct_fpi_client_gross_buy_candidate"] == "false"
+    assert issuer_fallback["shareholding_join_status"] == "issuer_fallback_parsed_verified_identity"
+    assert issuer_fallback["shareholding_fpi_category_i_shares"] == "20"
+    assert issuer_fallback["shareholding_fpi_total_ownership_percentage_points"] == "2.5"
+    assert total_only_fallback["shareholding_join_status"] == "issuer_fallback_total_only_verified_identity"
+    assert total_only_fallback["shareholding_fpi_category_i_shares"] == ""
+    assert total_only_fallback["shareholding_fpi_total_shares"] == "100"
+    assert reit["shareholding_join_status"] == "not_applicable_reit_unitholding"
+    assert reit["reit_unitholding_join_status"] == "parsed_verified_identity"
+    assert reit["shareholding_fpi_total_ownership_percentage_points"] == ""
+    assert reit["reit_unitholding_fpi_units"] == "5000"
+    assert reit["reit_unitholding_fpi_ownership_percentage_points"] == "6.5"
+    assert reit["ownership_context"] == "2026_quarterly_fpi_unitholding_baseline_available;units_not_equity_shares"
+    assert placeholder["universe_member_type"] == "index_adjustment_placeholder"
+    assert placeholder["tradability_status"] == "non_tradable_zero_price"
+    assert placeholder["fpi_scoring_eligible"] == "false"
+    assert placeholder["shareholding_join_status"] == "not_applicable_index_placeholder"
+    assert placeholder["fpi_deal_evidence_grade"] == "not_applicable_index_placeholder"
+    assert placeholder["evidence_summary"] == "non_tradable_demerger_index_placeholder"
     assert len(result["market_flow_window_statuses"]) == 6
     assert all(item["status"] == "insufficient_history" for item in result["market_flow_window_statuses"])
 

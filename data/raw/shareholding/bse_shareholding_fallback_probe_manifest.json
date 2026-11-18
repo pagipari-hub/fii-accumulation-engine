@@ -1,0 +1,40 @@
+{
+  "publisher": "Bombay Stock Exchange",
+  "retrieved_at_utc": "2026-11-12T08:46:50Z",
+  "reporting_date": "2026-09-30",
+  "candidate_count": 3,
+  "bse_udiff_source_sha256": "e2b7cea2672aed05df3ce55f3c531a153cb2b5215e2b493b2735cd9be116acce",
+  "api_access_status": "http_403_blocked",
+  "observations": [
+    {
+      "symbol": "ABBOTINDIA",
+      "reporting_date": "2026-09-30",
+      "universe_isin": "INE358A01014",
+      "bse_scrip_code": "500488",
+      "bse_symbol": "ABBOTINDIA",
+      "bse_series": "A",
+      "index_url": "https://api.bseindia.com/BseIndiaAPI/api/Corp_Shareholding_ng/w?scripcode=500488&flag=0&indtype=",
+      "status": "probe_error",
+      "error": "BSE request failed (403): https://api.bseindia.com/BseIndiaAPI/api/Corp_Shareholding_ng/w?scripcode=500488&flag=0&indtype="
+    },
+    {
+      "symbol": "ALKEM",
+      "reporting_date": "2026-09-30",
+      "universe_isin": "INE540L01014",
+      "bse_scrip_code": "539523",
+      "status": "not_attempted_after_exchange_403"
+    },
+    {
+      "symbol": "MCX",
+      "reporting_date": "2026-09-30",
+      "universe_isin": "INE745G01043",
+      "bse_scrip_code": "534091",
+      "status": "not_attempted_after_exchange_403"
+    }
+  ],
+  "status_counts": {
+    "probe_error": 1,
+    "not_attempted_after_exchange_403": 2
+  },
+  "scope_boundary": "BSE quarterly shareholding filing availability only; captured attachments are not yet parsed into ownership rows and do not establish daily FPI transactions."
+}

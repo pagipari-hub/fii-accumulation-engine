@@ -20,10 +20,17 @@ TRUSTED_XBRL_HOST = "nsearchives.nseindia.com"
 TRUSTED_XBRL_PATH = "/corporate/xbrl/"
 UNIVERSE_PATH = "data/raw/universe/nifty500_current.csv"
 PARSER_VERSION = 4
+PLACEHOLDER_CSV = Path("data/audits/nifty500_index_placeholders_2026-11-09.csv")
+
+ALLOWED_CROSSWALK_STATUSES = {
+    "verified_exact_dated_bse_scripcode_isin_match",
+    "verified_exact_dated_bse_symbol_isin_match",
+}
 
 OWNERSHIP_FIELDS = [
     "reporting_date", "symbol", "company_name", "isin",
-    "record_id", "submission_date", "broadcast_date", "system_date",
+    "universe_member_type", "tradability_status", "fpi_scoring_eligible",
+    "universe_exclusion_reason", "record_id", "submission_date", "broadcast_date", "system_date",
     "revised_data", "revision_date", "identity_status", "identity_join_method",
     "filing_status", "fpi_category_i_shares", "fpi_category_ii_shares",
     "fpi_total_shares", "fpi_category_i_ownership_percentage_points",
@@ -82,6 +89,29 @@ def _parse_nse_datetime(value: object, *, field: str) -> datetime | None:
     raise ValueError(f"invalid NSE shareholding {field}: {value!r}")
 
 
+def _load_index_placeholders(root: Path, universe: list[dict]) -> tuple[dict[str, dict], dict | None]:
+    path = root / PLACEHOLDER_CSV
+    if not path.exists():
+        return {}, None
+    payload = path.read_bytes()
+    rows = list(csv.DictReader(io.StringIO(payload.decode("utf-8-sig"))))
+    symbols = {row["symbol"].strip().upper() for row in universe}
+    indexed = {}
+    for row in rows:
+        symbol = row.get("symbol", "").strip().upper()
+        if not symbol or symbol not in symbols or symbol in indexed:
+            raise ValueError(f"invalid or duplicate index placeholder symbol: {symbol}")
+        if row.get("classification") != "demerged_index_placeholder":
+            raise ValueError(f"unsupported index placeholder classification: {symbol}")
+        indexed[symbol] = row
+    return indexed, {
+        "path": str(PLACEHOLDER_CSV),
+        "sha256": _sha256(payload),
+        "placeholder_count": len(indexed),
+        "symbols": sorted(indexed),
+    }
+
+
 def _load_universe(root: Path) -> tuple[list[dict], dict[str, dict], str]:
     path = root / UNIVERSE_PATH
     payload = path.read_bytes()
@@ -108,24 +138,101 @@ def _load_universe(root: Path) -> tuple[list[dict], dict[str, dict], str]:
     return rows, {row["symbol"]: row for row in rows}, _sha256(payload)
 
 
-def _metadata(master_row: dict, stock: dict) -> dict:
+def _load_identity_crosswalk(path: Path | None) -> tuple[dict[str, dict], dict | None]:
+    if path is None:
+        return {}, None
+    payload = path.read_bytes()
+    rows = list(csv.DictReader(io.StringIO(payload.decode("utf-8-sig"))))
+    if not rows:
+        raise ValueError("dated BSE identity crosswalk is empty")
+    report_path = path.with_suffix(".json")
+    report = json.loads(report_path.read_text(encoding="utf-8"))
+    digest = str(report.get("bse_source_sha256") or "").strip()
+    if report.get("bse_source_http_status") != 200:
+        raise ValueError("dated BSE identity source was not HTTP 200")
+    if report.get("candidate_count") != len(rows):
+        raise ValueError("dated BSE identity crosswalk candidate count mismatch")
+    if report.get("verified_count", -1) + report.get("unresolved_count", -1) != len(rows):
+        raise ValueError("dated BSE identity crosswalk verified/unresolved counts do not reconcile")
+    if not digest:
+        raise ValueError("dated BSE identity crosswalk has no source hash")
+    source_reference = str(report.get("bse_source_path") or "").strip()
+    source_name = Path(source_reference).name
+    if not source_name:
+        raise ValueError("dated BSE identity report has no safe raw-source filename")
+    source_path = report_path.parent / source_name
+    if not source_path.is_file() or _sha256(source_path.read_bytes()) != digest:
+        raise ValueError("dated BSE raw source is missing or fails SHA-256 verification")
+    indexed = {}
+    for row in rows:
+        symbol = row.get("symbol", "").strip().upper()
+        status = row.get("bse_crosswalk_status", "")
+        if not symbol or symbol in indexed:
+            raise ValueError("dated BSE identity crosswalk has blank or duplicate symbols")
+        if status not in ALLOWED_CROSSWALK_STATUSES:
+            continue
+        if row.get("reporting_date") != report.get("reporting_date"):
+            raise ValueError(f"dated BSE identity crosswalk date mismatch: {symbol}")
+        if row.get("bse_bhavcopy_sha256") != digest:
+            raise ValueError(f"dated BSE source hash mismatch in crosswalk row: {symbol}")
+        if row.get("bse_isin", "").strip().upper() != row.get("universe_isin", "").strip().upper():
+            raise ValueError(f"dated BSE ISIN does not match universe ISIN: {symbol}")
+        if len(row.get("xbrl_sha256", "")) != 64:
+            raise ValueError(f"crosswalk row has no valid XBRL hash: {symbol}")
+        indexed[symbol] = row
+    if len(indexed) != report.get("verified_count"):
+        raise ValueError("dated BSE identity crosswalk verified row count mismatch")
+    return indexed, {
+        "path": str(path),
+        "sha256": _sha256(payload),
+        "report_path": str(report_path),
+        "reporting_date": report["reporting_date"],
+        "candidate_count": len(rows),
+        "verified_count": len(indexed),
+        "unresolved_count": len(rows) - len(indexed),
+        "bse_source_sha256": digest,
+    }
+
+
+def _metadata(master_row: dict, stock: dict, identity_evidence: dict | None = None) -> dict:
     reporting_date = _parse_nse_date(master_row.get("date"), field="reporting date")
     if reporting_date is None:
         raise ValueError(f"missing reporting date for {master_row.get('symbol')}")
     symbol = str(master_row.get("symbol") or "").strip()
     isin = str(master_row.get("isin") or "").strip() or None
     company_name = str(master_row.get("name") or "").strip()
-    if isin:
-        if isin == stock["isin"]:
-            identity_status, join_method = "verified", "isin_exact"
+    identity_evidence_xbrl_sha256 = None
+    identity_evidence_bse_sha256 = None
+    if isin and isin == stock["isin"]:
+        identity_status, join_method = "verified", "isin_exact"
+    elif identity_evidence:
+        exact_evidence = (
+            identity_evidence.get("reporting_date") == reporting_date
+            and identity_evidence.get("master_record_id") == str(master_row.get("recordId") or "").strip()
+            and identity_evidence.get("master_xbrl_url") == str(master_row.get("xbrl") or "").strip()
+            and identity_evidence.get("universe_isin", "").strip().upper() == stock["isin"].upper()
+            and identity_evidence.get("bse_isin", "").strip().upper() == stock["isin"].upper()
+            and identity_evidence.get("bse_crosswalk_status") in ALLOWED_CROSSWALK_STATUSES
+        )
+        if exact_evidence:
+            identity_status = "verified"
+            join_method = identity_evidence["bse_crosswalk_status"]
+            identity_evidence_xbrl_sha256 = identity_evidence["xbrl_sha256"]
+            identity_evidence_bse_sha256 = identity_evidence["bse_bhavcopy_sha256"]
+        elif isin:
+            identity_status, join_method = "isin_mismatch", "dated_bse_crosswalk_rejected"
+        elif _normal_name(company_name) == _normal_name(stock["company_name"]):
+            identity_status, join_method = "verified", "symbol_and_company_name"
         else:
-            identity_status, join_method = "isin_mismatch", "symbol_only_rejected"
+            identity_status, join_method = "identity_unverified", "dated_bse_crosswalk_rejected"
+    elif isin:
+        identity_status, join_method = "isin_mismatch", "symbol_only_rejected"
     elif _normal_name(company_name) == _normal_name(stock["company_name"]):
         identity_status, join_method = "verified", "symbol_and_company_name"
     else:
         identity_status, join_method = "identity_unverified", "symbol_only_rejected"
 
-    return {
+    result = {
         "record_id": str(master_row.get("recordId") or "").strip(),
         "symbol": symbol,
         "company_name": company_name,
@@ -142,6 +249,10 @@ def _metadata(master_row: dict, stock: dict) -> dict:
         "identity_status": identity_status,
         "identity_join_method": join_method,
     }
+    if identity_evidence_xbrl_sha256:
+        result["identity_evidence_xbrl_sha256"] = identity_evidence_xbrl_sha256
+        result["identity_evidence_bse_sha256"] = identity_evidence_bse_sha256
+    return result
 
 
 def _trusted_xbrl_url(url: str) -> bool:
@@ -216,6 +327,7 @@ def _build_ownership_rows(
     master_records: list[dict],
     filings_by_key: dict[tuple[str, str], dict],
     master_hash: str,
+    placeholders: dict[str, dict] | None = None,
 ) -> list[dict]:
     grouped = defaultdict(list)
     dates = sorted({row["reporting_date"] for row in master_records})
@@ -225,6 +337,23 @@ def _build_ownership_rows(
     output = []
     for reporting_date in dates:
         for stock in universe:
+            placeholder = (placeholders or {}).get(stock["symbol"].upper())
+            if placeholder:
+                output.append({
+                    "reporting_date": reporting_date,
+                    "symbol": stock["symbol"],
+                    "company_name": stock["company_name"],
+                    "isin": stock["isin"],
+                    "universe_member_type": "index_adjustment_placeholder",
+                    "tradability_status": "non_tradable_zero_price",
+                    "fpi_scoring_eligible": "false",
+                    "universe_exclusion_reason": placeholder.get("reason", ""),
+                    "identity_status": "not_applicable_index_placeholder",
+                    "identity_join_method": "index_corporate_action_zero_price_placeholder",
+                    "filing_status": "not_applicable_index_placeholder",
+                    "source_master_sha256": master_hash,
+                })
+                continue
             candidates = grouped.get((stock["symbol"], reporting_date), [])
             if not candidates:
                 output.append({
@@ -232,6 +361,10 @@ def _build_ownership_rows(
                     "symbol": stock["symbol"],
                     "company_name": stock["company_name"],
                     "isin": stock["isin"],
+                    "universe_member_type": "tradable_security",
+                    "tradability_status": "tradable",
+                    "fpi_scoring_eligible": "true",
+                    "universe_exclusion_reason": "",
                     "identity_status": "not_found_in_current_master",
                     "identity_join_method": None,
                     "filing_status": "not_found_in_current_master",
@@ -246,6 +379,10 @@ def _build_ownership_rows(
                 "symbol": stock["symbol"],
                 "company_name": stock["company_name"],
                 "isin": stock["isin"],
+                "universe_member_type": "tradable_security",
+                "tradability_status": "tradable",
+                "fpi_scoring_eligible": "true",
+                "universe_exclusion_reason": "",
                 "record_id": latest["record_id"],
                 "submission_date": latest["submission_date"],
                 "broadcast_date": latest["broadcast_date"],
@@ -301,9 +438,13 @@ def _build_ownership_rows(
     return output
 
 
-def ingest(root: Path = Path(".")) -> dict:
+def ingest(root: Path = Path("."), identity_crosswalk_path: Path | None = None) -> dict:
     root = root.resolve()
     universe, universe_by_symbol, universe_hash = _load_universe(root)
+    index_placeholders, placeholder_meta = _load_index_placeholders(root, universe)
+    if identity_crosswalk_path is not None and not identity_crosswalk_path.is_absolute():
+        identity_crosswalk_path = root / identity_crosswalk_path
+    identity_crosswalk, identity_crosswalk_meta = _load_identity_crosswalk(identity_crosswalk_path)
 
     bootstrap, bootstrap_meta = _get(PAGE, BASE + "/", "text/html,*/*")
     if not bootstrap or bootstrap_meta["http_status"] != 200:
@@ -333,9 +474,9 @@ def ingest(root: Path = Path(".")) -> dict:
     for row in decoded:
         symbol = str(row.get("symbol") or "").strip()
         stock = universe_by_symbol.get(symbol)
-        if stock is None:
+        if stock is None or symbol.upper() in index_placeholders:
             continue
-        metadata = _metadata(row, stock)
+        metadata = _metadata(row, stock, identity_crosswalk.get(symbol.upper()))
         record_id = metadata["record_id"]
         if not record_id:
             raise ValueError(f"shareholding master row has no recordId for {symbol}")
@@ -407,6 +548,9 @@ def ingest(root: Path = Path(".")) -> dict:
                     f"xbrl={parsed['reporting_dates']}"
                 )
             xbrl_hash = _sha256(payload)
+            expected_identity_xbrl_hash = metadata.get("identity_evidence_xbrl_sha256")
+            if expected_identity_xbrl_hash and xbrl_hash != expected_identity_xbrl_hash:
+                raise ValueError("XBRL payload hash differs from dated BSE identity evidence")
             raw_path = raw_xbrl_dir / f"{metadata['record_id']}_{xbrl_hash[:16]}.xml"
             raw_path.parent.mkdir(parents=True, exist_ok=True)
             if raw_path.exists() and _sha256(raw_path.read_bytes()) != xbrl_hash:
@@ -449,7 +593,7 @@ def ingest(root: Path = Path(".")) -> dict:
             })
 
     ownership_rows = _build_ownership_rows(
-        universe, current_records, filings_by_key, master_hash
+        universe, current_records, filings_by_key, master_hash, index_placeholders
     )
     ownership_payload_buffer = io.StringIO(newline="")
     writer = csv.DictWriter(ownership_payload_buffer, fieldnames=OWNERSHIP_FIELDS)
@@ -468,15 +612,16 @@ def ingest(root: Path = Path(".")) -> dict:
 
     ownership_current = root / "data/raw/shareholding/shareholding_ownership_current.csv"
     ownership_current.write_bytes(ownership_payload)
-    identity_counts = Counter(row["identity_status"] for row in current_records)
+    identity_counts = Counter(row["identity_status"] for row in ownership_rows)
     parsed_count = sum(row.get("filing_status") == "parsed" for row in ownership_rows)
     latest_reporting_date = max(row["reporting_date"] for row in current_records)
     latest_ownership_rows = [row for row in ownership_rows if row["reporting_date"] == latest_reporting_date]
     parsed_latest_count = sum(row.get("filing_status") == "parsed" for row in latest_ownership_rows)
     eligible_count = len(eligible_records)
+    tradable_universe_count = len(universe) - len(index_placeholders)
     status = (
         "partial_xbrl_coverage" if fetch_errors
-        else "partial_identity_coverage" if identity_counts.get("isin_mismatch", 0) or identity_counts.get("identity_unverified", 0)
+        else "partial_identity_coverage" if identity_counts.get("isin_mismatch", 0) or identity_counts.get("identity_unverified", 0) or identity_counts.get("not_found_in_current_master", 0)
         else "complete"
     )
     manifest = {
@@ -489,7 +634,11 @@ def ingest(root: Path = Path(".")) -> dict:
         "master_raw_path": str(master_raw_path.relative_to(root)),
         "master_raw_sha256": master_hash,
         "universe_sha256": universe_hash,
+        "identity_crosswalk": identity_crosswalk_meta,
+        "index_placeholder_classification": placeholder_meta,
         "current_universe_count": len(universe),
+        "current_tradable_universe_count": tradable_universe_count,
+        "index_placeholder_count": len(index_placeholders),
         "master_records_for_current_universe": len(current_records),
         "reporting_dates": sorted({row["reporting_date"] for row in current_records}),
         "identity_status_counts": dict(sorted(identity_counts.items())),
@@ -511,7 +660,7 @@ def ingest(root: Path = Path(".")) -> dict:
         "ownership_row_count": len(ownership_rows),
         "latest_reporting_date": latest_reporting_date,
         "latest_quarter_parsed_count": parsed_latest_count,
-        "latest_quarter_coverage_pct": round(parsed_latest_count / len(universe) * 100, 2),
+        "latest_quarter_coverage_pct": round(parsed_latest_count / tradable_universe_count * 100, 2),
         "ownership_current_path": str(ownership_current.relative_to(root)),
         "ownership_snapshot_path": str(ownership_path.relative_to(root)),
         "ownership_snapshot_sha256": ownership_hash,
@@ -528,6 +677,7 @@ def ingest(root: Path = Path(".")) -> dict:
             "Quarter-end ownership is not a dated transaction and does not prove when shares were bought.",
             "Missing or unparsed categories remain null; they are never assumed to be zero.",
             "The master API may expose only the currently available filing period; older captured snapshots are retained locally.",
+            "Demerger index placeholders included at zero price remain in the 501-row index snapshot but are excluded from tradable-stock ownership coverage and FPI scoring.",
         ],
     }
     manifest_path = raw_dir / "current_manifest.json"
@@ -541,8 +691,11 @@ def ingest(root: Path = Path(".")) -> dict:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo-root", type=Path, default=Path("."))
+    parser.add_argument("--identity-crosswalk", type=Path)
     args = parser.parse_args()
-    print(json.dumps(ingest(args.repo_root), indent=2, ensure_ascii=False))
+    print(json.dumps(
+        ingest(args.repo_root, args.identity_crosswalk), indent=2, ensure_ascii=False
+    ))
 
 
 if __name__ == "__main__":

@@ -99,6 +99,15 @@ def test_rejects_untrusted_archive_host():
         select_report(catalogue, "participant_oi")
 
 
+def test_accepts_nseindia_in_archive_host():
+    catalogue = _catalogue()
+    catalogue["CurrentDay"][0]["filePath"] = "https://nsearchives.nseindia.in/content/nsccl/"
+    selected = select_report(catalogue, "participant_oi")
+    assert selected["download_url"].startswith(
+        "https://nsearchives.nseindia.in/content/nsccl/"
+    )
+
+
 def _participant_csv(dataset="participant_oi", mismatch=False):
     title_type = "Open Interest" if dataset == "participant_oi" else "Trading Volume"
     title = (

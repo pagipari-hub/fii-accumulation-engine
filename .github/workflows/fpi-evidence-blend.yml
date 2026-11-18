@@ -2,7 +2,7 @@ name: Build blended Nifty 500 FPI evidence matrix
 
 on:
   push:
-    branches: [main]
+    branches: [main, research/shareholding-identity-integration]
     paths:
       - "src/fii_engine/fpi_evidence_blend.py"
       - "tests/test_fpi_evidence_blend.py"
@@ -13,6 +13,9 @@ on:
       - "scripts/retry_git_push.sh"
       - "data/raw/daily_stock_features/**"
       - "data/raw/historical_features/**"
+      - "data/raw/nsdl_cash_flows/**"
+      - "data/processed/nsdl_cash_flows.csv"
+      - "data/processed/nsdl_cash_flow_context.json"
       - "data/raw/shareholding/**"
       - "data/raw/fpi_deal_attribution/**"
       - "data/raw/universe/nifty500_current.csv"
@@ -46,6 +49,9 @@ concurrency:
 
 jobs:
   blend:
+    # On the integration branch, rebuild only after the historical-feature
+    # workflow has committed its refreshed outputs; avoid concurrent writers.
+    if: "${{ github.ref != 'refs/heads/research/shareholding-identity-integration' }}"
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -84,12 +90,39 @@ jobs:
           assert manifest["status"] == "complete"
           assert manifest["stock_count"] == 501
           assert len(rows) == 501
+          assert manifest["ownership_parsed_verified_count"] == 494
+          assert manifest["issuer_fallback_verified_count"] == 2
+          assert manifest["reit_unitholding_verified_count"] == 3
+          assert manifest["ownership_evidence_coverage_count"] == 499
+          assert manifest["ownership_evidence_coverage_pct"] == 99.8
+          assert manifest["ownership_unresolved_count"] == 1
+          assert manifest["reit_unitholding_status_counts"]["parsed_verified_identity"] == 3
+          assert manifest["reit_unitholding_status_counts"]["not_applicable_equity_shareholding"] == 496
+          assert manifest["reit_unitholding_status_counts"]["not_found_in_current_master"] == 1
+          assert manifest["source_hashes"]["issuer_shareholding_fallback_csv"]
+          assert manifest["source_hashes"]["reit_unitholding_csv"]
           assert manifest["composite_score_status"] == "not_scored_independent_evidence_dimensions_only"
           assert manifest["universe_snapshot_manifest_path"]
           assert manifest["source_hashes"]["daily_stock_features"]
           assert manifest["source_hashes"]["historical_stock_features"]
           assert manifest["source_hashes"]["fpi_deal_stock_summary"]
           assert manifest["source_hashes"]["shareholding_ownership"]
+          historical = json.loads(Path(
+              "data/raw/historical_features/historical_features_current_manifest.json"
+          ).read_text(encoding="utf-8"))
+          assert historical["participant_archive_complete_session_count"] == 60
+          assert historical["participant_oi_session_count"] == 60
+          assert historical["participant_volume_session_count"] == 60
+          assert historical["participant_derivatives_window_cutoff_date"] == historical["as_of_trade_date"]
+          assert historical["participant_derivatives_as_of_trade_date"] <= historical["participant_derivatives_window_cutoff_date"]
+          assert historical["participant_derivatives_latest_observed_trade_date"] >= historical["participant_derivatives_as_of_trade_date"]
+          assert historical["participant_oi_available_session_count"] >= 60
+          assert historical["participant_volume_available_session_count"] >= 60
+          nsdl = manifest["nsdl_market_flow_context"]
+          assert nsdl["scope"] == "aggregate_market_wide_cash_equity_context_only"
+          assert nsdl["stock_level_attribution"] is False
+          assert nsdl["fpi"]["observed_days"] == 62
+          assert nsdl["dii"]["observed_days"] == 62
           print(json.dumps({
               "as_of_trade_date": manifest["as_of_trade_date"],
               "stock_count": manifest["stock_count"],
@@ -99,9 +132,20 @@ jobs:
               "ownership_reporting_date": manifest["ownership_reporting_date"],
               "ownership_parsed_verified_count": manifest["ownership_parsed_verified_count"],
               "ownership_coverage_pct": manifest["ownership_coverage_pct"],
+              "issuer_fallback_verified_count": manifest["issuer_fallback_verified_count"],
+              "reit_unitholding_verified_count": manifest["reit_unitholding_verified_count"],
+              "ownership_evidence_coverage_count": manifest["ownership_evidence_coverage_count"],
+              "ownership_evidence_coverage_pct": manifest["ownership_evidence_coverage_pct"],
+              "ownership_unresolved_count": manifest["ownership_unresolved_count"],
               "market_flow_session_count": manifest["market_flow_session_count"],
               "participant_oi_session_count": manifest["participant_oi_session_count"],
               "participant_volume_session_count": manifest["participant_volume_session_count"],
+              "participant_archive_complete_session_count": historical["participant_archive_complete_session_count"],
+              "participant_derivatives_as_of_trade_date": historical["participant_derivatives_as_of_trade_date"],
+              "participant_derivatives_window_cutoff_date": historical["participant_derivatives_window_cutoff_date"],
+              "participant_derivatives_latest_observed_trade_date": historical["participant_derivatives_latest_observed_trade_date"],
+              "nsdl_fpi_observed_days": nsdl["fpi"]["observed_days"],
+              "nsdl_dii_observed_days": nsdl["dii"]["observed_days"],
               "composite_score_status": manifest["composite_score_status"],
           }, indent=2))
           PY

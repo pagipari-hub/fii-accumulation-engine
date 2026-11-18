@@ -1,11 +1,46 @@
 name: Official NSE quarterly FPI ownership ingestion
 
+permissions:
+  contents: write
+  actions: read
+
 on:
   push:
-    branches: [main]
+    branches: [main, research/shareholding-identity-integration]
     paths:
       - "src/fii_engine/nse_shareholding_xbrl.py"
+      - "src/fii_engine/nse_reit_unitholding.py"
+      - "src/fii_engine/issuer_shareholding_fallback.py"
+      - "tests/test_issuer_shareholding_fallback.py"
+      - "tests/test_issuer_shareholding_fallback.py"
+      - "tests/test_nse_reit_unitholding.py"
+      - "pyproject.toml"
       - "src/fii_engine/nse_shareholding_ingest.py"
+      - "src/fii_engine/fpi_evidence_blend.py"
+      - "src/fii_engine/nse_bulk_block_deals.py"
+      - "src/fii_engine/fpi_deal_classifier.py"
+      - "src/fii_engine/cdsl_fpi_registry.py"
+      - "src/fii_engine/weekly_watchlist_report.py"
+      - "src/fii_engine/nsdl_cash_flow_context.py"
+      - "src/fii_engine/nse_shareholding_history_probe.py"
+      - "src/fii_engine/nse_shareholding_unitholding_announcement_probe.py"
+      - "tests/test_weekly_watchlist_report.py"
+      - "tests/test_nsdl_cash_flow_context.py"
+      - "tests/test_nse_shareholding_history_probe.py"
+      - "tests/test_nse_shareholding_unitholding_announcement_probe.py"
+      - "tests/test_fpi_evidence_blend.py"
+      - "tests/test_nse_bulk_block_deals.py"
+      - "tests/test_fpi_deal_classifier.py"
+      - "tests/test_cdsl_fpi_registry.py"
+      - "src/fii_engine/nse_security_master_probe.py"
+      - "src/fii_engine/nse_shareholding_xbrl_entity_probe.py"
+      - "src/fii_engine/bse_shareholding_scripcode_crosswalk.py"
+      - "src/fii_engine/bse_shareholding_fallback_probe.py"
+      - "tests/test_bse_shareholding_fallback_probe.py"
+      - "data/audits/bse_shareholding_fallback_candidates_2026-09-30.csv"
+      - "data/audits/nifty500_index_placeholders_2026-11-09.csv"
+      - "data/audits/shareholding_isin_mismatch_candidates_2026-09-30.csv"
+      - "data/audits/shareholding_missing_isin_candidates_2026-09-30.csv"
       - "tests/test_nse_shareholding_xbrl.py"
       - "tests/test_nse_shareholding_ingest.py"
       - "config/sources.yaml"
@@ -16,7 +51,38 @@ on:
   pull_request:
     paths:
       - "src/fii_engine/nse_shareholding_xbrl.py"
+      - "src/fii_engine/nse_reit_unitholding.py"
+      - "src/fii_engine/issuer_shareholding_fallback.py"
+      - "tests/test_issuer_shareholding_fallback.py"
+      - "tests/test_issuer_shareholding_fallback.py"
+      - "tests/test_nse_reit_unitholding.py"
+      - "pyproject.toml"
       - "src/fii_engine/nse_shareholding_ingest.py"
+      - "src/fii_engine/fpi_evidence_blend.py"
+      - "src/fii_engine/nse_bulk_block_deals.py"
+      - "src/fii_engine/fpi_deal_classifier.py"
+      - "src/fii_engine/cdsl_fpi_registry.py"
+      - "src/fii_engine/weekly_watchlist_report.py"
+      - "src/fii_engine/nsdl_cash_flow_context.py"
+      - "src/fii_engine/nse_shareholding_history_probe.py"
+      - "src/fii_engine/nse_shareholding_unitholding_announcement_probe.py"
+      - "tests/test_weekly_watchlist_report.py"
+      - "tests/test_nsdl_cash_flow_context.py"
+      - "tests/test_nse_shareholding_history_probe.py"
+      - "tests/test_nse_shareholding_unitholding_announcement_probe.py"
+      - "tests/test_fpi_evidence_blend.py"
+      - "tests/test_nse_bulk_block_deals.py"
+      - "tests/test_fpi_deal_classifier.py"
+      - "tests/test_cdsl_fpi_registry.py"
+      - "src/fii_engine/bse_shareholding_fallback_probe.py"
+      - "tests/test_bse_shareholding_fallback_probe.py"
+      - "data/audits/bse_shareholding_fallback_candidates_2026-09-30.csv"
+      - "data/audits/nifty500_index_placeholders_2026-11-09.csv"
+      - "data/audits/shareholding_missing_isin_candidates_2026-09-30.csv"
+      - "src/fii_engine/nse_security_master_probe.py"
+      - "src/fii_engine/nse_shareholding_xbrl_entity_probe.py"
+      - "src/fii_engine/bse_shareholding_scripcode_crosswalk.py"
+      - "data/audits/shareholding_isin_mismatch_candidates_2026-09-30.csv"
       - "tests/test_nse_shareholding_xbrl.py"
       - "tests/test_nse_shareholding_ingest.py"
       - "config/sources.yaml"
@@ -29,11 +95,8 @@ on:
     # 21:00 IST, Monday; captures newly filed quarterly reports and revisions.
     - cron: "30 15 * * 1"
 
-permissions:
-  contents: write
-
 concurrency:
-  group: nse-shareholding-ownership
+  group: nse-shareholding-ownership-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -46,6 +109,17 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Retrieve validated 62-session NSDL archive
+        if: github.event_name != 'pull_request'
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: nsdl-cash-flow-normalized-43054613197
+          path: artifacts/nsdl-cash-flow-normalized
+          run-id: 43054613197
+          repository: ${{ github.repository }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -55,12 +129,105 @@ jobs:
       - name: Install project and test dependencies
         run: python -m pip install -e ".[dev]"
 
+      - name: Preserve and verify NSDL aggregate cash-flow history
+        if: github.event_name != 'pull_request'
+        run: |
+          if [ ! -f data/processed/nsdl_cash_flows.csv ]; then
+            test -f artifacts/nsdl-cash-flow-normalized/processed/nsdl_cash_flows.csv
+            mkdir -p data/raw/nsdl_cash_flows data/processed
+            cp -R artifacts/nsdl-cash-flow-normalized/raw/nsdl_cash_flows/. data/raw/nsdl_cash_flows/
+            cp artifacts/nsdl-cash-flow-normalized/processed/nsdl_cash_flows.csv data/processed/
+          fi
+          python -m fii_engine.nsdl_cash_flow_context --repo-root . --output data/processed/nsdl_cash_flow_context.json
+
       - name: Run complete project test suite
         run: pytest
 
+      - name: Rebuild dated 2026-09-30 BSE identity evidence
+        if: github.event_name != 'pull_request'
+        run: |
+          python -m fii_engine.nse_security_master_probe --historical-date 2026-09-30 --output-dir artifacts/nse-security-master-probe
+          python -m fii_engine.nse_shareholding_xbrl_entity_probe --candidates data/audits/shareholding_isin_mismatch_candidates_2026-09-30.csv --output-dir artifacts/nse-security-master-probe
+          python -m fii_engine.bse_shareholding_scripcode_crosswalk --candidates data/audits/shareholding_isin_mismatch_candidates_2026-09-30.csv --xbrl-report artifacts/nse-security-master-probe/shareholding_xbrl_entity_probe.json --output-dir artifacts/nse-security-master-probe --reporting-date 2026-09-30
+          python -m fii_engine.nse_shareholding_xbrl_entity_probe --candidates data/audits/shareholding_missing_isin_candidates_2026-09-30.csv --output-dir artifacts/missing-isin-identity
+          python -m fii_engine.bse_shareholding_scripcode_crosswalk --candidates data/audits/shareholding_missing_isin_candidates_2026-09-30.csv --xbrl-report artifacts/missing-isin-identity/shareholding_xbrl_entity_probe.json --output-dir artifacts/missing-isin-identity --reporting-date 2026-09-30
+          python - <<'PY'
+          import csv
+          import json
+          from collections import Counter
+          from pathlib import Path
+          main_dir = Path("artifacts/nse-security-master-probe")
+          extra_dir = Path("artifacts/missing-isin-identity")
+          main_csv = main_dir / "shareholding_bse_scripcode_isin_crosswalk.csv"
+          extra_csv = extra_dir / "shareholding_bse_scripcode_isin_crosswalk.csv"
+          main_json = main_dir / "shareholding_bse_scripcode_isin_crosswalk.json"
+          extra_json = extra_dir / "shareholding_bse_scripcode_isin_crosswalk.json"
+          main_report = json.loads(main_json.read_text(encoding="utf-8"))
+          extra_report = json.loads(extra_json.read_text(encoding="utf-8"))
+          if main_report["bse_source_sha256"] != extra_report["bse_source_sha256"]:
+              raise SystemExit("BSE source hash differs between identity candidate sets")
+          with main_csv.open(newline="", encoding="utf-8") as handle:
+              rows = list(csv.DictReader(handle))
+          with extra_csv.open(newline="", encoding="utf-8") as handle:
+              extra_rows = list(csv.DictReader(handle))
+          if list(rows[0]) != list(extra_rows[0]):
+              raise SystemExit("identity crosswalk schemas differ")
+          rows.extend(extra_rows)
+          if len({row["symbol"] for row in rows}) != len(rows):
+              raise SystemExit("duplicate symbols in combined identity crosswalk")
+          statuses = {
+              "verified_exact_dated_bse_scripcode_isin_match",
+              "verified_exact_dated_bse_symbol_isin_match",
+          }
+          counts = Counter(row["bse_crosswalk_status"] for row in rows)
+          verified = sum(row["bse_crosswalk_status"] in statuses for row in rows)
+          with main_csv.open("w", newline="", encoding="utf-8") as handle:
+              writer = csv.DictWriter(handle, fieldnames=list(rows[0]))
+              writer.writeheader()
+              writer.writerows(rows)
+          main_report["candidate_count"] = len(rows)
+          main_report["xbrl_observation_count"] += extra_report["xbrl_observation_count"]
+          main_report["verified_count"] = verified
+          main_report["unresolved_count"] = len(rows) - verified
+          main_report["counts"] = dict(sorted(counts.items()))
+          main_report["additional_missing_isin_audit"] = {
+              "candidate_count": len(extra_rows),
+              "verified_count": sum(row["bse_crosswalk_status"] in statuses for row in extra_rows),
+              "counts": dict(sorted(Counter(row["bse_crosswalk_status"] for row in extra_rows).items())),
+          }
+          main_json.write_text(json.dumps(main_report, indent=2) + "\n", encoding="utf-8")
+          print(json.dumps(main_report["additional_missing_isin_audit"], indent=2))
+          PY
+          mkdir -p data/raw/shareholding/identity_evidence
+          cp artifacts/nse-security-master-probe/shareholding_bse_scripcode_isin_crosswalk.csv data/raw/shareholding/identity_evidence/
+          cp artifacts/nse-security-master-probe/shareholding_bse_scripcode_isin_crosswalk.json data/raw/shareholding/identity_evidence/
+          cp artifacts/nse-security-master-probe/BhavCopy_BSE_CM_0_0_0_20260930_F_0000_*.csv data/raw/shareholding/identity_evidence/
+
+      - name: Probe NSE symbol-specific quarterly shareholding history
+        if: github.event_name != 'pull_request'
+        run: python -m fii_engine.nse_shareholding_history_probe --output-dir artifacts/nse-shareholding-history
+
+      - name: Discover official NSE shareholding and unitholding disclosures
+        if: github.event_name != 'pull_request'
+        run: python -m fii_engine.nse_shareholding_unitholding_announcement_probe --output-dir artifacts/nse-shareholding-announcements
+
+      - name: Normalize official NSE REIT unitholding FPI ownership
+        if: github.event_name != 'pull_request'
+        run: python -m fii_engine.nse_reit_unitholding --root .
+
+      - name: Probe BSE quarterly shareholding fallback for three remaining EQ securities
+        if: github.event_name != 'pull_request'
+        run: |
+          python -m fii_engine.bse_shareholding_fallback_probe --candidates data/audits/bse_shareholding_fallback_candidates_2026-09-30.csv --output-dir artifacts/bse-shareholding-fallback --bse-udiff data/raw/shareholding/identity_evidence/BhavCopy_BSE_CM_0_0_0_20260930_F_0000_*.csv
+          cp artifacts/bse-shareholding-fallback/bse_shareholding_fallback_probe_manifest.json data/raw/shareholding/bse_shareholding_fallback_probe_manifest.json
+
+      - name: Probe official issuer-hosted equity shareholding fallbacks
+        if: github.event_name != 'pull_request'
+        run: python -m fii_engine.issuer_shareholding_fallback --root .
+
       - name: Capture official NSE shareholding filings and FPI ownership
         if: github.event_name != 'pull_request'
-        run: python -m fii_engine.nse_shareholding_ingest --repo-root .
+        run: python -m fii_engine.nse_shareholding_ingest --repo-root . --identity-crosswalk data/raw/shareholding/identity_evidence/shareholding_bse_scripcode_isin_crosswalk.csv
 
       - name: Validate filing, identity and ownership provenance
         if: github.event_name != 'pull_request'
@@ -79,6 +246,31 @@ jobs:
               "complete", "partial_identity_coverage", "partial_xbrl_coverage"
           }
           assert manifest["current_universe_count"] >= 480
+          assert manifest["identity_crosswalk"]["candidate_count"] == 146
+          assert manifest["identity_crosswalk"]["verified_count"] >= 143
+          assert manifest["current_tradable_universe_count"] == 500
+          assert manifest["index_placeholder_count"] == 1
+          assert manifest["latest_quarter_coverage_pct"] == 98.8
+          bse_fallback = json.loads(Path("artifacts/bse-shareholding-fallback/bse_shareholding_fallback_probe_manifest.json").read_text(encoding="utf-8"))
+          issuer_manifest_path = root / "data/raw/shareholding/issuer_shareholding_fallback_current_manifest.json"
+          assert issuer_manifest_path.is_file(), "issuer shareholding fallback manifest missing"
+          issuer_manifest = json.loads(issuer_manifest_path.read_text(encoding="utf-8"))
+          assert issuer_manifest["reporting_date"] == "2026-09-30"
+          assert issuer_manifest["parsed_verified_count"] >= 1
+          issuer_csv = root / issuer_manifest["output_path"]
+          assert hashlib.sha256(issuer_csv.read_bytes()).hexdigest() == issuer_manifest["output_sha256"]
+          print(json.dumps({"issuer_shareholding_fallback": issuer_manifest["observations"]}, indent=2))
+          reit_manifest_path = root / "data/raw/shareholding/reit_unitholding_current_manifest.json"
+          assert reit_manifest_path.is_file(), "REIT unitholding normalized manifest missing"
+          reit_manifest = json.loads(reit_manifest_path.read_text(encoding="utf-8"))
+          assert reit_manifest["reporting_date"] == "2026-09-30"
+          assert reit_manifest["parsed_reit_count"] == 3
+          reit_csv = root / reit_manifest["output_path"]
+          assert hashlib.sha256(reit_csv.read_bytes()).hexdigest() == reit_manifest["output_sha256"]
+          assert {row["symbol"] for row in reit_manifest["rows"]} == {"BAGMANE", "BIRET", "EMBASSY"}
+          print(json.dumps({"reit_unitholding_fpi": reit_manifest["rows"]}, indent=2))
+          assert bse_fallback["candidate_count"] == 3  # EQ-only BSE fallback; three REITs use NSE unitholding disclosures
+          print(json.dumps({"bse_fallback_status_counts": bse_fallback["status_counts"]}, indent=2))
           master_raw = root / manifest["master_raw_path"]
           assert master_raw.is_file()
           assert hashlib.sha256(master_raw.read_bytes()).hexdigest() == manifest["master_raw_sha256"]
@@ -120,6 +312,51 @@ jobs:
           }, indent=2))
           PY
 
+      - name: Rebuild full-universe FPI evidence matrix from refreshed ownership
+        if: github.event_name != 'pull_request'
+        run: python -m fii_engine.fpi_evidence_blend --root .
+
+      - name: Validate full-universe evidence matrix
+        if: github.event_name != 'pull_request'
+        run: |
+          python - <<'PY'
+          import csv
+          import hashlib
+          import json
+          from pathlib import Path
+          manifest_path = Path("data/raw/fpi_evidence_blend/fpi_evidence_matrix_current_manifest.json")
+          manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+          output = Path(manifest["current_output_path"])
+          assert hashlib.sha256(output.read_bytes()).hexdigest() == manifest["output_csv_sha256"]
+          with output.open(newline="", encoding="utf-8") as handle:
+              rows = list(csv.DictReader(handle))
+          assert manifest["status"] == "complete"
+          assert manifest["stock_count"] == 501 and len(rows) == 501
+          assert manifest["tradable_stock_count"] == 500
+          assert manifest["index_placeholder_count"] == 1
+          assert manifest["ownership_coverage_pct"] == 98.8
+          assert manifest["ownership_index_row_coverage_pct"] == 98.6
+          assert manifest["nsdl_market_flow_context"]["normalized_date_count"] >= 60
+          assert manifest["nsdl_market_flow_context"]["stock_level_attribution"] is False
+          assert manifest["composite_score_status"] == "not_scored_independent_evidence_dimensions_only"
+          assert manifest["source_hashes"]["shareholding_identity_crosswalk"]
+          print(json.dumps({
+              "stock_count": manifest["stock_count"],
+              "ownership_parsed_verified_count": manifest["ownership_parsed_verified_count"],
+              "ownership_coverage_pct": manifest["ownership_coverage_pct"],
+              "ownership_status_counts": manifest["ownership_status_counts"],
+              "as_of_trade_date": manifest["as_of_trade_date"],
+              "composite_score_status": manifest["composite_score_status"],
+          }, indent=2))
+          PY
+
+      - name: Generate weekly FPI evidence watchlist
+        if: github.event_name != 'pull_request'
+        run: |
+          REPORT_DATE="$(date -u +%F)"
+          python -m fii_engine.weekly_watchlist_report --matrix data/raw/fpi_evidence_blend/fpi_evidence_matrix_current.csv --manifest data/raw/fpi_evidence_blend/fpi_evidence_matrix_current_manifest.json --bse-fallback-manifest data/raw/shareholding/bse_shareholding_fallback_probe_manifest.json --reit-manifest data/raw/shareholding/reit_unitholding_current_manifest.json --issuer-fallback-manifest data/raw/shareholding/issuer_shareholding_fallback_current_manifest.json --output "reports/weekly/fpi_evidence_watchlist_${REPORT_DATE}.md"
+          test -s "reports/weekly/fpi_evidence_watchlist_${REPORT_DATE}.md"
+
       - name: Upload raw master, XBRL and normalized filing evidence
         if: always() && github.event_name != 'pull_request'
         uses: actions/upload-artifact@v4
@@ -127,19 +364,44 @@ jobs:
           name: nse-shareholding-ingest-${{ github.run_id }}
           path: |
             data/raw/shareholding/
+            artifacts/nse-security-master-probe/
+            artifacts/missing-isin-identity/
+            artifacts/bse-shareholding-fallback/
+            artifacts/nse-shareholding-history/
+            artifacts/nse-shareholding-announcements/
+            data/raw/shareholding/identity_evidence/
+            data/raw/nsdl_cash_flows/
+            artifacts/cdsl_fpi_registry/
+            data/raw/cdsl_fpi_registry/
+            data/snapshots/cdsl_fpi_registry/
+            data/raw/bulk_block_deals/
+            data/snapshots/bulk_block_deals/
+            data/raw/fpi_deal_attribution/
+            data/snapshots/fpi_deal_attribution/
+            data/processed/
             data/snapshots/shareholding_master/
             data/snapshots/shareholding_filings/
             data/snapshots/shareholding_ownership/
+            data/raw/fpi_evidence_blend/
+            data/snapshots/fpi_evidence_blend/
+            reports/weekly/
           if-no-files-found: warn
           retention-days: 90
 
       - name: Commit normalized append-only filings and ownership snapshots
         if: github.event_name != 'pull_request'
         run: |
-          if [[ -n "$(git status --porcelain data/snapshots/shareholding_master data/snapshots/shareholding_filings data/snapshots/shareholding_ownership data/raw/shareholding/current_manifest.json data/raw/shareholding/shareholding_ownership_current.csv)" ]]; then
+          if [[ -n "$(git status --porcelain data/snapshots/shareholding_master data/snapshots/shareholding_filings data/snapshots/shareholding_ownership data/raw/shareholding/current_manifest.json data/raw/shareholding/shareholding_ownership_current.csv data/raw/shareholding/identity_evidence data/raw/shareholding/bse_shareholding_fallback_probe_manifest.json data/raw/nsdl_cash_flows data/processed/nsdl_cash_flows.csv data/processed/nsdl_cash_flow_context.json data/raw/bulk_block_deals data/snapshots/bulk_block_deals data/raw/fpi_deal_attribution data/snapshots/fpi_deal_attribution data/raw/cdsl_fpi_registry data/snapshots/cdsl_fpi_registry reports/weekly data/raw/fpi_evidence_blend data/snapshots/fpi_evidence_blend)" ]]; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add data/snapshots/shareholding_master data/snapshots/shareholding_filings data/snapshots/shareholding_ownership data/raw/shareholding/current_manifest.json data/raw/shareholding/shareholding_ownership_current.csv
+            git add data/snapshots/shareholding_master data/snapshots/shareholding_filings data/snapshots/shareholding_ownership data/raw/shareholding/current_manifest.json data/raw/shareholding/shareholding_ownership_current.csv data/raw/fpi_evidence_blend data/snapshots/fpi_evidence_blend
+            git add -f data/raw/shareholding/reit_unitholding_current.csv data/raw/shareholding/reit_unitholding_current_manifest.json
+            git add -f data/raw/shareholding/issuer_shareholding_fallback_current.csv data/raw/shareholding/issuer_shareholding_fallback_current_manifest.json data/raw/shareholding/issuer_fallback
+            git add reports/weekly/
+            git add data/processed/nsdl_cash_flows.csv data/processed/nsdl_cash_flow_context.json data/raw/nsdl_cash_flows
+            git add data/raw/cdsl_fpi_registry data/snapshots/cdsl_fpi_registry
+            git add -f data/raw/bulk_block_deals data/snapshots/bulk_block_deals data/raw/fpi_deal_attribution data/snapshots/fpi_deal_attribution
+            git add -f artifacts/nse-shareholding-history artifacts/nse-shareholding-announcements data/raw/shareholding/identity_evidence data/raw/shareholding/bse_shareholding_fallback_probe_manifest.json
             git commit -m "data: record official NSE quarterly FPI ownership"
             bash scripts/retry_git_push.sh "$GITHUB_REF_NAME"
           else

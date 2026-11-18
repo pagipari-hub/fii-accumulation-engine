@@ -1,0 +1,792 @@
+{
+  "dataset": "nse_shareholding_xbrl_filing",
+  "parser_version": 4,
+  "filing": {
+    "record_id": "213848",
+    "symbol": "PREMIERENE",
+    "company_name": "Premier Energies Limited",
+    "isin": "INE0BS701011",
+    "universe_isin": "INE0BS701011",
+    "reporting_date": "2026-09-30",
+    "submission_date": "2026-10-12",
+    "broadcast_date": "12-OCT-2026 16:01:55",
+    "system_date": "12-OCT-2026 16:01:58",
+    "revised_data": "N",
+    "revision_date": null,
+    "revision_remark": null,
+    "xbrl_url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1736115_12102026040148_WEB.xml",
+    "identity_status": "verified",
+    "identity_join_method": "isin_exact",
+    "identity_evidence_xbrl_sha256": null,
+    "identity_evidence_bse_sha256": null,
+    "metadata_sha256": "f9cebb29eabae6f71318d38cbb1484f6c632e81153cec1cc070a898af21312e3",
+    "source_master_sha256": "1ecf54b17994a5305be2606e484362f195c3a8732156995a8641eaf25de46625"
+  },
+  "metadata_sha256": "f9cebb29eabae6f71318d38cbb1484f6c632e81153cec1cc070a898af21312e3",
+  "source_master_sha256": "1ecf54b17994a5305be2606e484362f195c3a8732156995a8641eaf25de46625",
+  "xbrl_url": "https://nsearchives.nseindia.com/corporate/xbrl/SHP_1736115_12102026040148_WEB.xml",
+  "xbrl_sha256": "648a6ec9ca764a98a543060cdf041bab16cf622a0d43e693a1c87f63474eaa84",
+  "xbrl_raw_path": "data/raw/shareholding/xbrl/213848_648a6ec9ca764a98.xml",
+  "xbrl_content_type": "application/xml",
+  "parsed": {
+    "parser": "nse_shareholding_xbrl",
+    "parser_version": 3,
+    "category_axis": "CategoryOfShareholdersAxis",
+    "reporting_dates": [
+      "2026-09-30"
+    ],
+    "category_record_count": 27,
+    "category_records": [
+      {
+        "context_id": "IndividualsOrHinduUndividedFamily_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "IndividualsOrHinduUndividedFamily",
+        "category_key": "IndividualsOrHinduUndividedFamily",
+        "entity_identifier": "PREMIERENE",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "IndividualsOrHinduUndividedFamilyMember"
+          }
+        ],
+        "shareholder_count": 7,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 265493004,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 265493004,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.5848",
+        "ownership_percentage_points": "58.4800",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 265493004,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.588",
+        "voting_rights_percentage_points": "58.800",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "OtherIndianShareholders_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "OtherIndianShareholders",
+        "category_key": "OtherIndianShareholders",
+        "entity_identifier": "PREMIERENE",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "OtherIndianShareholdersMember"
+          }
+        ],
+        "shareholder_count": 2,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 1000,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 1000,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0",
+        "ownership_percentage_points": "0",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 1000,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0",
+        "voting_rights_percentage_points": "0",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "Indian_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "Indian",
+        "category_key": "Indian",
+        "entity_identifier": "PREMIERENE",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "IndianMember"
+          }
+        ],
+        "shareholder_count": 9,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 265494004,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 265494004,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.5849",
+        "ownership_percentage_points": "58.4900",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 265494004,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.588",
+        "voting_rights_percentage_points": "58.800",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "ShareholdingOfPromoterAndPromoterGroup_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "ShareholdingOfPromoterAndPromoterGroup",
+        "category_key": "ShareholdingOfPromoterAndPromoterGroup",
+        "entity_identifier": "PREMIERENE",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "ShareholdingOfPromoterAndPromoterGroupMember"
+          }
+        ],
+        "shareholder_count": 9,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 265494004,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 265494004,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.5849",
+        "ownership_percentage_points": "58.4900",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 265494004,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.588",
+        "voting_rights_percentage_points": "58.800",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "MutualFundsOrUTI_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "MutualFundsOrUTI",
+        "category_key": "MutualFundsOrUTI",
+        "entity_identifier": "PREMIERENE",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "MutualFundsOrUTIMember"
+          }
+        ],
+        "shareholder_count": 31,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 62521033,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 62521033,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.1377",
+        "ownership_percentage_points": "13.7700",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 62521033,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.1385",
+        "voting_rights_percentage_points": "13.8500",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "VentureCapitalFunds_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "VentureCapitalFunds",
+        "category_key": "VentureCapitalFunds",
+        "entity_identifier": "PREMIERENE",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "VentureCapitalFundsMember"
+          }
+        ],
+        "shareholder_count": 0,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 0,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 0,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0",
+        "ownership_percentage_points": "0",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 0,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0",
+        "voting_rights_percentage_points": "0",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "AlternativeInvestmentFunds_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "AlternativeInvestmentFunds",
+        "category_key": "AlternativeInvestmentFunds",
+        "entity_identifier": "PREMIERENE",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "AlternativeInvestmentFundsMember"
+          }
+        ],
+        "shareholder_count": 32,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 9552207,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 9552207,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.021",
+        "ownership_percentage_points": "2.100",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 9552207,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0212",
+        "voting_rights_percentage_points": "2.1200",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "Banks_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "Banks",
+        "category_key": "Banks",
+        "entity_identifier": "PREMIERENE",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "BanksMember"
+          }
+        ],
+        "shareholder_count": 2,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 134000,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 134000,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0003",
+        "ownership_percentage_points": "0.0300",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 134000,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0003",
+        "voting_rights_percentage_points": "0.0300",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "InsuranceCompanies_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "InsuranceCompanies",
+        "category_key": "InsuranceCompanies",
+        "entity_identifier": "PREMIERENE",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "InsuranceCompaniesMember"
+          }
+        ],
+        "shareholder_count": 9,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 13506493,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 13506493,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0298",
+        "ownership_percentage_points": "2.9800",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 13506493,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0299",
+        "voting_rights_percentage_points": "2.9900",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "NBFCsRegisteredWithRBI_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "NBFCsRegisteredWithRBI",
+        "category_key": "NBFCsRegisteredWithRBI",
+        "entity_identifier": "PREMIERENE",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "NBFCsRegisteredWithRBIMember"
+          }
+        ],
+        "shareholder_count": 1,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 45,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 45,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0",
+        "ownership_percentage_points": "0",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 45,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0",
+        "voting_rights_percentage_points": "0",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "InstitutionsDomestic_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "InstitutionsDomestic",
+        "category_key": "InstitutionsDomestic",
+        "entity_identifier": "PREMIERENE",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "InstitutionsDomesticMember"
+          }
+        ],
+        "shareholder_count": 75,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 85713778,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 85713778,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.1888",
+        "ownership_percentage_points": "18.8800",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 85713778,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.1898",
+        "voting_rights_percentage_points": "18.9800",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "InstitutionsForeignPortfolioInvestorCategoryOne_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "InstitutionsForeignPortfolioInvestorCategoryOne",
+        "category_key": "fpi_category_i",
+        "entity_identifier": "PREMIERENE",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "InstitutionsForeignPortfolioInvestorCategoryOneMember"
+          }
+        ],
+        "shareholder_count": 163,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 31494845,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 31494845,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0694",
+        "ownership_percentage_points": "6.9400",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 31494845,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0697",
+        "voting_rights_percentage_points": "6.9700",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "InstitutionsForeignPortfolioInvestorCategoryTwo_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "InstitutionsForeignPortfolioInvestorCategoryTwo",
+        "category_key": "fpi_category_ii",
+        "entity_identifier": "PREMIERENE",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "InstitutionsForeignPortfolioInvestorCategoryTwoMember"
+          }
+        ],
+        "shareholder_count": 13,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 819681,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 819681,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0018",
+        "ownership_percentage_points": "0.1800",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 819681,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0018",
+        "voting_rights_percentage_points": "0.1800",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "InstitutionsForeign_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "InstitutionsForeign",
+        "category_key": "foreign_institutions_total",
+        "entity_identifier": "PREMIERENE",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "InstitutionsForeignMember"
+          }
+        ],
+        "shareholder_count": 176,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 32314526,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 32314526,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0712",
+        "ownership_percentage_points": "7.1200",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 32314526,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0716",
+        "voting_rights_percentage_points": "7.1600",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "DirectorsAndDirectorsRelatives_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "DirectorsAndDirectorsRelatives",
+        "category_key": "DirectorsAndDirectorsRelatives",
+        "entity_identifier": "PREMIERENE",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "DirectorsAndDirectorsRelativesMember"
+          }
+        ],
+        "shareholder_count": 4,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 15589042,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 15589042,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0343",
+        "ownership_percentage_points": "3.4300",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 15589042,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0345",
+        "voting_rights_percentage_points": "3.4500",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "KeyManagerialPersonnel_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "KeyManagerialPersonnel",
+        "category_key": "KeyManagerialPersonnel",
+        "entity_identifier": "PREMIERENE",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "KeyManagerialPersonnelMember"
+          }
+        ],
+        "shareholder_count": 1,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 170000,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 170000,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0004",
+        "ownership_percentage_points": "0.0400",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 170000,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0004",
+        "voting_rights_percentage_points": "0.0400",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "ResidentIndividualShareholdersHoldingNominalShareCapitalUpToRsTwoLakh_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "ResidentIndividualShareholdersHoldingNominalShareCapitalUpToRsTwoLakh",
+        "category_key": "ResidentIndividualShareholdersHoldingNominalShareCapitalUpToRsTwoLakh",
+        "entity_identifier": "PREMIERENE",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "ResidentIndividualShareholdersHoldingNominalShareCapitalUpToRsTwoLakhMember"
+          }
+        ],
+        "shareholder_count": 323347,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 22047922,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 22047922,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0486",
+        "ownership_percentage_points": "4.8600",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 22047922,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0488",
+        "voting_rights_percentage_points": "4.8800",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "ResidentIndividualShareholdersHoldingNominalShareCapitalInExcessOfRsTwoLakh_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "ResidentIndividualShareholdersHoldingNominalShareCapitalInExcessOfRsTwoLakh",
+        "category_key": "ResidentIndividualShareholdersHoldingNominalShareCapitalInExcessOfRsTwoLakh",
+        "entity_identifier": "PREMIERENE",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "ResidentIndividualShareholdersHoldingNominalShareCapitalInExcessOfRsTwoLakhMember"
+          }
+        ],
+        "shareholder_count": 2,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 685194,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 685194,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0015",
+        "ownership_percentage_points": "0.1500",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 685194,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0015",
+        "voting_rights_percentage_points": "0.1500",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "NonResidentIndians_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "NonResidentIndians",
+        "category_key": "NonResidentIndians",
+        "entity_identifier": "PREMIERENE",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "NonResidentIndiansMember"
+          }
+        ],
+        "shareholder_count": 4371,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 922441,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 922441,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.002",
+        "ownership_percentage_points": "0.200",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 922441,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.002",
+        "voting_rights_percentage_points": "0.200",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "ForeignCompanies_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "ForeignCompanies",
+        "category_key": "ForeignCompanies",
+        "entity_identifier": "PREMIERENE",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "ForeignCompaniesMember"
+          }
+        ],
+        "shareholder_count": 1,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 25037971,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 25037971,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0552",
+        "ownership_percentage_points": "5.5200",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 25037971,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0554",
+        "voting_rights_percentage_points": "5.5400",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "BodiesCorporate_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "BodiesCorporate",
+        "category_key": "BodiesCorporate",
+        "entity_identifier": "PREMIERENE",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "BodiesCorporateMember"
+          }
+        ],
+        "shareholder_count": 874,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 2680046,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 2680046,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0059",
+        "ownership_percentage_points": "0.5900",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 2680046,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.0059",
+        "voting_rights_percentage_points": "0.5900",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "OtherNonInstitutions_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "OtherNonInstitutions",
+        "category_key": "OtherNonInstitutions",
+        "entity_identifier": "PREMIERENE",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "OtherNonInstitutionsMember"
+          }
+        ],
+        "shareholder_count": 6284,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 901598,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 901598,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.002",
+        "ownership_percentage_points": "0.200",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 901598,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.002",
+        "voting_rights_percentage_points": "0.200",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "NonInstitutions_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "NonInstitutions",
+        "category_key": "NonInstitutions",
+        "entity_identifier": "PREMIERENE",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "NonInstitutionsMember"
+          }
+        ],
+        "shareholder_count": 334884,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 68034214,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 68034214,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.1499",
+        "ownership_percentage_points": "14.9900",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 68034214,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.1507",
+        "voting_rights_percentage_points": "15.0700",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "PublicShareholding_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "PublicShareholding",
+        "category_key": "PublicShareholding",
+        "entity_identifier": "PREMIERENE",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "PublicShareholdingMember"
+          }
+        ],
+        "shareholder_count": 335135,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 186062518,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 186062518,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.4099",
+        "ownership_percentage_points": "40.9900",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 186062518,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0.412",
+        "voting_rights_percentage_points": "41.200",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "EmployeeBenefitsTrusts_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "EmployeeBenefitsTrusts",
+        "category_key": "EmployeeBenefitsTrusts",
+        "entity_identifier": "PREMIERENE",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "EmployeeBenefitsTrustsMember"
+          }
+        ],
+        "shareholder_count": 1,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 2394988,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 2394988,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "0.0053",
+        "ownership_percentage_points": "0.5300",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 0,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0",
+        "voting_rights_percentage_points": "0",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "SharesHeldByNonPromoterNonPublicShareholders_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "SharesHeldByNonPromoterNonPublicShareholders",
+        "category_key": "SharesHeldByNonPromoterNonPublicShareholders",
+        "entity_identifier": "PREMIERENE",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "SharesHeldByNonPromoterNonPublicShareholdersMember"
+          }
+        ],
+        "shareholder_count": 1,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 2394988,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 2394988,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": null,
+        "voting_rights": 0,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "0",
+        "voting_rights_percentage_points": "0",
+        "voting_rights_fraction_unit_ref": "pure"
+      },
+      {
+        "context_id": "ShareholdingPattern_ContextI",
+        "reporting_date": "2026-09-30",
+        "category_member": "ShareholdingPattern",
+        "category_key": "ShareholdingPattern",
+        "entity_identifier": "PREMIERENE",
+        "dimensions": [
+          {
+            "dimension": "CategoryOfShareholdersAxis",
+            "member": "ShareholdingPatternMember"
+          }
+        ],
+        "shareholder_count": 335145,
+        "shareholder_count_unit_ref": "pure",
+        "shares": 453951510,
+        "shares_unit_ref": "shares",
+        "fully_paid_shares": 453951510,
+        "fully_paid_shares_unit_ref": "shares",
+        "ownership_fraction": "1",
+        "ownership_percentage_points": "100",
+        "ownership_fraction_unit_ref": "pure",
+        "voting_rights": 451556522,
+        "voting_rights_unit_ref": "pure",
+        "voting_rights_fraction": "1",
+        "voting_rights_percentage_points": "100",
+        "voting_rights_fraction_unit_ref": "pure"
+      }
+    ],
+    "fpi_reconciliation": [
+      {
+        "reporting_date": "2026-09-30",
+        "fpi_category_i_shares": 31494845,
+        "fpi_category_ii_shares": 819681,
+        "other_foreign_institution_shares": null,
+        "overseas_depositories_shares": null,
+        "foreign_direct_investment_shares": null,
+        "foreign_venture_capital_investor_shares": null,
+        "sovereign_wealth_funds_foreign_shares": null,
+        "foreign_institutions_total_shares": 32314526,
+        "component_sum_shares": null,
+        "difference_shares": null,
+        "status": "not_comparable_missing_component",
+        "scope_note": "FPI Category I and II remain distinct from FDI, foreign venture capital, foreign sovereign wealth funds, other foreign institutions and overseas depositories. Additional categories are included only when explicitly reported; absent or nil components are not assumed to be zero."
+      }
+    ],
+    "semantics": {
+      "ownership_fraction": "XBRL reported decimal fraction; multiply by 100 for percentage points",
+      "shares": "Reported share count from the NumberOfShares fact",
+      "missing": "Absent or nil facts remain null; they are never converted to zero",
+      "attribution": "Quarterly reported ownership, not daily trade flow or purchase date"
+    }
+  }
+}

@@ -12,6 +12,7 @@ from pathlib import Path
 
 UNIVERSE_CSV = Path("data/raw/universe/nifty500_current.csv")
 UNIVERSE_MANIFEST_DIR = Path("data/snapshots/universe")
+PLACEHOLDER_CSV = Path("data/audits/nifty500_index_placeholders_2026-11-09.csv")
 DAILY_MANIFEST = Path("data/raw/daily_stock_features/daily_stock_features_current_manifest.json")
 DAILY_CSV = Path("data/raw/daily_stock_features/daily_stock_features_current.csv")
 HISTORICAL_MANIFEST = Path("data/raw/historical_features/historical_features_current_manifest.json")
@@ -22,6 +23,10 @@ DEAL_MANIFEST = Path("data/raw/fpi_deal_attribution/fpi_deal_attribution_current
 DEAL_CSV = Path("data/raw/fpi_deal_attribution/fpi_deal_stock_summary_current.csv")
 SHAREHOLDING_MANIFEST = Path("data/raw/shareholding/current_manifest.json")
 SHAREHOLDING_CSV = Path("data/raw/shareholding/shareholding_ownership_current.csv")
+ISSUER_FALLBACK_MANIFEST = Path("data/raw/shareholding/issuer_shareholding_fallback_current_manifest.json")
+ISSUER_FALLBACK_CSV = Path("data/raw/shareholding/issuer_shareholding_fallback_current.csv")
+REIT_UNITHOLDING_MANIFEST = Path("data/raw/shareholding/reit_unitholding_current_manifest.json")
+REIT_UNITHOLDING_CSV = Path("data/raw/shareholding/reit_unitholding_current.csv")
 OUTPUT_CSV = Path("data/raw/fpi_evidence_blend/fpi_evidence_matrix_current.csv")
 OUTPUT_MANIFEST = Path("data/raw/fpi_evidence_blend/fpi_evidence_matrix_current_manifest.json")
 PARSER_VERSION = 1
@@ -54,7 +59,14 @@ SHAREHOLDING_FIELDS = [
     "overseas_depositories_shares", "foreign_direct_investment_shares",
     "foreign_venture_capital_investor_shares",
     "sovereign_wealth_funds_foreign_shares", "foreign_institutions_total_shares",
-    "fpi_reconciliation_status",
+    "fpi_reconciliation_status", "ownership_data_type", "source_url",
+    "source_content_type", "source_http_status", "source_raw_path", "source_sha256",
+    "identity_evidence_path", "identity_evidence_sha256", "category_breakdown_status",
+]
+REIT_FIELDS = [
+    "reporting_date", "ownership_data_type", "fpi_units",
+    "fpi_ownership_percentage_points", "reported_fpi_row_count",
+    "announcement_seq_id", "announcement_date", "attachment_path", "attachment_sha256",
 ]
 DEAL_FIELDS = [
     "deal_data_status", "deal_event_count", "unverified_deal_event_count",
@@ -79,12 +91,16 @@ DEAL_FIELDS = [
 
 OUTPUT_FIELDS = [
     "as_of_trade_date", "symbol", "company_name", "industry", "series", "isin",
-    "daily_join_status",
+    "universe_member_type", "tradability_status", "fpi_scoring_eligible",
+    "universe_exclusion_reason", "daily_join_status",
     *[f"daily_{field}" for field in DAILY_FIELDS],
     "historical_join_status",
     *[f"{window}s_{field}" for window in (5, 20, 60) for field in HISTORICAL_METRICS],
     "shareholding_join_status",
     *[f"shareholding_{field}" for field in SHAREHOLDING_FIELDS],
+    "reit_unitholding_join_status",
+    *[f"reit_unitholding_{field}" for field in REIT_FIELDS],
+    "ownership_data_type",
     "deal_join_status",
     *[f"deal_{field}" for field in DEAL_FIELDS],
     "direct_fpi_client_gross_buy_candidate",
@@ -176,6 +192,29 @@ def _load_universe(root: Path) -> tuple[list[dict], dict]:
     }
 
 
+def _load_placeholders(root: Path, universe_rows: list[dict]) -> tuple[dict[str, dict], dict | None]:
+    path = root / PLACEHOLDER_CSV
+    if not path.exists():
+        return {}, None
+    payload = path.read_bytes()
+    rows = _read_csv(path)
+    universe_symbols = {row["symbol"].strip().upper() for row in universe_rows}
+    indexed = {}
+    for row in rows:
+        symbol = row.get("symbol", "").strip().upper()
+        if not symbol or symbol not in universe_symbols or symbol in indexed:
+            raise ValueError(f"invalid or duplicate index placeholder symbol: {symbol}")
+        if row.get("classification") != "demerged_index_placeholder":
+            raise ValueError(f"unsupported index placeholder classification: {symbol}")
+        indexed[symbol] = row
+    return indexed, {
+        "path": str(PLACEHOLDER_CSV),
+        "sha256": _sha256(payload),
+        "placeholder_count": len(indexed),
+        "symbols": sorted(indexed),
+    }
+
+
 def _direction(value: str, status: str) -> str:
     if status != "complete" or value in (None, ""):
         return "unavailable"
@@ -257,9 +296,55 @@ def _options_context(row: dict) -> str:
 
 
 def _ownership_context(row: dict) -> str:
-    if row.get("shareholding_join_status") == "parsed_verified_identity":
+    if row.get("ownership_data_type") == "reit_unitholding_pattern":
+        return "2026_quarterly_fpi_unitholding_baseline_available;units_not_equity_shares"
+    status = row.get("shareholding_join_status", "")
+    if status == "parsed_verified_identity":
         return "2026_quarterly_fpi_ownership_baseline_available;no_prior_quarter_change_series"
+    if status == "issuer_fallback_parsed_verified_identity":
+        return "2026_quarterly_fpi_ownership_baseline_available_from_issuer_filing;no_prior_quarter_change_series"
+    if status == "issuer_fallback_total_only_verified_identity":
+        return "2026_quarterly_fpi_total_ownership_available;category_split_unavailable"
     return "quarterly_fpi_ownership_baseline_unavailable_or_unverified"
+
+
+def _issuer_fallback_to_shareholding(record: dict) -> dict:
+    category_status = record.get("category_breakdown_status", "")
+    total_only = category_status != "reported_category_i_and_ii"
+    return {
+        "reporting_date": record.get("reporting_date", ""),
+        "submission_date": "",
+        "broadcast_date": "",
+        "system_date": "",
+        "record_id": "",
+        "revised_data": "",
+        "revision_date": "",
+        "identity_status": "verified",
+        "identity_join_method": record.get("identity_join_method", ""),
+        "filing_status": "publisher_total_only_category_split_unavailable" if total_only else "parsed",
+        "fpi_category_i_shares": record.get("fpi_category_i_shares") or "",
+        "fpi_category_ii_shares": record.get("fpi_category_ii_shares") or "",
+        "fpi_total_shares": record.get("fpi_total_shares") or "",
+        "fpi_category_i_ownership_percentage_points": record.get("fpi_category_i_ownership_percentage_points") or "",
+        "fpi_category_ii_ownership_percentage_points": record.get("fpi_category_ii_ownership_percentage_points") or "",
+        "fpi_total_ownership_percentage_points": record.get("fpi_total_ownership_percentage_points") or "",
+        "other_foreign_institution_shares": "",
+        "overseas_depositories_shares": "",
+        "foreign_direct_investment_shares": "",
+        "foreign_venture_capital_investor_shares": "",
+        "sovereign_wealth_funds_foreign_shares": "",
+        "foreign_institutions_total_shares": "",
+        "fpi_reconciliation_status": "issuer_fallback_total_only_not_reconciled" if total_only else "issuer_fallback_publisher_reported",
+        "ownership_data_type": record.get("ownership_data_type", "issuer_published_equity_shareholding"),
+        "source_url": record.get("source_url", ""),
+        "source_content_type": record.get("source_content_type", ""),
+        "source_http_status": record.get("source_http_status", ""),
+        "source_raw_path": record.get("source_raw_path", ""),
+        "source_sha256": record.get("source_sha256", ""),
+        "identity_evidence_path": record.get("identity_evidence_path", ""),
+        "identity_evidence_sha256": record.get("identity_evidence_sha256", ""),
+        "category_breakdown_status": category_status,
+    }
 
 
 def _load_source(root: Path, manifest_path: Path, csv_path: Path, hash_key: str) -> tuple[dict, list[dict]]:
@@ -271,6 +356,21 @@ def _load_source(root: Path, manifest_path: Path, csv_path: Path, hash_key: str)
 
 def build(root: Path = Path(".")) -> dict:
     universe_rows, universe_meta = _load_universe(root)
+    placeholders, placeholder_meta = _load_placeholders(root, universe_rows)
+    nsdl_context_path = root / Path("data/processed/nsdl_cash_flow_context.json")
+    nsdl_context_payload = nsdl_context_path.read_bytes() if nsdl_context_path.exists() else None
+    nsdl_context = json.loads(nsdl_context_payload.decode("utf-8")) if nsdl_context_payload else None
+    if nsdl_context and nsdl_context.get("stock_level_attribution") is not False:
+        raise ValueError("NSDL aggregate cash-flow context must not be attributed to individual stocks")
+    bse_fallback_path = root / Path("data/raw/shareholding/bse_shareholding_fallback_probe_manifest.json")
+    bse_fallback_payload = bse_fallback_path.read_bytes() if bse_fallback_path.exists() else None
+    bse_fallback = json.loads(bse_fallback_payload.decode("utf-8")) if bse_fallback_payload else None
+    nse_history_path = root / Path("artifacts/nse-shareholding-history/nse_shareholding_history_probe_manifest.json")
+    nse_history_payload = nse_history_path.read_bytes() if nse_history_path.exists() else None
+    nse_history = json.loads(nse_history_payload.decode("utf-8")) if nse_history_payload else None
+    nse_announcement_path = root / Path("artifacts/nse-shareholding-announcements/nse_shareholding_unitholding_announcements_manifest.json")
+    nse_announcement_payload = nse_announcement_path.read_bytes() if nse_announcement_path.exists() else None
+    nse_announcements = json.loads(nse_announcement_payload.decode("utf-8")) if nse_announcement_payload else None
     daily_manifest, daily_rows = _load_source(
         root, DAILY_MANIFEST, DAILY_CSV, "output_sha256"
     )
@@ -283,6 +383,24 @@ def build(root: Path = Path(".")) -> dict:
     share_manifest, share_rows = _load_source(
         root, SHAREHOLDING_MANIFEST, SHAREHOLDING_CSV, "ownership_current_sha256"
     )
+    if (root / ISSUER_FALLBACK_MANIFEST).is_file() and (root / ISSUER_FALLBACK_CSV).is_file():
+        issuer_fallback_manifest, issuer_fallback_rows = _load_source(
+            root, ISSUER_FALLBACK_MANIFEST, ISSUER_FALLBACK_CSV, "output_sha256"
+        )
+    else:
+        issuer_fallback_manifest, issuer_fallback_rows = {"status": "not_available"}, []
+    if (root / REIT_UNITHOLDING_MANIFEST).is_file() and (root / REIT_UNITHOLDING_CSV).is_file():
+        reit_unitholding_manifest, reit_unitholding_rows = _load_source(
+            root, REIT_UNITHOLDING_MANIFEST, REIT_UNITHOLDING_CSV, "output_sha256"
+        )
+    else:
+        reit_unitholding_manifest, reit_unitholding_rows = {"status": "not_available"}, []
+    if issuer_fallback_manifest.get("status") == "complete":
+        if issuer_fallback_manifest.get("parsed_verified_count") != len(issuer_fallback_rows):
+            raise ValueError("issuer fallback parsed count does not match its CSV")
+    if reit_unitholding_manifest.get("status") == "complete":
+        if reit_unitholding_manifest.get("parsed_reit_count") != len(reit_unitholding_rows):
+            raise ValueError("REIT unitholding parsed count does not match its CSV")
     market_flow_path = _verify_hash(
         root, MARKET_FLOW_CSV, historical_manifest["market_output_sha256"], "market flow history"
     )
@@ -297,6 +415,12 @@ def build(root: Path = Path(".")) -> dict:
     historical_by_symbol = _unique_index(historical_rows, "symbol", "historical stock features")
     deal_by_symbol = _unique_index(deal_rows, "symbol", "FPI deal stock summary")
     share_by_symbol = _unique_index(share_rows, "symbol", "shareholding ownership")
+    issuer_fallback_by_symbol = _unique_index(
+        issuer_fallback_rows, "symbol", "issuer fallback ownership"
+    ) if issuer_fallback_rows else {}
+    reit_unitholding_by_symbol = _unique_index(
+        reit_unitholding_rows, "symbol", "REIT unitholding"
+    ) if reit_unitholding_rows else {}
 
     expected_count = len(universe_rows)
     for label, rows in (
@@ -317,6 +441,7 @@ def build(root: Path = Path(".")) -> dict:
     daily_join_counts = Counter()
     historical_join_counts = Counter()
     ownership_status_counts = Counter()
+    reit_unitholding_status_counts = Counter()
     deal_status_counts = Counter()
     for universe in sorted(universe_rows, key=lambda row: row["symbol"]):
         symbol = universe["symbol"].strip().upper()
@@ -325,34 +450,72 @@ def build(root: Path = Path(".")) -> dict:
         historical = historical_by_symbol[symbol]
         deal = deal_by_symbol[symbol]
         share = share_by_symbol[symbol]
+        issuer_fallback = issuer_fallback_by_symbol.get(symbol)
+        reit_unitholding = reit_unitholding_by_symbol.get(symbol)
+        reit_status = "not_found_in_current_master"
+        ownership_data_type = "unavailable"
 
-        daily_status = "isin_exact" if daily.get("isin", "").strip().upper() == isin else "isin_mismatch"
-        historical_status = (
-            "isin_exact" if historical.get("isin", "").strip().upper() == isin
-            else "isin_mismatch"
-        )
-        deal_status = (
-            "universe_isin_exact" if deal.get("universe_isin", "").strip().upper() == isin
-            else "universe_isin_mismatch"
-        )
-        share_identity = share.get("identity_status", "")
-        if share_identity == "verified" and share.get("isin", "").strip().upper() == isin:
-            if share.get("filing_status") == "parsed":
-                share_status = "parsed_verified_identity"
-            else:
-                share_status = "verified_identity_filing_not_parsed"
-        elif share_identity == "isin_mismatch":
-            share_status = "isin_mismatch"
-        elif share_identity == "identity_unverified":
-            share_status = "identity_unverified"
-        elif share_identity == "not_found_in_current_master":
-            share_status = "not_found_in_current_master"
+        placeholder = placeholders.get(symbol)
+        if placeholder:
+            daily_status = historical_status = deal_status = share_status = "not_applicable_index_placeholder"
+            reit_status = "not_applicable_index_placeholder"
+            ownership_data_type = "not_applicable_index_placeholder"
         else:
-            share_status = "ownership_identity_or_join_unavailable"
+            daily_status = "isin_exact" if daily.get("isin", "").strip().upper() == isin else "isin_mismatch"
+            historical_status = (
+                "isin_exact" if historical.get("isin", "").strip().upper() == isin
+                else "isin_mismatch"
+            )
+            deal_status = (
+                "universe_isin_exact" if deal.get("universe_isin", "").strip().upper() == isin
+                else "universe_isin_mismatch"
+            )
+            share_identity = share.get("identity_status", "")
+            if share_identity == "verified" and share.get("isin", "").strip().upper() == isin:
+                if share.get("filing_status") == "parsed":
+                    share_status = "parsed_verified_identity"
+                    ownership_data_type = "nse_equity_shareholding"
+                else:
+                    share_status = "verified_identity_filing_not_parsed"
+                    ownership_data_type = "nse_equity_shareholding"
+            elif share_identity == "isin_mismatch":
+                share_status = "isin_mismatch"
+            elif share_identity == "identity_unverified":
+                share_status = "identity_unverified"
+            elif share_identity == "not_found_in_current_master":
+                share_status = "not_found_in_current_master"
+            elif share_identity == "not_applicable_index_placeholder":
+                share_status = "not_applicable_index_placeholder"
+            else:
+                share_status = "ownership_identity_or_join_unavailable"
+
+            if share_status != "parsed_verified_identity" and issuer_fallback:
+                if issuer_fallback.get("isin", "").strip().upper() != isin:
+                    raise ValueError(f"issuer fallback ISIN mismatch for {symbol}")
+                share = _issuer_fallback_to_shareholding(issuer_fallback)
+                ownership_data_type = "issuer_published_equity_shareholding"
+                share_status = (
+                    "issuer_fallback_parsed_verified_identity"
+                    if issuer_fallback.get("category_breakdown_status") == "reported_category_i_and_ii"
+                    else "issuer_fallback_total_only_verified_identity"
+                )
+                reit_status = "not_applicable_equity_shareholding"
+            elif share_status != "parsed_verified_identity" and reit_unitholding:
+                if reit_unitholding.get("isin", "").strip().upper() != isin:
+                    raise ValueError(f"REIT unitholding ISIN mismatch for {symbol}")
+                share = {}
+                share_status = "not_applicable_reit_unitholding"
+                reit_status = "parsed_verified_identity"
+                ownership_data_type = "reit_unitholding_pattern"
+            elif share_status == "parsed_verified_identity":
+                reit_status = "not_applicable_equity_shareholding"
+            else:
+                reit_status = "not_found_in_current_master"
 
         daily_join_counts[daily_status] += 1
         historical_join_counts[historical_status] += 1
         ownership_status_counts[share_status] += 1
+        reit_unitholding_status_counts[reit_status] += 1
         deal_status_counts[deal.get("deal_data_status", "unknown")] += 1
 
         row = {
@@ -362,9 +525,15 @@ def build(root: Path = Path(".")) -> dict:
             "industry": universe["industry"],
             "series": universe["series"],
             "isin": isin,
+            "universe_member_type": "index_adjustment_placeholder" if placeholder else "tradable_security",
+            "tradability_status": "non_tradable_zero_price" if placeholder else "tradable",
+            "fpi_scoring_eligible": "false" if placeholder else "true",
+            "universe_exclusion_reason": placeholder.get("reason", "") if placeholder else "",
             "daily_join_status": daily_status,
             "historical_join_status": historical_status,
             "shareholding_join_status": share_status,
+            "reit_unitholding_join_status": reit_status,
+            "ownership_data_type": ownership_data_type,
             "deal_join_status": deal_status,
         }
 
@@ -374,9 +543,18 @@ def build(root: Path = Path(".")) -> dict:
             for field in HISTORICAL_METRICS:
                 key = f"{window}s_{field}"
                 row[key] = historical.get(key, "") if historical_status == "isin_exact" else ""
+        equity_ownership_statuses = {
+            "parsed_verified_identity",
+            "issuer_fallback_parsed_verified_identity",
+            "issuer_fallback_total_only_verified_identity",
+        }
         for field in SHAREHOLDING_FIELDS:
             value = share.get(field, "")
-            if share_status != "parsed_verified_identity" and field in {
+            if field == "ownership_data_type":
+                value = value or ("nse_equity_shareholding" if share_status == "parsed_verified_identity" else "")
+                if share_status not in equity_ownership_statuses:
+                    value = ""
+            if share_status not in equity_ownership_statuses and field in {
                 "fpi_category_i_shares", "fpi_category_ii_shares", "fpi_total_shares",
                 "fpi_category_i_ownership_percentage_points",
                 "fpi_category_ii_ownership_percentage_points",
@@ -384,6 +562,12 @@ def build(root: Path = Path(".")) -> dict:
             }:
                 value = ""
             row[f"shareholding_{field}"] = value
+        for field in REIT_FIELDS:
+            row[f"reit_unitholding_{field}"] = (
+                reit_unitholding.get(field, "")
+                if reit_status == "parsed_verified_identity" and reit_unitholding
+                else ""
+            )
         for field in DEAL_FIELDS:
             row[f"deal_{field}"] = deal.get(field, "") if deal_status == "universe_isin_exact" else ""
 
@@ -404,8 +588,11 @@ def build(root: Path = Path(".")) -> dict:
             grade = "grade_2_named_client_current_registry_match_temporal_status_unverified"
         else:
             grade = "not_assigned_no_direct_fpi_client_buy_evidence"
-        row["fpi_deal_evidence_grade"] = grade
+        row["fpi_deal_evidence_grade"] = (
+            "not_applicable_index_placeholder" if placeholder else grade
+        )
         row["deal_evidence_pattern"] = (
+            "not_applicable_index_placeholder" if placeholder else
             _deal_pattern(deal) if deal_status == "universe_isin_exact"
             else "deal_summary_universe_isin_mismatch"
         )
@@ -413,16 +600,26 @@ def build(root: Path = Path(".")) -> dict:
         row["positional_price_context"] = _positional_context(row) if historical_status == "isin_exact" else "unavailable"
         row["delivery_context"] = _delivery_context(row) if historical_status == "isin_exact" else "unavailable"
         row["options_context"] = _options_context(row) if historical_status == "isin_exact" else "unavailable"
-        row["ownership_context"] = _ownership_context(row)
+        row["ownership_context"] = (
+            "not_applicable_index_placeholder" if placeholder else _ownership_context(row)
+        )
         summary_parts = []
-        if direct_buy:
+        if placeholder:
+            summary_parts.append("non_tradable_demerger_index_placeholder")
+        if direct_buy and not placeholder:
             summary_parts.append("direct_named_fpi_client_buy_disclosed")
         if direct_buy and net_status != "complete_for_current_registry_matched_counterparties":
             summary_parts.append("known_net_incomplete_or_counterparty_unresolved")
         if deal_data_status == "no_disclosed_deal_in_available_snapshots":
             summary_parts.append("no_named_bulk_block_deal_in_window")
-        if share_status == "parsed_verified_identity":
+        if share_status in {
+            "parsed_verified_identity",
+            "issuer_fallback_parsed_verified_identity",
+            "issuer_fallback_total_only_verified_identity",
+        }:
             summary_parts.append("quarterly_fpi_ownership_baseline_available")
+        elif reit_status == "parsed_verified_identity":
+            summary_parts.append("quarterly_fpi_unitholding_baseline_available_units_not_equity_shares")
         if row["short_term_price_context"] == "5s_positive_price_return":
             summary_parts.append("positive_5_session_price_return")
         if row["positional_price_context"] in {
@@ -433,7 +630,15 @@ def build(root: Path = Path(".")) -> dict:
             summary_parts.append("delivery_strengthening_vs_20s")
         if row["options_context"].startswith("5s_same_expiry_pcr_available"):
             summary_parts.append("5_session_options_pcr_same_expiry_available")
-        if row["ownership_context"] != "2026_quarterly_fpi_ownership_baseline_available;no_prior_quarter_change_series":
+        if (
+            not placeholder
+            and share_status not in {
+                "parsed_verified_identity",
+                "issuer_fallback_parsed_verified_identity",
+                "issuer_fallback_total_only_verified_identity",
+            }
+            and reit_status != "parsed_verified_identity"
+        ):
             summary_parts.append("quarterly_fpi_ownership_baseline_unavailable_or_unverified")
         if deal_data_status == "observed_disclosed_deals" and not direct_buy:
             summary_parts.append("bulk_block_deals_disclosed_without_direct_fpi_client_buy_match")
@@ -471,11 +676,36 @@ def build(root: Path = Path(".")) -> dict:
     output_sha = _sha256(output_payload)
     source_hashes = {
         "universe": universe_meta["sha256"],
+        "universe_placeholder_classification": (placeholder_meta or {}).get("sha256"),
         "daily_stock_features": daily_manifest["output_sha256"],
         "historical_stock_features": historical_manifest["stock_output_sha256"],
         "fpi_deal_stock_summary": deal_manifest["stock_summary_csv_sha256"],
+        "fpi_deal_events": deal_manifest["event_csv_sha256"],
+        "fpi_deal_attribution_manifest": _sha256((root / DEAL_MANIFEST).read_bytes()),
         "cdsl_registry_snapshot": deal_manifest["registry_snapshot_sha256"],
         "shareholding_ownership": share_manifest["ownership_current_sha256"],
+        "issuer_shareholding_fallback_csv": issuer_fallback_manifest.get("output_sha256"),
+        "issuer_shareholding_fallback_manifest": (
+            _sha256((root / ISSUER_FALLBACK_MANIFEST).read_bytes())
+            if (root / ISSUER_FALLBACK_MANIFEST).is_file() else None
+        ),
+        "reit_unitholding_csv": reit_unitholding_manifest.get("output_sha256"),
+        "reit_unitholding_manifest": (
+            _sha256((root / REIT_UNITHOLDING_MANIFEST).read_bytes())
+            if (root / REIT_UNITHOLDING_MANIFEST).is_file() else None
+        ),
+        "shareholding_identity_crosswalk": (
+            share_manifest.get("identity_crosswalk") or {}
+        ).get("sha256"),
+        "shareholding_identity_bse_udiff": (
+            share_manifest.get("identity_crosswalk") or {}
+        ).get("bse_source_sha256"),
+        "nsdl_cash_flow_normalized_csv": (nsdl_context or {}).get("normalized_csv_sha256"),
+        "nsdl_cash_flow_raw_archive_manifest": (nsdl_context or {}).get("raw_archive_manifest_sha256"),
+        "nsdl_cash_flow_context": _sha256(nsdl_context_payload) if nsdl_context_payload else None,
+        "bse_shareholding_fallback_probe_manifest": _sha256(bse_fallback_payload) if bse_fallback_payload else None,
+        "nse_shareholding_history_probe_manifest": _sha256(nse_history_payload) if nse_history_payload else None,
+        "nse_shareholding_unitholding_announcement_probe_manifest": _sha256(nse_announcement_payload) if nse_announcement_payload else None,
         "market_flow_history": historical_manifest["market_output_sha256"],
         "participant_derivatives_history": historical_manifest["participant_output_sha256"],
     }
@@ -488,10 +718,16 @@ def build(root: Path = Path(".")) -> dict:
         "deal_trade_date_window": [
             deal_manifest["trade_date_window_start"], deal_manifest["trade_date_window_end"]
         ],
+        "deal_lookback_calendar_days": deal_manifest.get("lookback_calendar_days"),
+        "deal_source_row_count": deal_manifest.get("source_row_count"),
+        "deal_deduplicated_event_count": deal_manifest.get("deduplicated_event_count"),
+        "deal_current_registry_matched_fpi_client_event_count": deal_manifest.get("current_registry_matched_fpi_client_event_count"),
+        "deal_unmatched_event_count": deal_manifest.get("unmatched_event_count"),
         "registry_snapshot_date": deal_manifest["registry_snapshot_date"],
         "registry_snapshot_sha256": deal_manifest["registry_snapshot_sha256"],
         "ownership_reporting_date": share_manifest.get("latest_reporting_date"),
         "universe_snapshot_manifest_path": universe_meta["snapshot_manifest_path"],
+        "universe_placeholder_classification": placeholder_meta,
     }
     identity_sha = _sha256(
         json.dumps(snapshot_identity, sort_keys=True, separators=(",", ":")).encode("utf-8")
@@ -507,17 +743,72 @@ def build(root: Path = Path(".")) -> dict:
         "status": "complete",
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "stock_count": len(output_rows),
+        "tradable_stock_count": len(output_rows) - len(placeholders),
+        "index_placeholder_count": len(placeholders),
+        "index_placeholder_symbols": sorted(placeholders),
         "direct_fpi_client_gross_buy_candidate_count": sum(
             row["direct_fpi_client_gross_buy_candidate"] == "true" for row in output_rows
         ),
         "grade_1_count": sum(row["fpi_deal_evidence_grade"].startswith("grade_1") for row in output_rows),
         "grade_2_count": sum(row["fpi_deal_evidence_grade"].startswith("grade_2") for row in output_rows),
         "ownership_reporting_date": share_manifest.get("latest_reporting_date"),
+        "nsdl_market_flow_context": nsdl_context,
+        "bse_shareholding_fallback_probe": bse_fallback,
+        "issuer_shareholding_fallback_manifest": issuer_fallback_manifest,
+        "reit_unitholding_manifest": reit_unitholding_manifest,
+        "nse_shareholding_history_probe": nse_history,
+        "nse_shareholding_unitholding_announcements_probe": nse_announcements,
+        "identity_crosswalk_candidate_count": (share_manifest.get("identity_crosswalk") or {}).get("candidate_count"),
+        "identity_crosswalk_verified_count": (share_manifest.get("identity_crosswalk") or {}).get("verified_count"),
+        "identity_crosswalk_unresolved_count": (share_manifest.get("identity_crosswalk") or {}).get("unresolved_count"),
+        "identity_crosswalk_bse_source_sha256": (share_manifest.get("identity_crosswalk") or {}).get("bse_source_sha256"),
         "ownership_parsed_verified_count": ownership_status_counts["parsed_verified_identity"],
         "ownership_coverage_pct": round(
+            ownership_status_counts["parsed_verified_identity"] / (len(output_rows) - len(placeholders)) * 100, 2
+        ),
+        "ownership_index_row_coverage_pct": round(
             ownership_status_counts["parsed_verified_identity"] / len(output_rows) * 100, 2
         ),
+        "issuer_fallback_verified_count": (
+            ownership_status_counts["issuer_fallback_parsed_verified_identity"]
+            + ownership_status_counts["issuer_fallback_total_only_verified_identity"]
+        ),
+        "reit_unitholding_verified_count": reit_unitholding_status_counts["parsed_verified_identity"],
+        "equity_ownership_evidence_coverage_count": (
+            ownership_status_counts["parsed_verified_identity"]
+            + ownership_status_counts["issuer_fallback_parsed_verified_identity"]
+            + ownership_status_counts["issuer_fallback_total_only_verified_identity"]
+        ),
+        "equity_ownership_evidence_coverage_pct": round(
+            (
+                ownership_status_counts["parsed_verified_identity"]
+                + ownership_status_counts["issuer_fallback_parsed_verified_identity"]
+                + ownership_status_counts["issuer_fallback_total_only_verified_identity"]
+            ) / (len(output_rows) - len(placeholders)) * 100, 2
+        ),
+        "ownership_evidence_coverage_count": (
+            ownership_status_counts["parsed_verified_identity"]
+            + ownership_status_counts["issuer_fallback_parsed_verified_identity"]
+            + ownership_status_counts["issuer_fallback_total_only_verified_identity"]
+            + reit_unitholding_status_counts["parsed_verified_identity"]
+        ),
+        "ownership_evidence_coverage_pct": round(
+            (
+                ownership_status_counts["parsed_verified_identity"]
+                + ownership_status_counts["issuer_fallback_parsed_verified_identity"]
+                + ownership_status_counts["issuer_fallback_total_only_verified_identity"]
+                + reit_unitholding_status_counts["parsed_verified_identity"]
+            ) / (len(output_rows) - len(placeholders)) * 100, 2
+        ),
+        "ownership_unresolved_count": (
+            len(output_rows) - len(placeholders)
+            - ownership_status_counts["parsed_verified_identity"]
+            - ownership_status_counts["issuer_fallback_parsed_verified_identity"]
+            - ownership_status_counts["issuer_fallback_total_only_verified_identity"]
+            - reit_unitholding_status_counts["parsed_verified_identity"]
+        ),
         "ownership_status_counts": dict(ownership_status_counts),
+        "reit_unitholding_status_counts": dict(reit_unitholding_status_counts),
         "daily_join_status_counts": dict(daily_join_counts),
         "historical_join_status_counts": dict(historical_join_counts),
         "deal_status_counts": dict(deal_status_counts),
@@ -537,9 +828,28 @@ def build(root: Path = Path(".")) -> dict:
         "daily_stock_history_as_of": historical_manifest["as_of_trade_date"],
         "market_flow_session_count": historical_manifest["market_flow_session_count"],
         "market_flow_window_statuses": market_statuses,
+        "participant_derivatives_as_of_trade_date": historical_manifest.get(
+            "participant_derivatives_as_of_trade_date"
+        ),
+        "participant_derivatives_window_cutoff_date": historical_manifest.get(
+            "participant_derivatives_window_cutoff_date"
+        ),
+        "participant_derivatives_latest_observed_trade_date": historical_manifest.get(
+            "participant_derivatives_latest_observed_trade_date"
+        ),
         "participant_oi_session_count": historical_manifest["participant_oi_session_count"],
         "participant_volume_session_count": historical_manifest["participant_volume_session_count"],
+        "participant_oi_available_session_count": historical_manifest.get(
+            "participant_oi_available_session_count"
+        ),
+        "participant_volume_available_session_count": historical_manifest.get(
+            "participant_volume_available_session_count"
+        ),
         "participant_derivatives_window_statuses": participant_statuses,
+        "nsdl_market_flow_context": nsdl_context,
+        "bse_shareholding_fallback_probe": bse_fallback,
+        "nse_shareholding_history_probe": nse_history,
+        "nse_shareholding_unitholding_announcements_probe": nse_announcements,
         "composite_score_status": "not_scored_independent_evidence_dimensions_only",
         "source_hashes": source_hashes,
         "output_csv_sha256": output_sha,
@@ -547,11 +857,14 @@ def build(root: Path = Path(".")) -> dict:
         "snapshot_manifest_path": str(snapshot_manifest_path),
         "limitations": [
             "No composite score is issued; independent evidence dimensions are preserved without arbitrary weights.",
+            "Demerger index placeholders included at zero price remain in the index-row count but are excluded from tradable-stock ownership coverage and FPI scoring.",
+            "NSDL FPI/DII cash flows are aggregate market-wide context only and are not attributed to any individual stock.",
+            "NSE symbol-history and shareholding/unitholding announcement probes are source discovery only; their records are not ownership inputs until their period, categories, identity and payload hashes are validated.",
             "A named bulk/block client match is not complete FPI trading flow and does not establish beneficial ownership.",
             "The CDSL registry snapshot follows the deal window and does not publish registration start dates.",
             "The Nifty 500 source states data as of the last trading day of the previous month; exact effective date is not supplied.",
             "Quarterly FPI ownership has one reporting quarter only; no quarter-on-quarter change series is available yet.",
-            "Shareholding identity coverage is partial; mismatched or unverified identities remain null.",
+            "Dated BSE crosswalk identities are accepted only when reporting date, filing record ID, XBRL URL/hash, and universe ISIN all match; any remaining mismatched or unverified identities remain null.",
             "Market-wide FII/FPI and DII flows have only one session; 5/20/60-session baselines are insufficient.",
             "Participant OI and volume are category aggregates, not participant-by-stock positions, and currently have only one session.",
             "No disclosed bulk/block deal does not mean no FPI trading; it means no named transaction appeared in the collected reports.",

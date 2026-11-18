@@ -2,10 +2,18 @@ name: Official NSE participant and FII derivatives reports
 
 on:
   push:
-    branches: [main]
+    branches: [main, research/shareholding-identity-integration]
     paths:
       - "src/fii_engine/nse_fo_aggregate_reports.py"
       - "tests/test_nse_fo_aggregate_reports.py"
+      - "src/fii_engine/historical_features.py"
+      - "tests/test_historical_features.py"
+      - "src/fii_engine/fpi_evidence_blend.py"
+      - "tests/test_fpi_evidence_blend.py"
+      - "data/raw/nse_fo_historical/**"
+      - "data/raw/shareholding/**"
+      - "artifacts/nse-shareholding-announcements/**"
+      - "artifacts/nse-shareholding-history/**"
       - "pyproject.toml"
       - ".github/workflows/nse-fo-aggregate-reports.yml"
       - ".gitignore"
@@ -29,7 +37,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: official-nse-fo-aggregate-reports
+  group: official-nse-fo-aggregate-reports-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -135,13 +143,86 @@ jobs:
           }, indent=2))
           PY
 
-      - name: Commit immutable report snapshots and rebuilt historical feature outputs
+      - name: Build blended Nifty 500 FPI evidence matrix
+        if: "${{ github.event_name == 'push' && github.ref == 'refs/heads/research/shareholding-identity-integration' }}"
+        run: python -m fii_engine.fpi_evidence_blend --root .
+
+      - name: Validate point-in-time full-universe evidence matrix
+        if: "${{ github.event_name == 'push' && github.ref == 'refs/heads/research/shareholding-identity-integration' }}"
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+
+          historical = json.loads(Path(
+              "data/raw/historical_features/historical_features_current_manifest.json"
+          ).read_text(encoding="utf-8"))
+          matrix_path = Path("data/raw/fpi_evidence_blend/fpi_evidence_matrix_current_manifest.json")
+          matrix = json.loads(matrix_path.read_text(encoding="utf-8"))
+          output_path = Path("data/raw/fpi_evidence_blend/fpi_evidence_matrix_current.csv")
+          with output_path.open("r", encoding="utf-8", newline="") as handle:
+              rows = list(csv.DictReader(handle))
+
+          assert matrix["status"] == "complete"
+          assert matrix["stock_count"] == 501
+          assert len(rows) == 501
+          assert matrix["ownership_parsed_verified_count"] == 494
+          assert matrix["issuer_fallback_verified_count"] == 2
+          assert matrix["reit_unitholding_verified_count"] == 3
+          assert matrix["ownership_evidence_coverage_count"] == 499
+          assert matrix["ownership_evidence_coverage_pct"] == 99.8
+          assert matrix["ownership_unresolved_count"] == 1
+          assert matrix["reit_unitholding_status_counts"]["parsed_verified_identity"] == 3
+          assert matrix["reit_unitholding_status_counts"]["not_applicable_equity_shareholding"] == 496
+          assert matrix["reit_unitholding_status_counts"]["not_found_in_current_master"] == 1
+          assert matrix["as_of_trade_date"] == historical["as_of_trade_date"]
+          assert historical["participant_derivatives_window_cutoff_date"] == historical["as_of_trade_date"]
+          assert historical["participant_derivatives_as_of_trade_date"] <= historical["participant_derivatives_window_cutoff_date"]
+          assert historical["participant_oi_session_count"] == 60
+          assert historical["participant_volume_session_count"] == 60
+          assert historical["participant_archive_complete_session_count"] == 60
+          assert historical["participant_derivatives_latest_observed_trade_date"] == "2026-11-17"
+          assert matrix["participant_oi_session_count"] == 60
+          assert matrix["participant_volume_session_count"] == 60
+          assert matrix["participant_derivatives_as_of_trade_date"] == historical["participant_derivatives_as_of_trade_date"]
+          nsdl = matrix["nsdl_market_flow_context"]
+          assert nsdl["scope"] == "aggregate_market_wide_cash_equity_context_only"
+          assert nsdl["stock_level_attribution"] is False
+          assert nsdl["fpi"]["observed_days"] == 62
+          assert nsdl["dii"]["observed_days"] == 62
+          assert matrix["composite_score_status"] == "not_scored_independent_evidence_dimensions_only"
+
+          print(json.dumps({
+              "as_of_trade_date": matrix["as_of_trade_date"],
+              "stock_count": matrix["stock_count"],
+              "participant_oi_sessions_used": matrix["participant_oi_session_count"],
+              "participant_volume_sessions_used": matrix["participant_volume_session_count"],
+              "participant_as_of_trade_date": matrix["participant_derivatives_as_of_trade_date"],
+              "participant_window_cutoff_date": historical["participant_derivatives_window_cutoff_date"],
+              "participant_latest_observed_date_excluded_from_asof": matrix["participant_derivatives_latest_observed_trade_date"],
+              "nsdl_fpi_observed_days": nsdl["fpi"]["observed_days"],
+              "nsdl_dii_observed_days": nsdl["dii"]["observed_days"],
+              "direct_fpi_client_gross_buy_candidates": matrix["direct_fpi_client_gross_buy_candidate_count"],
+              "grade_1_count": matrix["grade_1_count"],
+              "grade_2_count": matrix["grade_2_count"],
+              "ownership_parsed_verified_count": matrix["ownership_parsed_verified_count"],
+              "issuer_fallback_verified_count": matrix["issuer_fallback_verified_count"],
+              "reit_unitholding_verified_count": matrix["reit_unitholding_verified_count"],
+              "ownership_evidence_coverage_count": matrix["ownership_evidence_coverage_count"],
+              "ownership_evidence_coverage_pct": matrix["ownership_evidence_coverage_pct"],
+              "ownership_unresolved_count": matrix["ownership_unresolved_count"],
+              "composite_score_status": matrix["composite_score_status"],
+          }, indent=2))
+          PY
+
+      - name: Commit immutable report snapshots, historical features and blended matrix
         if: github.event_name != 'pull_request'
         run: |
-          if [[ -n "$(git status --porcelain data/raw/fno_aggregate_reports/manifests data/snapshots/fno_aggregate_reports data/raw/historical_features data/snapshots/historical_features)" ]]; then
+          if [[ -n "$(git status --porcelain data/raw/fno_aggregate_reports/manifests data/snapshots/fno_aggregate_reports data/raw/historical_features data/snapshots/historical_features data/raw/fpi_evidence_blend data/snapshots/fpi_evidence_blend)" ]]; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add data/raw/fno_aggregate_reports/manifests data/snapshots/fno_aggregate_reports data/raw/historical_features data/snapshots/historical_features
+            git add data/raw/fno_aggregate_reports/manifests data/snapshots/fno_aggregate_reports data/raw/historical_features data/snapshots/historical_features data/raw/fpi_evidence_blend data/snapshots/fpi_evidence_blend
             git commit -m "data: record NSE participant and FII report provenance"
             bash scripts/retry_git_push.sh "$GITHUB_REF_NAME"
           else
@@ -161,5 +242,8 @@ jobs:
             data/snapshots/fno_aggregate_reports/*.csv
             data/snapshots/fno_aggregate_reports/*.csv
             data/raw/fno_aggregate_reports/manifests/*.json
+            data/raw/fpi_evidence_blend/*.csv
+            data/raw/fpi_evidence_blend/*.json
+            data/snapshots/fpi_evidence_blend/*.csv
           if-no-files-found: warn
           retention-days: 90
