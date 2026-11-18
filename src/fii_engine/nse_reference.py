@@ -343,7 +343,7 @@ def ingest(output_dir: Path = Path("artifacts/nse-reference")) -> dict:
             "publisher": "National Stock Exchange of India",
             "retrieved_at_utc": datetime.now(timezone.utc).isoformat(),
             "catalogue_responses": catalogue_refs,
-        }, indent=2) + "\\n",
+        }, indent=2) + "\n",
         encoding="utf-8",
     )
 
