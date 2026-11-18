@@ -230,7 +230,7 @@ def test_fo_master_accepts_non_test_future_tradable_stock_contract():
         "FUTSTK,HDFCBANK,1485301800,N,1,2,1\n"
     ).encode()
     result = inspect_fo_quality(payload, "06-Nov-2026")
-    assert result["latest_stock_expiry_date_utc"] == "2027-01-25"
+    assert result["latest_stock_expiry_date_utc"] == "2027-01-24"
     assert result["stock_contract_rows_expiring_on_or_after_catalogue_date"] == 1
     assert result["issues"] == []
 
