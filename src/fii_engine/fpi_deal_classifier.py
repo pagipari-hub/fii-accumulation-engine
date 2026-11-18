@@ -60,6 +60,37 @@ def _sha256(payload: bytes) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
+def _provenance_fingerprint(
+    *,
+    parser_version: int,
+    lookback_days: int,
+    start_date: date,
+    end_date: date,
+    registry_sha256: str,
+    universe_sha256: str,
+    source_refs: list[dict],
+) -> str:
+    """Hash source provenance separately from derived event/stock CSV content.
+
+    A repeated run can produce identical CSVs while source-manifest metadata
+    changes (for example, a fresh retrieval timestamp). The provenance manifest
+    therefore needs its own identity to avoid immutable-path collisions.
+    """
+    basis = {
+        "parser_version": parser_version,
+        "lookback_calendar_days": lookback_days,
+        "trade_date_window_start": start_date.isoformat(),
+        "trade_date_window_end": end_date.isoformat(),
+        "registry_snapshot_sha256": registry_sha256,
+        "universe_csv_sha256": universe_sha256,
+        "source_deal_manifests": source_refs,
+    }
+    canonical = json.dumps(
+        basis, sort_keys=True, separators=(",", ":"), ensure_ascii=False
+    ).encode("utf-8")
+    return _sha256(canonical)
+
+
 def _read_csv(path: Path) -> list[dict[str, str]]:
     with path.open("r", encoding="utf-8-sig", newline="") as handle:
         reader = csv.DictReader(handle)
@@ -637,13 +668,29 @@ def classify(root: Path = Path("."), lookback_days: int = 7) -> dict:
     stock_sha = _sha256(stock_payload)
     snapshot_hash = _sha256((event_sha + stock_sha).encode())
     stem = f"fpi_deal_attribution_{end_date:%Y%m%d}_{snapshot_hash[:16]}"
+    provenance_hash = _provenance_fingerprint(
+        parser_version=PARSER_VERSION,
+        lookback_days=lookback_days,
+        start_date=start_date,
+        end_date=end_date,
+        registry_sha256=registry_manifest["normalized_csv_sha256"],
+        universe_sha256=universe_metadata["sha256"],
+        source_refs=source_refs,
+    )
     event_snapshot_rel = f"data/snapshots/fpi_deal_attribution/{stem}_events.csv"
     stock_snapshot_rel = f"data/snapshots/fpi_deal_attribution/{stem}_stocks.csv"
-    snapshot_manifest_rel = f"data/snapshots/fpi_deal_attribution/{stem}.json"
+    # Keep the derived data content-addressed, but give provenance manifests a
+    # separate identity: source retrieval metadata can change while the derived
+    # event and stock CSV bytes remain identical.
+    snapshot_manifest_rel = (
+        f"data/snapshots/fpi_deal_attribution/{stem}_{provenance_hash[:12]}.json"
+    )
 
     snapshot_manifest = {
         "dataset": "nse_bulk_block_deal_fpi_counterparty_classification",
         "parser_version": PARSER_VERSION,
+        "provenance_fingerprint": provenance_hash,
+        "derived_content_fingerprint": snapshot_hash,
         "status": "complete" if events else "complete_no_deals",
         "lookback_calendar_days": lookback_days,
         "trade_date_window_start": start_date.isoformat(),
