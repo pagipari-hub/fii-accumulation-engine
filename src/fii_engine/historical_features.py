@@ -570,7 +570,7 @@ def _load_all_participant_snapshots(root: Path) -> tuple[dict[str, list[dict]], 
 def _participant_history_through(
     history: dict[str, list[dict]], cutoff_date: str
 ) -> dict[str, list[dict]]:
-    """Keep rolling windows point-in-time safe; later reports remain availability-only metadata."""
+    """Keep rolling windows point-in-time safe; later reports are availability-only and never enter those windows."""
     cutoff = date.fromisoformat(cutoff_date)
     return {
         dataset: [
