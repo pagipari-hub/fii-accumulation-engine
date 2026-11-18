@@ -2,7 +2,7 @@
   "dataset": "nifty500_blended_fpi_accumulation_evidence_matrix",
   "parser_version": 1,
   "as_of_trade_date": "2026-11-09",
-  "output_csv_sha256": "38edbda9415c0e97e3bd1d292be11406820729c2c48fbdc542b7408eca4495e3",
+  "output_csv_sha256": "cd013cf0a5ddb18c7e008607562cd0cd8a8cd23a61b4c5681d28da6d59367212",
   "source_hashes": {
     "universe": "68e2eac52f778cb8b1b63c2dd5617386a942b6313553f58ef2ef7f4260dfa469",
     "universe_placeholder_classification": "05cd88ad02eed6bce8622a9e887e1545035c93c01c1d5d53aa543e9bca4147ba",
@@ -13,6 +13,10 @@
     "fpi_deal_attribution_manifest": "15878dfc573de0b0bb00a2f8c755ed403ff201bf50e8e7fc7e58a5ce60c5e293",
     "cdsl_registry_snapshot": "ed003b061a033b6ba26c7b8b2238aec8ab2d1682edd0b2688277aefcfd66dcb4",
     "shareholding_ownership": "12edc6090af623b9fa5de095552ce15a38a79e86b6c2f5ad5cdea60b41573cb0",
+    "issuer_shareholding_fallback_csv": "6ef55042a432d8358d2a0a099674640444fcb32fd913b86e2dd6592d106fac64",
+    "issuer_shareholding_fallback_manifest": "0ab6b9be189ced0fcfc79c55459828e6a26b39f3576481e925714573542296d2",
+    "reit_unitholding_csv": "c40a017ba1ba0cf6d5dc62ad96868d25cf7e30aee0d23a0ac5c4d8fdff61353a",
+    "reit_unitholding_manifest": "500cc17b17e4105ca957eef3065d9d387379ffb8520c9d7e6d39220edcfbd9f2",
     "shareholding_identity_crosswalk": "12258998e48b1203bbcbc708d6d3ee9c5fcb9f7d537d925d47ae3c392a5d52c8",
     "shareholding_identity_bse_udiff": "e2b7cea2672aed05df3ce55f3c531a153cb2b5215e2b493b2735cd9be116acce",
     "nsdl_cash_flow_normalized_csv": "061bc2be35b00e26bd6250938c005ba1998fbc01044cac72c2d0e7cdf216d4c1",
@@ -45,9 +49,9 @@
       "DUMMYHEG"
     ]
   },
-  "snapshot_identity_sha256": "89191684542a9db391216379a932c7cfe230f64b9dca3b7bfa62b0d10bdd6e01",
+  "snapshot_identity_sha256": "976834bc6dd5a4969d3da2654a8092a28cb57b2e56be255de8434be1f669fecc",
   "status": "complete",
-  "generated_at_utc": "2026-11-18T00:25:30.206650+00:00",
+  "generated_at_utc": "2026-11-18T00:41:58.145221+00:00",
   "stock_count": 501,
   "tradable_stock_count": 500,
   "index_placeholder_count": 1,
@@ -149,6 +153,165 @@
       "not_attempted_after_exchange_403": 2
     },
     "scope_boundary": "BSE quarterly shareholding filing availability only; captured attachments are not yet parsed into ownership rows and do not establish daily FPI transactions."
+  },
+  "issuer_shareholding_fallback_manifest": {
+    "dataset": "issuer_published_equity_shareholding_fpi_fallback",
+    "reporting_date": "2026-09-30",
+    "status": "complete",
+    "expected_candidate_count": 2,
+    "parsed_verified_count": 2,
+    "rows": [
+      {
+        "reporting_date": "2026-09-30",
+        "symbol": "ABBOTINDIA",
+        "company_name": "Abbott India Ltd.",
+        "isin": "INE358A01014",
+        "identity_join_method": "verified_exact_dated_bse_udiff_symbol_scripcode_isin_match",
+        "identity_evidence_path": "data/raw/shareholding/identity_evidence/BhavCopy_BSE_CM_0_0_0_20260930_F_0000_e2b7cea2672aed05.csv",
+        "identity_evidence_sha256": "e2b7cea2672aed05df3ce55f3c531a153cb2b5215e2b493b2735cd9be116acce",
+        "ownership_data_type": "issuer_published_equity_shareholding",
+        "fpi_category_i_shares": 78784,
+        "fpi_category_ii_shares": 5316,
+        "fpi_total_shares": 84100,
+        "fpi_category_i_ownership_percentage_points": "0.37",
+        "fpi_category_ii_ownership_percentage_points": "0.03",
+        "fpi_total_ownership_percentage_points": "0.4",
+        "category_breakdown_status": "reported_category_i_and_ii",
+        "source_url": "https://www.abbott.com/content/dam/abbottdam/corp/gmea/global/corporate-sites/in/investors/shareholding/Shareholding-Pattern-September-30-2026.pdf",
+        "source_content_type": "application/pdf",
+        "source_http_status": 200,
+        "source_raw_path": "data/raw/shareholding/issuer_fallback/ABBOTINDIA_b32cbe95ce856199.pdf",
+        "source_sha256": "b32cbe95ce856199568de4d144e50190eca19d53f9c223a8af525f6a2d087caf"
+      },
+      {
+        "reporting_date": "2026-09-30",
+        "symbol": "MCX",
+        "company_name": "Multi Commodity Exchange of India Ltd.",
+        "isin": "INE745G01043",
+        "identity_join_method": "verified_exact_dated_bse_udiff_symbol_scripcode_isin_match",
+        "identity_evidence_path": "data/raw/shareholding/identity_evidence/BhavCopy_BSE_CM_0_0_0_20260930_F_0000_e2b7cea2672aed05.csv",
+        "identity_evidence_sha256": "e2b7cea2672aed05df3ce55f3c531a153cb2b5215e2b493b2735cd9be116acce",
+        "ownership_data_type": "issuer_published_equity_shareholding",
+        "fpi_category_i_shares": null,
+        "fpi_category_ii_shares": null,
+        "fpi_total_shares": 69014370,
+        "fpi_category_i_ownership_percentage_points": null,
+        "fpi_category_ii_ownership_percentage_points": null,
+        "fpi_total_ownership_percentage_points": "27.07",
+        "category_breakdown_status": "publisher_total_only_category_split_unavailable",
+        "source_url": "https://www.mcxindia.com/investor-relations/shareholder-information",
+        "source_content_type": "text/html; charset=utf-8",
+        "source_http_status": 200,
+        "source_raw_path": "data/raw/shareholding/issuer_fallback/MCX_ce9de87ef12eb594.html",
+        "source_sha256": "ce9de87ef12eb5945f15a7ed77ce317d7d21d7a59095d70bf32fbda887504a1a"
+      }
+    ],
+    "observations": [
+      {
+        "symbol": "ABBOTINDIA",
+        "source_url": "https://www.abbott.com/content/dam/abbottdam/corp/gmea/global/corporate-sites/in/investors/shareholding/Shareholding-Pattern-September-30-2026.pdf",
+        "source_type": "pdf",
+        "status": "parsed_verified_identity",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "raw_path": "data/raw/shareholding/issuer_fallback/ABBOTINDIA_b32cbe95ce856199.pdf",
+        "sha256": "b32cbe95ce856199568de4d144e50190eca19d53f9c223a8af525f6a2d087caf",
+        "fpi_total_shares": 84100,
+        "fpi_total_ownership_percentage_points": "0.4",
+        "category_breakdown_status": "reported_category_i_and_ii"
+      },
+      {
+        "symbol": "MCX",
+        "source_url": "https://www.mcxindia.com/investor-relations/shareholder-information",
+        "source_type": "html",
+        "status": "parsed_verified_identity",
+        "http_status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "raw_path": "data/raw/shareholding/issuer_fallback/MCX_ce9de87ef12eb594.html",
+        "sha256": "ce9de87ef12eb5945f15a7ed77ce317d7d21d7a59095d70bf32fbda887504a1a",
+        "fpi_total_shares": 69014370,
+        "fpi_total_ownership_percentage_points": "27.07",
+        "category_breakdown_status": "publisher_total_only_category_split_unavailable"
+      }
+    ],
+    "output_path": "data/raw/shareholding/issuer_shareholding_fallback_current.csv",
+    "output_sha256": "6ef55042a432d8358d2a0a099674640444fcb32fd913b86e2dd6592d106fac64",
+    "scope_boundary": "Issuer-published equity shareholding is a separate fallback source. Missing category splits remain null; no issuer-source values overwrite NSE XBRL records."
+  },
+  "reit_unitholding_manifest": {
+    "dataset": "official_nse_reit_unitholding_fpi_ownership",
+    "publisher": "National Stock Exchange of India",
+    "reporting_date": "2026-09-30",
+    "status": "complete",
+    "expected_reit_count": 3,
+    "parsed_reit_count": 3,
+    "rows": [
+      {
+        "reporting_date": "2026-09-30",
+        "symbol": "BAGMANE",
+        "company_name": "Bagmane Prime Office REIT",
+        "isin": "INE2OVN25015",
+        "ownership_data_type": "reit_unitholding_pattern",
+        "fpi_units": 7486373,
+        "fpi_ownership_percentage_points": "0.22",
+        "reported_fpi_row_count": 2,
+        "announcement_seq_id": "106815675",
+        "announcement_date": "13-Oct-2026 13:02:37",
+        "attachment_path": "artifacts/nse-shareholding-announcements/attachments/BAGMANE_106815675_f8cedb88375d56ad.pdf",
+        "attachment_sha256": "f8cedb88375d56ad7a50453cbfd438cce150d8408d6da5cab98e30e5b81f9a4c"
+      },
+      {
+        "reporting_date": "2026-09-30",
+        "symbol": "BIRET",
+        "company_name": "Brookfield India Real Estate Trust",
+        "isin": "INE0FDU25010",
+        "ownership_data_type": "reit_unitholding_pattern",
+        "fpi_units": 88393039,
+        "fpi_ownership_percentage_points": "10.65",
+        "reported_fpi_row_count": 2,
+        "announcement_seq_id": "106823639",
+        "announcement_date": "21-Oct-2026 17:33:24",
+        "attachment_path": "artifacts/nse-shareholding-announcements/attachments/BIRET_106823639_667ae75caf0d68d0.pdf",
+        "attachment_sha256": "667ae75caf0d68d0c3e703fa648cea693ce8e7f4783efe553ae39a2bce9fd8e1"
+      },
+      {
+        "reporting_date": "2026-09-30",
+        "symbol": "EMBASSY",
+        "company_name": "EMBASSY OFFICE PARKS REIT",
+        "isin": "INE041025011",
+        "ownership_data_type": "reit_unitholding_pattern",
+        "fpi_units": 302751052,
+        "fpi_ownership_percentage_points": "31.94",
+        "reported_fpi_row_count": 2,
+        "announcement_seq_id": "106812865",
+        "announcement_date": "09-Oct-2026 18:02:35",
+        "attachment_path": "artifacts/nse-shareholding-announcements/attachments/EMBASSY_106812865_bf299766b4a206da.pdf",
+        "attachment_sha256": "bf299766b4a206da6ba32ac654a42dbb30707a265b9244e8240e050bc44950b0"
+      }
+    ],
+    "source_evidence": [
+      {
+        "symbol": "EMBASSY",
+        "seq_id": "106812865",
+        "attachment_path": "artifacts/nse-shareholding-announcements/attachments/EMBASSY_106812865_bf299766b4a206da.pdf",
+        "attachment_sha256": "bf299766b4a206da6ba32ac654a42dbb30707a265b9244e8240e050bc44950b0"
+      },
+      {
+        "symbol": "BIRET",
+        "seq_id": "106823639",
+        "attachment_path": "artifacts/nse-shareholding-announcements/attachments/BIRET_106823639_667ae75caf0d68d0.pdf",
+        "attachment_sha256": "667ae75caf0d68d0c3e703fa648cea693ce8e7f4783efe553ae39a2bce9fd8e1"
+      },
+      {
+        "symbol": "BAGMANE",
+        "seq_id": "106815675",
+        "attachment_path": "artifacts/nse-shareholding-announcements/attachments/BAGMANE_106815675_f8cedb88375d56ad.pdf",
+        "attachment_sha256": "f8cedb88375d56ad7a50453cbfd438cce150d8408d6da5cab98e30e5b81f9a4c"
+      }
+    ],
+    "output_path": "data/raw/shareholding/reit_unitholding_current.csv",
+    "output_sha256": "c40a017ba1ba0cf6d5dc62ad96868d25cf7e30aee0d23a0ac5c4d8fdff61353a",
+    "scope_boundary": "REIT unit ownership is kept separate from equity shareholding XBRL; no conversion of units to equity shares is performed."
   },
   "nse_shareholding_history_probe": {
     "publisher": "National Stock Exchange of India",
@@ -6504,9 +6667,25 @@
   "ownership_parsed_verified_count": 494,
   "ownership_coverage_pct": 98.8,
   "ownership_index_row_coverage_pct": 98.6,
+  "issuer_fallback_verified_count": 2,
+  "reit_unitholding_verified_count": 3,
+  "equity_ownership_evidence_coverage_count": 496,
+  "equity_ownership_evidence_coverage_pct": 99.2,
+  "ownership_evidence_coverage_count": 499,
+  "ownership_evidence_coverage_pct": 99.8,
+  "ownership_unresolved_count": 1,
   "ownership_status_counts": {
     "parsed_verified_identity": 494,
-    "not_found_in_current_master": 6,
+    "issuer_fallback_parsed_verified_identity": 1,
+    "not_found_in_current_master": 1,
+    "not_applicable_reit_unitholding": 3,
+    "not_applicable_index_placeholder": 1,
+    "issuer_fallback_total_only_verified_identity": 1
+  },
+  "reit_unitholding_status_counts": {
+    "not_applicable_equity_shareholding": 494,
+    "not_found_in_current_master": 3,
+    "parsed_verified_identity": 3,
     "not_applicable_index_placeholder": 1
   },
   "daily_join_status_counts": {
@@ -6568,6 +6747,7 @@
     }
   ],
   "participant_derivatives_as_of_trade_date": "2026-11-09",
+  "participant_derivatives_window_cutoff_date": "2026-11-09",
   "participant_derivatives_latest_observed_trade_date": "2026-11-17",
   "participant_oi_session_count": 60,
   "participant_volume_session_count": 60,
@@ -9744,8 +9924,8 @@
     }
   ],
   "composite_score_status": "not_scored_independent_evidence_dimensions_only",
-  "snapshot_path": "data/snapshots/fpi_evidence_blend/fpi_evidence_matrix_20261109_38edbda9415c0e97.csv",
-  "snapshot_manifest_path": "data/snapshots/fpi_evidence_blend/fpi_evidence_matrix_20261109_38edbda9415c_89191684542a.json",
+  "snapshot_path": "data/snapshots/fpi_evidence_blend/fpi_evidence_matrix_20261109_cd013cf0a5ddb18c.csv",
+  "snapshot_manifest_path": "data/snapshots/fpi_evidence_blend/fpi_evidence_matrix_20261109_cd013cf0a5dd_976834bc6dd5.json",
   "limitations": [
     "No composite score is issued; independent evidence dimensions are preserved without arbitrary weights.",
     "Demerger index placeholders included at zero price remain in the index-row count but are excluded from tradable-stock ownership coverage and FPI scoring.",
