@@ -756,7 +756,15 @@ def build_historical_features(root: Path = Path(".")) -> dict:
         ],
         "market_flow_session_count": len(fii),
         "market_flow_trade_dates": fii_dates,
-        "participant_derivatives_as_of_trade_date": latest["date"],
+        "participant_derivatives_as_of_trade_date": max(
+            [
+                item["date"]
+                for dataset in ("participant_oi", "participant_volume")
+                for item in participant_history[dataset]
+            ],
+            default=None,
+        ),
+        "participant_derivatives_window_cutoff_date": latest["date"],
         "participant_derivatives_latest_observed_trade_date": max(
             [
                 item["date"]
