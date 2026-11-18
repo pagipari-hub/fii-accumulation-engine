@@ -96,6 +96,9 @@ jobs:
           assert manifest["ownership_evidence_coverage_count"] == 499
           assert manifest["ownership_evidence_coverage_pct"] == 99.8
           assert manifest["ownership_unresolved_count"] == 1
+          assert manifest["reit_unitholding_status_counts"]["parsed_verified_identity"] == 3
+          assert manifest["reit_unitholding_status_counts"]["not_applicable_equity_shareholding"] == 496
+          assert manifest["reit_unitholding_status_counts"]["not_found_in_current_master"] == 1
           assert manifest["source_hashes"]["issuer_shareholding_fallback_csv"]
           assert manifest["source_hashes"]["reit_unitholding_csv"]
           assert manifest["composite_score_status"] == "not_scored_independent_evidence_dimensions_only"
