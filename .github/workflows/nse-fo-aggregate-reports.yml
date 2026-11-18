@@ -6,6 +6,9 @@ on:
     paths:
       - "src/fii_engine/nse_fo_aggregate_reports.py"
       - "tests/test_nse_fo_aggregate_reports.py"
+      - "src/fii_engine/historical_features.py"
+      - "tests/test_historical_features.py"
+      - "data/raw/nse_fo_historical/**"
       - "pyproject.toml"
       - ".github/workflows/nse-fo-aggregate-reports.yml"
       - ".gitignore"
@@ -29,7 +32,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: official-nse-fo-aggregate-reports
+  group: official-nse-fo-aggregate-reports-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -123,14 +126,18 @@ jobs:
           if archive_manifest.is_file():
               archive = json.loads(archive_manifest.read_text(encoding="utf-8"))
               assert manifest["participant_archive_complete_session_count"] == archive["complete_sessions"]
-              assert manifest["participant_oi_session_count"] >= archive["complete_sessions"]
-              assert manifest["participant_volume_session_count"] >= archive["complete_sessions"]
+              assert manifest["participant_oi_session_count"] == archive["complete_sessions"]
+              assert manifest["participant_volume_session_count"] == archive["complete_sessions"]
+              assert manifest["participant_derivatives_as_of_trade_date"] == manifest["as_of_trade_date"]
+              assert manifest["participant_derivatives_window_cutoff_date"] == manifest["as_of_trade_date"]
+              assert manifest["participant_derivatives_latest_observed_trade_date"] == "2026-11-17"
           print(json.dumps({
               "as_of_trade_date": manifest["as_of_trade_date"],
               "daily_stock_sessions": manifest["daily_stock_session_count"],
               "participant_archive_complete_sessions": manifest["participant_archive_complete_session_count"],
-              "participant_oi_sessions": manifest["participant_oi_session_count"],
-              "participant_volume_sessions": manifest["participant_volume_session_count"],
+              "participant_oi_sessions_used": manifest["participant_oi_session_count"],
+              "participant_volume_sessions_used": manifest["participant_volume_session_count"],
+              "participant_latest_observed_date_excluded_from_asof": manifest["participant_derivatives_latest_observed_trade_date"],
               "participant_archive_manifest_sha256": manifest["participant_archive_manifest_sha256"],
           }, indent=2))
           PY
