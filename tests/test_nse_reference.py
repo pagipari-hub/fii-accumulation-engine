@@ -186,7 +186,7 @@ def test_cm_security_master_rejects_missing_or_ambiguous_source():
         })
 
 
-def test_cm_master_does_not_treat_old_record_update_as_stale_file():
+def test_cm_master_decodes_record_update_with_mii_epoch():
     payload = (
         "TckrSymb,SctySrs,ISIN,DelFlg,UpdDt\n"
         "HDFCBANK,EQ,INE040A01034,N,1478457391\n"
