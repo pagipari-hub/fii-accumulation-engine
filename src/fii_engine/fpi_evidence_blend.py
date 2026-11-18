@@ -629,8 +629,20 @@ def build(root: Path = Path(".")) -> dict:
         "daily_stock_history_as_of": historical_manifest["as_of_trade_date"],
         "market_flow_session_count": historical_manifest["market_flow_session_count"],
         "market_flow_window_statuses": market_statuses,
+        "participant_derivatives_as_of_trade_date": historical_manifest.get(
+            "participant_derivatives_as_of_trade_date"
+        ),
+        "participant_derivatives_latest_observed_trade_date": historical_manifest.get(
+            "participant_derivatives_latest_observed_trade_date"
+        ),
         "participant_oi_session_count": historical_manifest["participant_oi_session_count"],
         "participant_volume_session_count": historical_manifest["participant_volume_session_count"],
+        "participant_oi_available_session_count": historical_manifest.get(
+            "participant_oi_available_session_count"
+        ),
+        "participant_volume_available_session_count": historical_manifest.get(
+            "participant_volume_available_session_count"
+        ),
         "participant_derivatives_window_statuses": participant_statuses,
         "nsdl_market_flow_context": nsdl_context,
         "bse_shareholding_fallback_probe": bse_fallback,
