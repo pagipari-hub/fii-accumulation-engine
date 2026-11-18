@@ -1,4 +1,5 @@
 from fii_engine.nse_reference import (
+    _save_catalogue_payload,
     parse_catalog,
     inspect_cm_quality,
     inspect_fo_quality,
@@ -153,3 +154,21 @@ def test_fo_contract_master_accepts_nseindia_in_archive_host():
     assert selected["download_url"].startswith(
         "https://nsearchives.nseindia.in/content/fo/"
     )
+
+
+
+def test_catalogue_payload_is_preserved_content_addressed_and_repeatable(tmp_path):
+    import hashlib
+
+    payload = b'{"currentDate":"06-Nov-2026","CurrentDay":[{"fileKey":"test"}]}'
+    first = _save_catalogue_payload(
+        tmp_path, "cm", "https://www.nseindia.com/api/daily-reports?key=CM", payload
+    )
+    second = _save_catalogue_payload(
+        tmp_path, "cm", "https://www.nseindia.com/api/daily-reports?key=CM", payload
+    )
+    assert first == second
+    saved = tmp_path / first["raw_path"]
+    assert saved.read_bytes() == payload
+    assert first["raw_sha256"] == hashlib.sha256(payload).hexdigest()
+    assert first["raw_bytes"] == len(payload)
