@@ -8,6 +8,9 @@ on:
       - "tests/test_nse_historical_backfill.py"
       - ".github/workflows/historical-stock-backfill.yml"
       - "scripts/retry_git_push.sh"
+      - "data/snapshots/daily_stock_features/**"
+      - "data/raw/daily_stock_features/**"
+      - "data/raw/nse_fo_historical/**"
   pull_request:
     paths:
       - "src/fii_engine/nse_historical_backfill.py"
