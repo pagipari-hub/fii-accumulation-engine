@@ -567,6 +567,20 @@ def _load_all_participant_snapshots(root: Path) -> tuple[dict[str, list[dict]], 
     return merged, archive_dates
 
 
+def _participant_history_through(
+    history: dict[str, list[dict]], cutoff_date: str
+) -> dict[str, list[dict]]:
+    """Keep rolling windows point-in-time safe; later reports are availability-only."""
+    cutoff = date.fromisoformat(cutoff_date)
+    return {
+        dataset: [
+            item for item in snapshots
+            if date.fromisoformat(item["date"]) <= cutoff
+        ]
+        for dataset, snapshots in history.items()
+    }
+
+
 def _participant_window(
     snapshots: list[dict],
     expected_sessions: int,
@@ -581,6 +595,7 @@ def _participant_window(
         category, instrument_group, option_type, source_side = key
         base = {
             "dataset": dataset,
+            "as_of_trade_date": snapshots[-1]["date"],
             "participant_category": category,
             "instrument_group": instrument_group,
             "option_type": option_type,
@@ -631,8 +646,13 @@ def build_historical_features(root: Path = Path(".")) -> dict:
     root = root.resolve()
     daily, daily_dates = _load_daily_snapshots(root)
     fii, fii_dates = _load_fii_snapshots(root)
-    participant_history, participant_archive_dates = _load_all_participant_snapshots(root)
+    participant_history_available, participant_archive_dates = _load_all_participant_snapshots(root)
     latest = daily[-1]
+    # Keep future participant reports in availability metadata, never in a
+    # rolling feature whose stock universe is as-of an earlier date.
+    participant_history = _participant_history_through(
+        participant_history_available, latest["date"]
+    )
     latest_rows = [latest["rows"][symbol] for symbol in sorted(latest["symbols"])]
 
     output_rows = []
@@ -693,7 +713,7 @@ def build_historical_features(root: Path = Path(".")) -> dict:
         return _sha256(payload)
 
     participant_fields = [
-        "dataset", "participant_category", "instrument_group", "option_type",
+        "dataset", "as_of_trade_date", "participant_category", "instrument_group", "option_type",
         "source_side", "window_sessions", "sessions_available", "scope", "status",
         "start_contracts", "end_contracts", "change_contracts", "change_pct",
         "total_traded_contracts", "average_daily_contracts",
@@ -735,10 +755,39 @@ def build_historical_features(root: Path = Path(".")) -> dict:
         ],
         "market_flow_session_count": len(fii),
         "market_flow_trade_dates": fii_dates,
+        "participant_derivatives_as_of_trade_date": max(
+            [
+                item["date"]
+                for dataset in ("participant_oi", "participant_volume")
+                for item in participant_history[dataset]
+            ],
+            default=None,
+        ),
+        "participant_derivatives_window_cutoff_date": latest["date"],
+        "participant_derivatives_latest_observed_trade_date": max(
+            [
+                item["date"]
+                for dataset in ("participant_oi", "participant_volume")
+                for item in participant_history_available[dataset]
+            ],
+            default=None,
+        ),
         "participant_oi_session_count": len(participant_history["participant_oi"]),
         "participant_oi_trade_dates": [item["date"] for item in participant_history["participant_oi"]],
+        "participant_oi_available_session_count": len(participant_history_available["participant_oi"]),
+        "participant_oi_available_trade_dates": [item["date"] for item in participant_history_available["participant_oi"]],
+        "participant_oi_latest_observed_trade_date": (
+            participant_history_available["participant_oi"][-1]["date"]
+            if participant_history_available["participant_oi"] else None
+        ),
         "participant_volume_session_count": len(participant_history["participant_volume"]),
         "participant_volume_trade_dates": [item["date"] for item in participant_history["participant_volume"]],
+        "participant_volume_available_session_count": len(participant_history_available["participant_volume"]),
+        "participant_volume_available_trade_dates": [item["date"] for item in participant_history_available["participant_volume"]],
+        "participant_volume_latest_observed_trade_date": (
+            participant_history_available["participant_volume"][-1]["date"]
+            if participant_history_available["participant_volume"] else None
+        ),
         "participant_archive_complete_session_count": len(participant_archive_dates),
         "participant_archive_complete_trade_dates": participant_archive_dates,
         "participant_archive_manifest_path": (
@@ -767,6 +816,7 @@ def build_historical_features(root: Path = Path(".")) -> dict:
             "Market-wide FII/FPI and DII aggregates are separate context and never stock-level attribution.",
             "FII/FPI publication status is preserved; rolling sums are not a final custodial series.",
             "Participant OI and volume are participant-category aggregates, never participant-by-stock positions.",
+            "Participant rolling windows are clipped to the stock-feature as-of date; later reports are retained as availability-only metadata.",
         ],
     }
     manifest_path = output_dir / "historical_features_current_manifest.json"
