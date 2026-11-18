@@ -549,8 +549,10 @@ def build(root: Path = Path(".")) -> dict:
         }
         for field in SHAREHOLDING_FIELDS:
             value = share.get(field, "")
-            if field == "ownership_data_type" and share_status not in equity_ownership_statuses:
-                value = ""
+            if field == "ownership_data_type":
+                value = value or ("nse_equity_shareholding" if share_status == "parsed_verified_identity" else "")
+                if share_status not in equity_ownership_statuses:
+                    value = ""
             if share_status not in equity_ownership_statuses and field in {
                 "fpi_category_i_shares", "fpi_category_ii_shares", "fpi_total_shares",
                 "fpi_category_i_ownership_percentage_points",
