@@ -59,7 +59,7 @@ _MII_EPOCH = datetime(1980, 1, 1, tzinfo=timezone.utc)
 
 
 def _mii_timestamp_date(value: str | int) -> date:
-    """Convert an NSE MII LONG time field (seconds from 1980-01-01 UTC)."""
+    """Convert NSE MII LONG time fields using Master Data Specification v1.6 (1980 epoch)."""
     try:
         seconds = int(value)
     except (TypeError, ValueError) as exc:
