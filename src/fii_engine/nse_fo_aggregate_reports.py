@@ -19,7 +19,7 @@ from urllib.parse import urlparse
 import xlrd
 
 from fii_engine.nse_fo_bhavcopy import (
-    ARCHIVE_HOST,
+    ARCHIVE_HOSTS,
     REPORT_PAGE,
     _get,
     _parse_catalogue_date,
@@ -89,7 +89,7 @@ def select_report(catalogue: dict, dataset: str) -> dict:
     parsed = urlparse(file_path or "")
     if (
         parsed.scheme != "https"
-        or parsed.hostname != ARCHIVE_HOST
+        or parsed.hostname not in ARCHIVE_HOSTS
         or parsed.query
         or parsed.fragment
     ):
