@@ -180,17 +180,42 @@ def select_cm_security_master(catalog: dict) -> dict:
 
 
 def select_fo_contract_master(catalog: dict) -> dict:
-    current_date = catalog["currentDate"]
-    matches = [
-        record for record in catalog["CurrentDay"]
-        if isinstance(record, dict)
-        and str(record.get("fileKey", "")).upper() == "NSE-FO-CONTRACT-CSV"
-    ]
-    if len(matches) != 1:
+    # As with the CM security master, the latest FO MII contract file can be
+    # listed under PreviousDay while the catalogue currentDate is the next day.
+    matches = []
+    for group_name in ("CurrentDay", "PreviousDay"):
+        for record in catalog.get(group_name, []):
+            if (
+                isinstance(record, dict)
+                and str(record.get("fileKey", "")).upper() == "NSE-FO-CONTRACT-CSV"
+            ):
+                matches.append({**record, "_catalogue_group": group_name})
+
+    if not matches:
         raise ValueError(
-            f"expected exactly one NSE-exclusive FO MII contract master; found {len(matches)}"
+            "NSE catalogue has no NSE-FO-CONTRACT-CSV record in CurrentDay or PreviousDay"
         )
-    selected = _validate_report_record(matches[0], "nse_fo_contract_master", current_date)
+    try:
+        latest_date = max(
+            datetime.strptime(item["tradingDate"], "%d-%b-%Y").date()
+            for item in matches
+        )
+    except (KeyError, TypeError, ValueError) as exc:
+        raise ValueError("NSE FO MII catalogue record has an invalid tradingDate") from exc
+
+    latest = [
+        item for item in matches
+        if datetime.strptime(item["tradingDate"], "%d-%b-%Y").date() == latest_date
+    ]
+    if len(latest) != 1:
+        raise ValueError(
+            "expected exactly one latest NSE-FO-CONTRACT-CSV record; "
+            f"found {len(latest)} for {latest_date.isoformat()}"
+        )
+
+    selected = _validate_report_record(
+        latest[0], "nse_fo_contract_master", latest[0]["tradingDate"]
+    )
     label = selected["display_name"].casefold()
     if "nse exclusive contract" not in label:
         raise ValueError("FO contract record is not explicitly the NSE-exclusive contract file")
