@@ -98,14 +98,30 @@ def test_cm_security_master_rejects_missing_or_ambiguous_source():
         select_cm_security_master(_catalog(cm, cm))
 
 
-def test_cm_master_flags_ten_year_old_update_timestamps():
+def test_cm_master_does_not_treat_old_record_update_as_stale_file():
     payload = (
         "TckrSymb,SctySrs,ISIN,DelFlg,UpdDt\n"
         "HDFCBANK,EQ,INE040A01034,N,1478457391\n"
     ).encode()
     result = inspect_cm_quality(payload, "06-Nov-2026")
-    assert result["latest_update_date_utc"] == "2016-11-06"
-    assert result["issues"]
+    assert result["latest_record_update_date_utc"] == "2016-11-06"
+    assert result["record_update_timestamp_semantics"] == (
+        "row_level_local_database_update_not_file_publication_time"
+    )
+    assert result["catalogue_trading_date"] == "2026-11-06"
+    assert result["issues"] == []
+
+
+def test_cm_master_quarantines_missing_active_security_identity():
+    import pytest
+
+    payload = (
+        "TckrSymb,SctySrs,ISIN,DelFlg,UpdDt\n"
+        ",EQ,,N,1478457391\n"
+    ).encode()
+    result = inspect_cm_quality(payload, "06-Nov-2026")
+    assert result["active_rows_missing_identity"] == 1
+    assert any("missing identity fields" in issue for issue in result["issues"])
 
 
 def test_fo_master_does_not_count_dummy_future_stock_contracts():
