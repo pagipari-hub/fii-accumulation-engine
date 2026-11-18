@@ -21,6 +21,33 @@ def _write_snapshot(path: Path, rows: list[dict]) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def _write_current_participant_snapshot(root: Path, dataset: str, day: str, contracts: int):
+    import io
+
+    row = {
+        "trade_date": day,
+        "dataset": dataset,
+        "metric": "open_interest_contracts" if dataset == "participant_oi" else "traded_contracts",
+        "unit": "contracts",
+        "participant_category": "FII",
+        "instrument_group": "stock_futures",
+        "option_type": "",
+        "source_side": "long",
+        "contracts": str(contracts),
+    }
+    buffer = io.StringIO(newline="")
+    writer = csv.DictWriter(buffer, fieldnames=list(row))
+    writer.writeheader()
+    writer.writerow(row)
+    payload = buffer.getvalue().encode("utf-8")
+    digest = hashlib.sha256(payload).hexdigest()
+    path = root / "data/snapshots/fno_aggregate_reports" / (
+        f"{dataset}_{day}_{digest[:16]}_p1.csv"
+    )
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(payload)
+
+
 def _daily_row(day: str, symbol: str, close: int, *, delivery="40", buildup="long_buildup"):
     return {
         "trade_date": day,
@@ -176,6 +203,7 @@ def test_participant_oi_and_volume_history_remain_category_aggregates():
     volume = _participant_window(volume_snapshots, 5, "participant_volume")[0]
 
     assert oi["status"] == "complete"
+    assert oi["as_of_trade_date"] == "2026-11-06"
     assert oi["start_contracts"] == "100"
     assert oi["end_contracts"] == "140"
     assert oi["change_contracts"] == "40"
@@ -370,3 +398,41 @@ def test_daily_snapshot_revision_selects_only_strictly_dominant_observation(tmp_
     assert dates[-1] == "2026-11-06"
     assert selected["path"] == str(original.relative_to(tmp_path))
     assert len(selected["superseded_snapshot_paths"]) == 1
+
+
+
+def test_participant_windows_exclude_reports_after_stock_as_of_date(tmp_path):
+    _build_history(tmp_path)
+    archive_days = [f"2026-11-0{day}" for day in range(2, 7)]
+    _write_archive_manifest(tmp_path, archive_days)
+    _write_current_participant_snapshot(
+        tmp_path, "participant_oi", "2026-11-17", 999
+    )
+    _write_current_participant_snapshot(
+        tmp_path, "participant_volume", "2026-11-17", 999
+    )
+
+    result = build_historical_features(tmp_path)
+
+    assert result["as_of_trade_date"] == "2026-11-06"
+    assert result["participant_derivatives_as_of_trade_date"] == "2026-11-06"
+    assert result["participant_derivatives_window_cutoff_date"] == "2026-11-06"
+    assert result["participant_derivatives_latest_observed_trade_date"] == "2026-11-17"
+    assert result["participant_oi_session_count"] == 5
+    assert result["participant_volume_session_count"] == 5
+    assert result["participant_oi_available_session_count"] == 6
+    assert result["participant_volume_available_session_count"] == 6
+    assert result["participant_oi_trade_dates"] == archive_days
+    assert result["participant_oi_available_trade_dates"][-1] == "2026-11-17"
+
+    path = tmp_path / "data/raw/historical_features/participant_derivatives_history_current.csv"
+    with path.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    oi = next(row for row in rows
+              if row["dataset"] == "participant_oi"
+              and row["participant_category"] == "FII"
+              and row["instrument_group"] == "stock_futures"
+              and row["source_side"] == "long"
+              and row["window_sessions"] == "5")
+    assert oi["as_of_trade_date"] == "2026-11-06"
+    assert oi["end_contracts"] == "140"
