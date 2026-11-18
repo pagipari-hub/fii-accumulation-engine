@@ -23,6 +23,10 @@ DEAL_MANIFEST = Path("data/raw/fpi_deal_attribution/fpi_deal_attribution_current
 DEAL_CSV = Path("data/raw/fpi_deal_attribution/fpi_deal_stock_summary_current.csv")
 SHAREHOLDING_MANIFEST = Path("data/raw/shareholding/current_manifest.json")
 SHAREHOLDING_CSV = Path("data/raw/shareholding/shareholding_ownership_current.csv")
+ISSUER_FALLBACK_MANIFEST = Path("data/raw/shareholding/issuer_shareholding_fallback_current_manifest.json")
+ISSUER_FALLBACK_CSV = Path("data/raw/shareholding/issuer_shareholding_fallback_current.csv")
+REIT_UNITHOLDING_MANIFEST = Path("data/raw/shareholding/reit_unitholding_current_manifest.json")
+REIT_UNITHOLDING_CSV = Path("data/raw/shareholding/reit_unitholding_current.csv")
 OUTPUT_CSV = Path("data/raw/fpi_evidence_blend/fpi_evidence_matrix_current.csv")
 OUTPUT_MANIFEST = Path("data/raw/fpi_evidence_blend/fpi_evidence_matrix_current_manifest.json")
 PARSER_VERSION = 1
@@ -55,7 +59,14 @@ SHAREHOLDING_FIELDS = [
     "overseas_depositories_shares", "foreign_direct_investment_shares",
     "foreign_venture_capital_investor_shares",
     "sovereign_wealth_funds_foreign_shares", "foreign_institutions_total_shares",
-    "fpi_reconciliation_status",
+    "fpi_reconciliation_status", "ownership_data_type", "source_url",
+    "source_content_type", "source_http_status", "source_raw_path", "source_sha256",
+    "identity_evidence_path", "identity_evidence_sha256", "category_breakdown_status",
+]
+REIT_FIELDS = [
+    "reporting_date", "ownership_data_type", "fpi_units",
+    "fpi_ownership_percentage_points", "reported_fpi_row_count",
+    "announcement_seq_id", "announcement_date", "attachment_path", "attachment_sha256",
 ]
 DEAL_FIELDS = [
     "deal_data_status", "deal_event_count", "unverified_deal_event_count",
@@ -87,6 +98,9 @@ OUTPUT_FIELDS = [
     *[f"{window}s_{field}" for window in (5, 20, 60) for field in HISTORICAL_METRICS],
     "shareholding_join_status",
     *[f"shareholding_{field}" for field in SHAREHOLDING_FIELDS],
+    "reit_unitholding_join_status",
+    *[f"reit_unitholding_{field}" for field in REIT_FIELDS],
+    "ownership_data_type",
     "deal_join_status",
     *[f"deal_{field}" for field in DEAL_FIELDS],
     "direct_fpi_client_gross_buy_candidate",
