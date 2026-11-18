@@ -83,6 +83,71 @@ jobs:
                   ]
                   print(f"{group} MII/SECURITY/CONTRACT RECORDS:")
                   print(json.dumps(selected, indent=2, ensure_ascii=False))
+          manifest_path = Path("artifacts/nse-reference/manifest.json")
+          if manifest_path.is_file():
+              manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+              fo = next(
+                  (item for item in manifest.get("captures", [])
+                   if item.get("dataset") == "nse_fo_contract_master"),
+                  None,
+              )
+              if fo:
+                  import csv
+                  import gzip
+                  import hashlib
+                  import io
+                  from urllib.request import Request, urlopen
+
+                  raw_path = Path(fo["raw_artifact_path"])
+                  with gzip.open(raw_path, "rt", encoding="utf-8-sig", newline="") as handle:
+                      reader = csv.DictReader(handle)
+                      samples = []
+                      stock_expiries = []
+                      for row in reader:
+                          if len(samples) < 8:
+                              samples.append({
+                                  key: row.get(key)
+                                  for key in (
+                                      "FinInstrmNm", "TckrSymb", "XpryDt",
+                                      "StockNm", "UndrlygInstrm", "FinInstrmTp"
+                                  )
+                              })
+                          if row.get("FinInstrmNm") in {"FUTSTK", "OPTSTK"}:
+                              value = row.get("XpryDt", "")
+                              if value.isdigit():
+                                  stock_expiries.append(int(value))
+                  print("FO CONTRACT MASTER SAMPLE ROWS:")
+                  print(json.dumps(samples, indent=2, ensure_ascii=False))
+                  print("FO STOCK EXPIRY RAW RANGE:", {
+                      "min": min(stock_expiries) if stock_expiries else None,
+                      "max": max(stock_expiries) if stock_expiries else None,
+                      "count": len(stock_expiries),
+                  })
+
+                  alternate_url = fo["download_url"].replace(
+                      "nsearchives.nseindia.in", "nsearchives.nseindia.com"
+                  )
+                  try:
+                      request = Request(
+                          alternate_url,
+                          headers={
+                              "User-Agent": "Mozilla/5.0",
+                              "Accept": "application/octet-stream,*/*",
+                          },
+                      )
+                      with urlopen(request, timeout=30) as response:
+                          alternate_payload = response.read()
+                          print("FO .COM HOST COMPARISON:", {
+                              "status": response.status,
+                              "bytes": len(alternate_payload),
+                              "sha256": hashlib.sha256(alternate_payload).hexdigest(),
+                              "matches_catalogue_host_payload": (
+                                  hashlib.sha256(alternate_payload).hexdigest()
+                                  == fo["raw_sha256"]
+                              ),
+                          })
+                  except Exception as exc:
+                      print("FO .COM HOST COMPARISON FAILED:", repr(exc))
           PY
 
       - name: Validate capture manifest and source files
