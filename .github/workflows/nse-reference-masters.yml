@@ -8,6 +8,12 @@ on:
       - "tests/test_nse_reference.py"
       - "config/sources.yaml"
       - ".github/workflows/nse-reference-masters.yml"
+  pull_request:
+    paths:
+      - "src/fii_engine/nse_reference.py"
+      - "tests/test_nse_reference.py"
+      - "config/sources.yaml"
+      - ".github/workflows/nse-reference-masters.yml"
   workflow_dispatch:
   schedule:
     # 20:05 IST, Monday to Friday, after the daily report catalogue is published.
