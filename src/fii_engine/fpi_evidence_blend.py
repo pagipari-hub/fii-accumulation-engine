@@ -383,6 +383,24 @@ def build(root: Path = Path(".")) -> dict:
     share_manifest, share_rows = _load_source(
         root, SHAREHOLDING_MANIFEST, SHAREHOLDING_CSV, "ownership_current_sha256"
     )
+    if (root / ISSUER_FALLBACK_MANIFEST).is_file() and (root / ISSUER_FALLBACK_CSV).is_file():
+        issuer_fallback_manifest, issuer_fallback_rows = _load_source(
+            root, ISSUER_FALLBACK_MANIFEST, ISSUER_FALLBACK_CSV, "output_sha256"
+        )
+    else:
+        issuer_fallback_manifest, issuer_fallback_rows = {"status": "not_available"}, []
+    if (root / REIT_UNITHOLDING_MANIFEST).is_file() and (root / REIT_UNITHOLDING_CSV).is_file():
+        reit_unitholding_manifest, reit_unitholding_rows = _load_source(
+            root, REIT_UNITHOLDING_MANIFEST, REIT_UNITHOLDING_CSV, "output_sha256"
+        )
+    else:
+        reit_unitholding_manifest, reit_unitholding_rows = {"status": "not_available"}, []
+    if issuer_fallback_manifest.get("status") == "complete":
+        if issuer_fallback_manifest.get("parsed_verified_count") != len(issuer_fallback_rows):
+            raise ValueError("issuer fallback parsed count does not match its CSV")
+    if reit_unitholding_manifest.get("status") == "complete":
+        if reit_unitholding_manifest.get("parsed_reit_count") != len(reit_unitholding_rows):
+            raise ValueError("REIT unitholding parsed count does not match its CSV")
     market_flow_path = _verify_hash(
         root, MARKET_FLOW_CSV, historical_manifest["market_output_sha256"], "market flow history"
     )
@@ -397,6 +415,12 @@ def build(root: Path = Path(".")) -> dict:
     historical_by_symbol = _unique_index(historical_rows, "symbol", "historical stock features")
     deal_by_symbol = _unique_index(deal_rows, "symbol", "FPI deal stock summary")
     share_by_symbol = _unique_index(share_rows, "symbol", "shareholding ownership")
+    issuer_fallback_by_symbol = _unique_index(
+        issuer_fallback_rows, "symbol", "issuer fallback ownership"
+    ) if issuer_fallback_rows else {}
+    reit_unitholding_by_symbol = _unique_index(
+        reit_unitholding_rows, "symbol", "REIT unitholding"
+    ) if reit_unitholding_rows else {}
 
     expected_count = len(universe_rows)
     for label, rows in (
