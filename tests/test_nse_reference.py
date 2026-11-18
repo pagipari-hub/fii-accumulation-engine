@@ -86,7 +86,7 @@ def test_fo_contract_master_rejects_ambiguous_latest_exact_file_key():
 def test_fo_contract_master_rejects_wrong_trading_date():
     import pytest
 
-    with pytest.raises(ValueError, match="does not match"):
+    with pytest.raises(ValueError, match="catalogue/filename date mismatch"):
         select_fo_contract_master(_catalog(_record(tradingDate="05-Nov-2026")))
 
 
