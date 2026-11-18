@@ -192,7 +192,7 @@ def test_cm_master_does_not_treat_old_record_update_as_stale_file():
         "HDFCBANK,EQ,INE040A01034,N,1478457391\n"
     ).encode()
     result = inspect_cm_quality(payload, "06-Nov-2026")
-    assert result["latest_record_update_date_utc"] == "2016-11-06"
+    assert result["latest_record_update_date_utc"] == "2026-11-06"
     assert result["record_update_timestamp_semantics"] == (
         "row_level_local_database_update_not_file_publication_time"
     )
@@ -215,7 +215,7 @@ def test_cm_master_quarantines_missing_active_security_identity():
 def test_fo_master_does_not_count_dummy_future_stock_contracts():
     payload = (
         "FinInstrmNm,TckrSymb,XpryDt,DelFlg,PrtdToTrad,TradgStsNrmlMkt,ElgbltyNrmlMkt\n"
-        "OPTSTK,HDFCBANK,1483021800,N,1,2,1\n"
+        "OPTSTK,HDFCBANK,1200000000,N,1,2,1\n"
         "FUTSTK,011NSETEST,1795876200,N,0,2,1\n"
     ).encode()
     result = inspect_fo_quality(payload, "06-Nov-2026")
@@ -227,9 +227,10 @@ def test_fo_master_does_not_count_dummy_future_stock_contracts():
 def test_fo_master_accepts_non_test_future_tradable_stock_contract():
     payload = (
         "FinInstrmNm,TckrSymb,XpryDt,DelFlg,PrtdToTrad,TradgStsNrmlMkt,ElgbltyNrmlMkt\n"
-        "FUTSTK,HDFCBANK,1795876200,N,1,2,1\n"
+        "FUTSTK,HDFCBANK,1485301800,N,1,2,1\n"
     ).encode()
     result = inspect_fo_quality(payload, "06-Nov-2026")
+    assert result["latest_stock_expiry_date_utc"] == "2027-01-25"
     assert result["stock_contract_rows_expiring_on_or_after_catalogue_date"] == 1
     assert result["issues"] == []
 
@@ -259,3 +260,9 @@ def test_catalogue_payload_is_preserved_content_addressed_and_repeatable(tmp_pat
     assert saved.read_bytes() == payload
     assert first["raw_sha256"] == hashlib.sha256(payload).hexdigest()
     assert first["raw_bytes"] == len(payload)
+
+
+def test_mii_epoch_is_1980_not_unix_1970():
+    from fii_engine.nse_reference import _mii_timestamp_date
+
+    assert _mii_timestamp_date(1483021800).isoformat() == "2026-12-29"
