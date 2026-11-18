@@ -131,16 +131,21 @@ def test_mii_catalogue_filename_date_must_match_trading_date():
 def test_cm_security_master_rejects_missing_or_ambiguous_source():
     import pytest
 
-    with pytest.raises(ValueError, match="exactly one"):
+    with pytest.raises(ValueError, match="no NSE-CM-SECURITY-CSV"):
         select_cm_security_master(_catalog())
     cm = {
+        "fileKey": "NSE-CM-SECURITY-CSV",
         "fileActlName": "NSE_CM_security_06112026.csv.gz",
-        "filePath": "https://nsearchives.nseindia.com/content/equities/",
+        "filePath": "https://nsearchives.nseindia.com/content/cm/",
         "tradingDate": "06-Nov-2026",
         "displayName": "CM - MII - Security File (.gz) (NSE Listed securities)",
     }
-    with pytest.raises(ValueError, match="exactly one"):
-        select_cm_security_master(_catalog(cm, cm))
+    with pytest.raises(ValueError, match="exactly one latest"):
+        select_cm_security_master({
+            "currentDate": "07-Nov-2026",
+            "CurrentDay": [cm],
+            "PreviousDay": [cm],
+        })
 
 
 def test_cm_master_does_not_treat_old_record_update_as_stale_file():
