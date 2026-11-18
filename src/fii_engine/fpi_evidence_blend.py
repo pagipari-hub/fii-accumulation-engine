@@ -681,6 +681,16 @@ def build(root: Path = Path(".")) -> dict:
         "fpi_deal_attribution_manifest": _sha256((root / DEAL_MANIFEST).read_bytes()),
         "cdsl_registry_snapshot": deal_manifest["registry_snapshot_sha256"],
         "shareholding_ownership": share_manifest["ownership_current_sha256"],
+        "issuer_shareholding_fallback_csv": issuer_fallback_manifest.get("output_sha256"),
+        "issuer_shareholding_fallback_manifest": (
+            _sha256((root / ISSUER_FALLBACK_MANIFEST).read_bytes())
+            if (root / ISSUER_FALLBACK_MANIFEST).is_file() else None
+        ),
+        "reit_unitholding_csv": reit_unitholding_manifest.get("output_sha256"),
+        "reit_unitholding_manifest": (
+            _sha256((root / REIT_UNITHOLDING_MANIFEST).read_bytes())
+            if (root / REIT_UNITHOLDING_MANIFEST).is_file() else None
+        ),
         "shareholding_identity_crosswalk": (
             share_manifest.get("identity_crosswalk") or {}
         ).get("sha256"),
@@ -741,6 +751,8 @@ def build(root: Path = Path(".")) -> dict:
         "ownership_reporting_date": share_manifest.get("latest_reporting_date"),
         "nsdl_market_flow_context": nsdl_context,
         "bse_shareholding_fallback_probe": bse_fallback,
+        "issuer_shareholding_fallback_manifest": issuer_fallback_manifest,
+        "reit_unitholding_manifest": reit_unitholding_manifest,
         "nse_shareholding_history_probe": nse_history,
         "nse_shareholding_unitholding_announcements_probe": nse_announcements,
         "identity_crosswalk_candidate_count": (share_manifest.get("identity_crosswalk") or {}).get("candidate_count"),
@@ -754,7 +766,46 @@ def build(root: Path = Path(".")) -> dict:
         "ownership_index_row_coverage_pct": round(
             ownership_status_counts["parsed_verified_identity"] / len(output_rows) * 100, 2
         ),
+        "issuer_fallback_verified_count": (
+            ownership_status_counts["issuer_fallback_parsed_verified_identity"]
+            + ownership_status_counts["issuer_fallback_total_only_verified_identity"]
+        ),
+        "reit_unitholding_verified_count": reit_unitholding_status_counts["parsed_verified_identity"],
+        "equity_ownership_evidence_coverage_count": (
+            ownership_status_counts["parsed_verified_identity"]
+            + ownership_status_counts["issuer_fallback_parsed_verified_identity"]
+            + ownership_status_counts["issuer_fallback_total_only_verified_identity"]
+        ),
+        "equity_ownership_evidence_coverage_pct": round(
+            (
+                ownership_status_counts["parsed_verified_identity"]
+                + ownership_status_counts["issuer_fallback_parsed_verified_identity"]
+                + ownership_status_counts["issuer_fallback_total_only_verified_identity"]
+            ) / (len(output_rows) - len(placeholders)) * 100, 2
+        ),
+        "ownership_evidence_coverage_count": (
+            ownership_status_counts["parsed_verified_identity"]
+            + ownership_status_counts["issuer_fallback_parsed_verified_identity"]
+            + ownership_status_counts["issuer_fallback_total_only_verified_identity"]
+            + reit_unitholding_status_counts["parsed_verified_identity"]
+        ),
+        "ownership_evidence_coverage_pct": round(
+            (
+                ownership_status_counts["parsed_verified_identity"]
+                + ownership_status_counts["issuer_fallback_parsed_verified_identity"]
+                + ownership_status_counts["issuer_fallback_total_only_verified_identity"]
+                + reit_unitholding_status_counts["parsed_verified_identity"]
+            ) / (len(output_rows) - len(placeholders)) * 100, 2
+        ),
+        "ownership_unresolved_count": (
+            len(output_rows) - len(placeholders)
+            - ownership_status_counts["parsed_verified_identity"]
+            - ownership_status_counts["issuer_fallback_parsed_verified_identity"]
+            - ownership_status_counts["issuer_fallback_total_only_verified_identity"]
+            - reit_unitholding_status_counts["parsed_verified_identity"]
+        ),
         "ownership_status_counts": dict(ownership_status_counts),
+        "reit_unitholding_status_counts": dict(reit_unitholding_status_counts),
         "daily_join_status_counts": dict(daily_join_counts),
         "historical_join_status_counts": dict(historical_join_counts),
         "deal_status_counts": dict(deal_status_counts),
