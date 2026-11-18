@@ -11,7 +11,7 @@ import gzip
 import hashlib
 import json
 import re
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from html import unescape
 from pathlib import Path
 from urllib.error import HTTPError, URLError
@@ -53,6 +53,23 @@ def _get(url: str, referer: str, accept: str, timeout: int = 45) -> bytes:
 
 def _clean_text(value: str) -> str:
     return " ".join(unescape(re.sub(r"<[^>]*>", " ", value)).split())
+
+
+_MII_EPOCH = datetime(1980, 1, 1, tzinfo=timezone.utc)
+
+
+def _mii_timestamp_date(value: str | int) -> datetime.date:
+    """Convert an NSE MII LONG time field (seconds from 1980-01-01 UTC)."""
+    try:
+        seconds = int(value)
+    except (TypeError, ValueError) as exc:
+        raise ValueError(f"invalid NSE MII timestamp: {value!r}") from exc
+    if seconds <= 0:
+        raise ValueError(f"invalid NSE MII timestamp: {value!r}")
+    try:
+        return (_MII_EPOCH + timedelta(seconds=seconds)).date()
+    except OverflowError as exc:
+        raise ValueError(f"NSE MII timestamp is out of range: {value!r}") from exc
 
 
 def _save_catalogue_payload(
@@ -253,7 +270,7 @@ def inspect_cm_quality(expanded: bytes, trading_date: str) -> dict:
         raw_update = row.get("UpdDt", "").strip()
         if raw_update.isdigit() and int(raw_update) > 0:
             try:
-                updates.append(datetime.fromtimestamp(int(raw_update), tz=timezone.utc).date())
+                updates.append(_mii_timestamp_date(int(raw_update)))
             except (OverflowError, OSError, ValueError):
                 continue
 
@@ -315,9 +332,7 @@ def inspect_fo_quality(expanded: bytes, trading_date: str) -> dict:
         raw_expiry = row.get("XpryDt", "")
         if not raw_expiry.isdigit() or int(raw_expiry) <= 0:
             continue
-        expiry = datetime.fromtimestamp(
-            int(raw_expiry), tz=timezone.utc
-        ).date()
+        expiry = _mii_timestamp_date(int(raw_expiry))
         expiries.append(expiry)
         if expiry >= report_date and row.get("PrtdToTrad") == "1":
             future_rows += 1
