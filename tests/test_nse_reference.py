@@ -66,22 +66,66 @@ def test_fo_contract_master_rejects_ambiguous_records():
         select_fo_contract_master(_catalog(_record(), _record()))
 
 
-def test_selects_nse_listed_cm_security_master_not_interop_variant():
+def test_selects_nse_listed_cm_security_master_from_previous_day_not_interop():
     cm = {
-        "fileKey": "CM-MII-SECURITY-CSV",
-        "fileActlName": "NSE_CM_security_06112026.csv.gz",
-        "filePath": "https://nsearchives.nseindia.com/content/equities/",
-        "tradingDate": "06-Nov-2026",
+        "fileKey": "NSE-CM-SECURITY-CSV",
+        "fileActlName": "NSE_CM_security_17112026.csv.gz",
+        "filePath": "https://nsearchives.nseindia.in/content/cm/",
+        "tradingDate": "17-Nov-2026",
         "displayName": "CM - MII - Security File (.gz) (NSE Listed securities)",
     }
     interop = {
         **cm,
-        "filePath": "https://nsearchives.nseindia.com/content/equities/interop/",
+        "fileKey": "BSE-CM-SECURITY-CSV",
+        "filePath": "https://nsearchives.nseindia.in/content/cm/interop/",
         "displayName": "CM - MII - Security File (.gz) (NSE Listed and BSE Exclusive securities)",
     }
-    selected = select_cm_security_master(_catalog(interop, cm))
+    catalog = {
+        "currentDate": "18-Nov-2026",
+        "CurrentDay": [],
+        "PreviousDay": [interop, cm],
+    }
+    selected = select_cm_security_master(catalog)
     assert selected["dataset"] == "nse_cm_security_master"
+    assert selected["trading_date"] == "17-Nov-2026"
+    assert selected["catalogue_group"] == "PreviousDay"
     assert "NSE Listed securities" in selected["display_name"]
+
+
+def test_cm_master_rejects_ambiguous_latest_exact_file_key():
+    import pytest
+
+    cm = {
+        "fileKey": "NSE-CM-SECURITY-CSV",
+        "fileActlName": "NSE_CM_security_17112026.csv.gz",
+        "filePath": "https://nsearchives.nseindia.in/content/cm/",
+        "tradingDate": "17-Nov-2026",
+        "displayName": "CM - MII - Security File (.gz) (NSE Listed securities)",
+    }
+    with pytest.raises(ValueError, match="exactly one latest"):
+        select_cm_security_master({
+            "currentDate": "18-Nov-2026",
+            "CurrentDay": [cm],
+            "PreviousDay": [cm],
+        })
+
+
+def test_mii_catalogue_filename_date_must_match_trading_date():
+    import pytest
+
+    cm = {
+        "fileKey": "NSE-CM-SECURITY-CSV",
+        "fileActlName": "NSE_CM_security_16112026.csv.gz",
+        "filePath": "https://nsearchives.nseindia.in/content/cm/",
+        "tradingDate": "17-Nov-2026",
+        "displayName": "CM - MII - Security File (.gz) (NSE Listed securities)",
+    }
+    with pytest.raises(ValueError, match="catalogue/filename date mismatch"):
+        select_cm_security_master({
+            "currentDate": "18-Nov-2026",
+            "CurrentDay": [],
+            "PreviousDay": [cm],
+        })
 
 
 def test_cm_security_master_rejects_missing_or_ambiguous_source():
