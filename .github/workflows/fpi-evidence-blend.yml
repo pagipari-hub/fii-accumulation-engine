@@ -90,6 +90,14 @@ jobs:
           assert manifest["status"] == "complete"
           assert manifest["stock_count"] == 501
           assert len(rows) == 501
+          assert manifest["ownership_parsed_verified_count"] == 494
+          assert manifest["issuer_fallback_verified_count"] == 2
+          assert manifest["reit_unitholding_verified_count"] == 3
+          assert manifest["ownership_evidence_coverage_count"] == 499
+          assert manifest["ownership_evidence_coverage_pct"] == 99.8
+          assert manifest["ownership_unresolved_count"] == 1
+          assert manifest["source_hashes"]["issuer_shareholding_fallback_csv"]
+          assert manifest["source_hashes"]["reit_unitholding_csv"]
           assert manifest["composite_score_status"] == "not_scored_independent_evidence_dimensions_only"
           assert manifest["universe_snapshot_manifest_path"]
           assert manifest["source_hashes"]["daily_stock_features"]
@@ -121,6 +129,11 @@ jobs:
               "ownership_reporting_date": manifest["ownership_reporting_date"],
               "ownership_parsed_verified_count": manifest["ownership_parsed_verified_count"],
               "ownership_coverage_pct": manifest["ownership_coverage_pct"],
+              "issuer_fallback_verified_count": manifest["issuer_fallback_verified_count"],
+              "reit_unitholding_verified_count": manifest["reit_unitholding_verified_count"],
+              "ownership_evidence_coverage_count": manifest["ownership_evidence_coverage_count"],
+              "ownership_evidence_coverage_pct": manifest["ownership_evidence_coverage_pct"],
+              "ownership_unresolved_count": manifest["ownership_unresolved_count"],
               "market_flow_session_count": manifest["market_flow_session_count"],
               "participant_oi_session_count": manifest["participant_oi_session_count"],
               "participant_volume_session_count": manifest["participant_volume_session_count"],
