@@ -296,9 +296,55 @@ def _options_context(row: dict) -> str:
 
 
 def _ownership_context(row: dict) -> str:
-    if row.get("shareholding_join_status") == "parsed_verified_identity":
+    if row.get("ownership_data_type") == "reit_unitholding_pattern":
+        return "2026_quarterly_fpi_unitholding_baseline_available;units_not_equity_shares"
+    status = row.get("shareholding_join_status", "")
+    if status == "parsed_verified_identity":
         return "2026_quarterly_fpi_ownership_baseline_available;no_prior_quarter_change_series"
+    if status == "issuer_fallback_parsed_verified_identity":
+        return "2026_quarterly_fpi_ownership_baseline_available_from_issuer_filing;no_prior_quarter_change_series"
+    if status == "issuer_fallback_total_only_verified_identity":
+        return "2026_quarterly_fpi_total_ownership_available;category_split_unavailable"
     return "quarterly_fpi_ownership_baseline_unavailable_or_unverified"
+
+
+def _issuer_fallback_to_shareholding(record: dict) -> dict:
+    category_status = record.get("category_breakdown_status", "")
+    total_only = category_status != "reported_category_i_and_ii"
+    return {
+        "reporting_date": record.get("reporting_date", ""),
+        "submission_date": "",
+        "broadcast_date": "",
+        "system_date": "",
+        "record_id": "",
+        "revised_data": "",
+        "revision_date": "",
+        "identity_status": "verified",
+        "identity_join_method": record.get("identity_join_method", ""),
+        "filing_status": "publisher_total_only_category_split_unavailable" if total_only else "parsed",
+        "fpi_category_i_shares": record.get("fpi_category_i_shares") or "",
+        "fpi_category_ii_shares": record.get("fpi_category_ii_shares") or "",
+        "fpi_total_shares": record.get("fpi_total_shares") or "",
+        "fpi_category_i_ownership_percentage_points": record.get("fpi_category_i_ownership_percentage_points") or "",
+        "fpi_category_ii_ownership_percentage_points": record.get("fpi_category_ii_ownership_percentage_points") or "",
+        "fpi_total_ownership_percentage_points": record.get("fpi_total_ownership_percentage_points") or "",
+        "other_foreign_institution_shares": "",
+        "overseas_depositories_shares": "",
+        "foreign_direct_investment_shares": "",
+        "foreign_venture_capital_investor_shares": "",
+        "sovereign_wealth_funds_foreign_shares": "",
+        "foreign_institutions_total_shares": "",
+        "fpi_reconciliation_status": "issuer_fallback_total_only_not_reconciled" if total_only else "issuer_fallback_publisher_reported",
+        "ownership_data_type": record.get("ownership_data_type", "issuer_published_equity_shareholding"),
+        "source_url": record.get("source_url", ""),
+        "source_content_type": record.get("source_content_type", ""),
+        "source_http_status": record.get("source_http_status", ""),
+        "source_raw_path": record.get("source_raw_path", ""),
+        "source_sha256": record.get("source_sha256", ""),
+        "identity_evidence_path": record.get("identity_evidence_path", ""),
+        "identity_evidence_sha256": record.get("identity_evidence_sha256", ""),
+        "category_breakdown_status": category_status,
+    }
 
 
 def _load_source(root: Path, manifest_path: Path, csv_path: Path, hash_key: str) -> tuple[dict, list[dict]]:
