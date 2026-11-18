@@ -449,10 +449,16 @@ def build(root: Path = Path(".")) -> dict:
         historical = historical_by_symbol[symbol]
         deal = deal_by_symbol[symbol]
         share = share_by_symbol[symbol]
+        issuer_fallback = issuer_fallback_by_symbol.get(symbol)
+        reit_unitholding = reit_unitholding_by_symbol.get(symbol)
+        reit_status = "not_found_in_current_master"
+        ownership_data_type = "unavailable"
 
         placeholder = placeholders.get(symbol)
         if placeholder:
             daily_status = historical_status = deal_status = share_status = "not_applicable_index_placeholder"
+            reit_status = "not_applicable_index_placeholder"
+            ownership_data_type = "not_applicable_index_placeholder"
         else:
             daily_status = "isin_exact" if daily.get("isin", "").strip().upper() == isin else "isin_mismatch"
             historical_status = (
@@ -467,8 +473,10 @@ def build(root: Path = Path(".")) -> dict:
             if share_identity == "verified" and share.get("isin", "").strip().upper() == isin:
                 if share.get("filing_status") == "parsed":
                     share_status = "parsed_verified_identity"
+                    ownership_data_type = "nse_equity_shareholding"
                 else:
                     share_status = "verified_identity_filing_not_parsed"
+                    ownership_data_type = "nse_equity_shareholding"
             elif share_identity == "isin_mismatch":
                 share_status = "isin_mismatch"
             elif share_identity == "identity_unverified":
@@ -479,6 +487,28 @@ def build(root: Path = Path(".")) -> dict:
                 share_status = "not_applicable_index_placeholder"
             else:
                 share_status = "ownership_identity_or_join_unavailable"
+
+            if share_status != "parsed_verified_identity" and issuer_fallback:
+                if issuer_fallback.get("isin", "").strip().upper() != isin:
+                    raise ValueError(f"issuer fallback ISIN mismatch for {symbol}")
+                share = _issuer_fallback_to_shareholding(issuer_fallback)
+                ownership_data_type = "issuer_published_equity_shareholding"
+                share_status = (
+                    "issuer_fallback_parsed_verified_identity"
+                    if issuer_fallback.get("category_breakdown_status") == "reported_category_i_and_ii"
+                    else "issuer_fallback_total_only_verified_identity"
+                )
+            elif share_status != "parsed_verified_identity" and reit_unitholding:
+                if reit_unitholding.get("isin", "").strip().upper() != isin:
+                    raise ValueError(f"REIT unitholding ISIN mismatch for {symbol}")
+                share = {}
+                share_status = "not_applicable_reit_unitholding"
+                reit_status = "parsed_verified_identity"
+                ownership_data_type = "reit_unitholding_pattern"
+            elif share_status == "parsed_verified_identity":
+                reit_status = "not_applicable_equity_shareholding"
+            else:
+                reit_status = "not_found_in_current_master"
 
         daily_join_counts[daily_status] += 1
         historical_join_counts[historical_status] += 1
