@@ -529,6 +529,8 @@ def build(root: Path = Path(".")) -> dict:
             "daily_join_status": daily_status,
             "historical_join_status": historical_status,
             "shareholding_join_status": share_status,
+            "reit_unitholding_join_status": reit_status,
+            "ownership_data_type": ownership_data_type,
             "deal_join_status": deal_status,
         }
 
@@ -538,9 +540,16 @@ def build(root: Path = Path(".")) -> dict:
             for field in HISTORICAL_METRICS:
                 key = f"{window}s_{field}"
                 row[key] = historical.get(key, "") if historical_status == "isin_exact" else ""
+        equity_ownership_statuses = {
+            "parsed_verified_identity",
+            "issuer_fallback_parsed_verified_identity",
+            "issuer_fallback_total_only_verified_identity",
+        }
         for field in SHAREHOLDING_FIELDS:
             value = share.get(field, "")
-            if share_status != "parsed_verified_identity" and field in {
+            if field == "ownership_data_type" and share_status not in equity_ownership_statuses:
+                value = ""
+            if share_status not in equity_ownership_statuses and field in {
                 "fpi_category_i_shares", "fpi_category_ii_shares", "fpi_total_shares",
                 "fpi_category_i_ownership_percentage_points",
                 "fpi_category_ii_ownership_percentage_points",
@@ -548,6 +557,12 @@ def build(root: Path = Path(".")) -> dict:
             }:
                 value = ""
             row[f"shareholding_{field}"] = value
+        for field in REIT_FIELDS:
+            row[f"reit_unitholding_{field}"] = (
+                reit_unitholding.get(field, "")
+                if reit_status == "parsed_verified_identity" and reit_unitholding
+                else ""
+            )
         for field in DEAL_FIELDS:
             row[f"deal_{field}"] = deal.get(field, "") if deal_status == "universe_isin_exact" else ""
 
