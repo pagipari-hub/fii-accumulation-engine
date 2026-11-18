@@ -43,6 +43,44 @@ def test_selects_exact_nse_exclusive_fo_contract_master():
     assert selected["file_key"] == "NSE-FO-CONTRACT-CSV"
     assert selected["filename"] == "NSE_FO_contract_06112026.csv.gz"
     assert selected["trading_date"] == "06-Nov-2026"
+    assert selected["catalogue_group"] == "CurrentDay"
+
+
+def test_selects_fo_contract_master_from_previous_day_and_excludes_interop():
+    record = _record(
+        filePath="https://nsearchives.nseindia.in/content/fo/",
+        tradingDate="17-Nov-2026",
+        fileActlName="NSE_FO_contract_17112026.csv.gz",
+    )
+    interop = _record(
+        fileKey="NSEBSE-FO-CONTRACT-CSV",
+        filePath="https://nsearchives.nseindia.in/content/fo/interop/",
+        tradingDate="17-Nov-2026",
+        fileActlName="NSE_FO_contract_17112026.csv.gz",
+        displayName="F&O-MII – Contract File (.gz) (NSE and BSE Exclusive Contract)",
+    )
+    selected = select_fo_contract_master({
+        "currentDate": "18-Nov-2026",
+        "CurrentDay": [],
+        "PreviousDay": [interop, record],
+    })
+    assert selected["trading_date"] == "17-Nov-2026"
+    assert selected["catalogue_group"] == "PreviousDay"
+
+
+def test_fo_contract_master_rejects_ambiguous_latest_exact_file_key():
+    import pytest
+
+    record = _record(
+        tradingDate="17-Nov-2026",
+        fileActlName="NSE_FO_contract_17112026.csv.gz",
+    )
+    with pytest.raises(ValueError, match="exactly one latest"):
+        select_fo_contract_master({
+            "currentDate": "18-Nov-2026",
+            "CurrentDay": [record],
+            "PreviousDay": [record],
+        })
 
 
 def test_fo_contract_master_rejects_wrong_trading_date():
