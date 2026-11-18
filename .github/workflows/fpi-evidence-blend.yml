@@ -102,7 +102,8 @@ jobs:
           assert historical["participant_archive_complete_session_count"] == 60
           assert historical["participant_oi_session_count"] == 60
           assert historical["participant_volume_session_count"] == 60
-          assert historical["participant_derivatives_as_of_trade_date"] == historical["as_of_trade_date"]
+          assert historical["participant_derivatives_window_cutoff_date"] == historical["as_of_trade_date"]
+          assert historical["participant_derivatives_as_of_trade_date"] <= historical["participant_derivatives_window_cutoff_date"]
           assert historical["participant_derivatives_latest_observed_trade_date"] >= historical["participant_derivatives_as_of_trade_date"]
           assert historical["participant_oi_available_session_count"] >= 60
           assert historical["participant_volume_available_session_count"] >= 60
@@ -125,6 +126,7 @@ jobs:
               "participant_volume_session_count": manifest["participant_volume_session_count"],
               "participant_archive_complete_session_count": historical["participant_archive_complete_session_count"],
               "participant_derivatives_as_of_trade_date": historical["participant_derivatives_as_of_trade_date"],
+              "participant_derivatives_window_cutoff_date": historical["participant_derivatives_window_cutoff_date"],
               "participant_derivatives_latest_observed_trade_date": historical["participant_derivatives_latest_observed_trade_date"],
               "nsdl_fpi_observed_days": nsdl["fpi"]["observed_days"],
               "nsdl_dii_observed_days": nsdl["dii"]["observed_days"],
