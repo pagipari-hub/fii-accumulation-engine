@@ -106,7 +106,7 @@ def _validate_report_record(record: dict, dataset: str, current_date: str) -> di
     filename = record["fileActlName"].strip()
     if Path(filename).name != filename or not filename.lower().endswith(".csv.gz"):
         raise ValueError(f"{dataset}: unexpected report filename {filename!r}")
-    filename_match = re.search(r"_(\\d{8})\\.csv\\.gz$", filename, re.IGNORECASE)
+    filename_match = re.search(r"_(\d{8})\.csv\.gz$", filename, re.IGNORECASE)
     if not filename_match:
         raise ValueError(f"{dataset}: report filename has no dated MII suffix: {filename!r}")
     filename_date = datetime.strptime(filename_match.group(1), "%d%m%Y").date()
