@@ -5,6 +5,7 @@ from pathlib import Path
 
 from fii_engine.cdsl_fpi_registry import normalize_registry_name
 from fii_engine.fpi_deal_classifier import (
+    _provenance_fingerprint,
     _classify_event,
     _deduplicate_cross_report_rows,
     _stock_summary,
@@ -331,3 +332,36 @@ def test_classifier_writes_auditable_outputs_and_deduplicates_cross_report(tmp_p
     assert result["universe_row_count"] == 501
     assert result["nifty500_snapshot_verified_event_count"] == 1
     assert result["universe_effective_date_status"] == "exact constituent effective date not supplied here"
+
+
+
+def test_provenance_fingerprint_changes_when_source_manifest_metadata_changes():
+    base = {
+        "parser_version": 1,
+        "lookback_days": 7,
+        "start_date": date(2026, 10, 30),
+        "end_date": date(2026, 11, 6),
+        "registry_sha256": "registry-hash",
+        "universe_sha256": "universe-hash",
+        "source_refs": [{
+            "manifest_path": "data/raw/bulk_block_deals/manifests/bulk_2026-11-06.json",
+            "manifest_sha256": "manifest-hash-a",
+            "snapshot_path": "data/snapshots/bulk_2026-11-06.csv",
+            "snapshot_sha256": "snapshot-hash",
+            "deal_type": "bulk",
+            "trade_date": "2026-11-06",
+            "retrieved_at_utc": "2026-11-06T12:00:00Z",
+        }],
+    }
+    first = _provenance_fingerprint(**base)
+    assert _provenance_fingerprint(**base) == first
+
+    changed_source_metadata = {
+        **base,
+        "source_refs": [{
+            **base["source_refs"][0],
+            "manifest_sha256": "manifest-hash-b",
+            "retrieved_at_utc": "2026-11-07T12:00:00Z",
+        }],
+    }
+    assert _provenance_fingerprint(**changed_source_metadata) != first
