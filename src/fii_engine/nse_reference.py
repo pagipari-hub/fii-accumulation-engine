@@ -55,6 +55,29 @@ def _clean_text(value: str) -> str:
     return " ".join(unescape(re.sub(r"<[^>]*>", " ", value)).split())
 
 
+def _save_catalogue_payload(
+    output_dir: Path, dataset: str, url: str, payload: bytes
+) -> dict:
+    """Persist the exact catalogue response before any selector can fail."""
+    if not payload:
+        raise ValueError(f"{dataset}: NSE catalogue returned an empty payload")
+    digest = hashlib.sha256(payload).hexdigest()
+    directory = output_dir / "catalogue"
+    directory.mkdir(parents=True, exist_ok=True)
+    path = directory / f"{dataset}_{digest[:16]}.json"
+    if path.exists() and hashlib.sha256(path.read_bytes()).hexdigest() != digest:
+        raise RuntimeError(f"immutable NSE catalogue payload mismatch: {path}")
+    if not path.exists():
+        path.write_bytes(payload)
+    return {
+        "dataset": dataset,
+        "url": url,
+        "raw_path": str(path),
+        "raw_sha256": digest,
+        "raw_bytes": len(payload),
+    }
+
+
 def parse_catalog(payload: bytes) -> dict:
     try:
         data = json.loads(payload.decode("utf-8-sig"))
@@ -305,8 +328,27 @@ def ingest(output_dir: Path = Path("artifacts/nse-reference")) -> dict:
 
     cm_url = REPORT_API + "?" + urlencode({"key": "CM"})
     fo_url = REPORT_API + "?" + urlencode({"key": "FO"})
-    cm_catalog = parse_catalog(_get(cm_url, CM_REPORT_PAGE, "application/json,*/*"))
-    fo_catalog = parse_catalog(_get(fo_url, FO_REPORT_PAGE, "application/json,*/*"))
+    cm_payload = _get(cm_url, CM_REPORT_PAGE, "application/json,*/*")
+    fo_payload = _get(fo_url, FO_REPORT_PAGE, "application/json,*/*")
+
+    # Preserve the exact official catalogue responses before parsing or
+    # selecting. A selector failure must still leave inspectable evidence.
+    output_dir.mkdir(parents=True, exist_ok=True)
+    catalogue_refs = [
+        _save_catalogue_payload(output_dir, "cm", cm_url, cm_payload),
+        _save_catalogue_payload(output_dir, "fo", fo_url, fo_payload),
+    ]
+    (output_dir / "catalogue" / "probe_manifest.json").write_text(
+        json.dumps({
+            "publisher": "National Stock Exchange of India",
+            "retrieved_at_utc": datetime.now(timezone.utc).isoformat(),
+            "catalogue_responses": catalogue_refs,
+        }, indent=2) + "\\n",
+        encoding="utf-8",
+    )
+
+    cm_catalog = parse_catalog(cm_payload)
+    fo_catalog = parse_catalog(fo_payload)
 
     cm_record = select_cm_security_master(cm_catalog)
     fo_record = select_fo_contract_master(fo_catalog)
