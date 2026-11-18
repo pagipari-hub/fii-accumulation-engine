@@ -499,6 +499,7 @@ def build(root: Path = Path(".")) -> dict:
                     if issuer_fallback.get("category_breakdown_status") == "reported_category_i_and_ii"
                     else "issuer_fallback_total_only_verified_identity"
                 )
+                reit_status = "not_applicable_equity_shareholding"
             elif share_status != "parsed_verified_identity" and reit_unitholding:
                 if reit_unitholding.get("isin", "").strip().upper() != isin:
                     raise ValueError(f"REIT unitholding ISIN mismatch for {symbol}")
