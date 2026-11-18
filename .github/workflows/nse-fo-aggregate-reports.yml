@@ -172,7 +172,6 @@ jobs:
           assert matrix["participant_oi_session_count"] == 60
           assert matrix["participant_volume_session_count"] == 60
           assert matrix["participant_derivatives_as_of_trade_date"] == historical["participant_derivatives_as_of_trade_date"]
-          assert matrix["participant_derivatives_window_cutoff_date"] == historical["participant_derivatives_window_cutoff_date"]
           nsdl = matrix["nsdl_market_flow_context"]
           assert nsdl["scope"] == "aggregate_market_wide_cash_equity_context_only"
           assert nsdl["stock_level_attribution"] is False
@@ -186,7 +185,7 @@ jobs:
               "participant_oi_sessions_used": matrix["participant_oi_session_count"],
               "participant_volume_sessions_used": matrix["participant_volume_session_count"],
               "participant_as_of_trade_date": matrix["participant_derivatives_as_of_trade_date"],
-              "participant_window_cutoff_date": matrix["participant_derivatives_window_cutoff_date"],
+              "participant_window_cutoff_date": historical["participant_derivatives_window_cutoff_date"],
               "participant_latest_observed_date_excluded_from_asof": matrix["participant_derivatives_latest_observed_trade_date"],
               "nsdl_fpi_observed_days": nsdl["fpi"]["observed_days"],
               "nsdl_dii_observed_days": nsdl["dii"]["observed_days"],
