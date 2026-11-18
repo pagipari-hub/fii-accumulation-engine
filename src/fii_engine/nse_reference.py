@@ -11,7 +11,7 @@ import gzip
 import hashlib
 import json
 import re
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from html import unescape
 from pathlib import Path
 from urllib.error import HTTPError, URLError
@@ -58,7 +58,7 @@ def _clean_text(value: str) -> str:
 _MII_EPOCH = datetime(1980, 1, 1, tzinfo=timezone.utc)
 
 
-def _mii_timestamp_date(value: str | int) -> datetime.date:
+def _mii_timestamp_date(value: str | int) -> date:
     """Convert an NSE MII LONG time field (seconds from 1980-01-01 UTC)."""
     try:
         seconds = int(value)
