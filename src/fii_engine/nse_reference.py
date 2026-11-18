@@ -158,33 +158,58 @@ def _csv_rows(expanded: bytes, required: set[str], dataset: str) -> list[dict[st
 def inspect_cm_quality(expanded: bytes, trading_date: str) -> dict:
     required = {"TckrSymb", "SctySrs", "ISIN", "DelFlg", "UpdDt"}
     rows = _csv_rows(expanded, required, "CM security master")
-    updates = [
-        int(row["UpdDt"]) for row in rows
-        if row.get("UpdDt", "").isdigit() and int(row["UpdDt"]) > 0
-    ]
-    if not updates:
-        raise ValueError("CM security master has no parseable UpdDt values")
-    latest_update = datetime.fromtimestamp(max(updates), tz=timezone.utc).date()
     report_date = datetime.strptime(trading_date, "%d-%b-%Y").date()
+
+    # UpdDt is a per-security local database update timestamp, not the
+    # publication timestamp of the downloaded daily master file. Old values
+    # are therefore expected for unchanged securities and must not quarantine
+    # an otherwise current catalogue capture.
+    updates = []
+    for row in rows:
+        raw_update = row.get("UpdDt", "").strip()
+        if raw_update.isdigit() and int(raw_update) > 0:
+            try:
+                updates.append(datetime.fromtimestamp(int(raw_update), tz=timezone.utc).date())
+            except (OverflowError, OSError, ValueError):
+                continue
+
+    active_rows = [row for row in rows if row.get("DelFlg", "").strip().upper() == "N"]
+    invalid_delete_flags = sum(
+        row.get("DelFlg", "").strip().upper() not in {"N", "Y"} for row in rows
+    )
+    missing_identity_rows = sum(
+        not all(row.get(field, "").strip() for field in ("TckrSymb", "SctySrs", "ISIN"))
+        for row in active_rows
+    )
     test_rows = sum(
         "NSETEST" in row.get("TckrSymb", "").upper()
         or row.get("ISIN", "").upper().startswith("DUMMY")
         for row in rows
     )
+
     issues = []
-    if (report_date - latest_update).days > 365:
+    if not active_rows:
+        issues.append("CM security master contains no non-deleted securities")
+    if invalid_delete_flags:
+        issues.append(f"CM security master contains {invalid_delete_flags} invalid delete flags")
+    if missing_identity_rows:
         issues.append(
-            f"latest CM UpdDt {latest_update.isoformat()} is more than one year "
-            f"older than catalogue date {report_date.isoformat()}"
+            f"CM security master contains {missing_identity_rows} active rows with missing identity fields"
         )
+
     return {
         "row_count": len(rows),
-        "distinct_symbols": len({row["TckrSymb"] for row in rows if row.get("TckrSymb")}),
-        "latest_update_date_utc": latest_update.isoformat(),
+        "active_row_count": len(active_rows),
+        "distinct_symbols": len({row["TckrSymb"] for row in active_rows if row.get("TckrSymb")}),
+        "distinct_isins": len({row["ISIN"] for row in active_rows if row.get("ISIN")}),
+        "latest_record_update_date_utc": max(updates).isoformat() if updates else None,
+        "record_update_timestamp_semantics": "row_level_local_database_update_not_file_publication_time",
+        "catalogue_trading_date": report_date.isoformat(),
+        "invalid_delete_flag_rows": invalid_delete_flags,
+        "active_rows_missing_identity": missing_identity_rows,
         "test_or_dummy_rows": test_rows,
         "issues": issues,
     }
-
 
 def inspect_fo_quality(expanded: bytes, trading_date: str) -> dict:
     required = {
