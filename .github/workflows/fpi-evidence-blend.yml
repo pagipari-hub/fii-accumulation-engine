@@ -51,7 +51,7 @@ jobs:
   blend:
     # On the integration branch, rebuild only after the historical-feature
     # workflow has committed its refreshed outputs; avoid concurrent writers.
-    if: ${{ github.ref != 'refs/heads/research/shareholding-identity-integration' || github.event_name != 'push' || contains(github.event.head_commit.message, 'data: record NSE participant and FII report provenance') }}
+    if: "${{ github.ref != 'refs/heads/research/shareholding-identity-integration' || github.event_name != 'push' || contains(github.event.head_commit.message, 'data: record NSE participant and FII report provenance') }}"
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
