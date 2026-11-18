@@ -102,7 +102,7 @@ jobs:
                   with gzip.open(raw_path, "rt", encoding="utf-8-sig", newline="") as handle:
                       reader = csv.DictReader(handle)
                       samples = []
-                      stock_expiries = []
+                      active_stock_rows = []
                       for row in reader:
                           if len(samples) < 8:
                               samples.append({
@@ -112,16 +112,33 @@ jobs:
                                       "StockNm", "UndrlygInstrm", "FinInstrmTp"
                                   )
                               })
-                          if row.get("FinInstrmNm") in {"FUTSTK", "OPTSTK"}:
-                              value = row.get("XpryDt", "")
-                              if value.isdigit():
-                                  stock_expiries.append(int(value))
+                          if (
+                              row.get("FinInstrmNm") in {"FUTSTK", "OPTSTK"}
+                              and row.get("DelFlg", "").strip().upper() != "Y"
+                              and "NSETEST" not in row.get("TckrSymb", "").upper()
+                          ):
+                              active_stock_rows.append(row)
+                  active_stock_rows.sort(
+                      key=lambda row: int(row.get("XpryDt", "0"))
+                      if row.get("XpryDt", "").isdigit() else 0,
+                      reverse=True,
+                  )
                   print("FO CONTRACT MASTER SAMPLE ROWS:")
                   print(json.dumps(samples, indent=2, ensure_ascii=False))
-                  print("FO STOCK EXPIRY RAW RANGE:", {
-                      "min": min(stock_expiries) if stock_expiries else None,
-                      "max": max(stock_expiries) if stock_expiries else None,
-                      "count": len(stock_expiries),
+                  print("FO ACTIVE NON-TEST STOCK CONTRACT SUMMARY:", {
+                      "rows": len(active_stock_rows),
+                      "symbols": len({row.get("TckrSymb") for row in active_stock_rows}),
+                      "latest_rows": [
+                          {
+                              key: row.get(key)
+                              for key in (
+                                  "FinInstrmNm", "TckrSymb", "XpryDt", "StockNm",
+                                  "DelFlg", "PrtdToTrad", "TradgStsNrmlMkt",
+                                  "ElgbltyNrmlMkt"
+                              )
+                          }
+                          for row in active_stock_rows[:10]
+                      ],
                   })
 
                   alternate_url = fo["download_url"].replace(
