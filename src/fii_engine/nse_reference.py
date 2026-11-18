@@ -106,6 +106,16 @@ def _validate_report_record(record: dict, dataset: str, current_date: str) -> di
     filename = record["fileActlName"].strip()
     if Path(filename).name != filename or not filename.lower().endswith(".csv.gz"):
         raise ValueError(f"{dataset}: unexpected report filename {filename!r}")
+    filename_match = re.search(r"_(\\d{8})\\.csv\\.gz$", filename, re.IGNORECASE)
+    if not filename_match:
+        raise ValueError(f"{dataset}: report filename has no dated MII suffix: {filename!r}")
+    filename_date = datetime.strptime(filename_match.group(1), "%d%m%Y").date()
+    metadata_date = datetime.strptime(record["tradingDate"], "%d-%b-%Y").date()
+    if filename_date != metadata_date:
+        raise ValueError(
+            f"{dataset}: catalogue/filename date mismatch "
+            f"{metadata_date} vs {filename_date}"
+        )
     parsed = urlparse(record["filePath"])
     if parsed.scheme != "https" or parsed.hostname not in ARCHIVE_HOSTS or parsed.query or parsed.fragment:
         raise ValueError(f"{dataset}: untrusted archive path {record['filePath']!r}")
@@ -119,28 +129,54 @@ def _validate_report_record(record: dict, dataset: str, current_date: str) -> di
         "file_size_reported": record.get("fileSize"),
         "file_position": record.get("filePosition"),
         "file_hash_key": record.get("fileHashKey"),
+        "catalogue_group": record.get("_catalogue_group"),
     }
 
 
 def select_cm_security_master(catalog: dict) -> dict:
-    current_date = catalog["currentDate"]
+    # The daily CM MII master is commonly published in PreviousDay, with its
+    # own tradingDate. currentDate is the catalogue date, not the report date.
     matches = []
-    for record in catalog["CurrentDay"]:
-        if not isinstance(record, dict):
-            continue
-        label = _clean_text(str(record.get("displayName", ""))).casefold()
-        if (
-            "mii" in label
-            and "security file" in label
-            and "nse listed securities" in label
-            and "nse and bse" not in label
-        ):
-            matches.append(record)
-    if len(matches) != 1:
+    for group_name in ("CurrentDay", "PreviousDay"):
+        for record in catalog.get(group_name, []):
+            if (
+                isinstance(record, dict)
+                and str(record.get("fileKey", "")).upper() == "NSE-CM-SECURITY-CSV"
+            ):
+                matches.append({**record, "_catalogue_group": group_name})
+
+    if not matches:
         raise ValueError(
-            f"expected exactly one NSE-listed CM MII security master; found {len(matches)}"
+            "NSE catalogue has no NSE-CM-SECURITY-CSV record in CurrentDay or PreviousDay"
         )
-    return _validate_report_record(matches[0], "nse_cm_security_master", current_date)
+
+    try:
+        latest_date = max(
+            datetime.strptime(item["tradingDate"], "%d-%b-%Y").date()
+            for item in matches
+        )
+    except (KeyError, TypeError, ValueError) as exc:
+        raise ValueError("NSE CM MII catalogue record has an invalid tradingDate") from exc
+
+    latest = [
+        item for item in matches
+        if datetime.strptime(item["tradingDate"], "%d-%b-%Y").date() == latest_date
+    ]
+    if len(latest) != 1:
+        raise ValueError(
+            "expected exactly one latest NSE-CM-SECURITY-CSV record; "
+            f"found {len(latest)} for {latest_date.isoformat()}"
+        )
+
+    selected = latest[0]
+    label = _clean_text(str(selected.get("displayName", ""))).casefold()
+    if "nse listed securities" not in label or "bse exclusive" in label:
+        raise ValueError(
+            "NSE-CM-SECURITY-CSV record does not identify the NSE-listed-only security master"
+        )
+    return _validate_report_record(
+        selected, "nse_cm_security_master", selected["tradingDate"]
+    )
 
 
 def select_fo_contract_master(catalog: dict) -> dict:
