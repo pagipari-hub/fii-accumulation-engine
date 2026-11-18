@@ -1,0 +1,2272 @@
+{
+  "complete_sessions": 3,
+  "coverage_status": "target_met",
+  "datasets": [
+    "fii_derivatives_statistics",
+    "participant_oi",
+    "participant_volume"
+  ],
+  "generated_at": "2026-11-11T07:09:48+00:00",
+  "important_scope_note": "Participant reports are participant-category aggregates; FII derivatives statistics are aggregate FII derivatives data. None proves stock-specific FPI cash purchases or may be attributed to individual securities.",
+  "records": [
+    {
+      "archive_member": null,
+      "archive_sha256": "1ff8ae97611d2d91f99ec4c9fbf4f37aab5906274a06f7b48484bd4ef06d3104",
+      "attribution_scope": "participant_category_aggregate_not_stock_specific",
+      "dataset": "participant_oi",
+      "inspection": {
+        "column_count": 15,
+        "columns": [
+          "Client Type",
+          "Future Index Long",
+          "Future Index Short",
+          "Future Stock Long",
+          "Future Stock Short",
+          "Option Index Call Long",
+          "Option Index Put Long",
+          "Option Index Call Short",
+          "Option Index Put Short",
+          "Option Stock Call Long",
+          "Option Stock Put Long",
+          "Option Stock Call Short",
+          "Option Stock Put Short",
+          "Total Long Contracts",
+          "Total Short Contracts"
+        ],
+        "format": "csv",
+        "header_sha256": "18f3a9d408c28f7a328ddf2fd3b30777cc0d9d1010d58628587e88fd9a84d3ec",
+        "participant_categories": [
+          "Client",
+          "DII",
+          "FII",
+          "Pro",
+          "TOTAL"
+        ],
+        "participant_rows": [
+          {
+            "Future Index Long": 182812,
+            "Future Index Short": 102053,
+            "Future Stock Long": 3181091,
+            "Future Stock Short": 341804,
+            "Option Index Call Long": 2112701,
+            "Option Index Call Short": 2081906,
+            "Option Index Put Long": 2426932,
+            "Option Index Put Short": 2810271,
+            "Option Stock Call Long": 1840201,
+            "Option Stock Call Short": 1087490,
+            "Option Stock Put Long": 1179129,
+            "Option Stock Put Short": 1106891,
+            "Total Long Contracts": 10922866,
+            "Total Short Contracts": 7530414,
+            "participant_category": "Client"
+          },
+          {
+            "Future Index Long": 55291,
+            "Future Index Short": 24834,
+            "Future Stock Long": 339601,
+            "Future Stock Short": 4355663,
+            "Option Index Call Long": 13893,
+            "Option Index Call Short": 300,
+            "Option Index Put Long": 104232,
+            "Option Index Put Short": 0,
+            "Option Stock Call Long": 2716,
+            "Option Stock Call Short": 424180,
+            "Option Stock Put Long": 41449,
+            "Option Stock Put Short": 32557,
+            "Total Long Contracts": 557182,
+            "Total Short Contracts": 4837534,
+            "participant_category": "DII"
+          },
+          {
+            "Future Index Long": 52382,
+            "Future Index Short": 143123,
+            "Future Stock Long": 3580740,
+            "Future Stock Short": 2545989,
+            "Option Index Call Long": 606678,
+            "Option Index Call Short": 718631,
+            "Option Index Put Long": 969672,
+            "Option Index Put Short": 582033,
+            "Option Stock Call Long": 319289,
+            "Option Stock Call Short": 399618,
+            "Option Stock Put Long": 395883,
+            "Option Stock Put Short": 307120,
+            "Total Long Contracts": 5924644,
+            "Total Short Contracts": 4696514,
+            "participant_category": "FII"
+          },
+          {
+            "Future Index Long": 28827,
+            "Future Index Short": 49302,
+            "Future Stock Long": 683120,
+            "Future Stock Short": 541096,
+            "Option Index Call Long": 806059,
+            "Option Index Call Short": 738495,
+            "Option Index Put Long": 857050,
+            "Option Index Put Short": 965582,
+            "Option Stock Call Long": 1261677,
+            "Option Stock Call Short": 1512595,
+            "Option Stock Put Long": 1006634,
+            "Option Stock Put Short": 1176527,
+            "Total Long Contracts": 4643367,
+            "Total Short Contracts": 4983597,
+            "participant_category": "Pro"
+          }
+        ],
+        "reconciliation": {
+          "column_totals": {
+            "Future Index Long": {
+              "difference": 0,
+              "participant_sum": 319312,
+              "reported_total": 319312
+            },
+            "Future Index Short": {
+              "difference": 0,
+              "participant_sum": 319312,
+              "reported_total": 319312
+            },
+            "Future Stock Long": {
+              "difference": 0,
+              "participant_sum": 7784552,
+              "reported_total": 7784552
+            },
+            "Future Stock Short": {
+              "difference": 0,
+              "participant_sum": 7784552,
+              "reported_total": 7784552
+            },
+            "Option Index Call Long": {
+              "difference": 0,
+              "participant_sum": 3539331,
+              "reported_total": 3539331
+            },
+            "Option Index Call Short": {
+              "difference": -1,
+              "participant_sum": 3539332,
+              "reported_total": 3539331
+            },
+            "Option Index Put Long": {
+              "difference": 0,
+              "participant_sum": 4357886,
+              "reported_total": 4357886
+            },
+            "Option Index Put Short": {
+              "difference": 0,
+              "participant_sum": 4357886,
+              "reported_total": 4357886
+            },
+            "Option Stock Call Long": {
+              "difference": 0,
+              "participant_sum": 3423883,
+              "reported_total": 3423883
+            },
+            "Option Stock Call Short": {
+              "difference": 0,
+              "participant_sum": 3423883,
+              "reported_total": 3423883
+            },
+            "Option Stock Put Long": {
+              "difference": 0,
+              "participant_sum": 2623095,
+              "reported_total": 2623095
+            },
+            "Option Stock Put Short": {
+              "difference": 0,
+              "participant_sum": 2623095,
+              "reported_total": 2623095
+            },
+            "Total Long Contracts": {
+              "difference": 0,
+              "participant_sum": 22048059,
+              "reported_total": 22048059
+            },
+            "Total Short Contracts": {
+              "difference": 0,
+              "participant_sum": 22048059,
+              "reported_total": 22048059
+            }
+          },
+          "max_absolute_difference": 1,
+          "row_component_totals": {
+            "Client": {
+              "long_component_sum": 10922866,
+              "long_difference": 0,
+              "reported_total_long": 10922866,
+              "reported_total_short": 7530414,
+              "short_component_sum": 7530415,
+              "short_difference": -1
+            },
+            "DII": {
+              "long_component_sum": 557182,
+              "long_difference": 0,
+              "reported_total_long": 557182,
+              "reported_total_short": 4837534,
+              "short_component_sum": 4837534,
+              "short_difference": 0
+            },
+            "FII": {
+              "long_component_sum": 5924644,
+              "long_difference": 0,
+              "reported_total_long": 5924644,
+              "reported_total_short": 4696514,
+              "short_component_sum": 4696514,
+              "short_difference": 0
+            },
+            "Pro": {
+              "long_component_sum": 4643367,
+              "long_difference": 0,
+              "reported_total_long": 4643367,
+              "reported_total_short": 4983597,
+              "short_component_sum": 4983597,
+              "short_difference": 0
+            },
+            "TOTAL": {
+              "long_component_sum": 22048059,
+              "long_difference": 0,
+              "reported_total_long": 22048059,
+              "reported_total_short": 22048059,
+              "short_component_sum": 22048059,
+              "short_difference": 0
+            }
+          },
+          "status": "difference_observed"
+        },
+        "reported_total_row": {
+          "Future Index Long": 319312,
+          "Future Index Short": 319312,
+          "Future Stock Long": 7784552,
+          "Future Stock Short": 7784552,
+          "Option Index Call Long": 3539331,
+          "Option Index Call Short": 3539331,
+          "Option Index Put Long": 4357886,
+          "Option Index Put Short": 4357886,
+          "Option Stock Call Long": 3423883,
+          "Option Stock Call Short": 3423883,
+          "Option Stock Put Long": 2623095,
+          "Option Stock Put Short": 2623095,
+          "Total Long Contracts": 22048059,
+          "Total Short Contracts": 22048059,
+          "participant_category": "TOTAL"
+        },
+        "row_count": 5,
+        "title": "Participant wise Open Interest (no. of contracts) in Equity Derivatives as on Nov 09, 2026",
+        "trade_date_in_title": "2026-11-09",
+        "units_as_labelled": "number_of_contracts"
+      },
+      "payload_bytes": 977,
+      "payload_path": "data/raw/nse_fo_historical/2026-11-09/participant_oi_1ff8ae97611d2d91.csv",
+      "payload_sha256": "1ff8ae97611d2d91f99ec4c9fbf4f37aab5906274a06f7b48484bd4ef06d3104",
+      "raw_bytes": 977,
+      "raw_path": "data/raw/nse_fo_historical/2026-11-09/participant_oi_1ff8ae97611d2d91.bin",
+      "request_url": "https://nsearchives.nseindia.com/content/nsccl/fao_participant_oi_09112026.csv",
+      "retrieved_at": "2026-11-11T07:09:45+00:00",
+      "trade_date": "2026-11-09"
+    },
+    {
+      "archive_member": null,
+      "archive_sha256": "02daa0a768478ae450a4a94baf98993b73635d560d92a57b480d00d6919e09f6",
+      "attribution_scope": "participant_category_aggregate_not_stock_specific",
+      "dataset": "participant_volume",
+      "inspection": {
+        "column_count": 15,
+        "columns": [
+          "Client Type",
+          "Future Index Long",
+          "Future Index Short",
+          "Future Stock Long",
+          "Future Stock Short",
+          "Option Index Call Long",
+          "Option Index Put Long",
+          "Option Index Call Short",
+          "Option Index Put Short",
+          "Option Stock Call Long",
+          "Option Stock Put Long",
+          "Option Stock Call Short",
+          "Option Stock Put Short",
+          "Total Long Contracts",
+          "Total Short Contracts"
+        ],
+        "format": "csv",
+        "header_sha256": "18f3a9d408c28f7a328ddf2fd3b30777cc0d9d1010d58628587e88fd9a84d3ec",
+        "participant_categories": [
+          "Client",
+          "DII",
+          "FII",
+          "Pro",
+          "TOTAL"
+        ],
+        "participant_rows": [
+          {
+            "Future Index Long": 58309,
+            "Future Index Short": 59319,
+            "Future Stock Long": 309924,
+            "Future Stock Short": 284396,
+            "Option Index Call Long": 80425053,
+            "Option Index Call Short": 80736609,
+            "Option Index Put Long": 72539643,
+            "Option Index Put Short": 72621095,
+            "Option Stock Call Long": 1812309,
+            "Option Stock Call Short": 1679832,
+            "Option Stock Put Long": 672296,
+            "Option Stock Put Short": 668270,
+            "Total Long Contracts": 155817534,
+            "Total Short Contracts": 156049521,
+            "participant_category": "Client"
+          },
+          {
+            "Future Index Long": 2004,
+            "Future Index Short": 7083,
+            "Future Stock Long": 117363,
+            "Future Stock Short": 87618,
+            "Option Index Call Long": 5950,
+            "Option Index Call Short": 2825,
+            "Option Index Put Long": 14315,
+            "Option Index Put Short": 14233,
+            "Option Stock Call Long": 5037,
+            "Option Stock Call Short": 41850,
+            "Option Stock Put Long": 1959,
+            "Option Stock Put Short": 3166,
+            "Total Long Contracts": 146628,
+            "Total Short Contracts": 156775,
+            "participant_category": "DII"
+          },
+          {
+            "Future Index Long": 26577,
+            "Future Index Short": 15859,
+            "Future Stock Long": 241936,
+            "Future Stock Short": 283544,
+            "Option Index Call Long": 15265165,
+            "Option Index Call Short": 15096572,
+            "Option Index Put Long": 14004539,
+            "Option Index Put Short": 14107563,
+            "Option Stock Call Long": 178749,
+            "Option Stock Call Short": 205763,
+            "Option Stock Put Long": 150723,
+            "Option Stock Put Short": 143554,
+            "Total Long Contracts": 29867689,
+            "Total Short Contracts": 29852855,
+            "participant_category": "FII"
+          },
+          {
+            "Future Index Long": 30646,
+            "Future Index Short": 35275,
+            "Future Stock Long": 327245,
+            "Future Stock Short": 340910,
+            "Option Index Call Long": 132513494,
+            "Option Index Call Short": 132373656,
+            "Option Index Put Long": 118194029,
+            "Option Index Put Short": 118009635,
+            "Option Stock Call Long": 3208876,
+            "Option Stock Call Short": 3277526,
+            "Option Stock Put Long": 2016081,
+            "Option Stock Put Short": 2026069,
+            "Total Long Contracts": 256290371,
+            "Total Short Contracts": 256063071,
+            "participant_category": "Pro"
+          }
+        ],
+        "reconciliation": {
+          "column_totals": {
+            "Future Index Long": {
+              "difference": 0,
+              "participant_sum": 117536,
+              "reported_total": 117536
+            },
+            "Future Index Short": {
+              "difference": 0,
+              "participant_sum": 117536,
+              "reported_total": 117536
+            },
+            "Future Stock Long": {
+              "difference": 0,
+              "participant_sum": 996468,
+              "reported_total": 996468
+            },
+            "Future Stock Short": {
+              "difference": 0,
+              "participant_sum": 996468,
+              "reported_total": 996468
+            },
+            "Option Index Call Long": {
+              "difference": 0,
+              "participant_sum": 228209662,
+              "reported_total": 228209662
+            },
+            "Option Index Call Short": {
+              "difference": 0,
+              "participant_sum": 228209662,
+              "reported_total": 228209662
+            },
+            "Option Index Put Long": {
+              "difference": 0,
+              "participant_sum": 204752526,
+              "reported_total": 204752526
+            },
+            "Option Index Put Short": {
+              "difference": 0,
+              "participant_sum": 204752526,
+              "reported_total": 204752526
+            },
+            "Option Stock Call Long": {
+              "difference": 0,
+              "participant_sum": 5204971,
+              "reported_total": 5204971
+            },
+            "Option Stock Call Short": {
+              "difference": 0,
+              "participant_sum": 5204971,
+              "reported_total": 5204971
+            },
+            "Option Stock Put Long": {
+              "difference": 0,
+              "participant_sum": 2841059,
+              "reported_total": 2841059
+            },
+            "Option Stock Put Short": {
+              "difference": 0,
+              "participant_sum": 2841059,
+              "reported_total": 2841059
+            },
+            "Total Long Contracts": {
+              "difference": 0,
+              "participant_sum": 442122222,
+              "reported_total": 442122222
+            },
+            "Total Short Contracts": {
+              "difference": 0,
+              "participant_sum": 442122222,
+              "reported_total": 442122222
+            }
+          },
+          "max_absolute_difference": 0,
+          "row_component_totals": {
+            "Client": {
+              "long_component_sum": 155817534,
+              "long_difference": 0,
+              "reported_total_long": 155817534,
+              "reported_total_short": 156049521,
+              "short_component_sum": 156049521,
+              "short_difference": 0
+            },
+            "DII": {
+              "long_component_sum": 146628,
+              "long_difference": 0,
+              "reported_total_long": 146628,
+              "reported_total_short": 156775,
+              "short_component_sum": 156775,
+              "short_difference": 0
+            },
+            "FII": {
+              "long_component_sum": 29867689,
+              "long_difference": 0,
+              "reported_total_long": 29867689,
+              "reported_total_short": 29852855,
+              "short_component_sum": 29852855,
+              "short_difference": 0
+            },
+            "Pro": {
+              "long_component_sum": 256290371,
+              "long_difference": 0,
+              "reported_total_long": 256290371,
+              "reported_total_short": 256063071,
+              "short_component_sum": 256063071,
+              "short_difference": 0
+            },
+            "TOTAL": {
+              "long_component_sum": 442122222,
+              "long_difference": 0,
+              "reported_total_long": 442122222,
+              "reported_total_short": 442122222,
+              "short_component_sum": 442122222,
+              "short_difference": 0
+            }
+          },
+          "status": "exact_match"
+        },
+        "reported_total_row": {
+          "Future Index Long": 117536,
+          "Future Index Short": 117536,
+          "Future Stock Long": 996468,
+          "Future Stock Short": 996468,
+          "Option Index Call Long": 228209662,
+          "Option Index Call Short": 228209662,
+          "Option Index Put Long": 204752526,
+          "Option Index Put Short": 204752526,
+          "Option Stock Call Long": 5204971,
+          "Option Stock Call Short": 5204971,
+          "Option Stock Put Long": 2841059,
+          "Option Stock Put Short": 2841059,
+          "Total Long Contracts": 442122222,
+          "Total Short Contracts": 442122222,
+          "participant_category": "TOTAL"
+        },
+        "row_count": 5,
+        "title": "Participant wise Trading Volume (no. of contracts) in Equity Derivatives as on Nov 09, 2026",
+        "trade_date_in_title": "2026-11-09",
+        "units_as_labelled": "number_of_contracts"
+      },
+      "payload_bytes": 1006,
+      "payload_path": "data/raw/nse_fo_historical/2026-11-09/participant_volume_02daa0a768478ae4.csv",
+      "payload_sha256": "02daa0a768478ae450a4a94baf98993b73635d560d92a57b480d00d6919e09f6",
+      "raw_bytes": 1006,
+      "raw_path": "data/raw/nse_fo_historical/2026-11-09/participant_volume_02daa0a768478ae4.bin",
+      "request_url": "https://nsearchives.nseindia.com/content/nsccl/fao_participant_vol_09112026.csv",
+      "retrieved_at": "2026-11-11T07:09:45+00:00",
+      "trade_date": "2026-11-09"
+    },
+    {
+      "archive_member": null,
+      "archive_sha256": "08a79271e713948c3b502c0dc0f6d45e6247062719cc6ad68ecb2c9d8029de6a",
+      "attribution_scope": "aggregate_fii_derivatives_only",
+      "dataset": "fii_derivatives_statistics",
+      "inspection": {
+        "format": "xls",
+        "normalized_records": [
+          {
+            "buy_amount_crore": "4491.97",
+            "buy_contracts": 26577,
+            "instrument_group": "index_futures",
+            "open_interest_amount_crore": "32649.63",
+            "open_interest_contracts": 195505,
+            "record_level": "section_total",
+            "sell_amount_crore": "2677.41",
+            "sell_contracts": 15859,
+            "trade_date": "2026-11-09",
+            "underlying": "ALL_INDICES"
+          },
+          {
+            "buy_amount_crore": "4758773.87",
+            "buy_contracts": 29269704,
+            "instrument_group": "index_options",
+            "open_interest_amount_crore": "478951.53",
+            "open_interest_contracts": 2877014,
+            "record_level": "section_total",
+            "sell_amount_crore": "4748273.98",
+            "sell_contracts": 29204135,
+            "trade_date": "2026-11-09",
+            "underlying": "ALL_INDICES"
+          },
+          {
+            "buy_amount_crore": "16642.12",
+            "buy_contracts": 241936,
+            "instrument_group": "stock_futures",
+            "open_interest_amount_crore": "408279.37",
+            "open_interest_contracts": 6126729,
+            "record_level": "section_total",
+            "sell_amount_crore": "19497.61",
+            "sell_contracts": 283544,
+            "trade_date": "2026-11-09",
+            "underlying": "ALL_STOCKS"
+          },
+          {
+            "buy_amount_crore": "23892.96",
+            "buy_contracts": 329472,
+            "instrument_group": "stock_options",
+            "open_interest_amount_crore": "97112.75",
+            "open_interest_contracts": 1421910,
+            "record_level": "section_total",
+            "sell_amount_crore": "25051.03",
+            "sell_contracts": 349317,
+            "trade_date": "2026-11-09",
+            "underlying": "ALL_STOCKS"
+          },
+          {
+            "buy_amount_crore": "1952.02",
+            "buy_contracts": 10976,
+            "instrument_group": "index_futures",
+            "open_interest_amount_crore": "7510.32",
+            "open_interest_contracts": 41994,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "1181.41",
+            "sell_contracts": 6653,
+            "trade_date": "2026-11-09",
+            "underlying": "BANKNIFTY"
+          },
+          {
+            "buy_amount_crore": "11.61",
+            "buy_contracts": 71,
+            "instrument_group": "index_futures",
+            "open_interest_amount_crore": "82.76",
+            "open_interest_contracts": 505,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "4.08",
+            "sell_contracts": 25,
+            "trade_date": "2026-11-09",
+            "underlying": "FINNIFTY"
+          },
+          {
+            "buy_amount_crore": "72.47",
+            "buy_contracts": 431,
+            "instrument_group": "index_futures",
+            "open_interest_amount_crore": "3912.31",
+            "open_interest_contracts": 23190,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "36.47",
+            "sell_contracts": 217,
+            "trade_date": "2026-11-09",
+            "underlying": "MIDCPNIFTY"
+          },
+          {
+            "buy_amount_crore": "2455.14",
+            "buy_contracts": 15095,
+            "instrument_group": "index_futures",
+            "open_interest_amount_crore": "21068.77",
+            "open_interest_contracts": 129400,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "1454.00",
+            "sell_contracts": 8956,
+            "trade_date": "2026-11-09",
+            "underlying": "NIFTY"
+          },
+          {
+            "buy_amount_crore": "0.00",
+            "buy_contracts": 0,
+            "instrument_group": "index_futures",
+            "open_interest_amount_crore": "0.00",
+            "open_interest_contracts": 0,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "0.00",
+            "sell_contracts": 0,
+            "trade_date": "2026-11-09",
+            "underlying": "NIFTYFPI"
+          },
+          {
+            "buy_amount_crore": "0.72",
+            "buy_contracts": 4,
+            "instrument_group": "index_futures",
+            "open_interest_amount_crore": "75.47",
+            "open_interest_contracts": 416,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "1.44",
+            "sell_contracts": 8,
+            "trade_date": "2026-11-09",
+            "underlying": "NIFTYNXT50"
+          },
+          {
+            "buy_amount_crore": "71824.15",
+            "buy_contracts": 402685,
+            "instrument_group": "index_options",
+            "open_interest_amount_crore": "110849.89",
+            "open_interest_contracts": 618500,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "72613.94",
+            "sell_contracts": 407235,
+            "trade_date": "2026-11-09",
+            "underlying": "BANKNIFTY"
+          },
+          {
+            "buy_amount_crore": "1192.48",
+            "buy_contracts": 7251,
+            "instrument_group": "index_options",
+            "open_interest_amount_crore": "1705.20",
+            "open_interest_contracts": 10378,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "1108.90",
+            "sell_contracts": 6755,
+            "trade_date": "2026-11-09",
+            "underlying": "FINNIFTY"
+          },
+          {
+            "buy_amount_crore": "5247.91",
+            "buy_contracts": 30805,
+            "instrument_group": "index_options",
+            "open_interest_amount_crore": "12048.28",
+            "open_interest_contracts": 71433,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "5297.80",
+            "sell_contracts": 31198,
+            "trade_date": "2026-11-09",
+            "underlying": "MIDCPNIFTY"
+          },
+          {
+            "buy_amount_crore": "4680506.11",
+            "buy_contracts": 28828945,
+            "instrument_group": "index_options",
+            "open_interest_amount_crore": "354322.99",
+            "open_interest_contracts": 2176562,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "4669246.19",
+            "sell_contracts": 28758907,
+            "trade_date": "2026-11-09",
+            "underlying": "NIFTY"
+          },
+          {
+            "buy_amount_crore": "0.85",
+            "buy_contracts": 5,
+            "instrument_group": "index_options",
+            "open_interest_amount_crore": "12.62",
+            "open_interest_contracts": 72,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "1.94",
+            "sell_contracts": 11,
+            "trade_date": "2026-11-09",
+            "underlying": "NIFTYFPI"
+          },
+          {
+            "buy_amount_crore": "2.37",
+            "buy_contracts": 13,
+            "instrument_group": "index_options",
+            "open_interest_amount_crore": "12.56",
+            "open_interest_contracts": 69,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "5.21",
+            "sell_contracts": 29,
+            "trade_date": "2026-11-09",
+            "underlying": "NIFTYNXT50"
+          }
+        ],
+        "notes": [
+          "Both buy and sell positions have been considered",
+          "Options Value (Buy/Sell) = Strike price * Qty",
+          "Futures Value (Buy/Sell) = Traded Price * Qty",
+          "Value & Open Interest at the end of day:",
+          "Options Value (End of day) = Underlying Close Price * Qty",
+          "Futures Value (End of day) = Closing Futures Price * Qty  (closing price is the daily settlement price of futures contracts)"
+        ],
+        "section_reconciliation": {
+          "index_futures": {
+            "buy_amount_crore": "0.01",
+            "buy_contracts": "0",
+            "open_interest_amount_crore": "0.00",
+            "open_interest_contracts": "0",
+            "sell_amount_crore": "0.01",
+            "sell_contracts": "0"
+          },
+          "index_options": {
+            "buy_amount_crore": "0.00",
+            "buy_contracts": "0",
+            "open_interest_amount_crore": "-0.01",
+            "open_interest_contracts": "0",
+            "sell_amount_crore": "0.00",
+            "sell_contracts": "0"
+          }
+        },
+        "sheet_columns": 7,
+        "sheet_name": "sheet1",
+        "sheet_rows": 35,
+        "title": "FII DERIVATIVES STATISTICS FOR 09-Nov-2026",
+        "trade_date_in_title": "2026-11-09"
+      },
+      "payload_bytes": 9216,
+      "payload_path": "data/raw/nse_fo_historical/2026-11-09/fii_derivatives_statistics_08a79271e713948c.xls",
+      "payload_sha256": "08a79271e713948c3b502c0dc0f6d45e6247062719cc6ad68ecb2c9d8029de6a",
+      "raw_bytes": 9216,
+      "raw_path": "data/raw/nse_fo_historical/2026-11-09/fii_derivatives_statistics_08a79271e713948c.bin",
+      "request_url": "https://nsearchives.nseindia.com/content/fo/fii_stats_09-Nov-2026.xls",
+      "retrieved_at": "2026-11-11T07:09:46+00:00",
+      "trade_date": "2026-11-09"
+    },
+    {
+      "archive_member": null,
+      "archive_sha256": "4ed5a27ad847dc930857131ab60a8b5b7acdb3e592916b740a7cdd4de3a494ba",
+      "attribution_scope": "participant_category_aggregate_not_stock_specific",
+      "dataset": "participant_oi",
+      "inspection": {
+        "column_count": 15,
+        "columns": [
+          "Client Type",
+          "Future Index Long",
+          "Future Index Short",
+          "Future Stock Long",
+          "Future Stock Short",
+          "Option Index Call Long",
+          "Option Index Put Long",
+          "Option Index Call Short",
+          "Option Index Put Short",
+          "Option Stock Call Long",
+          "Option Stock Put Long",
+          "Option Stock Call Short",
+          "Option Stock Put Short",
+          "Total Long Contracts",
+          "Total Short Contracts"
+        ],
+        "format": "csv",
+        "header_sha256": "18f3a9d408c28f7a328ddf2fd3b30777cc0d9d1010d58628587e88fd9a84d3ec",
+        "participant_categories": [
+          "Client",
+          "DII",
+          "FII",
+          "Pro",
+          "TOTAL"
+        ],
+        "participant_rows": [
+          {
+            "Future Index Long": 180828,
+            "Future Index Short": 97047,
+            "Future Stock Long": 3139917,
+            "Future Stock Short": 320512,
+            "Option Index Call Long": 2906186,
+            "Option Index Call Short": 2894792,
+            "Option Index Put Long": 4070036,
+            "Option Index Put Short": 4474207,
+            "Option Stock Call Long": 1644069,
+            "Option Stock Call Short": 1040787,
+            "Option Stock Put Long": 1096053,
+            "Option Stock Put Short": 1050895,
+            "Total Long Contracts": 13037089,
+            "Total Short Contracts": 9878241,
+            "participant_category": "Client"
+          },
+          {
+            "Future Index Long": 54004,
+            "Future Index Short": 18468,
+            "Future Stock Long": 330049,
+            "Future Stock Short": 4393321,
+            "Option Index Call Long": 10818,
+            "Option Index Call Short": 553,
+            "Option Index Put Long": 104950,
+            "Option Index Put Short": 1003,
+            "Option Stock Call Long": 2363,
+            "Option Stock Call Short": 387014,
+            "Option Stock Put Long": 41614,
+            "Option Stock Put Short": 31515,
+            "Total Long Contracts": 543798,
+            "Total Short Contracts": 4831874,
+            "participant_category": "DII"
+          },
+          {
+            "Future Index Long": 48656,
+            "Future Index Short": 149072,
+            "Future Stock Long": 3605434,
+            "Future Stock Short": 2526231,
+            "Option Index Call Long": 861276,
+            "Option Index Call Short": 988900,
+            "Option Index Put Long": 1379216,
+            "Option Index Put Short": 929475,
+            "Option Stock Call Long": 310259,
+            "Option Stock Call Short": 366244,
+            "Option Stock Put Long": 386488,
+            "Option Stock Put Short": 296547,
+            "Total Long Contracts": 6591329,
+            "Total Short Contracts": 5256468,
+            "participant_category": "FII"
+          },
+          {
+            "Future Index Long": 29551,
+            "Future Index Short": 48452,
+            "Future Stock Long": 684647,
+            "Future Stock Short": 519983,
+            "Option Index Call Long": 1141859,
+            "Option Index Call Short": 1035893,
+            "Option Index Put Long": 1529740,
+            "Option Index Put Short": 1679258,
+            "Option Stock Call Long": 1227563,
+            "Option Stock Call Short": 1390209,
+            "Option Stock Put Long": 984087,
+            "Option Stock Put Short": 1129285,
+            "Total Long Contracts": 5597447,
+            "Total Short Contracts": 5803080,
+            "participant_category": "Pro"
+          }
+        ],
+        "reconciliation": {
+          "column_totals": {
+            "Future Index Long": {
+              "difference": 0,
+              "participant_sum": 313039,
+              "reported_total": 313039
+            },
+            "Future Index Short": {
+              "difference": 0,
+              "participant_sum": 313039,
+              "reported_total": 313039
+            },
+            "Future Stock Long": {
+              "difference": 0,
+              "participant_sum": 7760047,
+              "reported_total": 7760047
+            },
+            "Future Stock Short": {
+              "difference": 0,
+              "participant_sum": 7760047,
+              "reported_total": 7760047
+            },
+            "Option Index Call Long": {
+              "difference": -1,
+              "participant_sum": 4920139,
+              "reported_total": 4920138
+            },
+            "Option Index Call Short": {
+              "difference": 0,
+              "participant_sum": 4920138,
+              "reported_total": 4920138
+            },
+            "Option Index Put Long": {
+              "difference": 0,
+              "participant_sum": 7083942,
+              "reported_total": 7083942
+            },
+            "Option Index Put Short": {
+              "difference": -1,
+              "participant_sum": 7083943,
+              "reported_total": 7083942
+            },
+            "Option Stock Call Long": {
+              "difference": 0,
+              "participant_sum": 3184254,
+              "reported_total": 3184254
+            },
+            "Option Stock Call Short": {
+              "difference": 0,
+              "participant_sum": 3184254,
+              "reported_total": 3184254
+            },
+            "Option Stock Put Long": {
+              "difference": 0,
+              "participant_sum": 2508242,
+              "reported_total": 2508242
+            },
+            "Option Stock Put Short": {
+              "difference": 0,
+              "participant_sum": 2508242,
+              "reported_total": 2508242
+            },
+            "Total Long Contracts": {
+              "difference": 0,
+              "participant_sum": 25769663,
+              "reported_total": 25769663
+            },
+            "Total Short Contracts": {
+              "difference": 0,
+              "participant_sum": 25769663,
+              "reported_total": 25769663
+            }
+          },
+          "max_absolute_difference": 1,
+          "row_component_totals": {
+            "Client": {
+              "long_component_sum": 13037089,
+              "long_difference": 0,
+              "reported_total_long": 13037089,
+              "reported_total_short": 9878241,
+              "short_component_sum": 9878240,
+              "short_difference": 1
+            },
+            "DII": {
+              "long_component_sum": 543798,
+              "long_difference": 0,
+              "reported_total_long": 543798,
+              "reported_total_short": 4831874,
+              "short_component_sum": 4831874,
+              "short_difference": 0
+            },
+            "FII": {
+              "long_component_sum": 6591329,
+              "long_difference": 0,
+              "reported_total_long": 6591329,
+              "reported_total_short": 5256468,
+              "short_component_sum": 5256469,
+              "short_difference": -1
+            },
+            "Pro": {
+              "long_component_sum": 5597447,
+              "long_difference": 0,
+              "reported_total_long": 5597447,
+              "reported_total_short": 5803080,
+              "short_component_sum": 5803080,
+              "short_difference": 0
+            },
+            "TOTAL": {
+              "long_component_sum": 25769662,
+              "long_difference": 1,
+              "reported_total_long": 25769663,
+              "reported_total_short": 25769663,
+              "short_component_sum": 25769662,
+              "short_difference": 1
+            }
+          },
+          "status": "difference_observed"
+        },
+        "reported_total_row": {
+          "Future Index Long": 313039,
+          "Future Index Short": 313039,
+          "Future Stock Long": 7760047,
+          "Future Stock Short": 7760047,
+          "Option Index Call Long": 4920138,
+          "Option Index Call Short": 4920138,
+          "Option Index Put Long": 7083942,
+          "Option Index Put Short": 7083942,
+          "Option Stock Call Long": 3184254,
+          "Option Stock Call Short": 3184254,
+          "Option Stock Put Long": 2508242,
+          "Option Stock Put Short": 2508242,
+          "Total Long Contracts": 25769663,
+          "Total Short Contracts": 25769663,
+          "participant_category": "TOTAL"
+        },
+        "row_count": 5,
+        "title": "Participant wise Open Interest (no. of contracts) in Equity Derivatives as on Nov 06, 2026",
+        "trade_date_in_title": "2026-11-06",
+        "units_as_labelled": "number_of_contracts"
+      },
+      "payload_bytes": 983,
+      "payload_path": "data/raw/nse_fo_historical/2026-11-06/participant_oi_4ed5a27ad847dc93.csv",
+      "payload_sha256": "4ed5a27ad847dc930857131ab60a8b5b7acdb3e592916b740a7cdd4de3a494ba",
+      "raw_bytes": 983,
+      "raw_path": "data/raw/nse_fo_historical/2026-11-06/participant_oi_4ed5a27ad847dc93.bin",
+      "request_url": "https://nsearchives.nseindia.com/content/nsccl/fao_participant_oi_06112026.csv",
+      "retrieved_at": "2026-11-11T07:09:46+00:00",
+      "trade_date": "2026-11-06"
+    },
+    {
+      "archive_member": null,
+      "archive_sha256": "46a244fd324b1bef9747ccffee1f0dab3e0f5080d59b4caa4e697419b40acd0b",
+      "attribution_scope": "participant_category_aggregate_not_stock_specific",
+      "dataset": "participant_volume",
+      "inspection": {
+        "column_count": 15,
+        "columns": [
+          "Client Type",
+          "Future Index Long",
+          "Future Index Short",
+          "Future Stock Long",
+          "Future Stock Short",
+          "Option Index Call Long",
+          "Option Index Put Long",
+          "Option Index Call Short",
+          "Option Index Put Short",
+          "Option Stock Call Long",
+          "Option Stock Put Long",
+          "Option Stock Call Short",
+          "Option Stock Put Short",
+          "Total Long Contracts",
+          "Total Short Contracts"
+        ],
+        "format": "csv",
+        "header_sha256": "18f3a9d408c28f7a328ddf2fd3b30777cc0d9d1010d58628587e88fd9a84d3ec",
+        "participant_categories": [
+          "Client",
+          "DII",
+          "FII",
+          "Pro",
+          "TOTAL"
+        ],
+        "participant_rows": [
+          {
+            "Future Index Long": 90781,
+            "Future Index Short": 111641,
+            "Future Stock Long": 443989,
+            "Future Stock Short": 459596,
+            "Option Index Call Long": 43376449,
+            "Option Index Call Short": 43455960,
+            "Option Index Put Long": 32846925,
+            "Option Index Put Short": 32824048,
+            "Option Stock Call Long": 2359128,
+            "Option Stock Call Short": 2323905,
+            "Option Stock Put Long": 943490,
+            "Option Stock Put Short": 909877,
+            "Total Long Contracts": 80060762,
+            "Total Short Contracts": 80085027,
+            "participant_category": "Client"
+          },
+          {
+            "Future Index Long": 263,
+            "Future Index Short": 9853,
+            "Future Stock Long": 142773,
+            "Future Stock Short": 112448,
+            "Option Index Call Long": 9585,
+            "Option Index Call Short": 7250,
+            "Option Index Put Long": 3537,
+            "Option Index Put Short": 3401,
+            "Option Stock Call Long": 10208,
+            "Option Stock Call Short": 38939,
+            "Option Stock Put Long": 8321,
+            "Option Stock Put Short": 8252,
+            "Total Long Contracts": 174687,
+            "Total Short Contracts": 180143,
+            "participant_category": "DII"
+          },
+          {
+            "Future Index Long": 65215,
+            "Future Index Short": 28193,
+            "Future Stock Long": 397938,
+            "Future Stock Short": 406085,
+            "Option Index Call Long": 6658846,
+            "Option Index Call Short": 6632722,
+            "Option Index Put Long": 6176812,
+            "Option Index Put Short": 6153156,
+            "Option Stock Call Long": 331778,
+            "Option Stock Call Short": 329855,
+            "Option Stock Put Long": 238185,
+            "Option Stock Put Short": 235812,
+            "Total Long Contracts": 13868774,
+            "Total Short Contracts": 13785823,
+            "participant_category": "FII"
+          },
+          {
+            "Future Index Long": 46141,
+            "Future Index Short": 52713,
+            "Future Stock Long": 484046,
+            "Future Stock Short": 490617,
+            "Option Index Call Long": 41485579,
+            "Option Index Call Short": 41434527,
+            "Option Index Put Long": 38421530,
+            "Option Index Put Short": 38468199,
+            "Option Stock Call Long": 4307347,
+            "Option Stock Call Short": 4315762,
+            "Option Stock Put Long": 2652155,
+            "Option Stock Put Short": 2688210,
+            "Total Long Contracts": 87396798,
+            "Total Short Contracts": 87450028,
+            "participant_category": "Pro"
+          }
+        ],
+        "reconciliation": {
+          "column_totals": {
+            "Future Index Long": {
+              "difference": 0,
+              "participant_sum": 202400,
+              "reported_total": 202400
+            },
+            "Future Index Short": {
+              "difference": 0,
+              "participant_sum": 202400,
+              "reported_total": 202400
+            },
+            "Future Stock Long": {
+              "difference": 0,
+              "participant_sum": 1468746,
+              "reported_total": 1468746
+            },
+            "Future Stock Short": {
+              "difference": 0,
+              "participant_sum": 1468746,
+              "reported_total": 1468746
+            },
+            "Option Index Call Long": {
+              "difference": 0,
+              "participant_sum": 91530459,
+              "reported_total": 91530459
+            },
+            "Option Index Call Short": {
+              "difference": 0,
+              "participant_sum": 91530459,
+              "reported_total": 91530459
+            },
+            "Option Index Put Long": {
+              "difference": 0,
+              "participant_sum": 77448804,
+              "reported_total": 77448804
+            },
+            "Option Index Put Short": {
+              "difference": 0,
+              "participant_sum": 77448804,
+              "reported_total": 77448804
+            },
+            "Option Stock Call Long": {
+              "difference": 0,
+              "participant_sum": 7008461,
+              "reported_total": 7008461
+            },
+            "Option Stock Call Short": {
+              "difference": 0,
+              "participant_sum": 7008461,
+              "reported_total": 7008461
+            },
+            "Option Stock Put Long": {
+              "difference": 0,
+              "participant_sum": 3842151,
+              "reported_total": 3842151
+            },
+            "Option Stock Put Short": {
+              "difference": 0,
+              "participant_sum": 3842151,
+              "reported_total": 3842151
+            },
+            "Total Long Contracts": {
+              "difference": 0,
+              "participant_sum": 181501021,
+              "reported_total": 181501021
+            },
+            "Total Short Contracts": {
+              "difference": 0,
+              "participant_sum": 181501021,
+              "reported_total": 181501021
+            }
+          },
+          "max_absolute_difference": 0,
+          "row_component_totals": {
+            "Client": {
+              "long_component_sum": 80060762,
+              "long_difference": 0,
+              "reported_total_long": 80060762,
+              "reported_total_short": 80085027,
+              "short_component_sum": 80085027,
+              "short_difference": 0
+            },
+            "DII": {
+              "long_component_sum": 174687,
+              "long_difference": 0,
+              "reported_total_long": 174687,
+              "reported_total_short": 180143,
+              "short_component_sum": 180143,
+              "short_difference": 0
+            },
+            "FII": {
+              "long_component_sum": 13868774,
+              "long_difference": 0,
+              "reported_total_long": 13868774,
+              "reported_total_short": 13785823,
+              "short_component_sum": 13785823,
+              "short_difference": 0
+            },
+            "Pro": {
+              "long_component_sum": 87396798,
+              "long_difference": 0,
+              "reported_total_long": 87396798,
+              "reported_total_short": 87450028,
+              "short_component_sum": 87450028,
+              "short_difference": 0
+            },
+            "TOTAL": {
+              "long_component_sum": 181501021,
+              "long_difference": 0,
+              "reported_total_long": 181501021,
+              "reported_total_short": 181501021,
+              "short_component_sum": 181501021,
+              "short_difference": 0
+            }
+          },
+          "status": "exact_match"
+        },
+        "reported_total_row": {
+          "Future Index Long": 202400,
+          "Future Index Short": 202400,
+          "Future Stock Long": 1468746,
+          "Future Stock Short": 1468746,
+          "Option Index Call Long": 91530459,
+          "Option Index Call Short": 91530459,
+          "Option Index Put Long": 77448804,
+          "Option Index Put Short": 77448804,
+          "Option Stock Call Long": 7008461,
+          "Option Stock Call Short": 7008461,
+          "Option Stock Put Long": 3842151,
+          "Option Stock Put Short": 3842151,
+          "Total Long Contracts": 181501021,
+          "Total Short Contracts": 181501021,
+          "participant_category": "TOTAL"
+        },
+        "row_count": 5,
+        "title": "Participant wise Trading Volume (no. of contracts) in Equity Derivatives as on Nov 06, 2026",
+        "trade_date_in_title": "2026-11-06",
+        "units_as_labelled": "number_of_contracts"
+      },
+      "payload_bytes": 992,
+      "payload_path": "data/raw/nse_fo_historical/2026-11-06/participant_volume_46a244fd324b1bef.csv",
+      "payload_sha256": "46a244fd324b1bef9747ccffee1f0dab3e0f5080d59b4caa4e697419b40acd0b",
+      "raw_bytes": 992,
+      "raw_path": "data/raw/nse_fo_historical/2026-11-06/participant_volume_46a244fd324b1bef.bin",
+      "request_url": "https://nsearchives.nseindia.com/content/nsccl/fao_participant_vol_06112026.csv",
+      "retrieved_at": "2026-11-11T07:09:46+00:00",
+      "trade_date": "2026-11-06"
+    },
+    {
+      "archive_member": null,
+      "archive_sha256": "7355256d72101b5e00745b63ee6a10244aec2a596098bc1e0835bf397b630c98",
+      "attribution_scope": "aggregate_fii_derivatives_only",
+      "dataset": "fii_derivatives_statistics",
+      "inspection": {
+        "format": "xls",
+        "normalized_records": [
+          {
+            "buy_amount_crore": "10832.49",
+            "buy_contracts": 65215,
+            "instrument_group": "index_futures",
+            "open_interest_amount_crore": "32975.00",
+            "open_interest_contracts": 197728,
+            "record_level": "section_total",
+            "sell_amount_crore": "4698.05",
+            "sell_contracts": 28193,
+            "trade_date": "2026-11-06",
+            "underlying": "ALL_INDICES"
+          },
+          {
+            "buy_amount_crore": "2067138.99",
+            "buy_contracts": 12835658,
+            "instrument_group": "index_options",
+            "open_interest_amount_crore": "685865.45",
+            "open_interest_contracts": 4158866,
+            "record_level": "section_total",
+            "sell_amount_crore": "2060396.28",
+            "sell_contracts": 12785878,
+            "trade_date": "2026-11-06",
+            "underlying": "ALL_INDICES"
+          },
+          {
+            "buy_amount_crore": "26403.25",
+            "buy_contracts": 397938,
+            "instrument_group": "stock_futures",
+            "open_interest_amount_crore": "406829.20",
+            "open_interest_contracts": 6131665,
+            "record_level": "section_total",
+            "sell_amount_crore": "27569.44",
+            "sell_contracts": 406085,
+            "trade_date": "2026-11-06",
+            "underlying": "ALL_STOCKS"
+          },
+          {
+            "buy_amount_crore": "39735.90",
+            "buy_contracts": 569963,
+            "instrument_group": "stock_options",
+            "open_interest_amount_crore": "91826.83",
+            "open_interest_contracts": 1359538,
+            "record_level": "section_total",
+            "sell_amount_crore": "39401.70",
+            "sell_contracts": 565667,
+            "trade_date": "2026-11-06",
+            "underlying": "ALL_STOCKS"
+          },
+          {
+            "buy_amount_crore": "3694.65",
+            "buy_contracts": 21106,
+            "instrument_group": "index_futures",
+            "open_interest_amount_crore": "8122.88",
+            "open_interest_contracts": 45901,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "1794.28",
+            "sell_contracts": 10245,
+            "trade_date": "2026-11-06",
+            "underlying": "BANKNIFTY"
+          },
+          {
+            "buy_amount_crore": "8.72",
+            "buy_contracts": 54,
+            "instrument_group": "index_futures",
+            "open_interest_amount_crore": "66.99",
+            "open_interest_contracts": 410,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "3.85",
+            "sell_contracts": 24,
+            "trade_date": "2026-11-06",
+            "underlying": "FINNIFTY"
+          },
+          {
+            "buy_amount_crore": "166.50",
+            "buy_contracts": 997,
+            "instrument_group": "index_futures",
+            "open_interest_amount_crore": "3944.04",
+            "open_interest_contracts": 23430,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "264.89",
+            "sell_contracts": 1592,
+            "trade_date": "2026-11-06",
+            "underlying": "MIDCPNIFTY"
+          },
+          {
+            "buy_amount_crore": "6958.35",
+            "buy_contracts": 43034,
+            "instrument_group": "index_futures",
+            "open_interest_amount_crore": "20767.53",
+            "open_interest_contracts": 127577,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "2634.13",
+            "sell_contracts": 16327,
+            "trade_date": "2026-11-06",
+            "underlying": "NIFTY"
+          },
+          {
+            "buy_amount_crore": "0.00",
+            "buy_contracts": 0,
+            "instrument_group": "index_futures",
+            "open_interest_amount_crore": "0.00",
+            "open_interest_contracts": 0,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "0.00",
+            "sell_contracts": 0,
+            "trade_date": "2026-11-06",
+            "underlying": "NIFTYFPI"
+          },
+          {
+            "buy_amount_crore": "4.26",
+            "buy_contracts": 24,
+            "instrument_group": "index_futures",
+            "open_interest_amount_crore": "73.56",
+            "open_interest_contracts": 410,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "0.89",
+            "sell_contracts": 5,
+            "trade_date": "2026-11-06",
+            "underlying": "NIFTYNXT50"
+          },
+          {
+            "buy_amount_crore": "94360.96",
+            "buy_contracts": 538330,
+            "instrument_group": "index_options",
+            "open_interest_amount_crore": "107411.26",
+            "open_interest_contracts": 605960,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "94570.68",
+            "sell_contracts": 539315,
+            "trade_date": "2026-11-06",
+            "underlying": "BANKNIFTY"
+          },
+          {
+            "buy_amount_crore": "1338.82",
+            "buy_contracts": 8263,
+            "instrument_group": "index_options",
+            "open_interest_amount_crore": "1777.00",
+            "open_interest_contracts": 10855,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "1416.20",
+            "sell_contracts": 8689,
+            "trade_date": "2026-11-06",
+            "underlying": "FINNIFTY"
+          },
+          {
+            "buy_amount_crore": "10330.28",
+            "buy_contracts": 60915,
+            "instrument_group": "index_options",
+            "open_interest_amount_crore": "12232.54",
+            "open_interest_contracts": 72767,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "10431.40",
+            "sell_contracts": 61310,
+            "trade_date": "2026-11-06",
+            "underlying": "MIDCPNIFTY"
+          },
+          {
+            "buy_amount_crore": "1961101.21",
+            "buy_contracts": 12228107,
+            "instrument_group": "index_options",
+            "open_interest_amount_crore": "564424.68",
+            "open_interest_contracts": 3469171,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "1953966.39",
+            "sell_contracts": 12176499,
+            "trade_date": "2026-11-06",
+            "underlying": "NIFTY"
+          },
+          {
+            "buy_amount_crore": "0.88",
+            "buy_contracts": 5,
+            "instrument_group": "index_options",
+            "open_interest_amount_crore": "11.19",
+            "open_interest_contracts": 64,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "2.63",
+            "sell_contracts": 15,
+            "trade_date": "2026-11-06",
+            "underlying": "NIFTYFPI"
+          },
+          {
+            "buy_amount_crore": "6.84",
+            "buy_contracts": 38,
+            "instrument_group": "index_options",
+            "open_interest_amount_crore": "8.78",
+            "open_interest_contracts": 49,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "8.98",
+            "sell_contracts": 50,
+            "trade_date": "2026-11-06",
+            "underlying": "NIFTYNXT50"
+          }
+        ],
+        "notes": [
+          "Both buy and sell positions have been considered",
+          "Options Value (Buy/Sell) = Strike price * Qty",
+          "Futures Value (Buy/Sell) = Traded Price * Qty",
+          "Value & Open Interest at the end of day:",
+          "Options Value (End of day) = Underlying Close Price * Qty",
+          "Futures Value (End of day) = Closing Futures Price * Qty  (closing price is the daily settlement price of futures contracts)"
+        ],
+        "section_reconciliation": {
+          "index_futures": {
+            "buy_amount_crore": "0.01",
+            "buy_contracts": "0",
+            "open_interest_amount_crore": "0.00",
+            "open_interest_contracts": "0",
+            "sell_amount_crore": "0.01",
+            "sell_contracts": "0"
+          },
+          "index_options": {
+            "buy_amount_crore": "0.00",
+            "buy_contracts": "0",
+            "open_interest_amount_crore": "0.00",
+            "open_interest_contracts": "0",
+            "sell_amount_crore": "0.00",
+            "sell_contracts": "0"
+          }
+        },
+        "sheet_columns": 7,
+        "sheet_name": "sheet1",
+        "sheet_rows": 35,
+        "title": "FII DERIVATIVES STATISTICS FOR 06-Nov-2026",
+        "trade_date_in_title": "2026-11-06"
+      },
+      "payload_bytes": 9216,
+      "payload_path": "data/raw/nse_fo_historical/2026-11-06/fii_derivatives_statistics_7355256d72101b5e.xls",
+      "payload_sha256": "7355256d72101b5e00745b63ee6a10244aec2a596098bc1e0835bf397b630c98",
+      "raw_bytes": 9216,
+      "raw_path": "data/raw/nse_fo_historical/2026-11-06/fii_derivatives_statistics_7355256d72101b5e.bin",
+      "request_url": "https://nsearchives.nseindia.com/content/fo/fii_stats_06-Nov-2026.xls",
+      "retrieved_at": "2026-11-11T07:09:47+00:00",
+      "trade_date": "2026-11-06"
+    },
+    {
+      "archive_member": null,
+      "archive_sha256": "3a26d4ef2e52892fd9878a5e2b71837fad16a22f043dc86cd11c19f65f1f97bf",
+      "attribution_scope": "participant_category_aggregate_not_stock_specific",
+      "dataset": "participant_oi",
+      "inspection": {
+        "column_count": 15,
+        "columns": [
+          "Client Type",
+          "Future Index Long",
+          "Future Index Short",
+          "Future Stock Long",
+          "Future Stock Short",
+          "Option Index Call Long",
+          "Option Index Put Long",
+          "Option Index Call Short",
+          "Option Index Put Short",
+          "Option Stock Call Long",
+          "Option Stock Put Long",
+          "Option Stock Call Short",
+          "Option Stock Put Short",
+          "Total Long Contracts",
+          "Total Short Contracts"
+        ],
+        "format": "csv",
+        "header_sha256": "18f3a9d408c28f7a328ddf2fd3b30777cc0d9d1010d58628587e88fd9a84d3ec",
+        "participant_categories": [
+          "Client",
+          "DII",
+          "FII",
+          "Pro",
+          "TOTAL"
+        ],
+        "participant_rows": [
+          {
+            "Future Index Long": 187440,
+            "Future Index Short": 82799,
+            "Future Stock Long": 3141463,
+            "Future Stock Short": 306451,
+            "Option Index Call Long": 2760218,
+            "Option Index Call Short": 2669313,
+            "Option Index Put Long": 3318042,
+            "Option Index Put Short": 3745090,
+            "Option Stock Call Long": 1604934,
+            "Option Stock Call Short": 1036875,
+            "Option Stock Put Long": 1042838,
+            "Option Stock Put Short": 1031293,
+            "Total Long Contracts": 12054935,
+            "Total Short Contracts": 8871822,
+            "participant_category": "Client"
+          },
+          {
+            "Future Index Long": 53917,
+            "Future Index Short": 8791,
+            "Future Stock Long": 322570,
+            "Future Stock Short": 4416167,
+            "Option Index Call Long": 8583,
+            "Option Index Call Short": 653,
+            "Option Index Put Long": 104414,
+            "Option Index Put Short": 603,
+            "Option Stock Call Long": 2577,
+            "Option Stock Call Short": 358497,
+            "Option Stock Put Long": 41457,
+            "Option Stock Put Short": 31427,
+            "Total Long Contracts": 533518,
+            "Total Short Contracts": 4816138,
+            "participant_category": "DII"
+          },
+          {
+            "Future Index Long": 52037,
+            "Future Index Short": 189475,
+            "Future Stock Long": 3610905,
+            "Future Stock Short": 2523555,
+            "Option Index Call Long": 802826,
+            "Option Index Call Short": 956574,
+            "Option Index Put Long": 1236704,
+            "Option Index Put Short": 810619,
+            "Option Stock Call Long": 280284,
+            "Option Stock Call Short": 338192,
+            "Option Stock Put Long": 350521,
+            "Option Stock Put Short": 262953,
+            "Total Long Contracts": 6333277,
+            "Total Short Contracts": 5081368,
+            "participant_category": "FII"
+          },
+          {
+            "Future Index Long": 28693,
+            "Future Index Short": 41022,
+            "Future Stock Long": 676814,
+            "Future Stock Short": 505579,
+            "Option Index Call Long": 1096242,
+            "Option Index Call Short": 1041328,
+            "Option Index Put Long": 1289384,
+            "Option Index Put Short": 1392233,
+            "Option Stock Call Long": 1152292,
+            "Option Stock Call Short": 1306523,
+            "Option Stock Put Long": 924125,
+            "Option Stock Put Short": 1033268,
+            "Total Long Contracts": 5167550,
+            "Total Short Contracts": 5319953,
+            "participant_category": "Pro"
+          }
+        ],
+        "reconciliation": {
+          "column_totals": {
+            "Future Index Long": {
+              "difference": 0,
+              "participant_sum": 322087,
+              "reported_total": 322087
+            },
+            "Future Index Short": {
+              "difference": 0,
+              "participant_sum": 322087,
+              "reported_total": 322087
+            },
+            "Future Stock Long": {
+              "difference": 0,
+              "participant_sum": 7751752,
+              "reported_total": 7751752
+            },
+            "Future Stock Short": {
+              "difference": 0,
+              "participant_sum": 7751752,
+              "reported_total": 7751752
+            },
+            "Option Index Call Long": {
+              "difference": -1,
+              "participant_sum": 4667869,
+              "reported_total": 4667868
+            },
+            "Option Index Call Short": {
+              "difference": 0,
+              "participant_sum": 4667868,
+              "reported_total": 4667868
+            },
+            "Option Index Put Long": {
+              "difference": 1,
+              "participant_sum": 5948544,
+              "reported_total": 5948545
+            },
+            "Option Index Put Short": {
+              "difference": 0,
+              "participant_sum": 5948545,
+              "reported_total": 5948545
+            },
+            "Option Stock Call Long": {
+              "difference": 0,
+              "participant_sum": 3040087,
+              "reported_total": 3040087
+            },
+            "Option Stock Call Short": {
+              "difference": 0,
+              "participant_sum": 3040087,
+              "reported_total": 3040087
+            },
+            "Option Stock Put Long": {
+              "difference": 0,
+              "participant_sum": 2358941,
+              "reported_total": 2358941
+            },
+            "Option Stock Put Short": {
+              "difference": 0,
+              "participant_sum": 2358941,
+              "reported_total": 2358941
+            },
+            "Total Long Contracts": {
+              "difference": 0,
+              "participant_sum": 24089280,
+              "reported_total": 24089280
+            },
+            "Total Short Contracts": {
+              "difference": -1,
+              "participant_sum": 24089281,
+              "reported_total": 24089280
+            }
+          },
+          "max_absolute_difference": 1,
+          "row_component_totals": {
+            "Client": {
+              "long_component_sum": 12054935,
+              "long_difference": 0,
+              "reported_total_long": 12054935,
+              "reported_total_short": 8871822,
+              "short_component_sum": 8871821,
+              "short_difference": 1
+            },
+            "DII": {
+              "long_component_sum": 533518,
+              "long_difference": 0,
+              "reported_total_long": 533518,
+              "reported_total_short": 4816138,
+              "short_component_sum": 4816138,
+              "short_difference": 0
+            },
+            "FII": {
+              "long_component_sum": 6333277,
+              "long_difference": 0,
+              "reported_total_long": 6333277,
+              "reported_total_short": 5081368,
+              "short_component_sum": 5081368,
+              "short_difference": 0
+            },
+            "Pro": {
+              "long_component_sum": 5167550,
+              "long_difference": 0,
+              "reported_total_long": 5167550,
+              "reported_total_short": 5319953,
+              "short_component_sum": 5319953,
+              "short_difference": 0
+            },
+            "TOTAL": {
+              "long_component_sum": 24089280,
+              "long_difference": 0,
+              "reported_total_long": 24089280,
+              "reported_total_short": 24089280,
+              "short_component_sum": 24089280,
+              "short_difference": 0
+            }
+          },
+          "status": "difference_observed"
+        },
+        "reported_total_row": {
+          "Future Index Long": 322087,
+          "Future Index Short": 322087,
+          "Future Stock Long": 7751752,
+          "Future Stock Short": 7751752,
+          "Option Index Call Long": 4667868,
+          "Option Index Call Short": 4667868,
+          "Option Index Put Long": 5948545,
+          "Option Index Put Short": 5948545,
+          "Option Stock Call Long": 3040087,
+          "Option Stock Call Short": 3040087,
+          "Option Stock Put Long": 2358941,
+          "Option Stock Put Short": 2358941,
+          "Total Long Contracts": 24089280,
+          "Total Short Contracts": 24089280,
+          "participant_category": "TOTAL"
+        },
+        "row_count": 5,
+        "title": "Participant wise Open Interest (no. of contracts) in Equity Derivatives as on Nov 05, 2026",
+        "trade_date_in_title": "2026-11-05",
+        "units_as_labelled": "number_of_contracts"
+      },
+      "payload_bytes": 980,
+      "payload_path": "data/raw/nse_fo_historical/2026-11-05/participant_oi_3a26d4ef2e52892f.csv",
+      "payload_sha256": "3a26d4ef2e52892fd9878a5e2b71837fad16a22f043dc86cd11c19f65f1f97bf",
+      "raw_bytes": 980,
+      "raw_path": "data/raw/nse_fo_historical/2026-11-05/participant_oi_3a26d4ef2e52892f.bin",
+      "request_url": "https://nsearchives.nseindia.com/content/nsccl/fao_participant_oi_05112026.csv",
+      "retrieved_at": "2026-11-11T07:09:47+00:00",
+      "trade_date": "2026-11-05"
+    },
+    {
+      "archive_member": null,
+      "archive_sha256": "a020ada8e074d6acc3a92220b1055f8d606149bee96595894b5f74409c7beb10",
+      "attribution_scope": "participant_category_aggregate_not_stock_specific",
+      "dataset": "participant_volume",
+      "inspection": {
+        "column_count": 15,
+        "columns": [
+          "Client Type",
+          "Future Index Long",
+          "Future Index Short",
+          "Future Stock Long",
+          "Future Stock Short",
+          "Option Index Call Long",
+          "Option Index Put Long",
+          "Option Index Call Short",
+          "Option Index Put Short",
+          "Option Stock Call Long",
+          "Option Stock Put Long",
+          "Option Stock Call Short",
+          "Option Stock Put Short",
+          "Total Long Contracts",
+          "Total Short Contracts"
+        ],
+        "format": "csv",
+        "header_sha256": "18f3a9d408c28f7a328ddf2fd3b30777cc0d9d1010d58628587e88fd9a84d3ec",
+        "participant_categories": [
+          "Client",
+          "DII",
+          "FII",
+          "Pro",
+          "TOTAL"
+        ],
+        "participant_rows": [
+          {
+            "Future Index Long": 70755,
+            "Future Index Short": 115907,
+            "Future Stock Long": 441769,
+            "Future Stock Short": 528457,
+            "Option Index Call Long": 19796259,
+            "Option Index Call Short": 19797260,
+            "Option Index Put Long": 13646942,
+            "Option Index Put Short": 13575760,
+            "Option Stock Call Long": 2444733,
+            "Option Stock Call Short": 2414120,
+            "Option Stock Put Long": 959941,
+            "Option Stock Put Short": 937799,
+            "Total Long Contracts": 37360399,
+            "Total Short Contracts": 37369303,
+            "participant_category": "Client"
+          },
+          {
+            "Future Index Long": 5072,
+            "Future Index Short": 2264,
+            "Future Stock Long": 190870,
+            "Future Stock Short": 76875,
+            "Option Index Call Long": 1571,
+            "Option Index Call Short": 7250,
+            "Option Index Put Long": 1141,
+            "Option Index Put Short": 10333,
+            "Option Stock Call Long": 15314,
+            "Option Stock Call Short": 35904,
+            "Option Stock Put Long": 10117,
+            "Option Stock Put Short": 12532,
+            "Total Long Contracts": 224085,
+            "Total Short Contracts": 145158,
+            "participant_category": "DII"
+          },
+          {
+            "Future Index Long": 68305,
+            "Future Index Short": 19764,
+            "Future Stock Long": 495951,
+            "Future Stock Short": 451764,
+            "Option Index Call Long": 3711972,
+            "Option Index Call Short": 3643743,
+            "Option Index Put Long": 3478983,
+            "Option Index Put Short": 3473985,
+            "Option Stock Call Long": 319266,
+            "Option Stock Call Short": 298768,
+            "Option Stock Put Long": 219403,
+            "Option Stock Put Short": 222961,
+            "Total Long Contracts": 8293880,
+            "Total Short Contracts": 8110985,
+            "participant_category": "FII"
+          },
+          {
+            "Future Index Long": 32225,
+            "Future Index Short": 38422,
+            "Future Stock Long": 516632,
+            "Future Stock Short": 588126,
+            "Option Index Call Long": 20024579,
+            "Option Index Call Short": 20086128,
+            "Option Index Put Long": 18843483,
+            "Option Index Put Short": 18910471,
+            "Option Stock Call Long": 4499561,
+            "Option Stock Call Short": 4530082,
+            "Option Stock Put Long": 2748401,
+            "Option Stock Put Short": 2764570,
+            "Total Long Contracts": 46664881,
+            "Total Short Contracts": 46917799,
+            "participant_category": "Pro"
+          }
+        ],
+        "reconciliation": {
+          "column_totals": {
+            "Future Index Long": {
+              "difference": 0,
+              "participant_sum": 176357,
+              "reported_total": 176357
+            },
+            "Future Index Short": {
+              "difference": 0,
+              "participant_sum": 176357,
+              "reported_total": 176357
+            },
+            "Future Stock Long": {
+              "difference": 0,
+              "participant_sum": 1645222,
+              "reported_total": 1645222
+            },
+            "Future Stock Short": {
+              "difference": 0,
+              "participant_sum": 1645222,
+              "reported_total": 1645222
+            },
+            "Option Index Call Long": {
+              "difference": 0,
+              "participant_sum": 43534381,
+              "reported_total": 43534381
+            },
+            "Option Index Call Short": {
+              "difference": 0,
+              "participant_sum": 43534381,
+              "reported_total": 43534381
+            },
+            "Option Index Put Long": {
+              "difference": 0,
+              "participant_sum": 35970549,
+              "reported_total": 35970549
+            },
+            "Option Index Put Short": {
+              "difference": 0,
+              "participant_sum": 35970549,
+              "reported_total": 35970549
+            },
+            "Option Stock Call Long": {
+              "difference": 0,
+              "participant_sum": 7278874,
+              "reported_total": 7278874
+            },
+            "Option Stock Call Short": {
+              "difference": 0,
+              "participant_sum": 7278874,
+              "reported_total": 7278874
+            },
+            "Option Stock Put Long": {
+              "difference": 0,
+              "participant_sum": 3937862,
+              "reported_total": 3937862
+            },
+            "Option Stock Put Short": {
+              "difference": 0,
+              "participant_sum": 3937862,
+              "reported_total": 3937862
+            },
+            "Total Long Contracts": {
+              "difference": 0,
+              "participant_sum": 92543245,
+              "reported_total": 92543245
+            },
+            "Total Short Contracts": {
+              "difference": 0,
+              "participant_sum": 92543245,
+              "reported_total": 92543245
+            }
+          },
+          "max_absolute_difference": 0,
+          "row_component_totals": {
+            "Client": {
+              "long_component_sum": 37360399,
+              "long_difference": 0,
+              "reported_total_long": 37360399,
+              "reported_total_short": 37369303,
+              "short_component_sum": 37369303,
+              "short_difference": 0
+            },
+            "DII": {
+              "long_component_sum": 224085,
+              "long_difference": 0,
+              "reported_total_long": 224085,
+              "reported_total_short": 145158,
+              "short_component_sum": 145158,
+              "short_difference": 0
+            },
+            "FII": {
+              "long_component_sum": 8293880,
+              "long_difference": 0,
+              "reported_total_long": 8293880,
+              "reported_total_short": 8110985,
+              "short_component_sum": 8110985,
+              "short_difference": 0
+            },
+            "Pro": {
+              "long_component_sum": 46664881,
+              "long_difference": 0,
+              "reported_total_long": 46664881,
+              "reported_total_short": 46917799,
+              "short_component_sum": 46917799,
+              "short_difference": 0
+            },
+            "TOTAL": {
+              "long_component_sum": 92543245,
+              "long_difference": 0,
+              "reported_total_long": 92543245,
+              "reported_total_short": 92543245,
+              "short_component_sum": 92543245,
+              "short_difference": 0
+            }
+          },
+          "status": "exact_match"
+        },
+        "reported_total_row": {
+          "Future Index Long": 176357,
+          "Future Index Short": 176357,
+          "Future Stock Long": 1645222,
+          "Future Stock Short": 1645222,
+          "Option Index Call Long": 43534381,
+          "Option Index Call Short": 43534381,
+          "Option Index Put Long": 35970549,
+          "Option Index Put Short": 35970549,
+          "Option Stock Call Long": 7278874,
+          "Option Stock Call Short": 7278874,
+          "Option Stock Put Long": 3937862,
+          "Option Stock Put Short": 3937862,
+          "Total Long Contracts": 92543245,
+          "Total Short Contracts": 92543245,
+          "participant_category": "TOTAL"
+        },
+        "row_count": 5,
+        "title": "Participant wise Trading Volume (no. of contracts) in Equity Derivatives as on Nov 05, 2026",
+        "trade_date_in_title": "2026-11-05",
+        "units_as_labelled": "number_of_contracts"
+      },
+      "payload_bytes": 991,
+      "payload_path": "data/raw/nse_fo_historical/2026-11-05/participant_volume_a020ada8e074d6ac.csv",
+      "payload_sha256": "a020ada8e074d6acc3a92220b1055f8d606149bee96595894b5f74409c7beb10",
+      "raw_bytes": 991,
+      "raw_path": "data/raw/nse_fo_historical/2026-11-05/participant_volume_a020ada8e074d6ac.bin",
+      "request_url": "https://nsearchives.nseindia.com/content/nsccl/fao_participant_vol_05112026.csv",
+      "retrieved_at": "2026-11-11T07:09:48+00:00",
+      "trade_date": "2026-11-05"
+    },
+    {
+      "archive_member": null,
+      "archive_sha256": "4d0b7db091e418bd89edab31ebd736e32742c518e8f947bc8f89b51b2ccaa36c",
+      "attribution_scope": "aggregate_fii_derivatives_only",
+      "dataset": "fii_derivatives_statistics",
+      "inspection": {
+        "format": "xls",
+        "normalized_records": [
+          {
+            "buy_amount_crore": "11126.17",
+            "buy_contracts": 68305,
+            "instrument_group": "index_futures",
+            "open_interest_amount_crore": "39649.20",
+            "open_interest_contracts": 241512,
+            "record_level": "section_total",
+            "sell_amount_crore": "3242.40",
+            "sell_contracts": 19764,
+            "trade_date": "2026-11-05",
+            "underlying": "ALL_INDICES"
+          },
+          {
+            "buy_amount_crore": "1142655.19",
+            "buy_contracts": 7190955,
+            "instrument_group": "index_options",
+            "open_interest_amount_crore": "614924.69",
+            "open_interest_contracts": 3806723,
+            "record_level": "section_total",
+            "sell_amount_crore": "1131193.83",
+            "sell_contracts": 7117728,
+            "trade_date": "2026-11-05",
+            "underlying": "ALL_INDICES"
+          },
+          {
+            "buy_amount_crore": "33162.10",
+            "buy_contracts": 495951,
+            "instrument_group": "stock_futures",
+            "open_interest_amount_crore": "403793.83",
+            "open_interest_contracts": 6134460,
+            "record_level": "section_total",
+            "sell_amount_crore": "30225.92",
+            "sell_contracts": 451764,
+            "trade_date": "2026-11-05",
+            "underlying": "ALL_STOCKS"
+          },
+          {
+            "buy_amount_crore": "36873.22",
+            "buy_contracts": 538669,
+            "instrument_group": "stock_options",
+            "open_interest_amount_crore": "81926.05",
+            "open_interest_contracts": 1231950,
+            "record_level": "section_total",
+            "sell_amount_crore": "35701.98",
+            "sell_contracts": 521729,
+            "trade_date": "2026-11-05",
+            "underlying": "ALL_STOCKS"
+          },
+          {
+            "buy_amount_crore": "3231.45",
+            "buy_contracts": 18800,
+            "instrument_group": "index_futures",
+            "open_interest_amount_crore": "10598.64",
+            "open_interest_contracts": 61046,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "1243.68",
+            "sell_contracts": 7232,
+            "trade_date": "2026-11-05",
+            "underlying": "BANKNIFTY"
+          },
+          {
+            "buy_amount_crore": "23.66",
+            "buy_contracts": 150,
+            "instrument_group": "index_futures",
+            "open_interest_amount_crore": "60.66",
+            "open_interest_contracts": 380,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "10.89",
+            "sell_contracts": 69,
+            "trade_date": "2026-11-05",
+            "underlying": "FINNIFTY"
+          },
+          {
+            "buy_amount_crore": "339.08",
+            "buy_contracts": 2020,
+            "instrument_group": "index_futures",
+            "open_interest_amount_crore": "3836.57",
+            "open_interest_contracts": 22821,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "98.55",
+            "sell_contracts": 588,
+            "trade_date": "2026-11-05",
+            "underlying": "MIDCPNIFTY"
+          },
+          {
+            "buy_amount_crore": "7530.55",
+            "buy_contracts": 47327,
+            "instrument_group": "index_futures",
+            "open_interest_amount_crore": "25076.04",
+            "open_interest_contracts": 156834,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "1887.30",
+            "sell_contracts": 11864,
+            "trade_date": "2026-11-05",
+            "underlying": "NIFTY"
+          },
+          {
+            "buy_amount_crore": "0.00",
+            "buy_contracts": 0,
+            "instrument_group": "index_futures",
+            "open_interest_amount_crore": "0.00",
+            "open_interest_contracts": 0,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "0.00",
+            "sell_contracts": 0,
+            "trade_date": "2026-11-05",
+            "underlying": "NIFTYFPI"
+          },
+          {
+            "buy_amount_crore": "1.43",
+            "buy_contracts": 8,
+            "instrument_group": "index_futures",
+            "open_interest_amount_crore": "77.29",
+            "open_interest_contracts": 431,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "1.97",
+            "sell_contracts": 11,
+            "trade_date": "2026-11-05",
+            "underlying": "NIFTYNXT50"
+          },
+          {
+            "buy_amount_crore": "89256.76",
+            "buy_contracts": 517408,
+            "instrument_group": "index_options",
+            "open_interest_amount_crore": "90747.21",
+            "open_interest_contracts": 523579,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "84791.66",
+            "sell_contracts": 491900,
+            "trade_date": "2026-11-05",
+            "underlying": "BANKNIFTY"
+          },
+          {
+            "buy_amount_crore": "2262.63",
+            "buy_contracts": 14071,
+            "instrument_group": "index_options",
+            "open_interest_amount_crore": "1645.03",
+            "open_interest_contracts": 10307,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "2376.58",
+            "sell_contracts": 14726,
+            "trade_date": "2026-11-05",
+            "underlying": "FINNIFTY"
+          },
+          {
+            "buy_amount_crore": "8550.54",
+            "buy_contracts": 50887,
+            "instrument_group": "index_options",
+            "open_interest_amount_crore": "11397.97",
+            "open_interest_contracts": 68000,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "8622.80",
+            "sell_contracts": 51344,
+            "trade_date": "2026-11-05",
+            "underlying": "MIDCPNIFTY"
+          },
+          {
+            "buy_amount_crore": "1042571.17",
+            "buy_contracts": 6608512,
+            "instrument_group": "index_options",
+            "open_interest_amount_crore": "511115.58",
+            "open_interest_contracts": 3204730,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "1035380.27",
+            "sell_contracts": 6559635,
+            "trade_date": "2026-11-05",
+            "underlying": "NIFTY"
+          },
+          {
+            "buy_amount_crore": "0.00",
+            "buy_contracts": 0,
+            "instrument_group": "index_options",
+            "open_interest_amount_crore": "7.60",
+            "open_interest_contracts": 44,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "0.18",
+            "sell_contracts": 1,
+            "trade_date": "2026-11-05",
+            "underlying": "NIFTYFPI"
+          },
+          {
+            "buy_amount_crore": "14.09",
+            "buy_contracts": 77,
+            "instrument_group": "index_options",
+            "open_interest_amount_crore": "11.30",
+            "open_interest_contracts": 63,
+            "record_level": "underlying_detail",
+            "sell_amount_crore": "22.35",
+            "sell_contracts": 122,
+            "trade_date": "2026-11-05",
+            "underlying": "NIFTYNXT50"
+          }
+        ],
+        "notes": [
+          "Both buy and sell positions have been considered",
+          "Options Value (Buy/Sell) = Strike price * Qty",
+          "Futures Value (Buy/Sell) = Traded Price * Qty",
+          "Value & Open Interest at the end of day:",
+          "Options Value (End of day) = Underlying Close Price * Qty",
+          "Futures Value (End of day) = Closing Futures Price * Qty  (closing price is the daily settlement price of futures contracts)"
+        ],
+        "section_reconciliation": {
+          "index_futures": {
+            "buy_amount_crore": "0.00",
+            "buy_contracts": "0",
+            "open_interest_amount_crore": "0.00",
+            "open_interest_contracts": "0",
+            "sell_amount_crore": "0.01",
+            "sell_contracts": "0"
+          },
+          "index_options": {
+            "buy_amount_crore": "0.00",
+            "buy_contracts": "0",
+            "open_interest_amount_crore": "0.00",
+            "open_interest_contracts": "0",
+            "sell_amount_crore": "-0.01",
+            "sell_contracts": "0"
+          }
+        },
+        "sheet_columns": 7,
+        "sheet_name": "sheet1",
+        "sheet_rows": 35,
+        "title": "FII DERIVATIVES STATISTICS FOR 05-Nov-2026",
+        "trade_date_in_title": "2026-11-05"
+      },
+      "payload_bytes": 9216,
+      "payload_path": "data/raw/nse_fo_historical/2026-11-05/fii_derivatives_statistics_4d0b7db091e418bd.xls",
+      "payload_sha256": "4d0b7db091e418bd89edab31ebd736e32742c518e8f947bc8f89b51b2ccaa36c",
+      "raw_bytes": 9216,
+      "raw_path": "data/raw/nse_fo_historical/2026-11-05/fii_derivatives_statistics_4d0b7db091e418bd.bin",
+      "request_url": "https://nsearchives.nseindia.com/content/fo/fii_stats_05-Nov-2026.xls",
+      "retrieved_at": "2026-11-11T07:09:48+00:00",
+      "trade_date": "2026-11-05"
+    }
+  ],
+  "requested_complete_sessions": 3,
+  "unavailable": [
+    {
+      "dataset": "participant_oi",
+      "error": "RuntimeError: NSE request failed for https://nsearchives.nseindia.com/content/nsccl/fao_participant_oi_10112026.csv: HTTP Error 404: Not Found",
+      "status": "unavailable_or_unvalidated",
+      "trade_date": "2026-11-10"
+    },
+    {
+      "dataset": "participant_volume",
+      "error": "RuntimeError: NSE request failed for https://nsearchives.nseindia.com/content/nsccl/fao_participant_vol_10112026.csv: HTTP Error 404: Not Found",
+      "status": "unavailable_or_unvalidated",
+      "trade_date": "2026-11-10"
+    },
+    {
+      "dataset": "fii_derivatives_statistics",
+      "error": "RuntimeError: NSE request failed for https://nsearchives.nseindia.com/content/fo/fii_stats_10-Nov-2026.xls: HTTP Error 404: Not Found",
+      "status": "unavailable_or_unvalidated",
+      "trade_date": "2026-11-10"
+    }
+  ]
+}
