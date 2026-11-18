@@ -162,6 +162,12 @@ jobs:
           assert matrix["status"] == "complete"
           assert matrix["stock_count"] == 501
           assert len(rows) == 501
+          assert matrix["ownership_parsed_verified_count"] == 494
+          assert matrix["issuer_fallback_verified_count"] == 2
+          assert matrix["reit_unitholding_verified_count"] == 3
+          assert matrix["ownership_evidence_coverage_count"] == 499
+          assert matrix["ownership_evidence_coverage_pct"] == 99.8
+          assert matrix["ownership_unresolved_count"] == 1
           assert matrix["as_of_trade_date"] == historical["as_of_trade_date"]
           assert historical["participant_derivatives_window_cutoff_date"] == historical["as_of_trade_date"]
           assert historical["participant_derivatives_as_of_trade_date"] <= historical["participant_derivatives_window_cutoff_date"]
@@ -192,6 +198,12 @@ jobs:
               "direct_fpi_client_gross_buy_candidates": matrix["direct_fpi_client_gross_buy_candidate_count"],
               "grade_1_count": matrix["grade_1_count"],
               "grade_2_count": matrix["grade_2_count"],
+              "ownership_parsed_verified_count": matrix["ownership_parsed_verified_count"],
+              "issuer_fallback_verified_count": matrix["issuer_fallback_verified_count"],
+              "reit_unitholding_verified_count": matrix["reit_unitholding_verified_count"],
+              "ownership_evidence_coverage_count": matrix["ownership_evidence_coverage_count"],
+              "ownership_evidence_coverage_pct": matrix["ownership_evidence_coverage_pct"],
+              "ownership_unresolved_count": matrix["ownership_unresolved_count"],
               "composite_score_status": matrix["composite_score_status"],
           }, indent=2))
           PY
