@@ -632,6 +632,9 @@ def build(root: Path = Path(".")) -> dict:
         "participant_derivatives_as_of_trade_date": historical_manifest.get(
             "participant_derivatives_as_of_trade_date"
         ),
+        "participant_derivatives_window_cutoff_date": historical_manifest.get(
+            "participant_derivatives_window_cutoff_date"
+        ),
         "participant_derivatives_latest_observed_trade_date": historical_manifest.get(
             "participant_derivatives_latest_observed_trade_date"
         ),
