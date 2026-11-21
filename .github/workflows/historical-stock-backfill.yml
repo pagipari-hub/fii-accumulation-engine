@@ -37,7 +37,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: daily-nifty500-stock-evidence
+  group: daily-nifty500-stock-evidence-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
