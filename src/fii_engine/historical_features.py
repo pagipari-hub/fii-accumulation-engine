@@ -67,7 +67,17 @@ def _load_daily_snapshots(root: Path) -> tuple[list[dict], list[str]]:
     paths = sorted(directory.glob("daily_stock_features_*.csv"))
     if not paths:
         raise FileNotFoundError("no immutable daily stock feature snapshots found")
-    by_date: dict[str, dict] = {}
+
+    resolution_path = root / "config/daily_stock_snapshot_resolutions.json"
+    if resolution_path.exists():
+        resolution_document = json.loads(resolution_path.read_text(encoding="utf-8"))
+        if resolution_document.get("schema_version") != 1:
+            raise ValueError("unsupported daily snapshot resolution schema version")
+        resolutions = resolution_document.get("resolutions", {})
+    else:
+        resolutions = {}
+
+    candidates_by_date: dict[str, list[dict]] = defaultdict(list)
     for path in paths:
         match = re.fullmatch(
             r"daily_stock_features_(\d{4}-\d{2}-\d{2})_([0-9a-f]{16})\.csv",
@@ -95,12 +105,7 @@ def _load_daily_snapshots(root: Path) -> tuple[list[dict], list[str]]:
         isins = {row["symbol"]: row["isin"] for row in rows}
         if any(not value for value in isins.values()):
             raise ValueError(f"blank ISIN in daily stock snapshot: {path}")
-        if snapshot_date in by_date:
-            raise ValueError(
-                f"multiple immutable stock snapshots exist for {snapshot_date}; "
-                "resolve the corrected/revised snapshot explicitly before rolling analysis"
-            )
-        by_date[snapshot_date] = {
+        candidates_by_date[snapshot_date].append({
             "date": snapshot_date,
             "rows": {row["symbol"]: row for row in rows},
             "symbols": set(symbols),
@@ -108,9 +113,46 @@ def _load_daily_snapshots(root: Path) -> tuple[list[dict], list[str]]:
             "path": str(path.relative_to(root)),
             "sha256": digest,
             "row_count": len(rows),
-        }
-    dates = sorted(by_date)
-    return [by_date[item] for item in dates], dates
+        })
+
+    selected_by_date = {}
+    for snapshot_date, candidates in sorted(candidates_by_date.items()):
+        resolution = resolutions.get(snapshot_date)
+        candidate_prefixes = sorted(item["sha256"][:16] for item in candidates)
+        if resolution is None:
+            if len(candidates) != 1:
+                raise ValueError(
+                    f"multiple immutable stock snapshots exist for {snapshot_date}; "
+                    "resolve the corrected/revised snapshot explicitly before rolling analysis"
+                )
+            selected = candidates[0]
+        else:
+            expected_prefixes = sorted(resolution.get("candidate_sha256_prefixes", []))
+            if expected_prefixes != candidate_prefixes:
+                raise ValueError(
+                    f"daily snapshot resolution candidate set changed for {snapshot_date}; "
+                    "re-adjudication is required"
+                )
+            selected_prefix = resolution.get("selected_sha256_prefix")
+            matches = [
+                item for item in candidates
+                if item["sha256"].startswith(str(selected_prefix))
+            ]
+            if len(matches) != 1:
+                raise ValueError(
+                    f"daily snapshot resolution does not select exactly one candidate for {snapshot_date}"
+                )
+            selected = matches[0]
+            selected["resolution"] = resolution
+        selected_by_date[snapshot_date] = selected
+
+    unknown_resolutions = sorted(set(resolutions) - set(candidates_by_date))
+    if unknown_resolutions:
+        raise ValueError(
+            f"daily snapshot resolutions reference missing dates: {unknown_resolutions}"
+        )
+    dates = sorted(selected_by_date)
+    return [selected_by_date[item] for item in dates], dates
 
 
 def _load_fii_snapshots(root: Path) -> tuple[list[dict], list[str]]:
@@ -525,6 +567,13 @@ def build_historical_features(root: Path = Path(".")) -> dict:
         "as_of_trade_date": latest["date"],
         "daily_stock_session_count": len(daily),
         "daily_stock_trade_dates": daily_dates,
+        "daily_stock_snapshot_resolutions": [
+            {
+                "trade_date": item["date"],
+                **item["resolution"],
+            }
+            for item in daily if "resolution" in item
+        ],
         "market_flow_session_count": len(fii),
         "market_flow_trade_dates": fii_dates,
         "participant_oi_session_count": len(participant_history["participant_oi"]),
