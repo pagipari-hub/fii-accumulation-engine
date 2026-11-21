@@ -1,2351 +1,2835 @@
 {
   "dataset": "nse_shareholding_fpi_ownership",
   "publisher": "National Stock Exchange of India",
-  "retrieved_at_utc": "2026-11-16T23:47:26.012657+00:00",
-  "status": "partial_xbrl_coverage",
+  "retrieved_at_utc": "2026-11-21T16:19:25.302971+00:00",
+  "status": "partial_identity_coverage",
   "source_page": "https://www.nseindia.com/companies-listing/corporate-filings-shareholding-pattern/",
   "master_url": "https://www.nseindia.com/api/corporate-share-holdings-master?index=equities",
-  "master_raw_path": "data/raw/shareholding/shareholding_master_d7cf10b1a4f3980c.json",
-  "master_raw_sha256": "d7cf10b1a4f3980c59c4426a6befcfdf2235b5165902c087c2e33b29538f2372",
+  "master_raw_path": "data/raw/shareholding/shareholding_master_8ef1603f82316b29.json",
+  "master_raw_sha256": "8ef1603f82316b29b6bf13a8dfd4faede8856742ead6ed9fda7fdce37bdc0e28",
   "universe_sha256": "68e2eac52f778cb8b1b63c2dd5617386a942b6313553f58ef2ef7f4260dfa469",
   "current_universe_count": 501,
-  "master_records_for_current_universe": 494,
+  "master_records_for_current_universe": 495,
   "reporting_dates": [
     "2026-09-30"
   ],
   "identity_status_counts": {
-    "isin_mismatch": 109,
-    "verified": 385
+    "identity_unverified": 3,
+    "isin_mismatch": 143,
+    "verified": 349
   },
-  "eligible_filing_count": 385,
-  "fetched_filing_count": 0,
+  "eligible_filing_count": 349,
+  "fetched_filing_count": 349,
   "reused_filing_count": 0,
-  "fetch_error_count": 385,
-  "fetch_errors": [
+  "fetch_error_count": 0,
+  "fetch_errors": [],
+  "raw_xbrl_refs": [
     {
+      "path": "data/raw/shareholding/xbrl/216400_15d299ce9b00f8e1.xml",
+      "sha256": "15d299ce9b00f8e162401b13ea10507509c7b3c29ed56777acfe1413ae3ba7de",
+      "bytes": 345975,
+      "record_id": "216400",
+      "symbol": "ALKEM"
+    },
+    {
+      "path": "data/raw/shareholding/xbrl/216298_18c37e6017deed82.xml",
+      "sha256": "18c37e6017deed822d9833038a4a3d86433ca77f059466d79abf9cddeccf6041",
+      "bytes": 245752,
       "record_id": "216298",
-      "symbol": "HONASA",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743656_22102026121924_WEB.xml"
+      "symbol": "HONASA"
     },
     {
-      "record_id": "216293",
-      "symbol": "COFORGE",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743643_21102026105431_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/216286_54fd64e0f9521d08.xml",
+      "sha256": "54fd64e0f9521d081323799b5408048b53ec0c9c14a6608a00db7854f9930d58",
+      "bytes": 187954,
       "record_id": "216286",
-      "symbol": "GRAVITA",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743625_21102026095332_WEB.xml"
+      "symbol": "GRAVITA"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216280_eabff7672dce0f50.xml",
+      "sha256": "eabff7672dce0f505f7d149e4966adb40e3d7ce58a7d927f924d07cf7f938bfc",
+      "bytes": 341230,
       "record_id": "216280",
-      "symbol": "CIPLA",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743615_21102026092948_WEB.xml"
+      "symbol": "CIPLA"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216278_4f35b1cc76fd4bcf.xml",
+      "sha256": "4f35b1cc76fd4bcf806d956ea781311ab798e916aa849d5a7eb4f68cbb1a2c28",
+      "bytes": 241126,
       "record_id": "216278",
-      "symbol": "SONACOMS",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743608_21102026092126_WEB.xml"
+      "symbol": "SONACOMS"
     },
     {
-      "record_id": "216274",
-      "symbol": "COROMANDEL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743599_21102026091803_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/216263_6d6222ad51a9e730.xml",
+      "sha256": "6d6222ad51a9e730651dc360710e45b3407fdbb749cd49f5fd945b6f003b183a",
+      "bytes": 112472,
       "record_id": "216263",
-      "symbol": "HBLENGINE",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743556_21102026082148_WEB.xml"
+      "symbol": "HBLENGINE"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216256_291d331d433bd830.xml",
+      "sha256": "291d331d433bd83008aa2a4cfde33ecf0222cfa5be04613d71fd7abbbe06de80",
+      "bytes": 499662,
       "record_id": "216256",
-      "symbol": "ICICILIFE",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743528_21102026080538_WEB.xml"
+      "symbol": "ICICILIFE"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216254_58612f07b15d582b.xml",
+      "sha256": "58612f07b15d582b5326d10fcb8a9eca45638af3160142b68916726e18480b34",
+      "bytes": 553143,
       "record_id": "216254",
-      "symbol": "KFINTECH",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743521_21102026075922_WEB.xml"
+      "symbol": "KFINTECH"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216248_d9fdc0894e1b2b02.xml",
+      "sha256": "d9fdc0894e1b2b029b15478d1273317c1fda7e1a1fdc51d7f843e0ffce020606",
+      "bytes": 463992,
       "record_id": "216248",
-      "symbol": "JSWENERGY",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743505_21102026074527_WEB.xml"
+      "symbol": "JSWENERGY"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216245_11b6bd06c78e6b33.xml",
+      "sha256": "11b6bd06c78e6b33c33291007b00afd779e90149ed82632e24883b56205e662c",
+      "bytes": 482437,
       "record_id": "216245",
-      "symbol": "ICICIAMC",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743496_21102026073755_WEB.xml"
+      "symbol": "ICICIAMC"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216243_ef13dc8652baccc5.xml",
+      "sha256": "ef13dc8652baccc5b6962844cf8bd5bff5390fc1ecc3c72082372c9fd055f0cd",
+      "bytes": 504645,
       "record_id": "216243",
-      "symbol": "KIRLOSENG",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743494_21102026073729_WEB.xml"
+      "symbol": "KIRLOSENG"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216233_bfb501cda4d74aae.xml",
+      "sha256": "bfb501cda4d74aaec33571e5cfd636905e78df21c2038064b6e36da7a750d160",
+      "bytes": 270190,
       "record_id": "216233",
-      "symbol": "CHOICEIN",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743468_21102026071752_WEB.xml"
+      "symbol": "CHOICEIN"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216227_a38a9865cbe81764.xml",
+      "sha256": "a38a9865cbe817646f78e79c7e42569c12622ea8f9e6325ce4e61ea64d18e7ea",
+      "bytes": 209104,
       "record_id": "216227",
-      "symbol": "BIOCON",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743438_21102026070347_WEB.xml"
+      "symbol": "BIOCON"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216226_d56f693ec80fd8f3.xml",
+      "sha256": "d56f693ec80fd8f35e8658f2b1a46ab824409c5ee258a6fe172db2c5c05fa4d1",
+      "bytes": 368248,
       "record_id": "216226",
-      "symbol": "TORNTPOWER",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743436_21102026070322_WEB.xml"
+      "symbol": "TORNTPOWER"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216223_b2606b53db609d7d.xml",
+      "sha256": "b2606b53db609d7de0f0c336a4656bb12829a6406fb0d341aa10842c4f49efa5",
+      "bytes": 845695,
       "record_id": "216223",
-      "symbol": "TECHM",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743431_21102026070029_WEB.xml"
+      "symbol": "TECHM"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216206_1d1af5daec493f4b.xml",
+      "sha256": "1d1af5daec493f4b9a59d828d5fd0530e4c9fc53b384976f8b5a7bd368c84bb0",
+      "bytes": 1252810,
       "record_id": "216206",
-      "symbol": "JSWCEMENT",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743380_21102026063448_WEB.xml"
+      "symbol": "JSWCEMENT"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216192_5a6b20492b705d20.xml",
+      "sha256": "5a6b20492b705d20955850c61a574a481e8771a21629d8c21f852c211d291465",
+      "bytes": 817698,
       "record_id": "216192",
-      "symbol": "INDUSTOWER",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743312_21102026061216_WEB.xml"
+      "symbol": "INDUSTOWER"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216175_5a53b46441c60727.xml",
+      "sha256": "5a53b46441c60727a6a855b78aeed0a68921201b32ec8661daf86e58541f6bd0",
+      "bytes": 481547,
+      "record_id": "216175",
+      "symbol": "JSWSTEEL"
+    },
+    {
+      "path": "data/raw/shareholding/xbrl/216166_e19752c475dbdb57.xml",
+      "sha256": "e19752c475dbdb573e35226df307a9af88684a3b0413af9c87d57604d3a6c3b4",
+      "bytes": 98263,
       "record_id": "216166",
-      "symbol": "RAILTEL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743190_21102026054740_WEB.xml"
+      "symbol": "RAILTEL"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216164_056e54f4bd3f0518.xml",
+      "sha256": "056e54f4bd3f05186e65391f12f3f26acba047309a1df0b928aee29cd9a9cdd6",
+      "bytes": 262022,
       "record_id": "216164",
-      "symbol": "CROMPTON",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743188_21102026054422_WEB.xml"
+      "symbol": "CROMPTON"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216160_4c465a7e9b43215b.xml",
+      "sha256": "4c465a7e9b43215b30d1a144aa0f277b681168c9eb814e2ca778057a63f47765",
+      "bytes": 203515,
       "record_id": "216160",
-      "symbol": "SHRIPISTON",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743176_21102026053744_WEB.xml"
+      "symbol": "SHRIPISTON"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216151_ee479e3195d1922c.xml",
+      "sha256": "ee479e3195d1922ce92e1e65ef22531aeb4ff50a1fab54bfcd7125cefbe772fe",
+      "bytes": 147838,
       "record_id": "216151",
-      "symbol": "AIIL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743165_21102026053240_WEB.xml"
+      "symbol": "AIIL"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216142_e43d12f3f86503ae.xml",
+      "sha256": "e43d12f3f86503ae9bbc0c148c57e11ddb3d5cf816cd6a716b5a9f8720771e94",
+      "bytes": 382316,
       "record_id": "216142",
-      "symbol": "ABDL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743149_21102026052359_WEB.xml"
+      "symbol": "ABDL"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216119_5121de933d397b6b.xml",
+      "sha256": "5121de933d397b6b94c3116959e389e2dbb985b648475dfd35ee5d06f2cc2fae",
+      "bytes": 489302,
       "record_id": "216119",
-      "symbol": "GODREJCP",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743116_21102026050506_WEB.xml"
+      "symbol": "GODREJCP"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216118_30485754fe1bc3e2.xml",
+      "sha256": "30485754fe1bc3e23cbb4427139535b8895016aab67522113ff5fce78f151a44",
+      "bytes": 245523,
       "record_id": "216118",
-      "symbol": "NUVOCO",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743115_21102026050451_WEB.xml"
+      "symbol": "NUVOCO"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216105_d91fc3902ddb3243.xml",
+      "sha256": "d91fc3902ddb3243060718ab16e66a4db6432899355a1848537b377a91fa2324",
+      "bytes": 207901,
       "record_id": "216105",
-      "symbol": "POLICYBZR",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743089_21102026045244_WEB.xml"
+      "symbol": "POLICYBZR"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216095_4aca85e074715d85.xml",
+      "sha256": "4aca85e074715d850df63d514f33d5977a64d5fbeae6afb409811c6ea79c94f9",
+      "bytes": 396534,
       "record_id": "216095",
-      "symbol": "ABCAPITAL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743057_21102026044315_WEB.xml"
+      "symbol": "ABCAPITAL"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216092_5774cc211109b43d.xml",
+      "sha256": "5774cc211109b43d4c5d7c4c6f588179a3ad7f250369e723b24e005c7905cb7f",
+      "bytes": 747793,
       "record_id": "216092",
-      "symbol": "BLS",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743046_21102026044149_WEB.xml"
+      "symbol": "BLS"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216084_6c16e4352ca4edc5.xml",
+      "sha256": "6c16e4352ca4edc52bf5173a7bcd8b7d8ee6991fd1df92576a1e4beca803a468",
+      "bytes": 601620,
       "record_id": "216084",
-      "symbol": "LTM",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743015_21102026043212_WEB.xml"
+      "symbol": "LTM"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216076_bfe67e24ef7649a4.xml",
+      "sha256": "bfe67e24ef7649a40fc9967ef7a9106fdb6fe866dc6a6475c95404e991823e7f",
+      "bytes": 341497,
       "record_id": "216076",
-      "symbol": "DEEPAKFERT",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742995_21102026042546_WEB.xml"
+      "symbol": "DEEPAKFERT"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216074_323f273fd5267a7c.xml",
+      "sha256": "323f273fd5267a7c8c3558920b8756d8c54b828cc42f35fc6507561824031f9e",
+      "bytes": 523576,
       "record_id": "216074",
-      "symbol": "RELIANCE",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742991_21102026042504_WEB.xml"
+      "symbol": "RELIANCE"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216041_2b837539739c1375.xml",
+      "sha256": "2b837539739c1375f526771e403fe1c363b4fcc1b631539473631ef822e5de1b",
+      "bytes": 599975,
       "record_id": "216041",
-      "symbol": "LTTS",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742896_21102026034709_WEB.xml"
+      "symbol": "LTTS"
     },
     {
-      "record_id": "216039",
-      "symbol": "ZENSARTECH",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742890_21102026034402_WEB.xml"
-    },
-    {
-      "record_id": "216035",
-      "symbol": "DRREDDY",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742881_21102026034106_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/216034_287c7d8086bb4260.xml",
+      "sha256": "287c7d8086bb4260d3609b6edd8292323d58347b89402657307ab681bab289b7",
+      "bytes": 97053,
       "record_id": "216034",
-      "symbol": "SAIL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742880_21102026034028_WEB.xml"
+      "symbol": "SAIL"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216033_5b3710708744bc4f.xml",
+      "sha256": "5b3710708744bc4fa6fbd4c1ca40ecdac41d073158a8747c89cd68be6dcfce6f",
+      "bytes": 253345,
       "record_id": "216033",
-      "symbol": "LEMONTREE",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742878_21102026033846_WEB.xml"
+      "symbol": "LEMONTREE"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216028_a05324f07dc8b246.xml",
+      "sha256": "a05324f07dc8b24643f1700a46da70810244151db0b64ed426941fd554f84d5a",
+      "bytes": 178260,
       "record_id": "216028",
-      "symbol": "CAPLIPOINT",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742873_21102026033543_WEB.xml"
+      "symbol": "CAPLIPOINT"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216027_647ed64c8d3f1a6c.xml",
+      "sha256": "647ed64c8d3f1a6c7762edd109f9746402757de4b8dd4d399c5ca17bd15dc861",
+      "bytes": 240556,
       "record_id": "216027",
-      "symbol": "OLAELEC",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742867_21102026033254_WEB.xml"
+      "symbol": "OLAELEC"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216024_f0c32796a2c1b15d.xml",
+      "sha256": "f0c32796a2c1b15df0114b097d15b74f04557eebc6fe1747ae6ca7ee0833116b",
+      "bytes": 185114,
       "record_id": "216024",
-      "symbol": "NBCC",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742859_21102026032935_WEB.xml"
+      "symbol": "NBCC"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216023_70c0d693742fcae2.xml",
+      "sha256": "70c0d693742fcae2476aa9fd4849e4e34cdb23a8bdbee303e165d36bc0d46ac6",
+      "bytes": 446264,
       "record_id": "216023",
-      "symbol": "PPLPHARMA",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742857_21102026032628_WEB.xml"
+      "symbol": "PPLPHARMA"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216019_2b39383287416020.xml",
+      "sha256": "2b39383287416020c2b1fea6088e602962ab8bc202cd7fefc33d6b3c07acb4a1",
+      "bytes": 259776,
       "record_id": "216019",
-      "symbol": "ASTERDM",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742841_21102026031953_WEB.xml"
+      "symbol": "ASTERDM"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216015_ec6ae5a833543efc.xml",
+      "sha256": "ec6ae5a833543efc1eea0b0eca96816eb92425b737ea767925e4045c7f9e2e46",
+      "bytes": 255685,
       "record_id": "216015",
-      "symbol": "ONESOURCE",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742818_21102026031128_WEB.xml"
+      "symbol": "ONESOURCE"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216011_923462941d2dc64c.xml",
+      "sha256": "923462941d2dc64c7ab261665e82bb7cfe61b2cd7b61b5d537c0309c66bbe022",
+      "bytes": 138786,
       "record_id": "216011",
-      "symbol": "JPPOWER",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742809_21102026030754_WEB.xml"
+      "symbol": "JPPOWER"
     },
     {
+      "path": "data/raw/shareholding/xbrl/216010_a1d04fc60017de42.xml",
+      "sha256": "a1d04fc60017de425ec46d04fce7d905e28b8d03c365a506ef5085feade28d5e",
+      "bytes": 395899,
       "record_id": "216010",
-      "symbol": "JINDALSTEL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742806_21102026030632_WEB.xml"
+      "symbol": "JINDALSTEL"
     },
     {
-      "record_id": "216008",
-      "symbol": "LAURUSLABS",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742798_21102026030442_WEB.xml"
-    },
-    {
-      "record_id": "215986",
-      "symbol": "JINDALSAW",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742735_21102026023519_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/215985_7db1fa5819762f16.xml",
+      "sha256": "7db1fa5819762f16982639942fe027f80b387fb1409e00d267bbb5562df64798",
+      "bytes": 436552,
       "record_id": "215985",
-      "symbol": "BELRISE",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742730_21102026023230_WEB.xml"
+      "symbol": "BELRISE"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215980_d38ad2b8fdc2a8a7.xml",
+      "sha256": "d38ad2b8fdc2a8a7dea5d74968b301df97db02fa2ab80614ca1e0bae343a7230",
+      "bytes": 139932,
       "record_id": "215980",
-      "symbol": "OIL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742722_21102026022457_WEB.xml"
+      "symbol": "OIL"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215975_31cfc4784bc9406d.xml",
+      "sha256": "31cfc4784bc9406d5f4688ac9478ded16712617da81648ed7dcef4217a08385e",
+      "bytes": 221052,
       "record_id": "215975",
-      "symbol": "PTCIL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742714_21102026021404_WEB.xml"
+      "symbol": "PTCIL"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215974_63a5f445b5c559fa.xml",
+      "sha256": "63a5f445b5c559fa97fc7d802e790ebf94b95111c302435747abf50dd8560093",
+      "bytes": 1362152,
       "record_id": "215974",
-      "symbol": "AFCONS",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742713_21102026021326_WEB.xml"
+      "symbol": "AFCONS"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215941_9308d3f58432d6a4.xml",
+      "sha256": "9308d3f58432d6a4c261ceea08fe486680ac621b1a3d79ad216cb138e8cc423f",
+      "bytes": 532820,
       "record_id": "215941",
-      "symbol": "JIOFIN",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742627_21102026125748_WEB.xml"
+      "symbol": "JIOFIN"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215939_d41a0fb14849b71a.xml",
+      "sha256": "d41a0fb14849b71a14a361845ea05ca2d6f06d4b481c2f8dc264aa18a26a810a",
+      "bytes": 114543,
       "record_id": "215939",
-      "symbol": "IOB",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742616_21102026125144_WEB.xml"
+      "symbol": "IOB"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215936_6f1f2b4da72ef952.xml",
+      "sha256": "6f1f2b4da72ef952f1e1dab1899c07fafa64bdbcf40d7f6c656b5d2d4b2b59c3",
+      "bytes": 232134,
       "record_id": "215936",
-      "symbol": "NAVINFLUOR",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742609_21102026124907_WEB.xml"
+      "symbol": "NAVINFLUOR"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215934_d638dcef91f46e77.xml",
+      "sha256": "d638dcef91f46e770bc045518fbafab52bea3258beb9ff611d2bcb9b256c43ad",
+      "bytes": 426495,
       "record_id": "215934",
-      "symbol": "DALBHARAT",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742601_21102026124726_WEB.xml"
+      "symbol": "DALBHARAT"
     },
     {
-      "record_id": "215932",
-      "symbol": "HINDPETRO",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742599_21102026124617_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/215926_dfa947774637d967.xml",
+      "sha256": "dfa947774637d967434916c2ab35180c4d7dd6574e4eccf85f3365430dd169ac",
+      "bytes": 310109,
       "record_id": "215926",
-      "symbol": "POLYCAB",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742582_21102026123532_WEB.xml"
+      "symbol": "POLYCAB"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215913_b0a57e92e033307e.xml",
+      "sha256": "b0a57e92e033307e447ee81c2f9c9af5b3f5551172628783957f76390f09334b",
+      "bytes": 294819,
       "record_id": "215913",
-      "symbol": "VEDPOWER",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742537_21102026121042_WEB.xml"
+      "symbol": "VEDPOWER"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215891_013c519757c82383.xml",
+      "sha256": "013c519757c82383d100c1fcc2c4158daab66ec03f4fd023e8ba5b2bf7ce878c",
+      "bytes": 1571469,
       "record_id": "215891",
-      "symbol": "TMPV",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742472_21102026112027_WEB.xml"
+      "symbol": "TMPV"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215884_a42a6087c3ab5d99.xml",
+      "sha256": "a42a6087c3ab5d99002c118104540be08fde76de1a3acc6a821f3e7bb127d3d5",
+      "bytes": 251732,
       "record_id": "215884",
-      "symbol": "PIIND",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742461_21102026111041_WEB.xml"
+      "symbol": "PIIND"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215882_5e73b96d49786e4c.xml",
+      "sha256": "5e73b96d49786e4c1bce06275e82260af61dc2ee23e4f20b2d502ebff1c82c46",
+      "bytes": 386833,
       "record_id": "215882",
-      "symbol": "TBOTEK",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742459_21102026110846_WEB.xml"
+      "symbol": "TBOTEK"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215879_7a33555120840cc5.xml",
+      "sha256": "7a33555120840cc53b4c61dd784088576b3e5fbae63ca7f2943801d815334390",
+      "bytes": 620403,
       "record_id": "215879",
-      "symbol": "MRF",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742450_21102026110106_WEB.xml"
+      "symbol": "MRF"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215877_f8451f4d15aedf82.xml",
+      "sha256": "f8451f4d15aedf8201ed4025b2be409a4ee26dd51eae68a4b21e3219f91e04b8",
+      "bytes": 217794,
       "record_id": "215877",
-      "symbol": "ESCORTS",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742447_21102026105846_WEB.xml"
+      "symbol": "ESCORTS"
     },
     {
-      "record_id": "215868",
-      "symbol": "GVT&D",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742427_21102026103104_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/215862_4cb5ea2d9eed85c1.xml",
+      "sha256": "4cb5ea2d9eed85c18d6d6982be21a1a3ddc9f16036ecb29ea70cb75313f1eab2",
+      "bytes": 605702,
       "record_id": "215862",
-      "symbol": "MARUTI",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742414_21102026100118_WEB.xml"
+      "symbol": "MARUTI"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215860_4cc7945790c5003b.xml",
+      "sha256": "4cc7945790c5003b883374b820b28c587cff1d08bc216f268a5039d5cc8f61dc",
+      "bytes": 527244,
       "record_id": "215860",
-      "symbol": "MINDACORP",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742411_21102026094206_WEB.xml"
+      "symbol": "MINDACORP"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215859_bdc51d05fd999c7d.xml",
+      "sha256": "bdc51d05fd999c7d17f30a34fc1bef04b19576f35704725543104a9bb83cbde5",
+      "bytes": 164605,
       "record_id": "215859",
-      "symbol": "WHIRLPOOL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742410_21102026094101_WEB.xml"
+      "symbol": "WHIRLPOOL"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215849_ab9c8f52afe9992c.xml",
+      "sha256": "ab9c8f52afe9992c5744bdc3a02339a677f0933cf02ac635c38549b0beb2865f",
+      "bytes": 643846,
       "record_id": "215849",
-      "symbol": "NAM-INDIA",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742396_20102026110543_WEB.xml"
+      "symbol": "NAM-INDIA"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215843_1104dcd258aa1c4f.xml",
+      "sha256": "1104dcd258aa1c4fe9a3c1ba3398f86f6ce1ee41647f5f1566ef4926e6452a98",
+      "bytes": 230297,
       "record_id": "215843",
-      "symbol": "OBEROIRLTY",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742378_20102026081828_WEB.xml"
+      "symbol": "OBEROIRLTY"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215837_6a2b1d70b488e529.xml",
+      "sha256": "6a2b1d70b488e529e0865522791df5304e038d793a525b35061eae1ffaabb89f",
+      "bytes": 264453,
       "record_id": "215837",
-      "symbol": "JUBLINGREA",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742361_20102026065019_WEB.xml"
+      "symbol": "JUBLINGREA"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215835_8477b2c4528d605a.xml",
+      "sha256": "8477b2c4528d605a40ee0218d4fc05e000cccf0211ceb277441ccceee54c84b2",
+      "bytes": 304511,
       "record_id": "215835",
-      "symbol": "NYKAA",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742358_20102026064551_WEB.xml"
+      "symbol": "NYKAA"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215821_7ee1052027c988ef.xml",
+      "sha256": "7ee1052027c988efc0f8e5d88222b6cedaece7d7e2ee20dd0092def370fd9343",
+      "bytes": 514613,
+      "record_id": "215821",
+      "symbol": "MUTHOOTFIN"
+    },
+    {
+      "path": "data/raw/shareholding/xbrl/215820_a9810ce4c3eb52fd.xml",
+      "sha256": "a9810ce4c3eb52fdc9e118f115f030dbeaf9b6819ec308ccebab2c12674acd06",
+      "bytes": 799416,
       "record_id": "215820",
-      "symbol": "WELSPUNLIV",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742331_20102026052045_WEB.xml"
+      "symbol": "WELSPUNLIV"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215807_add9be91db4ccd05.xml",
+      "sha256": "add9be91db4ccd05c4c16deac2c9c0ebc4ab97af9db8e09462193b174913e5e0",
+      "bytes": 176766,
       "record_id": "215807",
-      "symbol": "PAGEIND",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742311_20102026042929_WEB.xml"
+      "symbol": "PAGEIND"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215806_64664f1a004bdf11.xml",
+      "sha256": "64664f1a004bdf118bdbb46960b9c1f873bea07fd0d1de1906d1625a8eb3ff2a",
+      "bytes": 532270,
       "record_id": "215806",
-      "symbol": "AEGISVOPAK",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742309_20102026042436_WEB.xml"
+      "symbol": "AEGISVOPAK"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215805_01b0951e8f40c6fc.xml",
+      "sha256": "01b0951e8f40c6fc665dd9a431fadc0e838d5685a0e4ac0666724680a66cc3ac",
+      "bytes": 138398,
       "record_id": "215805",
-      "symbol": "ZFCVINDIA",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742307_20102026042404_WEB.xml"
+      "symbol": "ZFCVINDIA"
     },
     {
-      "record_id": "215803",
-      "symbol": "GABRIEL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742302_20102026041246_WEB.xml"
+      "path": "data/raw/shareholding/xbrl/215795_fecf767234ed59f8.xml",
+      "sha256": "fecf767234ed59f815b153d4dca5abe9181ab8728daa681e35b5854d9c2fa373",
+      "bytes": 260751,
+      "record_id": "215795",
+      "symbol": "SHRIRAMFIN"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215787_c9d9f664e4cbdaf3.xml",
+      "sha256": "c9d9f664e4cbdaf38e8d4d71dfd9a603db686deb6464f8e5c7da121a19a78a47",
+      "bytes": 1101729,
       "record_id": "215787",
-      "symbol": "TIINDIA",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742269_20102026031745_WEB.xml"
+      "symbol": "TIINDIA"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215781_3210de9160899fa6.xml",
+      "sha256": "3210de9160899fa654a5bed661f41caa59c74f3e674159319e7d4ca15184514e",
+      "bytes": 204648,
       "record_id": "215781",
-      "symbol": "ASHOKLEY",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742256_20102026024923_WEB.xml"
+      "symbol": "ASHOKLEY"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215767_d648508cb38065d1.xml",
+      "sha256": "d648508cb38065d16b9735ccf8e38b32be96c59da4db594f8f227fe3a38bcd3c",
+      "bytes": 386587,
       "record_id": "215767",
-      "symbol": "ITCHOTELS",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742227_20102026125238_WEB.xml"
+      "symbol": "ITCHOTELS"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215760_3718bb8baeedda84.xml",
+      "sha256": "3718bb8baeedda8468fe5a2dcdd20613c2844258320f2fb4ec25e097e5674577",
+      "bytes": 338297,
       "record_id": "215760",
-      "symbol": "PWL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742214_20102026123105_WEB.xml"
+      "symbol": "PWL"
     },
     {
-      "record_id": "215753",
-      "symbol": "INFY",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742200_20102026120732_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/215747_76b8fc9d1bd259e5.xml",
+      "sha256": "76b8fc9d1bd259e52cb66a21d0bbf963a5ed8b3fa10d0825c612616da89c9806",
+      "bytes": 1140648,
       "record_id": "215747",
-      "symbol": "GILLETTE",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742188_20102026113335_WEB.xml"
+      "symbol": "GILLETTE"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215746_ee5365c4a745f8ba.xml",
+      "sha256": "ee5365c4a745f8badfc4600fc2fe961bd88aa77bcdafc66fa92e4808e3376d4d",
+      "bytes": 852373,
       "record_id": "215746",
-      "symbol": "WELCORP",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742187_20102026113326_WEB.xml"
+      "symbol": "WELCORP"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215739_a2c248396a2b4bd7.xml",
+      "sha256": "a2c248396a2b4bd7701b97ea3c4c4bed36cfafa5f320a73354aff203d1259ad3",
+      "bytes": 202503,
       "record_id": "215739",
-      "symbol": "JAINREC",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742175_20102026103819_WEB.xml"
+      "symbol": "JAINREC"
     },
     {
-      "record_id": "215735",
-      "symbol": "BSOFT",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742171_20102026100017_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/215725_01752e174d7e23dd.xml",
+      "sha256": "01752e174d7e23dd9109640864432ef16ade44116c9c9ccb1035e0eecc4c95ea",
+      "bytes": 226103,
       "record_id": "215725",
-      "symbol": "HINDUNILVR",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742125_19102026102752_WEB.xml"
+      "symbol": "HINDUNILVR"
     },
     {
-      "record_id": "215722",
-      "symbol": "INDHOTEL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742116_19102026094034_WEB.xml"
-    },
-    {
-      "record_id": "215718",
-      "symbol": "ABREL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742103_19102026090804_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/215717_a9419fbe9de06dbb.xml",
+      "sha256": "a9419fbe9de06dbb8023538b5120dbbbe23dcfe419b9332fc3d713d88f9474a9",
+      "bytes": 180138,
       "record_id": "215717",
-      "symbol": "ANURAS",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742099_19102026090252_WEB.xml"
+      "symbol": "ANURAS"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215711_032028600e781ed2.xml",
+      "sha256": "032028600e781ed2d5ab9fae1e97cef4d65ed59e5efbb53559e6ccfe67b11fca",
+      "bytes": 1627957,
       "record_id": "215711",
-      "symbol": "TMCV",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742077_19102026083235_WEB.xml"
+      "symbol": "TMCV"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215708_22dd0fe5067fc572.xml",
+      "sha256": "22dd0fe5067fc572e482fcb5c4dfe157f1376acaf0ed9a1300212af0bd7fa55f",
+      "bytes": 383283,
       "record_id": "215708",
-      "symbol": "CLEANMAX",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742065_19102026081910_WEB.xml"
+      "symbol": "CLEANMAX"
     },
     {
-      "record_id": "215706",
-      "symbol": "ASIANPAINT",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742053_19102026080927_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/215702_35c38294ebca3511.xml",
+      "sha256": "35c38294ebca3511da0a8e0dd25ae640546f3f392bb9a0041bbe06c0085c78a9",
+      "bytes": 204978,
       "record_id": "215702",
-      "symbol": "JMFINANCIL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1742042_19102026080131_WEB.xml"
+      "symbol": "JMFINANCIL"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215681_d0d1b9a8bd3bcae6.xml",
+      "sha256": "d0d1b9a8bd3bcae6d656bc00c004d0bfc7ac780ccc88b1b4c3401ae2569f4854",
+      "bytes": 947765,
       "record_id": "215681",
-      "symbol": "GMRAIRPORT",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741974_19102026071903_WEB.xml"
+      "symbol": "GMRAIRPORT"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215672_ff06176de108e96d.xml",
+      "sha256": "ff06176de108e96d871b6441951a203fdc92ad9015068198eca76f73bf4bbfd7",
+      "bytes": 457712,
       "record_id": "215672",
-      "symbol": "DOMS",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741957_19102026070903_WEB.xml"
+      "symbol": "DOMS"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215671_caf823cbf8cccf6d.xml",
+      "sha256": "caf823cbf8cccf6d8cf03c3056078091c667b8483fbc6a5ad6122d2d4d339d4e",
+      "bytes": 378676,
       "record_id": "215671",
-      "symbol": "ACMESOLAR",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741955_19102026070634_WEB.xml"
+      "symbol": "ACMESOLAR"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215656_a3b0c7fc112a4df5.xml",
+      "sha256": "a3b0c7fc112a4df507200a3d794ffe936327620b39342c0ed25aab2dbfc373d7",
+      "bytes": 381830,
       "record_id": "215656",
-      "symbol": "DMART",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741908_19102026063955_WEB.xml"
+      "symbol": "DMART"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215654_beee32c89ce1f166.xml",
+      "sha256": "beee32c89ce1f166d7bebc909b54c8552f2c577f815505e38f253023ff4b0e2d",
+      "bytes": 218350,
+      "record_id": "215654",
+      "symbol": "SHREECEM"
+    },
+    {
+      "path": "data/raw/shareholding/xbrl/215653_319f3cc592a0ee92.xml",
+      "sha256": "319f3cc592a0ee92842d79f788c6d89aedbc9d2151e60e4ac8552b6ab82b40a7",
+      "bytes": 1324120,
       "record_id": "215653",
-      "symbol": "TCS",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741905_19102026063741_WEB.xml"
+      "symbol": "TCS"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215651_403ece6ac769dfc4.xml",
+      "sha256": "403ece6ac769dfc4b90817087e820d7c92c9bb619edb50396e047fb6241d9226",
+      "bytes": 320852,
       "record_id": "215651",
-      "symbol": "IDEA",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741899_19102026063613_WEB.xml"
+      "symbol": "IDEA"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215646_0c8c40f475333987.xml",
+      "sha256": "0c8c40f4753339879b93801e94f41ff3855cb14f67adbb206e010c42d10463a1",
+      "bytes": 293378,
       "record_id": "215646",
-      "symbol": "RUBICON",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741890_19102026062951_WEB.xml"
+      "symbol": "RUBICON"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215639_279a5e66aa58a46d.xml",
+      "sha256": "279a5e66aa58a46de98d5ef7f1bfad02777334d04e80dc8308a674975494190c",
+      "bytes": 1720272,
       "record_id": "215639",
-      "symbol": "TENNIND",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741878_19102026062441_WEB.xml"
+      "symbol": "TENNIND"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215634_bee0d8c6040e70da.xml",
+      "sha256": "bee0d8c6040e70daf3aecfd9d455dc9d7df4174faedf118dd30ecf83016d72cd",
+      "bytes": 496442,
       "record_id": "215634",
-      "symbol": "SYRMA",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741868_19102026062019_WEB.xml"
+      "symbol": "SYRMA"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215631_a4818f4d6f84f26f.xml",
+      "sha256": "a4818f4d6f84f26f8ec76487728c7c545f1f617ea57a3ae3d6bba561441e16c2",
+      "bytes": 219515,
       "record_id": "215631",
-      "symbol": "HDFCLIFE",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741860_19102026061629_WEB.xml"
+      "symbol": "HDFCLIFE"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215628_abb810e87a24becc.xml",
+      "sha256": "abb810e87a24becce2f178a274b3b1d96449cf985e7af8fbb652f86c77309d3d",
+      "bytes": 297683,
       "record_id": "215628",
-      "symbol": "SOLARINDS",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741853_19102026061408_WEB.xml"
+      "symbol": "SOLARINDS"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215622_a0b8d1cfa4963603.xml",
+      "sha256": "a0b8d1cfa496360386b2a73ad083240cb40c7ce4626860cdffcc667feab07346",
+      "bytes": 216593,
+      "record_id": "215622",
+      "symbol": "IDFCFIRSTB"
+    },
+    {
+      "path": "data/raw/shareholding/xbrl/215617_44b80703c83b8101.xml",
+      "sha256": "44b80703c83b8101d1261ecb9799021a74c0c43505346ec2ecb3f5197562ea08",
+      "bytes": 226838,
       "record_id": "215617",
-      "symbol": "ASTRAL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741816_19102026060057_WEB.xml"
+      "symbol": "ASTRAL"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215616_cd41b21d49af9b97.xml",
+      "sha256": "cd41b21d49af9b971afd173db5211fb2d9dae4493996d1ae83e80593bf701738",
+      "bytes": 257713,
       "record_id": "215616",
-      "symbol": "MOTILALOFS",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741815_19102026060037_WEB.xml"
+      "symbol": "MOTILALOFS"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215609_97a65b929d60d1f0.xml",
+      "sha256": "97a65b929d60d1f068f0d11b51c42e92b4cbb63121c52b9e2308ce313c631a3f",
+      "bytes": 260396,
       "record_id": "215609",
-      "symbol": "WOCKPHARMA",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741805_19102026055732_WEB.xml"
+      "symbol": "WOCKPHARMA"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215608_9dd8be9155fe6296.xml",
+      "sha256": "9dd8be9155fe62964511d3563620d49ee7ee128935c735d4b8b2e339ab685540",
+      "bytes": 293151,
       "record_id": "215608",
-      "symbol": "CANHLIFE",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741804_19102026055717_WEB.xml"
+      "symbol": "CANHLIFE"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215598_3d6d6fc698872065.xml",
+      "sha256": "3d6d6fc698872065e0d2b0f5f194d75553fdd2aea2c3cb4cdfcb07f0be5fc76c",
+      "bytes": 179044,
       "record_id": "215598",
-      "symbol": "PFOCUS",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741760_19102026053815_WEB.xml"
+      "symbol": "PFOCUS"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215597_290e82af68920abb.xml",
+      "sha256": "290e82af68920abb8f1aae550a6109bc0517585e8a8224f4199ef5072121e40a",
+      "bytes": 213434,
       "record_id": "215597",
-      "symbol": "INDIGO",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741759_19102026053811_WEB.xml"
+      "symbol": "INDIGO"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215585_1744fb27785434e8.xml",
+      "sha256": "1744fb27785434e8419e59ac5ce4427dc5b26a2cc66c6a2c9bc510a3f8295269",
+      "bytes": 341569,
       "record_id": "215585",
-      "symbol": "JKTYRE",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741732_19102026052647_WEB.xml"
+      "symbol": "JKTYRE"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215579_030d2f3423f64c48.xml",
+      "sha256": "030d2f3423f64c489c1b2b96dbfe07cce7158b646139e1cfc31b57c55cb16110",
+      "bytes": 290586,
+      "record_id": "215579",
+      "symbol": "ELGIEQUIP"
+    },
+    {
+      "path": "data/raw/shareholding/xbrl/215563_91c5bff58c9c1256.xml",
+      "sha256": "91c5bff58c9c12569fb30c2daa34879d802c3c4381acb3752057ea152a64cf1c",
+      "bytes": 222131,
       "record_id": "215563",
-      "symbol": "EMMVEE",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741662_19102026050117_WEB.xml"
+      "symbol": "EMMVEE"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215561_35f08f2a4ae7c655.xml",
+      "sha256": "35f08f2a4ae7c6551eefaeaa6d706c13c372a0dfb7b4ee6ee93b0ca3dcc27ac7",
+      "bytes": 130308,
       "record_id": "215561",
-      "symbol": "ACE",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741660_19102026050042_WEB.xml"
+      "symbol": "ACE"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215554_61f0e7b9317a9de3.xml",
+      "sha256": "61f0e7b9317a9de322e06bd25eade6fe7cdc089877746cdca8f19e4e31d3fb58",
+      "bytes": 241546,
       "record_id": "215554",
-      "symbol": "BHARTIARTL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741646_19102026045340_WEB.xml"
+      "symbol": "BHARTIARTL"
     },
     {
-      "record_id": "215547",
-      "symbol": "CONCOR",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741633_19102026045114_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/215535_2cc695f4da6cbf60.xml",
+      "sha256": "2cc695f4da6cbf6058f959b7364cde7420057d0cee25f959eaf96adcf8ecde9a",
+      "bytes": 289314,
       "record_id": "215535",
-      "symbol": "HOMEFIRST",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741595_19102026043910_WEB.xml"
+      "symbol": "HOMEFIRST"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215532_86aa5abc2f77ab71.xml",
+      "sha256": "86aa5abc2f77ab71f2fb88efd5f9e417dd0b899048aa932d620fc90838f5a4fb",
+      "bytes": 825689,
       "record_id": "215532",
-      "symbol": "BHARTIHEXA",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741591_19102026043823_WEB.xml"
+      "symbol": "BHARTIHEXA"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215530_e3ba76b3095ce144.xml",
+      "sha256": "e3ba76b3095ce144c4d7480687607bdc51b01750acad55878a01a3244dd757c2",
+      "bytes": 434546,
       "record_id": "215530",
-      "symbol": "DEVYANI",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741588_19102026043645_WEB.xml"
+      "symbol": "DEVYANI"
     },
     {
-      "record_id": "215527",
-      "symbol": "HEROMOTOCO",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741580_19102026043440_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/215525_b95c8d11c6331abb.xml",
+      "sha256": "b95c8d11c6331abb9f6b922062867ffa0ed36a99df2d210e4e4fd3c92f1b36bb",
+      "bytes": 164081,
       "record_id": "215525",
-      "symbol": "SCI",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741573_19102026043207_WEB.xml"
+      "symbol": "SCI"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215511_8abeb19d710ebdff.xml",
+      "sha256": "8abeb19d710ebdffc76bbf4ae126e11489f267adf108fd1c7eb914d9f8c2b7f6",
+      "bytes": 251025,
       "record_id": "215511",
-      "symbol": "INOXINDIA",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741540_19102026041339_WEB.xml"
+      "symbol": "INOXINDIA"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215497_747849878d433171.xml",
+      "sha256": "747849878d433171fc53e36c3b65589714d9b2a9804af6198bb7e0224b31ff43",
+      "bytes": 342044,
       "record_id": "215497",
-      "symbol": "MEDANTA",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741502_19102026035252_WEB.xml"
+      "symbol": "MEDANTA"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215495_b9b346753f4b4cd9.xml",
+      "sha256": "b9b346753f4b4cd9b6f56cf420c9c3a5f456e55c1057f1cba5b78aa3c2b22ca0",
+      "bytes": 281605,
       "record_id": "215495",
-      "symbol": "AMBER",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741496_19102026035132_WEB.xml"
+      "symbol": "AMBER"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215492_c9941df55a53c237.xml",
+      "sha256": "c9941df55a53c23730e9648e7f486d609e5ff8dab96cdfe04c9bf398b4affe2a",
+      "bytes": 327237,
       "record_id": "215492",
-      "symbol": "EMCURE",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741485_19102026034802_WEB.xml"
+      "symbol": "EMCURE"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215491_a2c7ccd79ece2e77.xml",
+      "sha256": "a2c7ccd79ece2e77998314450d12eef4e3a79ff5d6fb72f06a79b94e39c57682",
+      "bytes": 556935,
       "record_id": "215491",
-      "symbol": "GODREJIND",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741484_19102026034723_WEB.xml"
+      "symbol": "GODREJIND"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215465_915eb2d918335ba4.xml",
+      "sha256": "915eb2d918335ba45a03d582b6a9c42393d1e81717dd6ef7875e3fb1ee48c4c4",
+      "bytes": 398218,
       "record_id": "215465",
-      "symbol": "INDIAMART",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741416_19102026031659_WEB.xml"
+      "symbol": "INDIAMART"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215448_19120cad1bb524b4.xml",
+      "sha256": "19120cad1bb524b453d8963d4463a8890239bce6c72f88b62cfa98ac9d962da1",
+      "bytes": 232949,
       "record_id": "215448",
-      "symbol": "ICICIGI",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741386_19102026030219_WEB.xml"
+      "symbol": "ICICIGI"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215440_5628e01b37900bdd.xml",
+      "sha256": "5628e01b37900bdd949028e5a7c8658a5e2962fbbf23ba12a9d703ebedca67d5",
+      "bytes": 123371,
       "record_id": "215440",
-      "symbol": "UNIONBANK",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741370_19102026024233_WEB.xml"
+      "symbol": "UNIONBANK"
     },
     {
-      "record_id": "215434",
-      "symbol": "IRB",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741352_19102026022706_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/215431_ad53e371e312e772.xml",
+      "sha256": "ad53e371e312e772aafac168e343094414dc7c5eeecda0a83b795f71cf6beeb6",
+      "bytes": 337151,
       "record_id": "215431",
-      "symbol": "VOGL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741341_19102026021711_WEB.xml"
+      "symbol": "VOGL"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215428_bde3c31396732bea.xml",
+      "sha256": "bde3c31396732bea721c7ccf8b66fffbfc919a6cf8971bb08a5056bc6bd85f68",
+      "bytes": 274214,
       "record_id": "215428",
-      "symbol": "DELHIVERY",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741328_19102026020401_WEB.xml"
+      "symbol": "DELHIVERY"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215424_7470a6d294f64a7d.xml",
+      "sha256": "7470a6d294f64a7d0205136279147d817e5964fdd091f0b2a5b7a83ee3eed23f",
+      "bytes": 535856,
       "record_id": "215424",
-      "symbol": "UNOMINDA",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741318_19102026015727_WEB.xml"
+      "symbol": "UNOMINDA"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215423_20844d2d90ef698d.xml",
+      "sha256": "20844d2d90ef698d4a435a0875e6258be304b65e7c729993dba92ce3540664dc",
+      "bytes": 205505,
       "record_id": "215423",
-      "symbol": "POLYMED",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741316_19102026015553_WEB.xml"
+      "symbol": "POLYMED"
     },
     {
-      "record_id": "215421",
-      "symbol": "BATAINDIA",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741313_19102026014658_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/215417_8555bdacf16344c2.xml",
+      "sha256": "8555bdacf16344c203e56edd78fc8976b08c71f7f90abb20217d1d9a9546735e",
+      "bytes": 129243,
       "record_id": "215417",
-      "symbol": "IEX",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741298_19102026013139_WEB.xml"
+      "symbol": "IEX"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215416_8f47752313b327cc.xml",
+      "sha256": "8f47752313b327ccea9744b23fddf89b124c5935014475555f56eb8bb94239ff",
+      "bytes": 193332,
       "record_id": "215416",
-      "symbol": "RVNL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741297_19102026013046_WEB.xml"
+      "symbol": "RVNL"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215415_c821c13a43e1ba81.xml",
+      "sha256": "c821c13a43e1ba811850014cb62c7b2ed566e58537d50f3033e0e7ae26d0d142",
+      "bytes": 149164,
       "record_id": "215415",
-      "symbol": "PETRONET",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741295_19102026013005_WEB.xml"
+      "symbol": "PETRONET"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215393_59e810383b335c99.xml",
+      "sha256": "59e810383b335c994897bb63b294f115ae61fce6803e5d2692c1228382b441a3",
+      "bytes": 478903,
       "record_id": "215393",
-      "symbol": "CPPLUS",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741247_19102026125104_WEB.xml"
+      "symbol": "CPPLUS"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215392_31c01c7abce9dc26.xml",
+      "sha256": "31c01c7abce9dc26d7906dd08a6e12bdfa30897802c20de1f5b2adf3c821ce1a",
+      "bytes": 109187,
       "record_id": "215392",
-      "symbol": "GICRE",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741246_19102026124915_WEB.xml"
+      "symbol": "GICRE"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215365_ed62acf72655e534.xml",
+      "sha256": "ed62acf72655e534c013c47cdb2db646512b2f70bb32347c391c1d3a9c2b0b23",
+      "bytes": 1630861,
+      "record_id": "215365",
+      "symbol": "TATASTEEL"
+    },
+    {
+      "path": "data/raw/shareholding/xbrl/215362_3fb2b37cf3fef2b2.xml",
+      "sha256": "3fb2b37cf3fef2b2ab4953be42198ac8c590581aaf5f70c91c8d7352a02d6c7e",
+      "bytes": 212863,
       "record_id": "215362",
-      "symbol": "LUPIN",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741171_19102026114146_WEB.xml"
+      "symbol": "LUPIN"
     },
     {
-      "record_id": "215355",
-      "symbol": "TATACONSUM",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741158_19102026112604_WEB.xml"
+      "path": "data/raw/shareholding/xbrl/215353_151f0ffc00b3e1cf.xml",
+      "sha256": "151f0ffc00b3e1cf6a23730050559b58513915014d4a74baf1ceb7738460bbf4",
+      "bytes": 199157,
+      "record_id": "215353",
+      "symbol": "FORTIS"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215344_1fad12825072d336.xml",
+      "sha256": "1fad12825072d336ff4807514df2910efb9026665a7f8ca6e380f85c71482ff6",
+      "bytes": 189702,
       "record_id": "215344",
-      "symbol": "BSE",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741125_19102026104829_WEB.xml"
+      "symbol": "BSE"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215339_72cb98f4568729ac.xml",
+      "sha256": "72cb98f4568729ac1ae47154d6c64506c867f64720ac4518410363d58021ffed",
+      "bytes": 858574,
       "record_id": "215339",
-      "symbol": "JSWINFRA",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741119_19102026103627_WEB.xml"
+      "symbol": "JSWINFRA"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215338_57a5444c8d036f96.xml",
+      "sha256": "57a5444c8d036f9663b99283441fdb11de31adea8c2030725e8dff554ab3729b",
+      "bytes": 331859,
       "record_id": "215338",
-      "symbol": "PNBHOUSING",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741115_19102026101907_WEB.xml"
+      "symbol": "PNBHOUSING"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215309_34cf76d8c0663bd1.xml",
+      "sha256": "34cf76d8c0663bd134a0a2c76996b3d2dd3837a54996ee96eb68b259a82d6364",
+      "bytes": 196711,
       "record_id": "215309",
-      "symbol": "INOXWIND",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1741002_17102026081653_WEB.xml"
+      "symbol": "INOXWIND"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215303_20a0df19ee84913e.xml",
+      "sha256": "20a0df19ee84913e47619d474afb5aeac12886d1d8c2b3e5926658b1db09ddbc",
+      "bytes": 459610,
       "record_id": "215303",
-      "symbol": "KIRLOSBROS",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740983_17102026071521_WEB.xml"
+      "symbol": "KIRLOSBROS"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215298_419de546fa80e181.xml",
+      "sha256": "419de546fa80e181a6354288c74c379c526513eb6ae202eb89f161735c5d4415",
+      "bytes": 240131,
       "record_id": "215298",
-      "symbol": "AUBANK",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740975_17102026070318_WEB.xml"
+      "symbol": "AUBANK"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215291_0ef8bf5ef5e59780.xml",
+      "sha256": "0ef8bf5ef5e597800fa2df2690c4d113de5bef834ba7627567e8c1812365bf42",
+      "bytes": 330527,
       "record_id": "215291",
-      "symbol": "VISL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740959_17102026062957_WEB.xml"
+      "symbol": "VISL"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215287_df63febdce9c8b02.xml",
+      "sha256": "df63febdce9c8b02b2f6c8ee2649c9428366772a9ae431bb9206194668a72d37",
+      "bytes": 108579,
       "record_id": "215287",
-      "symbol": "ITI",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740934_17102026060658_WEB.xml"
+      "symbol": "ITI"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215275_75a9b0e369e15b80.xml",
+      "sha256": "75a9b0e369e15b80834bc79c0ec4b7aec8ad521fbcd0d635186eff6ead23ef58",
+      "bytes": 720035,
       "record_id": "215275",
-      "symbol": "M&MFIN",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740882_17102026052416_WEB.xml"
+      "symbol": "M&MFIN"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215273_01c574c6aad1ee22.xml",
+      "sha256": "01c574c6aad1ee22ba7648f60f35130a2217d1a42e6689833bbaa91f408a198e",
+      "bytes": 133340,
       "record_id": "215273",
-      "symbol": "NLCINDIA",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740876_17102026051531_WEB.xml"
+      "symbol": "NLCINDIA"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215247_5ed3891c3eaab0e5.xml",
+      "sha256": "5ed3891c3eaab0e59dfdef40c020457801935578017c2cf9658a9c709aba2c68",
+      "bytes": 310946,
       "record_id": "215247",
-      "symbol": "SIGNATURE",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740812_17102026041951_WEB.xml"
+      "symbol": "SIGNATURE"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215216_0c48163e2bffd95c.xml",
+      "sha256": "0c48163e2bffd95c54c0a7ecdc445ea47908ec80b0fbec8ea9f84a1e5b4e2275",
+      "bytes": 268272,
       "record_id": "215216",
-      "symbol": "KAYNES",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740726_17102026025027_WEB.xml"
+      "symbol": "KAYNES"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215214_869ace73eee7bcd4.xml",
+      "sha256": "869ace73eee7bcd4a81cac50abbe36b91bcea4448bf869caf288bf4b7466f072",
+      "bytes": 386181,
       "record_id": "215214",
-      "symbol": "CLEAN",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740711_17102026024216_WEB.xml"
+      "symbol": "CLEAN"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215209_2a6936091df11e62.xml",
+      "sha256": "2a6936091df11e6274b52192b0c7af44e0b30ae023cab4a78d8bac8442a28969",
+      "bytes": 76818,
       "record_id": "215209",
-      "symbol": "BHARATCOAL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740686_17102026021909_WEB.xml"
+      "symbol": "BHARATCOAL"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215173_c79ca7214253d5c2.xml",
+      "sha256": "c79ca7214253d5c23a852300c8bb76e464e14b0f8ba7c5342a88065cea0afa6b",
+      "bytes": 218663,
+      "record_id": "215173",
+      "symbol": "CESC"
+    },
+    {
+      "path": "data/raw/shareholding/xbrl/215170_9619ad285f7e34e0.xml",
+      "sha256": "9619ad285f7e34e0a79fe1147a57c92fcf43cfe4673a9a38c6527e2bd0927c18",
+      "bytes": 343718,
       "record_id": "215170",
-      "symbol": "VAML",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740603_17102026122959_WEB.xml"
+      "symbol": "VAML"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215153_4e139cf27262e36e.xml",
+      "sha256": "4e139cf27262e36ebe771bc629619fc3429a80785ba40ced6d02ec2fdf5164f8",
+      "bytes": 194090,
       "record_id": "215153",
-      "symbol": "CONCORDBIO",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740544_17102026102420_WEB.xml"
+      "symbol": "CONCORDBIO"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215152_b98f69e13af055ca.xml",
+      "sha256": "b98f69e13af055caa50815bb1b16808315e1a25994c3e7a3cbb6db020d9475f6",
+      "bytes": 176686,
       "record_id": "215152",
-      "symbol": "LT",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740540_17102026101104_WEB.xml"
+      "symbol": "LT"
     },
     {
-      "record_id": "215149",
-      "symbol": "COCHINSHIP",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740537_17102026093742_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/214755_ddab7a9dbdaa03f3.xml",
+      "sha256": "ddab7a9dbdaa03f3c4f8fc12fed07c57cc01d9a36f3e63b666707be09b3ef397",
+      "bytes": 507212,
       "record_id": "214755",
-      "symbol": "RRKABEL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739466_16102026081136_WEB.xml"
+      "symbol": "RRKABEL"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215136_59572df8c54526b2.xml",
+      "sha256": "59572df8c54526b22158bf52e3b2e35efac5300bca000f38b53e4aba7548748a",
+      "bytes": 399097,
       "record_id": "215136",
-      "symbol": "TEJASNET",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740492_16102026090805_WEB.xml"
+      "symbol": "TEJASNET"
     },
     {
-      "record_id": "215132",
-      "symbol": "ZEEL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740483_16102026085634_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/215127_92b22ffd92b6386e.xml",
+      "sha256": "92b22ffd92b6386e706cc5dc4707f4ef9ed6320c3f1f54ff2f9b813fdfd09612",
+      "bytes": 332778,
       "record_id": "215127",
-      "symbol": "FRACTAL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1744470_23102026015446_WEB.xml"
+      "symbol": "FRACTAL"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215126_195e0553552daec2.xml",
+      "sha256": "195e0553552daec21c2f82be81e66e9ba35cf9c6246968e6555b5301d865f958",
+      "bytes": 328577,
       "record_id": "215126",
-      "symbol": "KEC",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740470_16102026083259_WEB.xml"
+      "symbol": "KEC"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215115_0e1c5bd37bac35c3.xml",
+      "sha256": "0e1c5bd37bac35c37c74eda4384382eb12b4f3161d7c14623060142eb6f45529",
+      "bytes": 1350437,
       "record_id": "215115",
-      "symbol": "TATACOMM",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740422_16102026072955_WEB.xml"
+      "symbol": "TATACOMM"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215106_5e87abb780e6405d.xml",
+      "sha256": "5e87abb780e6405dba6d9f9850586b786aa8a42650b9264ba983f37a41c0a3c4",
+      "bytes": 249018,
       "record_id": "215106",
-      "symbol": "RPOWER",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740388_16102026071007_WEB.xml"
+      "symbol": "RPOWER"
     },
     {
-      "record_id": "215096",
-      "symbol": "CAMS",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740350_16102026064848_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/215089_4bc21c2f2b6f636d.xml",
+      "sha256": "4bc21c2f2b6f636d03466230fabcf02331140d08e7d656a3d77658093f32734d",
+      "bytes": 629619,
       "record_id": "215089",
-      "symbol": "BAJAJFINSV",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740318_16102026063210_WEB.xml"
+      "symbol": "BAJAJFINSV"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215085_191b2b993f872ea6.xml",
+      "sha256": "191b2b993f872ea62b4b1f31bab64d4014f1c52757039ea4c30e9feaae69a167",
+      "bytes": 194557,
       "record_id": "215085",
-      "symbol": "BALKRISIND",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740308_16102026062546_WEB.xml"
+      "symbol": "BALKRISIND"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215084_e4b61172966c8481.xml",
+      "sha256": "e4b61172966c84811377ace9934de4fcce0ec4c52688197b0c27e661b8da81dc",
+      "bytes": 407718,
       "record_id": "215084",
-      "symbol": "PRESTIGE",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740306_16102026062520_WEB.xml"
+      "symbol": "PRESTIGE"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215083_8a7e063ae4cfa167.xml",
+      "sha256": "8a7e063ae4cfa16724c51a3e656cc06f50c25a4d651211df3b2ee6383bff55da",
+      "bytes": 176903,
       "record_id": "215083",
-      "symbol": "UNITDSPR",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740305_16102026062518_WEB.xml"
+      "symbol": "UNITDSPR"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215032_4458a1e684b1dc6f.xml",
+      "sha256": "4458a1e684b1dc6fe24773096d3590afa1f98dbf9f26ed7675e8c45cb06a9775",
+      "bytes": 363145,
       "record_id": "215032",
-      "symbol": "JKCEMENT",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740154_16102026052359_WEB.xml"
+      "symbol": "JKCEMENT"
     },
     {
-      "record_id": "215030",
-      "symbol": "VEDL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740148_16102026052137_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/215028_1e17278ec96aa8f5.xml",
+      "sha256": "1e17278ec96aa8f55ef7cd1a9be7d4d56d6149e860b6f8edbb57eb3d8c539d84",
+      "bytes": 785423,
       "record_id": "215028",
-      "symbol": "LGEINDIA",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740146_16102026052133_WEB.xml"
+      "symbol": "LGEINDIA"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215027_6754f4b3b72a41b0.xml",
+      "sha256": "6754f4b3b72a41b049bda559bc88ccbc7989fac1e3c15fa4c49c00f19f5a77a1",
+      "bytes": 471080,
       "record_id": "215027",
-      "symbol": "MANKIND",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740145_16102026052126_WEB.xml"
+      "symbol": "MANKIND"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215022_a1a4ffdfddbc166f.xml",
+      "sha256": "a1a4ffdfddbc166f16320336a4f8caffe74120435f635a155d75ffe358273047",
+      "bytes": 352093,
       "record_id": "215022",
-      "symbol": "NETWEB",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740134_16102026051345_WEB.xml"
+      "symbol": "NETWEB"
     },
     {
+      "path": "data/raw/shareholding/xbrl/215019_d14322fcf4c57bab.xml",
+      "sha256": "d14322fcf4c57bab876eb062d0637ceea5958400435687e4d3649c4a129de0d7",
+      "bytes": 550220,
+      "record_id": "215019",
+      "symbol": "UPL"
+    },
+    {
+      "path": "data/raw/shareholding/xbrl/215018_5c0bf307232103b6.xml",
+      "sha256": "5c0bf307232103b6c505db2dda9e1d2b923ac6bc4dafb8256a27b5d62ad1d02d",
+      "bytes": 522561,
       "record_id": "215018",
-      "symbol": "PIRAMALFIN",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740128_16102026051023_WEB.xml"
+      "symbol": "PIRAMALFIN"
     },
     {
-      "record_id": "215013",
-      "symbol": "MAZDOCK",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740106_16102026050154_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/215012_8890f363f2ffa4e5.xml",
+      "sha256": "8890f363f2ffa4e58adcfd3321b9fc9061ddfdc7c1b9f3779e05ed6b2127a64d",
+      "bytes": 188910,
       "record_id": "215012",
-      "symbol": "TRITURBINE",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740105_16102026050119_WEB.xml"
+      "symbol": "TRITURBINE"
     },
     {
-      "record_id": "215000",
-      "symbol": "NATCOPHARM",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740079_16102026045222_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/214999_8d29aed330aa7a71.xml",
+      "sha256": "8d29aed330aa7a71ab5b2ec912d1205dc6dc7eb4bcd88d3b5a4d3425cef78441",
+      "bytes": 307549,
       "record_id": "214999",
-      "symbol": "FIVESTAR",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740072_16102026044922_WEB.xml"
+      "symbol": "FIVESTAR"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214996_0b71e7bf42f365a3.xml",
+      "sha256": "0b71e7bf42f365a3399a1aea2cec7d5276cde9ff1c7289e01a1f1e8e1114cdb7",
+      "bytes": 263997,
       "record_id": "214996",
-      "symbol": "MAXHEALTH",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740060_16102026044443_WEB.xml"
+      "symbol": "MAXHEALTH"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214991_dc21321bfb37dc77.xml",
+      "sha256": "dc21321bfb37dc778e44536c640f85c9404cc37990d750760d9d54e02332642d",
+      "bytes": 121405,
       "record_id": "214991",
-      "symbol": "IDBI",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740051_16102026044138_WEB.xml"
+      "symbol": "IDBI"
     },
     {
-      "record_id": "214990",
-      "symbol": "EIHOTEL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740050_16102026044132_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/214980_5bda9994082e358b.xml",
+      "sha256": "5bda9994082e358bc7ecf21e01a505cc444c40424cb7bae0a83eefcadd498875",
+      "bytes": 191861,
       "record_id": "214980",
-      "symbol": "ENRIN",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740034_16102026043448_WEB.xml"
+      "symbol": "ENRIN"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214975_5da7f08984ce7e93.xml",
+      "sha256": "5da7f08984ce7e93d33dc1df54c86e9c82788db3ee44eca4fc213b3bf444ebd0",
+      "bytes": 977158,
       "record_id": "214975",
-      "symbol": "STARHEALTH",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1740021_16102026043036_WEB.xml"
+      "symbol": "STARHEALTH"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214951_d1ff06f89e49eb61.xml",
+      "sha256": "d1ff06f89e49eb61265a6a89de5b718f92e4e9e8b382c7d12c167cbf87cae061",
+      "bytes": 503288,
       "record_id": "214951",
-      "symbol": "HYUNDAI",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739965_16102026041555_WEB.xml"
+      "symbol": "HYUNDAI"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214946_05a7148b87ed8a33.xml",
+      "sha256": "05a7148b87ed8a3352adaa483f7697c5c058661fb001da29dbf7f5d90419e54a",
+      "bytes": 189730,
       "record_id": "214946",
-      "symbol": "TVSMOTOR",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739943_16102026041050_WEB.xml"
+      "symbol": "TVSMOTOR"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214939_c7f4de1a0816ca94.xml",
+      "sha256": "c7f4de1a0816ca940c1ab9f3100d7548123668ee0ebb5ca309f6999cbfb44ea3",
+      "bytes": 164697,
       "record_id": "214939",
-      "symbol": "SUNTV",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739912_16102026035750_WEB.xml"
+      "symbol": "SUNTV"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214929_a8c8b72601c6bd95.xml",
+      "sha256": "a8c8b72601c6bd95be1ec3867c37e7466ac904c0c5ab13c904c2a96a101d02be",
+      "bytes": 209013,
       "record_id": "214929",
-      "symbol": "LTFOODS",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739896_16102026034850_WEB.xml"
+      "symbol": "LTFOODS"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214919_ec4726bf38a18a0c.xml",
+      "sha256": "ec4726bf38a18a0c74a35bb180a10cd85937470a1f84d6d4f322d360179cac35",
+      "bytes": 205536,
       "record_id": "214919",
-      "symbol": "APTUS",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739880_16102026034147_WEB.xml"
+      "symbol": "APTUS"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214908_6c4c658f71e8f675.xml",
+      "sha256": "6c4c658f71e8f675b0d7d701e1de2306d9764721116ae85c50ab80f1f5308cea",
+      "bytes": 783146,
       "record_id": "214908",
-      "symbol": "DABUR",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739859_16102026033110_WEB.xml"
+      "symbol": "DABUR"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214900_824b0d06c513f82e.xml",
+      "sha256": "824b0d06c513f82e577f9c152a33895462e354bd52e834812990f7013065f417",
+      "bytes": 205447,
       "record_id": "214900",
-      "symbol": "KEI",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739839_16102026031946_WEB.xml"
+      "symbol": "KEI"
     },
     {
-      "record_id": "214894",
-      "symbol": "ASAHIINDIA",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739818_16102026030835_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/214891_d8d06ef1befd4a55.xml",
+      "sha256": "d8d06ef1befd4a55897282df009c2b86734239db34981723d0553c31cf7a508a",
+      "bytes": 242105,
       "record_id": "214891",
-      "symbol": "LALPATHLAB",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739810_16102026030639_WEB.xml"
+      "symbol": "LALPATHLAB"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214886_9505f3ca9d45c956.xml",
+      "sha256": "9505f3ca9d45c9568e432994f501370992cc036af95f31ed2dc4efa0596b5d6f",
+      "bytes": 586792,
       "record_id": "214886",
-      "symbol": "TATATECH",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739800_16102026030236_WEB.xml"
+      "symbol": "TATATECH"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214868_c5f5010deeee6801.xml",
+      "sha256": "c5f5010deeee6801c7816892d2a8c1f8a23d6744bd67361d00c4cb49e0bedba7",
+      "bytes": 190723,
       "record_id": "214868",
-      "symbol": "LODHA",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739751_16102026023743_WEB.xml"
+      "symbol": "LODHA"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214861_5db50fc741e1bc36.xml",
+      "sha256": "5db50fc741e1bc36a8941cd0dc63c83edf374b9754bd583ae24a3d807d6ef741",
+      "bytes": 331541,
       "record_id": "214861",
-      "symbol": "BHARATFORG",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739723_16102026021746_WEB.xml"
+      "symbol": "BHARATFORG"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214853_be903fc679d00a77.xml",
+      "sha256": "be903fc679d00a774030f556861b1ee5f7a6485f5e8ba33e41d2e5a0de8dda07",
+      "bytes": 168768,
+      "record_id": "214853",
+      "symbol": "PFC"
+    },
+    {
+      "path": "data/raw/shareholding/xbrl/214850_88d291a74fa20257.xml",
+      "sha256": "88d291a74fa202573dc3e624314314233c06fd701c2dab0b358fc8de310d0970",
+      "bytes": 650430,
       "record_id": "214850",
-      "symbol": "IKS",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739706_16102026020213_WEB.xml"
+      "symbol": "IKS"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214846_106d1ac049592f26.xml",
+      "sha256": "106d1ac049592f26ec07d931719e67113cf411e1382a9402e6a1db213009259e",
+      "bytes": 201962,
       "record_id": "214846",
-      "symbol": "MGL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739698_16102026015439_WEB.xml"
+      "symbol": "MGL"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214836_5ed935b39b636948.xml",
+      "sha256": "5ed935b39b636948fa8dfd9e0450d07399aa524ec6a9b4176355f22ac854d71c",
+      "bytes": 265264,
       "record_id": "214836",
-      "symbol": "BANDHANBNK",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739681_16102026012227_WEB.xml"
+      "symbol": "BANDHANBNK"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214821_a0cb345bb5f08a0e.xml",
+      "sha256": "a0cb345bb5f08a0eb7f8eba09ebc02faf56b2c2cfee80bd983e31e5c1aa1ffca",
+      "bytes": 102733,
       "record_id": "214821",
-      "symbol": "HINDCOPPER",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739634_16102026124751_WEB.xml"
+      "symbol": "HINDCOPPER"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214810_f5eacfebbc1e1694.xml",
+      "sha256": "f5eacfebbc1e16949a5093ec8ffd844f285c3914ea808b4d428ccd2a26543d14",
+      "bytes": 192173,
       "record_id": "214810",
-      "symbol": "HEXT",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739594_16102026122435_WEB.xml"
+      "symbol": "HEXT"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214809_6d7d52e87776735f.xml",
+      "sha256": "6d7d52e87776735f833474e7b7e95c369c07ee68e8b0b76bdcc2a69b20cd00e7",
+      "bytes": 338246,
       "record_id": "214809",
-      "symbol": "MSUMI",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739590_16102026122229_WEB.xml"
+      "symbol": "MSUMI"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214804_2d7c87d152bbb694.xml",
+      "sha256": "2d7c87d152bbb694f52bde2b2efd4a09114883a22ceb08f0ad2d710b6b3fc085",
+      "bytes": 203349,
       "record_id": "214804",
-      "symbol": "CDSL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739584_16102026121818_WEB.xml"
+      "symbol": "CDSL"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214799_9f28d5a35007487e.xml",
+      "sha256": "9f28d5a35007487e626ec7a7e3fb524bb7a098ee07a25fc8417ddb1134f6c1f1",
+      "bytes": 180046,
       "record_id": "214799",
-      "symbol": "GLAND",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739563_16102026115909_WEB.xml"
+      "symbol": "GLAND"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214798_4d8bb4434390c13f.xml",
+      "sha256": "4d8bb4434390c13fba253b250b7f503c132d49e5a682fb34115f76cd7409570b",
+      "bytes": 1054896,
       "record_id": "214798",
-      "symbol": "EIDPARRY",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739560_16102026115716_WEB.xml"
+      "symbol": "EIDPARRY"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214794_ff2b43ad09553cb0.xml",
+      "sha256": "ff2b43ad09553cb088ecd583e1c4303249faa0ff2caa8b01a4447e9952123794",
+      "bytes": 110543,
+      "record_id": "214794",
+      "symbol": "IREDA"
+    },
+    {
+      "path": "data/raw/shareholding/xbrl/214790_a8c22a05d4e25942.xml",
+      "sha256": "a8c22a05d4e25942abc89c3d2766df64b0c658d7585aff6d61c7060bcb20ee9c",
+      "bytes": 115953,
       "record_id": "214790",
-      "symbol": "CENTRALBK",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739544_16102026114629_WEB.xml"
+      "symbol": "CENTRALBK"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214780_127fcbfb153e82fa.xml",
+      "sha256": "127fcbfb153e82faa2ce638cc7b32d119d20266404ff1c256f67881600d6108c",
+      "bytes": 617260,
       "record_id": "214780",
-      "symbol": "HFCL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739523_16102026112900_WEB.xml"
+      "symbol": "HFCL"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214775_1c294b365978867d.xml",
+      "sha256": "1c294b365978867d504b3ded76117896fa6d4e50e5192d82cb35ee4ca3a37e03",
+      "bytes": 138115,
       "record_id": "214775",
-      "symbol": "ZENTEC",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739515_16102026112552_WEB.xml"
+      "symbol": "ZENTEC"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214768_288942c8726d5696.xml",
+      "sha256": "288942c8726d5696044d2988206edf3daf061472f92661624b75b970a17afdc1",
+      "bytes": 1525834,
       "record_id": "214768",
-      "symbol": "TATACHEM",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739495_16102026104315_WEB.xml"
+      "symbol": "TATACHEM"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214753_9395bff9f083ef4c.xml",
+      "sha256": "9395bff9f083ef4c419eb9d183d8e20db27dbc4a2afd98d6c9643ee0fdd31e62",
+      "bytes": 172696,
       "record_id": "214753",
-      "symbol": "SYNGENE",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739456_15102026103042_WEB.xml"
+      "symbol": "SYNGENE"
     },
     {
-      "record_id": "214747",
-      "symbol": "TORNTPHARM",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739383_15102026075118_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/214743_e4d33451527ba2af.xml",
+      "sha256": "e4d33451527ba2af8fb284adfb629f6d2a1cb10b874d78fcc1a76eec91dc6860",
+      "bytes": 168135,
       "record_id": "214743",
-      "symbol": "COHANCE",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739335_15102026071315_WEB.xml"
+      "symbol": "COHANCE"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214736_007979370e1e256f.xml",
+      "sha256": "007979370e1e256fd3ab2dbc6b89b1da5e4af4344fe239012f02bedf18a9ab8d",
+      "bytes": 319651,
       "record_id": "214736",
-      "symbol": "SBILIFE",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739296_15102026065450_WEB.xml"
+      "symbol": "SBILIFE"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214727_74569660298217d9.xml",
+      "sha256": "74569660298217d9c501cfd911b6b83756bde5a2b1ad1e76c6d0270a05413fc4",
+      "bytes": 550345,
       "record_id": "214727",
-      "symbol": "SUNDARMFIN",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739250_15102026062428_WEB.xml"
+      "symbol": "SUNDARMFIN"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214719_efeb5f870980aad9.xml",
+      "sha256": "efeb5f870980aad9885c179c010db53f9067d51b828812d5aefc5196847ba828",
+      "bytes": 384033,
       "record_id": "214719",
-      "symbol": "DEEPAKNTR",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739232_15102026061215_WEB.xml"
+      "symbol": "DEEPAKNTR"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214717_0b16f0628d252a7c.xml",
+      "sha256": "0b16f0628d252a7c89a0f3e78969354f1db7a83e0948636a40fa1e8ca2fc6e44",
+      "bytes": 225731,
       "record_id": "214717",
-      "symbol": "KPITTECH",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739221_15102026060712_WEB.xml"
+      "symbol": "KPITTECH"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214706_3245d1ce7de52eda.xml",
+      "sha256": "3245d1ce7de52eda5b980e6edecbb7521f8f7a0d820467679912220d18543131",
+      "bytes": 182848,
+      "record_id": "214706",
+      "symbol": "NAVA"
+    },
+    {
+      "path": "data/raw/shareholding/xbrl/214700_445a51863bdec770.xml",
+      "sha256": "445a51863bdec770e0162eee3747c243684551075db25397bc6d38e02c47998f",
+      "bytes": 165802,
       "record_id": "214700",
-      "symbol": "ANANTRAJ",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739157_15102026054726_WEB.xml"
+      "symbol": "ANANTRAJ"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214699_4a8f314042e64a13.xml",
+      "sha256": "4a8f314042e64a135052c11bb671440f42ff24706a4b13490615f00c88d23483",
+      "bytes": 135267,
       "record_id": "214699",
-      "symbol": "AIAENG",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739156_15102026054603_WEB.xml"
+      "symbol": "AIAENG"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214694_29720024c675af7d.xml",
+      "sha256": "29720024c675af7da1cd5f6f291fac8d0c2a1a589e04ef81284afe4050b7a71a",
+      "bytes": 219053,
       "record_id": "214694",
-      "symbol": "GALLANTT",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739147_15102026054243_WEB.xml"
+      "symbol": "GALLANTT"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214689_32878ede557f601c.xml",
+      "sha256": "32878ede557f601c4a7a430e06f0aa8df89a361a578d011fc35e4b0e8018117a",
+      "bytes": 164299,
       "record_id": "214689",
-      "symbol": "ECLERX",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739129_15102026053801_WEB.xml"
+      "symbol": "ECLERX"
     },
     {
-      "record_id": "214687",
-      "symbol": "ARE&M",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739121_15102026053436_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/214677_aabe7121abaecc90.xml",
+      "sha256": "aabe7121abaecc90effb207bff2b3959388eca82944cb80b00055246903ee0f5",
+      "bytes": 220759,
       "record_id": "214677",
-      "symbol": "SUZLON",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739068_15102026051415_WEB.xml"
+      "symbol": "SUZLON"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214672_947daeabda52a98e.xml",
+      "sha256": "947daeabda52a98e9f213195f96a708d3c414c7efb51089c4ca4783b6829a415",
+      "bytes": 204558,
       "record_id": "214672",
-      "symbol": "BRIGADE",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739055_15102026050920_WEB.xml"
+      "symbol": "BRIGADE"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214671_69a509a1b412cfdc.xml",
+      "sha256": "69a509a1b412cfdc1a84161547f3758911e77806f24db966b3c3dfd52c86bdb6",
+      "bytes": 165469,
       "record_id": "214671",
-      "symbol": "OLECTRA",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739053_15102026050851_WEB.xml"
+      "symbol": "OLECTRA"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214668_4948883617f84319.xml",
+      "sha256": "4948883617f8431992fdcc08c7bff642c108e72be27b56c848c46d5da39ea14f",
+      "bytes": 302862,
       "record_id": "214668",
-      "symbol": "FORCEMOT",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739049_15102026050742_WEB.xml"
+      "symbol": "FORCEMOT"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214666_b2969447910806e6.xml",
+      "sha256": "b2969447910806e6774fcfbccd4fba87fb5bda793fe1d6d81d1f8aa1ce23f671",
+      "bytes": 280344,
       "record_id": "214666",
-      "symbol": "CARTRADE",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739041_15102026050504_WEB.xml"
+      "symbol": "CARTRADE"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214664_54ed4c0249b5812c.xml",
+      "sha256": "54ed4c0249b5812c975b3482ba03702a84d3f73700e31c9bff310096b2f4c077",
+      "bytes": 257201,
       "record_id": "214664",
-      "symbol": "SANSERA",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739030_15102026045753_WEB.xml"
+      "symbol": "SANSERA"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214663_5bd2c8852175e3ff.xml",
+      "sha256": "5bd2c8852175e3ffb518016f64835b10d18b3e690b8baa23e1781a5038c91eb8",
+      "bytes": 324642,
       "record_id": "214663",
-      "symbol": "ATHERENERG",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1739029_15102026045742_WEB.xml"
+      "symbol": "ATHERENERG"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214641_9aa4f4a95c04a95e.xml",
+      "sha256": "9aa4f4a95c04a95ee96c98c3cbe8600cf9fc7b7c5170c4f7178d2ea9dfb0cd2f",
+      "bytes": 169835,
       "record_id": "214641",
-      "symbol": "ENDURANCE",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738971_15102026043604_WEB.xml"
+      "symbol": "ENDURANCE"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214637_08426749e38f9497.xml",
+      "sha256": "08426749e38f94975c867de55d173fc7d4b7c93d9a01860bf8f23a1177feeae7",
+      "bytes": 186209,
       "record_id": "214637",
-      "symbol": "IOC",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738964_15102026043209_WEB.xml"
+      "symbol": "IOC"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214632_30b3706bc8298120.xml",
+      "sha256": "30b3706bc82981206ecb91a351864fbf4f66d359bd49d684514eee4f304a36f6",
+      "bytes": 197714,
+      "record_id": "214632",
+      "symbol": "SAMMAANCAP"
+    },
+    {
+      "path": "data/raw/shareholding/xbrl/214631_04273126c0bb6c6b.xml",
+      "sha256": "04273126c0bb6c6b38f0a5deffda61a4e1f416f628fe9f35f8d1ff7f51b4956b",
+      "bytes": 295817,
       "record_id": "214631",
-      "symbol": "APARINDS",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738950_15102026042538_WEB.xml"
+      "symbol": "APARINDS"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214615_6830957d30bc2051.xml",
+      "sha256": "6830957d30bc2051d196ec72517f370796888484efd449b69a01a972d4985f6c",
+      "bytes": 171390,
       "record_id": "214615",
-      "symbol": "NSLNISP",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738893_15102026040407_WEB.xml"
+      "symbol": "NSLNISP"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214609_f25b009c8353ae31.xml",
+      "sha256": "f25b009c8353ae31aceeaaddc5fdd4419982e5467218718969a99293aa0f3287",
+      "bytes": 308033,
       "record_id": "214609",
-      "symbol": "KOTAKBANK",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738874_15102026035632_WEB.xml"
+      "symbol": "KOTAKBANK"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214606_070b5681a8fad1ae.xml",
+      "sha256": "070b5681a8fad1ae798132ffd832edf73cd55adb596e70e67861dfe8c6b2833d",
+      "bytes": 118596,
       "record_id": "214606",
-      "symbol": "NMDC",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738864_15102026035331_WEB.xml"
+      "symbol": "NMDC"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214605_18cf6d7cb1bd4009.xml",
+      "sha256": "18cf6d7cb1bd400980cefb00142c44bb8b4780735b70942469cc9a1563145315",
+      "bytes": 200479,
       "record_id": "214605",
-      "symbol": "TIMKEN",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738863_15102026035053_WEB.xml"
+      "symbol": "TIMKEN"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214597_2350e1d83989924b.xml",
+      "sha256": "2350e1d83989924baec2e57dbef41bb4857137ea9e99f31189ddcc24c79354d7",
+      "bytes": 607530,
       "record_id": "214597",
-      "symbol": "BAJAJ-AUTO",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738840_15102026033814_WEB.xml"
+      "symbol": "BAJAJ-AUTO"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214595_d33e20900ee8800e.xml",
+      "sha256": "d33e20900ee8800e0996975afe68f0782b4da95e3c5d59fab260bf89e657921c",
+      "bytes": 196228,
       "record_id": "214595",
-      "symbol": "CUMMINSIND",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738833_15102026033455_WEB.xml"
+      "symbol": "CUMMINSIND"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214583_7b2f3d4c2fe80288.xml",
+      "sha256": "7b2f3d4c2fe802887c7c60c61dbe87cbb8976d23d24fcd1c7c816ea6e8c40b3a",
+      "bytes": 143880,
+      "record_id": "214583",
+      "symbol": "IFCI"
+    },
+    {
+      "path": "data/raw/shareholding/xbrl/214581_29843c543dbfa3cf.xml",
+      "sha256": "29843c543dbfa3cf09227f63631b351e2478df5793e872e907b8206b2f8683f9",
+      "bytes": 202062,
       "record_id": "214581",
-      "symbol": "REDINGTON",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738776_15102026030911_WEB.xml"
+      "symbol": "REDINGTON"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214571_7e74b012d061db12.xml",
+      "sha256": "7e74b012d061db12a1d4326b909b376d83ce71f0e33e9f8063faa000e55e6a66",
+      "bytes": 282092,
       "record_id": "214571",
-      "symbol": "PHOENIXLTD",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738741_15102026024843_WEB.xml"
+      "symbol": "PHOENIXLTD"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214569_ca93f2132d5a51a5.xml",
+      "sha256": "ca93f2132d5a51a56624642904378899628d5b5b1eafef94beecb263e3dec103",
+      "bytes": 129694,
       "record_id": "214569",
-      "symbol": "PNB",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738738_15102026024246_WEB.xml"
+      "symbol": "PNB"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214566_88123e9540c931b2.xml",
+      "sha256": "88123e9540c931b21cf7142601f5bdcfabfb640e425e65f7a607ae11be140c5c",
+      "bytes": 261754,
       "record_id": "214566",
-      "symbol": "HDBFS",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738727_15102026023026_WEB.xml"
+      "symbol": "HDBFS"
     },
     {
-      "record_id": "214559",
-      "symbol": "GLAXO",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738702_15102026021804_WEB.xml"
-    },
-    {
-      "record_id": "214550",
-      "symbol": "HAL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738658_15102026013209_WEB.xml"
-    },
-    {
-      "record_id": "214513",
-      "symbol": "HEGAM",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738553_15102026122031_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/214503_24492244988cbf8f.xml",
+      "sha256": "24492244988cbf8f1d87e0ff067eaba9ef71876a0d2097d9b4c5a7fbc6932e56",
+      "bytes": 453085,
       "record_id": "214503",
-      "symbol": "WAAREEENER",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738518_15102026120211_WEB.xml"
+      "symbol": "WAAREEENER"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214487_bdb471f1abe2fec0.xml",
+      "sha256": "bdb471f1abe2fec013e6e927f8cdea18cf2262a247b0695a2ac0953256091668",
+      "bytes": 1636132,
+      "record_id": "214487",
+      "symbol": "TATACAP"
+    },
+    {
+      "path": "data/raw/shareholding/xbrl/214486_84da261f91044e96.xml",
+      "sha256": "84da261f91044e9642aadac98365db8acedb8093e187f216bbdae23826043b33",
+      "bytes": 326529,
       "record_id": "214486",
-      "symbol": "SRF",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738472_15102026111004_WEB.xml"
+      "symbol": "SRF"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214480_9acae79f96d064b7.xml",
+      "sha256": "9acae79f96d064b75981faa4788273a3045e554ceba433ca37ac2eab7249e374",
+      "bytes": 164150,
       "record_id": "214480",
-      "symbol": "NTPC",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738456_15102026105458_WEB.xml"
+      "symbol": "NTPC"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214476_bdc5248bc508bdcc.xml",
+      "sha256": "bdc5248bc508bdccdcc85f0825bad62015bf3df039d928605741d11d21194247",
+      "bytes": 147632,
       "record_id": "214476",
-      "symbol": "POWERGRID",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738451_15102026105019_WEB.xml"
+      "symbol": "POWERGRID"
     },
     {
-      "record_id": "214467",
-      "symbol": "LICHSGFIN",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738422_15102026094914_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/214462_ebea20bdde62c7c6.xml",
+      "sha256": "ebea20bdde62c7c69d2af38066588dc812922d5ce7b804bdf5adf6aec95f9e5e",
+      "bytes": 221626,
       "record_id": "214462",
-      "symbol": "CRAFTSMAN",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738411_15102026090509_WEB.xml"
+      "symbol": "CRAFTSMAN"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214200_0f4adaf4b32a2a8b.xml",
+      "sha256": "0f4adaf4b32a2a8bc4dded0a1f1ab48258c3bf8eb0bc0e375c14abd8b07d0d2c",
+      "bytes": 204712,
       "record_id": "214200",
-      "symbol": "PAYTM",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737329_14102026080305_WEB.xml"
+      "symbol": "PAYTM"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214453_37a2970793cdef7f.xml",
+      "sha256": "37a2970793cdef7f52d0edb746655aa2bd012fdce2dd0fc621526bc48315043d",
+      "bytes": 1486650,
       "record_id": "214453",
-      "symbol": "TTML",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738192_14102026100812_WEB.xml"
+      "symbol": "TTML"
     },
     {
-      "record_id": "214441",
-      "symbol": "BAJAJHLDNG",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738099_14102026065841_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/214438_bf2dd10a1e96381d.xml",
+      "sha256": "bf2dd10a1e96381df13efa80a6d342c18691e0d36315455631dff2ef2214401a",
+      "bytes": 196868,
       "record_id": "214438",
-      "symbol": "MTARTECH",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738079_14102026063605_WEB.xml"
+      "symbol": "MTARTECH"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214436_cb5748dfcdbdb328.xml",
+      "sha256": "cb5748dfcdbdb3289a2a742e74108fd4a482cf8925286b6dfdb0de00d969c82a",
+      "bytes": 231414,
       "record_id": "214436",
-      "symbol": "DATAPATTNS",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1738068_14102026063149_WEB.xml"
+      "symbol": "DATAPATTNS"
     },
     {
-      "record_id": "214415",
-      "symbol": "HINDZINC",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737993_14102026055738_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/214398_7ad46a8e05209f38.xml",
+      "sha256": "7ad46a8e05209f3811f8dba21aaac9035ba253c2ccfb122a236c56426e27d591",
+      "bytes": 217302,
       "record_id": "214398",
-      "symbol": "AADHARHFC",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737917_14102026052530_WEB.xml"
+      "symbol": "AADHARHFC"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214394_2250c2f33c410518.xml",
+      "sha256": "2250c2f33c4105185f61d4bb55056b378cec49c000e25623ae2c0925a106c3bd",
+      "bytes": 178740,
       "record_id": "214394",
-      "symbol": "NHPC",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737909_14102026052303_WEB.xml"
+      "symbol": "NHPC"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214390_2b8494de3b144246.xml",
+      "sha256": "2b8494de3b1442466ea8721fb24817bd50bc967e4039111864d62a2205cbefa9",
+      "bytes": 282772,
       "record_id": "214390",
-      "symbol": "CEATLTD",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737895_14102026051722_WEB.xml"
+      "symbol": "CEATLTD"
     },
     {
-      "record_id": "214377",
-      "symbol": "ANGELONE",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737867_14102026045751_WEB.xml"
+      "path": "data/raw/shareholding/xbrl/214382_2c7ce1cd52977c44.xml",
+      "sha256": "2c7ce1cd52977c44c58f2855c4e0a807970adb396d969276bc38fa3663f14ae6",
+      "bytes": 111656,
+      "record_id": "214382",
+      "symbol": "HUDCO"
     },
     {
-      "record_id": "214373",
-      "symbol": "NATIONALUM",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737856_14102026045149_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/214367_f2a3863762ea05f3.xml",
+      "sha256": "f2a3863762ea05f3fdf4eb85aef9620c4b90e875d2eb80e7e0acb7b0c62fba62",
+      "bytes": 109747,
       "record_id": "214367",
-      "symbol": "LINDEINDIA",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737836_14102026044134_WEB.xml"
+      "symbol": "LINDEINDIA"
     },
     {
-      "record_id": "214363",
-      "symbol": "STLTECH",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737819_14102026043803_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/214357_dfb426a9537a01af.xml",
+      "sha256": "dfb426a9537a01af90d087337658cd967293957c3e3314beff9635a6d45cf469",
+      "bytes": 166788,
       "record_id": "214357",
-      "symbol": "INTELLECT",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737801_14102026043150_WEB.xml"
+      "symbol": "INTELLECT"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214355_bb8aa737d99e6ecc.xml",
+      "sha256": "bb8aa737d99e6ecc552da21bff68a09e98a3d8f8dde0258677409466602cdc6b",
+      "bytes": 223573,
       "record_id": "214355",
-      "symbol": "BAJAJHFL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737797_14102026042924_WEB.xml"
+      "symbol": "BAJAJHFL"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214348_eb86c34998a40191.xml",
+      "sha256": "eb86c34998a401913a62288b4908eead4dde7436e9d63d7e511d35d14b64b22c",
+      "bytes": 152849,
       "record_id": "214348",
-      "symbol": "GAIL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737784_14102026042249_WEB.xml"
+      "symbol": "GAIL"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214343_c0cbaf891de5cce1.xml",
+      "sha256": "c0cbaf891de5cce17f26a24894d8956549d92900e9778134da38c68c843326e6",
+      "bytes": 625339,
       "record_id": "214343",
-      "symbol": "EMAMILTD",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737769_14102026041654_WEB.xml"
+      "symbol": "EMAMILTD"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214337_9192f08fd1387b34.xml",
+      "sha256": "9192f08fd1387b3487c056c67bb23d2a3aee5bd641b50c14af9eef05f065d4a3",
+      "bytes": 649741,
       "record_id": "214337",
-      "symbol": "GODREJPROP",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737751_14102026040830_WEB.xml"
+      "symbol": "GODREJPROP"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214332_6d4247a86b90c011.xml",
+      "sha256": "6d4247a86b90c011b0f5bb574771e6345ebafb946700ea05d8fdef62e0f31568",
+      "bytes": 354392,
       "record_id": "214332",
-      "symbol": "ATUL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737735_14102026040258_WEB.xml"
+      "symbol": "ATUL"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214327_48ee776a3fe16616.xml",
+      "sha256": "48ee776a3fe166162f2cd049767e72bd09f43c8bc29795cb7a929237eea1a879",
+      "bytes": 130937,
       "record_id": "214327",
-      "symbol": "BOSCHLTD",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737716_14102026034514_WEB.xml"
+      "symbol": "BOSCHLTD"
     },
     {
-      "record_id": "214310",
-      "symbol": "BEML",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737648_14102026030717_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/214293_9b255499c7994c02.xml",
+      "sha256": "9b255499c7994c02498092ffafedd60e33257e3c1b8fc00fbefa66704f4526a4",
+      "bytes": 116601,
       "record_id": "214293",
-      "symbol": "LICI",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737591_14102026022441_WEB.xml"
+      "symbol": "LICI"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214276_c7ee4d7139718829.xml",
+      "sha256": "c7ee4d7139718829ac5094662077fc2092f3f786047677aae7a23bdf8732890c",
+      "bytes": 162559,
       "record_id": "214276",
-      "symbol": "AVANTIFEED",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737523_14102026010733_WEB.xml"
+      "symbol": "AVANTIFEED"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214271_7d5fdab4c4a2d89f.xml",
+      "sha256": "7d5fdab4c4a2d89f7cb51d318ac65ba99c212197d3b7f2fb48ac4ce229fb61a9",
+      "bytes": 108371,
       "record_id": "214271",
-      "symbol": "RITES",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737497_14102026124853_WEB.xml"
+      "symbol": "RITES"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214256_6e5e6b73727e6b54.xml",
+      "sha256": "6e5e6b73727e6b541954f07f64b268391af707df8e9d60cc2577f0c08dca7a70",
+      "bytes": 313678,
       "record_id": "214256",
-      "symbol": "SBICARD",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737457_14102026121442_WEB.xml"
+      "symbol": "SBICARD"
     },
     {
-      "record_id": "214250",
-      "symbol": "ICICIBANK",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1743956_22102026042725_WEB.xml"
+      "path": "data/raw/shareholding/xbrl/214249_254192aa6938aece.xml",
+      "sha256": "254192aa6938aece62cc5b67908686106da316cb684e4b42e2ad044a1049191e",
+      "bytes": 215292,
+      "record_id": "214249",
+      "symbol": "RECLTD"
     },
     {
-      "record_id": "214242",
-      "symbol": "AUROPHARMA",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737425_14102026114826_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/214235_b45427fea73e2c55.xml",
+      "sha256": "b45427fea73e2c55508369963bef846d7f200eb731b8970eed64395737d9df69",
+      "bytes": 154172,
       "record_id": "214235",
-      "symbol": "RHIM",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737404_14102026112540_WEB.xml"
+      "symbol": "RHIM"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214232_e19a6dc5530361ca.xml",
+      "sha256": "e19a6dc5530361cac48f850252244a4930571c5fcce1637b4dae8daa180da873",
+      "bytes": 164493,
+      "record_id": "214232",
+      "symbol": "IRFC"
+    },
+    {
+      "path": "data/raw/shareholding/xbrl/214229_d6b4d4d8896d4fd2.xml",
+      "sha256": "d6b4d4d8896d4fd21eb9ac1a0196b6f78e495235b1ede3630374a12187e1a4f0",
+      "bytes": 219297,
       "record_id": "214229",
-      "symbol": "AZAD",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737385_14102026110317_WEB.xml"
+      "symbol": "AZAD"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214222_1c366a835c60345b.xml",
+      "sha256": "1c366a835c60345b774fe7510e7f526a288517d4544319c96b43571870d653d7",
+      "bytes": 284915,
+      "record_id": "214222",
+      "symbol": "MANAPPURAM"
+    },
+    {
+      "path": "data/raw/shareholding/xbrl/214221_7ae53d373650f557.xml",
+      "sha256": "7ae53d373650f55758e132ef32f82b2984997422e23829d36581ccd6ad78fce9",
+      "bytes": 182289,
       "record_id": "214221",
-      "symbol": "PINELABS",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737372_14102026103557_WEB.xml"
+      "symbol": "PINELABS"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214215_4b11c4ece08c2265.xml",
+      "sha256": "4b11c4ece08c2265f4bb7fc2782342034c6b3432749739a977989ce50807f43f",
+      "bytes": 176744,
       "record_id": "214215",
-      "symbol": "RAINBOW",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737357_14102026101847_WEB.xml"
+      "symbol": "RAINBOW"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214211_1938b4ab0493d1a9.xml",
+      "sha256": "1938b4ab0493d1a950fd6b764da5b7a86a9b0db7d3ab504219a8a469659d31b6",
+      "bytes": 405991,
       "record_id": "214211",
-      "symbol": "CHAMBLFERT",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737347_14102026100243_WEB.xml"
+      "symbol": "CHAMBLFERT"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214205_c43eff9716b45e1a.xml",
+      "sha256": "c43eff9716b45e1a9d2ec5eae975d702ff09e6173c1e82a597b61cea03abc743",
+      "bytes": 250704,
       "record_id": "214205",
-      "symbol": "PATANJALI",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737336_14102026094232_WEB.xml"
+      "symbol": "PATANJALI"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214187_4abe47e3d000ce70.xml",
+      "sha256": "4abe47e3d000ce70b56a82fb03865201787c1a3be4a66260243f17d3d5250a25",
+      "bytes": 417372,
       "record_id": "214187",
-      "symbol": "ANANDRATHI",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737231_13102026064115_WEB.xml"
+      "symbol": "ANANDRATHI"
     },
     {
-      "record_id": "214185",
-      "symbol": "DIXON",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737227_13102026063951_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/214174_9847479a8b41c1ee.xml",
+      "sha256": "9847479a8b41c1ee839fc81c3efc0c0af6c8ca64df464245c1dfa27f443f853f",
+      "bytes": 173644,
       "record_id": "214174",
-      "symbol": "FIRSTCRY",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737199_13102026061712_WEB.xml"
+      "symbol": "FIRSTCRY"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214168_b12035675cfc2afc.xml",
+      "sha256": "b12035675cfc2afcdcb69820f5537b6e412817fc9a331edb7b318b769d9a7820",
+      "bytes": 208130,
       "record_id": "214168",
-      "symbol": "SAGILITY",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737173_13102026055925_WEB.xml"
+      "symbol": "SAGILITY"
     },
     {
-      "record_id": "214135",
-      "symbol": "YESBANK",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737065_13102026050518_WEB.xml"
+      "path": "data/raw/shareholding/xbrl/214145_ae552d45f8cb797f.xml",
+      "sha256": "ae552d45f8cb797f7cd3e0ca0269da12169e66993c73d26e6da1935684c2e58b",
+      "bytes": 205357,
+      "record_id": "214145",
+      "symbol": "IIFL"
     },
     {
-      "record_id": "214129",
-      "symbol": "ITC",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737048_13102026050138_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/214127_0538cec5a335c16e.xml",
+      "sha256": "0538cec5a335c16e2d03790a505625651cf6babb1b0690414cfa1a5fcd89e5ed",
+      "bytes": 132448,
       "record_id": "214127",
-      "symbol": "CASTROLIND",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737040_13102026045731_WEB.xml"
+      "symbol": "CASTROLIND"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214119_a1e270f510ddec3b.xml",
+      "sha256": "a1e270f510ddec3ba601a1c0c39711b3c2a5236f9e7bab517aef1506953a2d7f",
+      "bytes": 231416,
       "record_id": "214119",
-      "symbol": "SWANCORP",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737019_13102026044828_WEB.xml"
+      "symbol": "SWANCORP"
     },
     {
-      "record_id": "214115",
-      "symbol": "J&KBANK",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1737009_13102026044456_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/214108_8a72957dc6494dfc.xml",
+      "sha256": "8a72957dc6494dfc813bcd908ec3b768f8d803dee58a0506a246effbfe457984",
+      "bytes": 202176,
       "record_id": "214108",
-      "symbol": "PARADEEP",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736997_13102026043703_WEB.xml"
+      "symbol": "PARADEEP"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214105_8c8a364ccfec04bd.xml",
+      "sha256": "8c8a364ccfec04bdc2f2af9143b1766fc8e8c6cef6cb9cb2f69d25733c9bcbc8",
+      "bytes": 136728,
       "record_id": "214105",
-      "symbol": "IGL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736988_13102026043316_WEB.xml"
+      "symbol": "IGL"
     },
     {
-      "record_id": "214091",
-      "symbol": "EXIDEIND",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736957_13102026041727_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/214086_68fc8946775d7c09.xml",
+      "sha256": "68fc8946775d7c09c8fbd94e39c5901c96aa80e8271b5086789e60e04590e422",
+      "bytes": 131684,
       "record_id": "214086",
-      "symbol": "FSL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736948_13102026041109_WEB.xml"
+      "symbol": "FSL"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214081_dbb1e43f3ed8fc64.xml",
+      "sha256": "dbb1e43f3ed8fc649e305f02b20838fec2d6dac63536a4cbe30b56ff960fca2d",
+      "bytes": 199423,
       "record_id": "214081",
-      "symbol": "COLPAL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736932_13102026040415_WEB.xml"
+      "symbol": "COLPAL"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214074_a7b5e6b26a2e255f.xml",
+      "sha256": "a7b5e6b26a2e255f4f089952972071babf0c92d5adc456546f8dec0d14f4e0f4",
+      "bytes": 212667,
       "record_id": "214074",
-      "symbol": "TITAGARH",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736913_13102026035219_WEB.xml"
+      "symbol": "TITAGARH"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214070_2516c614ad09acbd.xml",
+      "sha256": "2516c614ad09acbdb4d3ec1fcf76b5cac71ea9c5533f20402f9fb0597eb6cacb",
+      "bytes": 196575,
       "record_id": "214070",
-      "symbol": "UBL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736891_13102026033642_WEB.xml"
+      "symbol": "UBL"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214064_cc84af7514febd2c.xml",
+      "sha256": "cc84af7514febd2c3484a87df50a4143d3931264a76a817198d0ba5fd2ddd610",
+      "bytes": 209922,
       "record_id": "214064",
-      "symbol": "MPHASIS",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736857_13102026031930_WEB.xml"
+      "symbol": "MPHASIS"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214062_7a02f97ef9fd87c1.xml",
+      "sha256": "7a02f97ef9fd87c1318bdee67ad77edeb809babb2449eaa1e5a556ef34edb426",
+      "bytes": 1012887,
       "record_id": "214062",
-      "symbol": "CHOLAHLDNG",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736852_13102026031724_WEB.xml"
+      "symbol": "CHOLAHLDNG"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214057_9e5a0711ea0e07ea.xml",
+      "sha256": "9e5a0711ea0e07ea6045fab4ebb6f0d785218228bda54e338143defbfdf88dba",
+      "bytes": 245751,
       "record_id": "214057",
-      "symbol": "HSCL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736844_13102026031321_WEB.xml"
+      "symbol": "HSCL"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214050_d4e5355d5e8ca5a4.xml",
+      "sha256": "d4e5355d5e8ca5a4714023a253eba9054a4c4528a644840dbfeba17f35cdd8df",
+      "bytes": 163825,
       "record_id": "214050",
-      "symbol": "NH",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736827_13102026030512_WEB.xml"
+      "symbol": "NH"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214047_4d8d4378b48cf7f9.xml",
+      "sha256": "4d8d4378b48cf7f971e127c1c8931c41455fa518fd5b5784019255eaa7bdcba8",
+      "bytes": 369329,
       "record_id": "214047",
-      "symbol": "ANTHEM",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736823_13102026025758_WEB.xml"
+      "symbol": "ANTHEM"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214044_a0078eef852310ac.xml",
+      "sha256": "a0078eef852310acfa807fd37bced43ea23b5ab2ede225c818aaeafbe9798660",
+      "bytes": 165547,
       "record_id": "214044",
-      "symbol": "PRIVISCL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736808_13102026024532_WEB.xml"
+      "symbol": "PRIVISCL"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214043_4ae1426a78e11b11.xml",
+      "sha256": "4ae1426a78e11b115231bf8042149dfe6057663d78390e77aec75795f958b25a",
+      "bytes": 139014,
       "record_id": "214043",
-      "symbol": "SCHNEIDER",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736806_13102026024522_WEB.xml"
+      "symbol": "SCHNEIDER"
     },
     {
-      "record_id": "214036",
-      "symbol": "BBOX",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736789_13102026023115_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/214034_b2e9ccb4ece5d823.xml",
+      "sha256": "b2e9ccb4ece5d823af6a797a5cfd4c8940ec5aec8efa115e7603ae5831ee6b12",
+      "bytes": 186036,
       "record_id": "214034",
-      "symbol": "HDFCAMC",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736786_13102026022428_WEB.xml"
+      "symbol": "HDFCAMC"
     },
     {
+      "path": "data/raw/shareholding/xbrl/214025_ae2393e7dec430d9.xml",
+      "sha256": "ae2393e7dec430d9d0096a8e13d70ae4ab235cfd88601633df43768bfca82e51",
+      "bytes": 394593,
       "record_id": "214025",
-      "symbol": "KALYANKJIL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736765_13102026015914_WEB.xml"
+      "symbol": "KALYANKJIL"
     },
     {
-      "record_id": "214015",
-      "symbol": "IPCALAB",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736726_13102026011741_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/214008_0fa5b917d119aae9.xml",
+      "sha256": "0fa5b917d119aae9c212235a58f7383b4961cddacece8fe225e04ca9f3339325",
+      "bytes": 273361,
       "record_id": "214008",
-      "symbol": "NTPCGREEN",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736696_13102026125628_WEB.xml"
+      "symbol": "NTPCGREEN"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213995_14487e0bfe5ae2ac.xml",
+      "sha256": "14487e0bfe5ae2ac87dd62528cc414d54bd1107df8a6f96b7e1fb73a7dc0619d",
+      "bytes": 269434,
       "record_id": "213995",
-      "symbol": "ETERNAL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736668_13102026124040_WEB.xml"
+      "symbol": "ETERNAL"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213990_2c8ede8a3e785068.xml",
+      "sha256": "2c8ede8a3e7850684026cfddcd2a2737b30c1a186cb9b07b24bab7954aa6f562",
+      "bytes": 241411,
       "record_id": "213990",
-      "symbol": "SOBHA",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736649_13102026122918_WEB.xml"
+      "symbol": "SOBHA"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213965_caad260b3c30dd96.xml",
+      "sha256": "caad260b3c30dd96d2a3aa0e27091c19e9d005fbdc9c0198b801bc99626e64d3",
+      "bytes": 131438,
       "record_id": "213965",
-      "symbol": "UTIAMC",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736593_13102026114809_WEB.xml"
+      "symbol": "UTIAMC"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213939_a032218c7f762c09.xml",
+      "sha256": "a032218c7f762c09124262be72c9e1c5cc38268c9e682f22995e7e95b5a1b1f5",
+      "bytes": 211052,
       "record_id": "213939",
-      "symbol": "CREDITACC",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736521_13102026103700_WEB.xml"
+      "symbol": "CREDITACC"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213890_8b3c3a1e88af971c.xml",
+      "sha256": "8b3c3a1e88af971c78616cecc4701d20efaae6d43ce83ba599f727e822b0ada3",
+      "bytes": 161370,
       "record_id": "213890",
-      "symbol": "THANGAMAYL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736295_12102026054310_WEB.xml"
+      "symbol": "THANGAMAYL"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213884_5b8d7371b3c73425.xml",
+      "sha256": "5b8d7371b3c73425ae3dc92aabb28745c9fd5fac3b8f72158ee6668a26333b81",
+      "bytes": 217923,
+      "record_id": "213884",
+      "symbol": "AEGISLOG"
+    },
+    {
+      "path": "data/raw/shareholding/xbrl/213882_1d36cf5bbb49c12d.xml",
+      "sha256": "1d36cf5bbb49c12d2885642c4e8deab73579ba459970733384a9fdda204727e9",
+      "bytes": 179654,
       "record_id": "213882",
-      "symbol": "CIEINDIA",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736250_12102026051909_WEB.xml"
+      "symbol": "CIEINDIA"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213881_83b9b138ee80e22b.xml",
+      "sha256": "83b9b138ee80e22bbff3b78f8634ea7be41af19060fa46ee919f91b2498993f6",
+      "bytes": 120967,
       "record_id": "213881",
-      "symbol": "OFSS",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736248_12102026051824_WEB.xml"
+      "symbol": "OFSS"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213872_093a87ed277af64e.xml",
+      "sha256": "093a87ed277af64eb208b7464b933cae3ac12c64dd8fc5c763b5b1be948938b6",
+      "bytes": 165042,
       "record_id": "213872",
-      "symbol": "CMPDI",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736201_12102026044611_WEB.xml"
+      "symbol": "CMPDI"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213869_58f83f212a33ab53.xml",
+      "sha256": "58f83f212a33ab53ccd8737006a9018d8f45e6a7be0ae4ce7690340ef135fb1f",
+      "bytes": 288503,
       "record_id": "213869",
-      "symbol": "ULTRACEMCO",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736194_12102026043923_WEB.xml"
+      "symbol": "ULTRACEMCO"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213853_12b056da659c4033.xml",
+      "sha256": "12b056da659c4033bd654662a93519b8ea3c0fc2ee459d10d8566dd7298d5397",
+      "bytes": 439361,
       "record_id": "213853",
-      "symbol": "MFSL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736151_12102026041358_WEB.xml"
+      "symbol": "MFSL"
     },
     {
-      "record_id": "213850",
-      "symbol": "APLAPOLLO",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736137_12102026041019_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/213848_648a6ec9ca764a98.xml",
+      "sha256": "648a6ec9ca764a98a543060cdf041bab16cf622a0d43e693a1c87f63474eaa84",
+      "bytes": 228726,
       "record_id": "213848",
-      "symbol": "PREMIERENE",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736115_12102026040148_WEB.xml"
+      "symbol": "PREMIERENE"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213840_a34b68b8722798db.xml",
+      "sha256": "a34b68b8722798db20782b535badd70c9a923327d4b864cbc79a2cb8929d6345",
+      "bytes": 201096,
       "record_id": "213840",
-      "symbol": "NEULANDLAB",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736092_12102026034744_WEB.xml"
+      "symbol": "NEULANDLAB"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213817_1e30e7e5254d7902.xml",
+      "sha256": "1e30e7e5254d7902076173d1d09e726f65a35553cc93214cc544c34e509adb71",
+      "bytes": 188737,
       "record_id": "213817",
-      "symbol": "TEGA",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1736007_12102026025059_WEB.xml"
+      "symbol": "TEGA"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213811_4a6f9ccc922189c0.xml",
+      "sha256": "4a6f9ccc922189c001430cf27a2c1e8dc643879459a0a1ec477bcf5334fc1724",
+      "bytes": 402889,
       "record_id": "213811",
-      "symbol": "LENSKART",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735992_12102026022956_WEB.xml"
+      "symbol": "LENSKART"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213805_3d21ec03bc1fba21.xml",
+      "sha256": "3d21ec03bc1fba21f6a0dd4854459b7b791ae15c6e2140192876ed99a94629c5",
+      "bytes": 274684,
       "record_id": "213805",
-      "symbol": "VIJAYA",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735976_12102026015530_WEB.xml"
+      "symbol": "VIJAYA"
     },
     {
-      "record_id": "213800",
-      "symbol": "BANKINDIA",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735949_12102026012506_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/213789_8e4731ee0f8858ea.xml",
+      "sha256": "8e4731ee0f8858eaac43f530769d1f2218bcc17cb7a8d1c843c6e9e1bc372bf2",
+      "bytes": 138671,
       "record_id": "213789",
-      "symbol": "TECHNOE",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735913_12102026010105_WEB.xml"
+      "symbol": "TECHNOE"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213786_804e9ed2c4d9cde1.xml",
+      "sha256": "804e9ed2c4d9cde19bfbe1386cff09e0beb82c2d8b85526a571979fcc09e7df9",
+      "bytes": 214727,
       "record_id": "213786",
-      "symbol": "SWIGGY",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735908_12102026125855_WEB.xml"
+      "symbol": "SWIGGY"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213752_30c54b404ca0870c.xml",
+      "sha256": "30c54b404ca0870c3387622675463e3d676ecfb747ce7b35cc50d55a84116a83",
+      "bytes": 226090,
       "record_id": "213752",
-      "symbol": "GESHIP",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735777_12102026102855_WEB.xml"
+      "symbol": "GESHIP"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213745_835e758a9f54d094.xml",
+      "sha256": "835e758a9f54d0947d4af35244a9d2071e6a1c91362e4095100ad985369ce705",
+      "bytes": 352222,
       "record_id": "213745",
-      "symbol": "URBANCO",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735757_11102026045751_WEB.xml"
+      "symbol": "URBANCO"
     },
     {
-      "record_id": "213740",
-      "symbol": "PGEL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735493_10102026064831_WEB.xml"
-    },
-    {
-      "record_id": "213723",
-      "symbol": "VTL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735438_10102026043610_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/213718_1e1734d48a7c4f7f.xml",
+      "sha256": "1e1734d48a7c4f7f8260402a723a30ccb8e31d555216f99b0d253d6b220a07dc",
+      "bytes": 235319,
       "record_id": "213718",
-      "symbol": "ADANIPORTS",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735409_10102026035052_WEB.xml"
+      "symbol": "ADANIPORTS"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213708_1f9662cd991fa3ef.xml",
+      "sha256": "1f9662cd991fa3efbd716958913cf89e7e8e439995a3303da927f00f85e6ecdd",
+      "bytes": 424183,
       "record_id": "213708",
-      "symbol": "JSL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735365_10102026025011_WEB.xml"
+      "symbol": "JSL"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213704_ce90e0805f21ef06.xml",
+      "sha256": "ce90e0805f21ef06f2a6b7578853f72caa327865e724c53e9fa591982be7aa7d",
+      "bytes": 255151,
       "record_id": "213704",
-      "symbol": "ADANIENSOL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735355_10102026020737_WEB.xml"
+      "symbol": "ADANIENSOL"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213702_1079c179d5e41970.xml",
+      "sha256": "1079c179d5e419702e1c875603ea5aa449721dc8543343cffb6b576386ffbf9d",
+      "bytes": 164125,
       "record_id": "213702",
-      "symbol": "ATGL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735353_10102026015343_WEB.xml"
+      "symbol": "ATGL"
     },
     {
-      "record_id": "213676",
-      "symbol": "BALRAMCHIN",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735220_09102026074157_WEB.xml"
-    },
-    {
-      "record_id": "213667",
-      "symbol": "AXISBANK",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735162_09102026064511_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/213656_a540c43a8ea3580d.xml",
+      "sha256": "a540c43a8ea3580d002048800ff3628cfa65b3e8f91d13d07b178c92bf3fca83",
+      "bytes": 246101,
       "record_id": "213656",
-      "symbol": "PVRINOX",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735125_09102026061731_WEB.xml"
+      "symbol": "PVRINOX"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213655_2db51bf732f0347c.xml",
+      "sha256": "2db51bf732f0347c5d513bb594d52640155f2912b846a086c058678acbe27eea",
+      "bytes": 215154,
       "record_id": "213655",
-      "symbol": "AMBUJACEM",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735122_09102026061302_WEB.xml"
+      "symbol": "AMBUJACEM"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213650_9db3cdb226ac2ceb.xml",
+      "sha256": "9db3cdb226ac2ceb0c4136bff4548e28d1baccc8b89460a600f8f70a5a4229a3",
+      "bytes": 202742,
+      "record_id": "213650",
+      "symbol": "WIPRO"
+    },
+    {
+      "path": "data/raw/shareholding/xbrl/213640_34c02efaa166b7d6.xml",
+      "sha256": "34c02efaa166b7d6440a2d5c7a3ff7970fa09ebffe271d5cd217709fae3d9ae0",
+      "bytes": 106696,
       "record_id": "213640",
-      "symbol": "POWERINDIA",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1735055_09102026053840_WEB.xml"
+      "symbol": "POWERINDIA"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213604_7d37d3fbf99df742.xml",
+      "sha256": "7d37d3fbf99df742e922a64fe50ea92522b6e8e45cc8a54517560cb100e92d28",
+      "bytes": 192997,
       "record_id": "213604",
-      "symbol": "GRANULES",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734932_09102026041953_WEB.xml"
+      "symbol": "GRANULES"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213596_9ab9e4e476c40c0b.xml",
+      "sha256": "9ab9e4e476c40c0bb6ffe42a693d1f72f7ab554e8fa5be78389f6528e28b15c2",
+      "bytes": 101392,
       "record_id": "213596",
-      "symbol": "FACT",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734876_09102026034154_WEB.xml"
+      "symbol": "FACT"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213587_ad99635ef49b51dd.xml",
+      "sha256": "ad99635ef49b51dd542ef88430c4f755f821fadce5262e07696f362fd7f5329e",
+      "bytes": 174771,
       "record_id": "213587",
-      "symbol": "FLUOROCHEM",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734845_09102026031625_WEB.xml"
+      "symbol": "FLUOROCHEM"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213554_fe23224888fdcad6.xml",
+      "sha256": "fe23224888fdcad6b670e99e3c3e23e304c4a2c2e686ac789188f2c728a6f8cf",
+      "bytes": 120895,
       "record_id": "213554",
-      "symbol": "HONAUT",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734704_09102026122756_WEB.xml"
+      "symbol": "HONAUT"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213539_23b127f035908317.xml",
+      "sha256": "23b127f035908317cf3159ff2b0dc8291e54becdf5979ba77aefce2f463fef12",
+      "bytes": 113327,
       "record_id": "213539",
-      "symbol": "NIACL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734639_09102026105613_WEB.xml"
+      "symbol": "NIACL"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213420_34b6585a2f364492.xml",
+      "sha256": "34b6585a2f3644923890d1f11fbc71015ef63f56e480781013f0dd033d0daa58",
+      "bytes": 206433,
       "record_id": "213420",
-      "symbol": "TARIL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734076_08102026101824_WEB.xml"
+      "symbol": "TARIL"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213527_446ad0ea30c3acb4.xml",
+      "sha256": "446ad0ea30c3acb46dd8c4164beffb985bf98ae8d0ee09625f98f32855c242ba",
+      "bytes": 210956,
       "record_id": "213527",
-      "symbol": "CCL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734566_08102026071456_WEB.xml"
+      "symbol": "CCL"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213522_5bde974f18c5b944.xml",
+      "sha256": "5bde974f18c5b944dbf5409e5161d955de0bfba8cd181b45ae6033d8b0d37e17",
+      "bytes": 403807,
       "record_id": "213522",
-      "symbol": "RBLBANK",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734526_08102026062818_WEB.xml"
+      "symbol": "RBLBANK"
     },
     {
-      "record_id": "213513",
-      "symbol": "HAVELLS",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734459_08102026053816_WEB.xml"
-    },
-    {
-      "record_id": "213507",
-      "symbol": "LTF",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734439_08102026052653_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/213503_4f85bfcb79a3dabc.xml",
+      "sha256": "4f85bfcb79a3dabce36d3c4863ac6b3bb7c75a15c632475b15df624675e0c73a",
+      "bytes": 207715,
       "record_id": "213503",
-      "symbol": "RADICO",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734404_08102026050721_WEB.xml"
+      "symbol": "RADICO"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213493_d937a858839cd979.xml",
+      "sha256": "d937a858839cd97921d83821f4fbc184127bd07e3b2b4c95cac8c40f86b151ae",
+      "bytes": 343123,
       "record_id": "213493",
-      "symbol": "AETHER",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734361_08102026044208_WEB.xml"
+      "symbol": "AETHER"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213485_1c307b54041d9408.xml",
+      "sha256": "1c307b54041d94088bdddb6df557080a81515a604e5d14433c843a150a166aba",
+      "bytes": 98184,
       "record_id": "213485",
-      "symbol": "UCOBANK",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734335_08102026042244_WEB.xml"
+      "symbol": "UCOBANK"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213483_552b8cae53d8999a.xml",
+      "sha256": "552b8cae53d8999a508d03c9892dcf5c52d770fc07c1ccc31e18d039e8ffa415",
+      "bytes": 157884,
       "record_id": "213483",
-      "symbol": "JYOTICNC",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734330_08102026042053_WEB.xml"
+      "symbol": "JYOTICNC"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213480_3b817dd9a747a058.xml",
+      "sha256": "3b817dd9a747a058fc44e1c2242ffeac254b9bcb714232d99e277d27f2e8c42d",
+      "bytes": 347310,
       "record_id": "213480",
-      "symbol": "LLOYDSME",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734633_09102026103829_WEB.xml"
+      "symbol": "LLOYDSME"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213475_a1c658fcc9882a17.xml",
+      "sha256": "a1c658fcc9882a177f61a59b2c175d0cc525e6737922ee9522a85fdb6d14b2a1",
+      "bytes": 126590,
       "record_id": "213475",
-      "symbol": "AWL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734273_08102026033216_WEB.xml"
+      "symbol": "AWL"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213473_ec869996161e4a3f.xml",
+      "sha256": "ec869996161e4a3f32665cb59275bd0d32573e1a2f5e50493af9b06ab5cc8da6",
+      "bytes": 244021,
       "record_id": "213473",
-      "symbol": "AAVAS",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734271_08102026032250_WEB.xml"
+      "symbol": "AAVAS"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213472_382a21930e6479bc.xml",
+      "sha256": "382a21930e6479bc537cd285e287964a921e63be51afef3835de4a6d49273a4a",
+      "bytes": 185300,
       "record_id": "213472",
-      "symbol": "COALINDIA",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734270_08102026032238_WEB.xml"
+      "symbol": "COALINDIA"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213468_24db9cd944bea6c4.xml",
+      "sha256": "24db9cd944bea6c483521af26aaf7c352b76a2021c5b0026670630727bc58ac5",
+      "bytes": 337615,
+      "record_id": "213468",
+      "symbol": "POONAWALLA"
+    },
+    {
+      "path": "data/raw/shareholding/xbrl/213466_8f8ef8b535ae67ad.xml",
+      "sha256": "8f8ef8b535ae67adce5ea9ad373558e79a1deca29a5baed5b8b546f2bfdb2a49",
+      "bytes": 145921,
       "record_id": "213466",
-      "symbol": "ABSLAMC",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734239_08102026025311_WEB.xml"
+      "symbol": "ABSLAMC"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213445_6772fa5ed0ea4f89.xml",
+      "sha256": "6772fa5ed0ea4f89e065a235177d6ea6af35112033e0efb86bf942c794b15689",
+      "bytes": 108207,
       "record_id": "213445",
-      "symbol": "MAHABANK",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734163_08102026125019_WEB.xml"
+      "symbol": "MAHABANK"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213435_b2deb07a3dfa5349.xml",
+      "sha256": "b2deb07a3dfa5349cb14dc29000d3e0083c665dfca82e2d0ab7bda57aa1f5579",
+      "bytes": 140231,
       "record_id": "213435",
-      "symbol": "INDIANB",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734139_08102026122540_WEB.xml"
+      "symbol": "INDIANB"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213429_7b8ee97463544590.xml",
+      "sha256": "7b8ee97463544590fb928b6356ffb15439d0e9bb21d83ff6a3f3c7cd446d8a0d",
+      "bytes": 103559,
       "record_id": "213429",
-      "symbol": "SJVN",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1734117_08102026114024_WEB.xml"
+      "symbol": "SJVN"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213414_26b50cf74f77d966.xml",
+      "sha256": "26b50cf74f77d966e112a20a8c140890475f46fb4949aabb37acc4a4e4bd3c2c",
+      "bytes": 385884,
       "record_id": "213414",
-      "symbol": "SAILIFE",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1733965_07102026063003_WEB.xml"
+      "symbol": "SAILIFE"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213405_f111e79a38c16499.xml",
+      "sha256": "f111e79a38c1649971db515e45def3284979e457a46c0eec0d7055222dd9836a",
+      "bytes": 300396,
       "record_id": "213405",
-      "symbol": "JWL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1733873_07102026051055_WEB.xml"
+      "symbol": "JWL"
     },
     {
-      "record_id": "213399",
-      "symbol": "MRPL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1733841_07102026043054_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/213378_c1c2ce6f10ee98d0.xml",
+      "sha256": "c1c2ce6f10ee98d0cf917a65b3ed8ad04d2eb216fbe7207c3b4794bc4849e079",
+      "bytes": 529346,
       "record_id": "213378",
-      "symbol": "GROWW",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1733744_07102026023207_WEB.xml"
+      "symbol": "GROWW"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213371_2d6c9a2de56a3a28.xml",
+      "sha256": "2d6c9a2de56a3a2885ca779cf25feb66de6942522d271329ddb3813ca6925a8f",
+      "bytes": 243446,
       "record_id": "213371",
-      "symbol": "VMM",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1733720_07102026012928_WEB.xml"
+      "symbol": "VMM"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213366_7767116acaccfe02.xml",
+      "sha256": "7767116acaccfe02274236e2cba1c0234ff8fd1864c368f032e832f1e86e6009",
+      "bytes": 248578,
       "record_id": "213366",
-      "symbol": "IGIL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1733703_07102026010357_WEB.xml"
+      "symbol": "IGIL"
     },
     {
-      "record_id": "213352",
-      "symbol": "APOLLOHOSP",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1733654_07102026112959_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/213332_2e561a48c554c509.xml",
+      "sha256": "2e561a48c554c5098a046479cbba7a4a40d93a4d1f2a424835fbe9695f37de69",
+      "bytes": 236499,
       "record_id": "213332",
-      "symbol": "SHYAMMETL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1733523_06102026061618_WEB.xml"
+      "symbol": "SHYAMMETL"
     },
     {
-      "record_id": "213303",
-      "symbol": "AFFLE",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1733379_06102026031849_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/213292_68c71f0a0d5733fc.xml",
+      "sha256": "68c71f0a0d5733fcd5047c0974e3c4f8de515d36843def70d5ce67a8d830062d",
+      "bytes": 160086,
       "record_id": "213292",
-      "symbol": "GRSE",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1733301_06102026124203_WEB.xml"
+      "symbol": "GRSE"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213283_e1ced67a093c6e68.xml",
+      "sha256": "e1ced67a093c6e688b5f33f95e1c29ef489b46fb457b8bba8cfe483809629ebb",
+      "bytes": 627010,
       "record_id": "213283",
-      "symbol": "SUMICHEM",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1733253_06102026114043_WEB.xml"
+      "symbol": "SUMICHEM"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213281_9a65c7afccb230f7.xml",
+      "sha256": "9a65c7afccb230f74e9a7fa8b607c81a14787f8ed8c76106c7eac3424716cc35",
+      "bytes": 155864,
       "record_id": "213281",
-      "symbol": "DIVISLAB",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1733233_06102026103802_WEB.xml"
+      "symbol": "DIVISLAB"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213277_26a10468436d4644.xml",
+      "sha256": "26a10468436d46443b279515040c6c416d5eab7ff64809377be831205b870477",
+      "bytes": 435646,
       "record_id": "213277",
-      "symbol": "DLF",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1733186_05102026073938_WEB.xml"
+      "symbol": "DLF"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213275_5b66aaa2475a709d.xml",
+      "sha256": "5b66aaa2475a709dd91dd23f35ec22c84113b3e5d6a2252a7f16a13fb1234fd0",
+      "bytes": 294127,
       "record_id": "213275",
-      "symbol": "MEESHO",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1733161_05102026071536_WEB.xml"
+      "symbol": "MEESHO"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213264_cf41277242db156f.xml",
+      "sha256": "cf41277242db156f00bbe3dbdbcf7b9ab7d3ee5aca9e879a03dfe68ee0ce9089",
+      "bytes": 170798,
       "record_id": "213264",
-      "symbol": "CHENNPETRO",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1732947_05102026034747_WEB.xml"
+      "symbol": "CHENNPETRO"
     },
     {
+      "path": "data/raw/shareholding/xbrl/213263_bad1fdc8c541dd8d.xml",
+      "sha256": "bad1fdc8c541dd8d27acdf79da2ae6d1ac0b8997e3b3ec89872f7946affd8e42",
+      "bytes": 97944,
       "record_id": "213263",
-      "symbol": "MMTC",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1732944_05102026033120_WEB.xml"
+      "symbol": "MMTC"
     },
     {
-      "record_id": "213248",
-      "symbol": "CANBK",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1732749_03102026042915_WEB.xml"
-    },
-    {
+      "path": "data/raw/shareholding/xbrl/213249_1c5d3d7c72224ff5.xml",
+      "sha256": "1c5d3d7c72224ff58e7176381a84cecbb0fbc8351fe11a41fde1bfad1fd5235d",
+      "bytes": 239256,
       "record_id": "213249",
-      "symbol": "ADANIGREEN",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1732768_03102026054652_WEB.xml"
-    },
-    {
-      "record_id": "213244",
-      "symbol": "CGCL",
-      "status": "untrusted_xbrl_url",
-      "url": "https://nsearchives.nseindia.in/corporate/xbrl/SHP_1732514_01102026082308_WEB.xml"
+      "symbol": "ADANIGREEN"
     }
   ],
-  "raw_xbrl_refs": [],
-  "filing_snapshot_paths": [],
-  "parsed_ownership_row_count": 0,
+  "filing_snapshot_paths": [
+    "data/snapshots/shareholding_filings/filing_216400_e7082611ce95a537_p4.json",
+    "data/snapshots/shareholding_filings/filing_216298_b5286aed13bf34bd_p4.json",
+    "data/snapshots/shareholding_filings/filing_216286_a5875111a147eba7_p4.json",
+    "data/snapshots/shareholding_filings/filing_216280_61690c5fdd5883ec_p4.json",
+    "data/snapshots/shareholding_filings/filing_216278_97073c9ed638a327_p4.json",
+    "data/snapshots/shareholding_filings/filing_216263_f44a2497103b009c_p4.json",
+    "data/snapshots/shareholding_filings/filing_216256_85bc7ae17f271f68_p4.json",
+    "data/snapshots/shareholding_filings/filing_216254_1f987c586556063e_p4.json",
+    "data/snapshots/shareholding_filings/filing_216248_b1acd6a624c945eb_p4.json",
+    "data/snapshots/shareholding_filings/filing_216245_d9519b0624a2bd26_p4.json",
+    "data/snapshots/shareholding_filings/filing_216243_18da7a2fccf1dae2_p4.json",
+    "data/snapshots/shareholding_filings/filing_216233_4dceb7bcebc8b00b_p4.json",
+    "data/snapshots/shareholding_filings/filing_216227_26684287d0953cf4_p4.json",
+    "data/snapshots/shareholding_filings/filing_216226_1de0609c16ec329e_p4.json",
+    "data/snapshots/shareholding_filings/filing_216223_b536e5fe8bab940f_p4.json",
+    "data/snapshots/shareholding_filings/filing_216206_8218a30aeb1f05a5_p4.json",
+    "data/snapshots/shareholding_filings/filing_216192_48dc698cfc1b6460_p4.json",
+    "data/snapshots/shareholding_filings/filing_216175_b225600d168dac5f_p4.json",
+    "data/snapshots/shareholding_filings/filing_216166_50a5656f5aa64c8c_p4.json",
+    "data/snapshots/shareholding_filings/filing_216164_655996d9991a9458_p4.json",
+    "data/snapshots/shareholding_filings/filing_216160_0b8acc5504f0676c_p4.json",
+    "data/snapshots/shareholding_filings/filing_216151_64fdd74b7a50132d_p4.json",
+    "data/snapshots/shareholding_filings/filing_216142_870f2d13dbed3467_p4.json",
+    "data/snapshots/shareholding_filings/filing_216119_1abaf75964364c12_p4.json",
+    "data/snapshots/shareholding_filings/filing_216118_881bc0663cd0939b_p4.json",
+    "data/snapshots/shareholding_filings/filing_216105_18f0451e1204844f_p4.json",
+    "data/snapshots/shareholding_filings/filing_216095_d87eb7e85bb20f91_p4.json",
+    "data/snapshots/shareholding_filings/filing_216092_473ad7e8517bec86_p4.json",
+    "data/snapshots/shareholding_filings/filing_216084_32a47bd1f50566e4_p4.json",
+    "data/snapshots/shareholding_filings/filing_216076_69413c1c847f839e_p4.json",
+    "data/snapshots/shareholding_filings/filing_216074_ecddc3876ba5d672_p4.json",
+    "data/snapshots/shareholding_filings/filing_216041_d9d6055da6df37c9_p4.json",
+    "data/snapshots/shareholding_filings/filing_216034_c0547ffd04a59a60_p4.json",
+    "data/snapshots/shareholding_filings/filing_216033_582c17320c4ac8d0_p4.json",
+    "data/snapshots/shareholding_filings/filing_216028_1bb547f1caa24579_p4.json",
+    "data/snapshots/shareholding_filings/filing_216027_1521b4ad784cc75b_p4.json",
+    "data/snapshots/shareholding_filings/filing_216024_90d6ae646ec9b706_p4.json",
+    "data/snapshots/shareholding_filings/filing_216023_6b906b0b5b710957_p4.json",
+    "data/snapshots/shareholding_filings/filing_216019_20642a418af81a61_p4.json",
+    "data/snapshots/shareholding_filings/filing_216015_43bd67d1df379e2b_p4.json",
+    "data/snapshots/shareholding_filings/filing_216011_d2496e5a9f8074fa_p4.json",
+    "data/snapshots/shareholding_filings/filing_216010_ec3097a76f9a3551_p4.json",
+    "data/snapshots/shareholding_filings/filing_215985_c5a4259378ccbe32_p4.json",
+    "data/snapshots/shareholding_filings/filing_215980_5e4794f96829cff4_p4.json",
+    "data/snapshots/shareholding_filings/filing_215975_dbd82765c7505107_p4.json",
+    "data/snapshots/shareholding_filings/filing_215974_ed0b986b366a6290_p4.json",
+    "data/snapshots/shareholding_filings/filing_215941_39a2c4d98e2231d7_p4.json",
+    "data/snapshots/shareholding_filings/filing_215939_2cc2e05716fa8e5b_p4.json",
+    "data/snapshots/shareholding_filings/filing_215936_3f105d6e2adfbac5_p4.json",
+    "data/snapshots/shareholding_filings/filing_215934_888932a04b57b80a_p4.json",
+    "data/snapshots/shareholding_filings/filing_215926_90799bbf7033a0e8_p4.json",
+    "data/snapshots/shareholding_filings/filing_215913_a5e00fcc788509ff_p4.json",
+    "data/snapshots/shareholding_filings/filing_215891_a86d34def599e417_p4.json",
+    "data/snapshots/shareholding_filings/filing_215884_b7853a7f92ba3912_p4.json",
+    "data/snapshots/shareholding_filings/filing_215882_ca5705e213c9f6a9_p4.json",
+    "data/snapshots/shareholding_filings/filing_215879_a1fdc8e64c82a51d_p4.json",
+    "data/snapshots/shareholding_filings/filing_215877_03e38dff36d0531c_p4.json",
+    "data/snapshots/shareholding_filings/filing_215862_87283445a5e512f0_p4.json",
+    "data/snapshots/shareholding_filings/filing_215860_e1fc4e616646a808_p4.json",
+    "data/snapshots/shareholding_filings/filing_215859_5304fb5709e7abad_p4.json",
+    "data/snapshots/shareholding_filings/filing_215849_d78bb42ccb1feca1_p4.json",
+    "data/snapshots/shareholding_filings/filing_215843_de4b901d28ecd975_p4.json",
+    "data/snapshots/shareholding_filings/filing_215837_0e06fed1de6913ae_p4.json",
+    "data/snapshots/shareholding_filings/filing_215835_2dd0eb0fef139897_p4.json",
+    "data/snapshots/shareholding_filings/filing_215821_320e62ecc36547ae_p4.json",
+    "data/snapshots/shareholding_filings/filing_215820_4669a12611966dcf_p4.json",
+    "data/snapshots/shareholding_filings/filing_215807_2632379b669c85a6_p4.json",
+    "data/snapshots/shareholding_filings/filing_215806_9b228a25a90053ff_p4.json",
+    "data/snapshots/shareholding_filings/filing_215805_0be68311ca917a27_p4.json",
+    "data/snapshots/shareholding_filings/filing_215795_aa083463d03b2b75_p4.json",
+    "data/snapshots/shareholding_filings/filing_215787_219d8820662060bd_p4.json",
+    "data/snapshots/shareholding_filings/filing_215781_e6a6ac49a2dbcb80_p4.json",
+    "data/snapshots/shareholding_filings/filing_215767_9d770187195223a7_p4.json",
+    "data/snapshots/shareholding_filings/filing_215760_9c15a3bcd8c6de8d_p4.json",
+    "data/snapshots/shareholding_filings/filing_215747_57041194aa01cda2_p4.json",
+    "data/snapshots/shareholding_filings/filing_215746_d88b1df7eb579c20_p4.json",
+    "data/snapshots/shareholding_filings/filing_215739_7458a8890cee4695_p4.json",
+    "data/snapshots/shareholding_filings/filing_215725_1f3e001fbc525ad5_p4.json",
+    "data/snapshots/shareholding_filings/filing_215717_0ee4bf7fedf11d16_p4.json",
+    "data/snapshots/shareholding_filings/filing_215711_6ba509288465e58b_p4.json",
+    "data/snapshots/shareholding_filings/filing_215708_baa5ec56990e35ed_p4.json",
+    "data/snapshots/shareholding_filings/filing_215702_f1bd737f22ffb5ce_p4.json",
+    "data/snapshots/shareholding_filings/filing_215681_b4c19c89a715e21d_p4.json",
+    "data/snapshots/shareholding_filings/filing_215672_a86afd755abb4b5c_p4.json",
+    "data/snapshots/shareholding_filings/filing_215671_d908af5a9220e407_p4.json",
+    "data/snapshots/shareholding_filings/filing_215656_535c814f60e2359e_p4.json",
+    "data/snapshots/shareholding_filings/filing_215654_91bc05dd85dd4723_p4.json",
+    "data/snapshots/shareholding_filings/filing_215653_8716cdfa5a1486aa_p4.json",
+    "data/snapshots/shareholding_filings/filing_215651_033a36c05ba91bf9_p4.json",
+    "data/snapshots/shareholding_filings/filing_215646_e29be8f358fe4f39_p4.json",
+    "data/snapshots/shareholding_filings/filing_215639_c96217e9e3a6da12_p4.json",
+    "data/snapshots/shareholding_filings/filing_215634_e046d82c4312a7c2_p4.json",
+    "data/snapshots/shareholding_filings/filing_215631_706463960a93ec06_p4.json",
+    "data/snapshots/shareholding_filings/filing_215628_5e57ce75fe1bd9df_p4.json",
+    "data/snapshots/shareholding_filings/filing_215622_9cecac0a021aae05_p4.json",
+    "data/snapshots/shareholding_filings/filing_215617_a106a370f7dc04ab_p4.json",
+    "data/snapshots/shareholding_filings/filing_215616_481f32ba89632261_p4.json",
+    "data/snapshots/shareholding_filings/filing_215609_7d57cade84a1c100_p4.json",
+    "data/snapshots/shareholding_filings/filing_215608_f4ae9e8a4b217f56_p4.json",
+    "data/snapshots/shareholding_filings/filing_215598_6967888bba9c440c_p4.json",
+    "data/snapshots/shareholding_filings/filing_215597_f7d96da2aabdde4d_p4.json",
+    "data/snapshots/shareholding_filings/filing_215585_dc4ec951eb52e6e7_p4.json",
+    "data/snapshots/shareholding_filings/filing_215579_973711eb014c896d_p4.json",
+    "data/snapshots/shareholding_filings/filing_215563_80dc616cf2dbfb55_p4.json",
+    "data/snapshots/shareholding_filings/filing_215561_49abf84e5f98782f_p4.json",
+    "data/snapshots/shareholding_filings/filing_215554_2bd81422d40dce58_p4.json",
+    "data/snapshots/shareholding_filings/filing_215535_ef9a50811d814cfc_p4.json",
+    "data/snapshots/shareholding_filings/filing_215532_fdca14501e1265fa_p4.json",
+    "data/snapshots/shareholding_filings/filing_215530_44ab842af2f3c164_p4.json",
+    "data/snapshots/shareholding_filings/filing_215525_80db3e7d3f2ee124_p4.json",
+    "data/snapshots/shareholding_filings/filing_215511_f5c4110cde7a995e_p4.json",
+    "data/snapshots/shareholding_filings/filing_215497_853258758eaff6a6_p4.json",
+    "data/snapshots/shareholding_filings/filing_215495_4ac7dceb585f0361_p4.json",
+    "data/snapshots/shareholding_filings/filing_215492_ca01823f49b6cea6_p4.json",
+    "data/snapshots/shareholding_filings/filing_215491_1fee8ca8c0ba9b8b_p4.json",
+    "data/snapshots/shareholding_filings/filing_215465_3ed8bb033e4f21da_p4.json",
+    "data/snapshots/shareholding_filings/filing_215448_f416e841085892d0_p4.json",
+    "data/snapshots/shareholding_filings/filing_215440_2b0120d6f6049b86_p4.json",
+    "data/snapshots/shareholding_filings/filing_215431_9cc7a881777c5ce2_p4.json",
+    "data/snapshots/shareholding_filings/filing_215428_acaad2a21a781a36_p4.json",
+    "data/snapshots/shareholding_filings/filing_215424_1f20838437733772_p4.json",
+    "data/snapshots/shareholding_filings/filing_215423_5e9dc6dca2848ccd_p4.json",
+    "data/snapshots/shareholding_filings/filing_215417_f1bdbbfdaa97e4bb_p4.json",
+    "data/snapshots/shareholding_filings/filing_215416_9a4323ab6c67a3fb_p4.json",
+    "data/snapshots/shareholding_filings/filing_215415_30ddd56030bcdfa2_p4.json",
+    "data/snapshots/shareholding_filings/filing_215393_e707a27412e8c7a4_p4.json",
+    "data/snapshots/shareholding_filings/filing_215392_46b09088b8e6d4d8_p4.json",
+    "data/snapshots/shareholding_filings/filing_215365_680606ed9a647696_p4.json",
+    "data/snapshots/shareholding_filings/filing_215362_2f02b335954960c0_p4.json",
+    "data/snapshots/shareholding_filings/filing_215353_18c6fb8b753c5c1b_p4.json",
+    "data/snapshots/shareholding_filings/filing_215344_98f7d3aa4da8f706_p4.json",
+    "data/snapshots/shareholding_filings/filing_215339_c554c3da3635be59_p4.json",
+    "data/snapshots/shareholding_filings/filing_215338_8c9f427b79666bdb_p4.json",
+    "data/snapshots/shareholding_filings/filing_215309_2fc806a9d1cfa3de_p4.json",
+    "data/snapshots/shareholding_filings/filing_215303_9149c109be6a09d4_p4.json",
+    "data/snapshots/shareholding_filings/filing_215298_ff09a7624a1dab24_p4.json",
+    "data/snapshots/shareholding_filings/filing_215291_ffc78087eeed0004_p4.json",
+    "data/snapshots/shareholding_filings/filing_215287_335516f2edb13f70_p4.json",
+    "data/snapshots/shareholding_filings/filing_215275_479f2d86de74dd79_p4.json",
+    "data/snapshots/shareholding_filings/filing_215273_a7dd1533c6964a87_p4.json",
+    "data/snapshots/shareholding_filings/filing_215247_5400c00e8ab1670f_p4.json",
+    "data/snapshots/shareholding_filings/filing_215216_371fc234f66884d2_p4.json",
+    "data/snapshots/shareholding_filings/filing_215214_d613c6e431c6e443_p4.json",
+    "data/snapshots/shareholding_filings/filing_215209_b794eb85ca08fb20_p4.json",
+    "data/snapshots/shareholding_filings/filing_215173_8aaba3d1c55912a5_p4.json",
+    "data/snapshots/shareholding_filings/filing_215170_15877f45550b671f_p4.json",
+    "data/snapshots/shareholding_filings/filing_215153_a537d973f2fe0196_p4.json",
+    "data/snapshots/shareholding_filings/filing_215152_9f877b40a4fb0e5f_p4.json",
+    "data/snapshots/shareholding_filings/filing_214755_e4c8805f2443169b_p4.json",
+    "data/snapshots/shareholding_filings/filing_215136_defb4cc6f8a87f4c_p4.json",
+    "data/snapshots/shareholding_filings/filing_215127_fab0d144c312b837_p4.json",
+    "data/snapshots/shareholding_filings/filing_215126_228f529de30973dc_p4.json",
+    "data/snapshots/shareholding_filings/filing_215115_833e93dc676206a5_p4.json",
+    "data/snapshots/shareholding_filings/filing_215106_4b3d7b8b526747d6_p4.json",
+    "data/snapshots/shareholding_filings/filing_215089_1662e44b0fba5b6c_p4.json",
+    "data/snapshots/shareholding_filings/filing_215085_f08851298012c17c_p4.json",
+    "data/snapshots/shareholding_filings/filing_215084_846f27b3c60e0883_p4.json",
+    "data/snapshots/shareholding_filings/filing_215083_1bf289166c03969b_p4.json",
+    "data/snapshots/shareholding_filings/filing_215032_2b8a1155f54e8cbf_p4.json",
+    "data/snapshots/shareholding_filings/filing_215028_4b570f7d8ef5a6bd_p4.json",
+    "data/snapshots/shareholding_filings/filing_215027_125c3bddee859d68_p4.json",
+    "data/snapshots/shareholding_filings/filing_215022_88672f93462b4a10_p4.json",
+    "data/snapshots/shareholding_filings/filing_215019_dba9502506b8eec0_p4.json",
+    "data/snapshots/shareholding_filings/filing_215018_ac7dcfe5efdead79_p4.json",
+    "data/snapshots/shareholding_filings/filing_215012_e239a7c8a3e50dd0_p4.json",
+    "data/snapshots/shareholding_filings/filing_214999_2bf3b541bbc0fe06_p4.json",
+    "data/snapshots/shareholding_filings/filing_214996_2a648d509704a13a_p4.json",
+    "data/snapshots/shareholding_filings/filing_214991_34e1e858410ceb1b_p4.json",
+    "data/snapshots/shareholding_filings/filing_214980_52632fdedd35a11f_p4.json",
+    "data/snapshots/shareholding_filings/filing_214975_b94f32c7ea2cda10_p4.json",
+    "data/snapshots/shareholding_filings/filing_214951_adb0c30a00f53689_p4.json",
+    "data/snapshots/shareholding_filings/filing_214946_51fb3ca12dec8690_p4.json",
+    "data/snapshots/shareholding_filings/filing_214939_eac3418e3e50c9c1_p4.json",
+    "data/snapshots/shareholding_filings/filing_214929_19c073060d396c3d_p4.json",
+    "data/snapshots/shareholding_filings/filing_214919_715d825b97a3d25b_p4.json",
+    "data/snapshots/shareholding_filings/filing_214908_a372d8f1399f4880_p4.json",
+    "data/snapshots/shareholding_filings/filing_214900_ebf95feb75ecfb1a_p4.json",
+    "data/snapshots/shareholding_filings/filing_214891_fb7e894c91e8ef57_p4.json",
+    "data/snapshots/shareholding_filings/filing_214886_d4894d2dabf0a46a_p4.json",
+    "data/snapshots/shareholding_filings/filing_214868_0c3a571a63f16ac3_p4.json",
+    "data/snapshots/shareholding_filings/filing_214861_cd07039856c42567_p4.json",
+    "data/snapshots/shareholding_filings/filing_214853_849e3c43ff14784d_p4.json",
+    "data/snapshots/shareholding_filings/filing_214850_1e6a1d07246c65ad_p4.json",
+    "data/snapshots/shareholding_filings/filing_214846_487f204bbf40976a_p4.json",
+    "data/snapshots/shareholding_filings/filing_214836_3fde559a6ee8afdc_p4.json",
+    "data/snapshots/shareholding_filings/filing_214821_078e660c9c05ba7e_p4.json",
+    "data/snapshots/shareholding_filings/filing_214810_ad1013c9f7a10640_p4.json",
+    "data/snapshots/shareholding_filings/filing_214809_ce6be4424f101d82_p4.json",
+    "data/snapshots/shareholding_filings/filing_214804_aeca4ee1277e4b18_p4.json",
+    "data/snapshots/shareholding_filings/filing_214799_e65eb7d96c53e0f1_p4.json",
+    "data/snapshots/shareholding_filings/filing_214798_cd713e2125a37b8d_p4.json",
+    "data/snapshots/shareholding_filings/filing_214794_de7a4c1cd5500886_p4.json",
+    "data/snapshots/shareholding_filings/filing_214790_6e17610447b34535_p4.json",
+    "data/snapshots/shareholding_filings/filing_214780_2de97d487a87f4ae_p4.json",
+    "data/snapshots/shareholding_filings/filing_214775_ff765dd7065af6ba_p4.json",
+    "data/snapshots/shareholding_filings/filing_214768_a1c4c66767d87e31_p4.json",
+    "data/snapshots/shareholding_filings/filing_214753_86971b4f76379f8f_p4.json",
+    "data/snapshots/shareholding_filings/filing_214743_10a5ea44e38d8c01_p4.json",
+    "data/snapshots/shareholding_filings/filing_214736_f68fd478648f21b9_p4.json",
+    "data/snapshots/shareholding_filings/filing_214727_37db36c3d6a3e549_p4.json",
+    "data/snapshots/shareholding_filings/filing_214719_0d8064984c9ad820_p4.json",
+    "data/snapshots/shareholding_filings/filing_214717_aebeff986b419992_p4.json",
+    "data/snapshots/shareholding_filings/filing_214706_bf41a30079058bde_p4.json",
+    "data/snapshots/shareholding_filings/filing_214700_83449e1eb4d5d32f_p4.json",
+    "data/snapshots/shareholding_filings/filing_214699_cecc4d209b7ff1e9_p4.json",
+    "data/snapshots/shareholding_filings/filing_214694_d9e8d897437f7340_p4.json",
+    "data/snapshots/shareholding_filings/filing_214689_c2dc639aa522fc3d_p4.json",
+    "data/snapshots/shareholding_filings/filing_214677_b99a27cf1a1be206_p4.json",
+    "data/snapshots/shareholding_filings/filing_214672_9701292559b35041_p4.json",
+    "data/snapshots/shareholding_filings/filing_214671_3797bb35be9ec163_p4.json",
+    "data/snapshots/shareholding_filings/filing_214668_e8556b2eb432bc6c_p4.json",
+    "data/snapshots/shareholding_filings/filing_214666_dd1afa6a44af9fc5_p4.json",
+    "data/snapshots/shareholding_filings/filing_214664_8a4322d90df90b78_p4.json",
+    "data/snapshots/shareholding_filings/filing_214663_2436bb6b3cf4fef0_p4.json",
+    "data/snapshots/shareholding_filings/filing_214641_8c3a1d47d0469d4c_p4.json",
+    "data/snapshots/shareholding_filings/filing_214637_d224269c8ce8b955_p4.json",
+    "data/snapshots/shareholding_filings/filing_214632_3e8c2639d9b4a8c2_p4.json",
+    "data/snapshots/shareholding_filings/filing_214631_f193f598c7febbce_p4.json",
+    "data/snapshots/shareholding_filings/filing_214615_2bc90ba327a0fabe_p4.json",
+    "data/snapshots/shareholding_filings/filing_214609_6f59152af4649c70_p4.json",
+    "data/snapshots/shareholding_filings/filing_214606_7ccd79d2a6313260_p4.json",
+    "data/snapshots/shareholding_filings/filing_214605_01bac29d2809ff0c_p4.json",
+    "data/snapshots/shareholding_filings/filing_214597_b3fc638906579f89_p4.json",
+    "data/snapshots/shareholding_filings/filing_214595_69953c478c4e9774_p4.json",
+    "data/snapshots/shareholding_filings/filing_214583_392da2b8890539b5_p4.json",
+    "data/snapshots/shareholding_filings/filing_214581_41c46b0f8e8e202a_p4.json",
+    "data/snapshots/shareholding_filings/filing_214571_dccadd8c86be574e_p4.json",
+    "data/snapshots/shareholding_filings/filing_214569_ea4e8cf17cde95c0_p4.json",
+    "data/snapshots/shareholding_filings/filing_214566_4a9824cdadc68255_p4.json",
+    "data/snapshots/shareholding_filings/filing_214503_80c19e5b7f845610_p4.json",
+    "data/snapshots/shareholding_filings/filing_214487_01cfbe002fc3d529_p4.json",
+    "data/snapshots/shareholding_filings/filing_214486_cc700306f3cbdc97_p4.json",
+    "data/snapshots/shareholding_filings/filing_214480_184ea2edbea3df4f_p4.json",
+    "data/snapshots/shareholding_filings/filing_214476_797b0d569b8cf2d7_p4.json",
+    "data/snapshots/shareholding_filings/filing_214462_61fe975900ebb1f7_p4.json",
+    "data/snapshots/shareholding_filings/filing_214200_3a12f01b5ad30a94_p4.json",
+    "data/snapshots/shareholding_filings/filing_214453_4eccac55e6ebb3f4_p4.json",
+    "data/snapshots/shareholding_filings/filing_214438_822ae822186d921e_p4.json",
+    "data/snapshots/shareholding_filings/filing_214436_05be3388211289c1_p4.json",
+    "data/snapshots/shareholding_filings/filing_214398_e41b8f2feecbbe77_p4.json",
+    "data/snapshots/shareholding_filings/filing_214394_2f4e4c3bdc99a390_p4.json",
+    "data/snapshots/shareholding_filings/filing_214390_1dc6fb55ebca0f94_p4.json",
+    "data/snapshots/shareholding_filings/filing_214382_1b4c28fbedd57dca_p4.json",
+    "data/snapshots/shareholding_filings/filing_214367_ea789c0f804591db_p4.json",
+    "data/snapshots/shareholding_filings/filing_214357_1efd75ab14e5c335_p4.json",
+    "data/snapshots/shareholding_filings/filing_214355_e011ca06375efdbd_p4.json",
+    "data/snapshots/shareholding_filings/filing_214348_b01bb997ad89419a_p4.json",
+    "data/snapshots/shareholding_filings/filing_214343_d37a504c8ec64626_p4.json",
+    "data/snapshots/shareholding_filings/filing_214337_8d117084d3bc6293_p4.json",
+    "data/snapshots/shareholding_filings/filing_214332_91bee0f515fb37e4_p4.json",
+    "data/snapshots/shareholding_filings/filing_214327_b5d35714cbc4f23e_p4.json",
+    "data/snapshots/shareholding_filings/filing_214293_9b82d1002ee049cc_p4.json",
+    "data/snapshots/shareholding_filings/filing_214276_c3fc8f9554ff6528_p4.json",
+    "data/snapshots/shareholding_filings/filing_214271_66f7ff4b6e8f3cc7_p4.json",
+    "data/snapshots/shareholding_filings/filing_214256_d5b4c60d5d084999_p4.json",
+    "data/snapshots/shareholding_filings/filing_214249_efe3bbc06d92b8ae_p4.json",
+    "data/snapshots/shareholding_filings/filing_214235_df98e5e4422cebbf_p4.json",
+    "data/snapshots/shareholding_filings/filing_214232_2c53d7ee8afb2e0a_p4.json",
+    "data/snapshots/shareholding_filings/filing_214229_1b5d43bbc7c2504c_p4.json",
+    "data/snapshots/shareholding_filings/filing_214222_5495f0665ff555d3_p4.json",
+    "data/snapshots/shareholding_filings/filing_214221_a8c8de14a0dd37be_p4.json",
+    "data/snapshots/shareholding_filings/filing_214215_4da86bde175693c7_p4.json",
+    "data/snapshots/shareholding_filings/filing_214211_bbe86db926f61f4c_p4.json",
+    "data/snapshots/shareholding_filings/filing_214205_85949bbb80d57d3c_p4.json",
+    "data/snapshots/shareholding_filings/filing_214187_c08f8b023e05b2e6_p4.json",
+    "data/snapshots/shareholding_filings/filing_214174_093cc720455e4ddd_p4.json",
+    "data/snapshots/shareholding_filings/filing_214168_a112d947d0df446d_p4.json",
+    "data/snapshots/shareholding_filings/filing_214145_56541e63a1169db5_p4.json",
+    "data/snapshots/shareholding_filings/filing_214127_848212b203fc137b_p4.json",
+    "data/snapshots/shareholding_filings/filing_214119_d8d9c60b4059e96b_p4.json",
+    "data/snapshots/shareholding_filings/filing_214108_8a6806d8271b9161_p4.json",
+    "data/snapshots/shareholding_filings/filing_214105_c28765afa38bb90c_p4.json",
+    "data/snapshots/shareholding_filings/filing_214086_fb345220736a9484_p4.json",
+    "data/snapshots/shareholding_filings/filing_214081_12f202ada1f769d7_p4.json",
+    "data/snapshots/shareholding_filings/filing_214074_0dfcc196385802e2_p4.json",
+    "data/snapshots/shareholding_filings/filing_214070_0aee3dde3f924af2_p4.json",
+    "data/snapshots/shareholding_filings/filing_214064_7a6fdc134ad7e388_p4.json",
+    "data/snapshots/shareholding_filings/filing_214062_62d2f31799b39b99_p4.json",
+    "data/snapshots/shareholding_filings/filing_214057_097bef48c6087dae_p4.json",
+    "data/snapshots/shareholding_filings/filing_214050_57a53e0bfa76d341_p4.json",
+    "data/snapshots/shareholding_filings/filing_214047_eeb0d0c7440ebca4_p4.json",
+    "data/snapshots/shareholding_filings/filing_214044_0d8d4dc1de000737_p4.json",
+    "data/snapshots/shareholding_filings/filing_214043_adaf2113f1408c2f_p4.json",
+    "data/snapshots/shareholding_filings/filing_214034_23d7539fd32101c9_p4.json",
+    "data/snapshots/shareholding_filings/filing_214025_7c6deb8e55b6e4e3_p4.json",
+    "data/snapshots/shareholding_filings/filing_214008_14356ef67879289b_p4.json",
+    "data/snapshots/shareholding_filings/filing_213995_adb2f6021c7f482a_p4.json",
+    "data/snapshots/shareholding_filings/filing_213990_a8789d51a17718f5_p4.json",
+    "data/snapshots/shareholding_filings/filing_213965_59fd2cddace42896_p4.json",
+    "data/snapshots/shareholding_filings/filing_213939_eb53bd50ca752006_p4.json",
+    "data/snapshots/shareholding_filings/filing_213890_8f039a1062c9778d_p4.json",
+    "data/snapshots/shareholding_filings/filing_213884_e7e996b8f97d48db_p4.json",
+    "data/snapshots/shareholding_filings/filing_213882_d71dd912d584671c_p4.json",
+    "data/snapshots/shareholding_filings/filing_213881_f4c42b721a978c94_p4.json",
+    "data/snapshots/shareholding_filings/filing_213872_aa4798247e85c070_p4.json",
+    "data/snapshots/shareholding_filings/filing_213869_9be58d0f9717b534_p4.json",
+    "data/snapshots/shareholding_filings/filing_213853_d372f97e2d45f38a_p4.json",
+    "data/snapshots/shareholding_filings/filing_213848_621347af5b2c9711_p4.json",
+    "data/snapshots/shareholding_filings/filing_213840_2afb9f3a0952f19f_p4.json",
+    "data/snapshots/shareholding_filings/filing_213817_fc12eb0d7e331815_p4.json",
+    "data/snapshots/shareholding_filings/filing_213811_cc65646baebe5fd9_p4.json",
+    "data/snapshots/shareholding_filings/filing_213805_c2cef5b6774dc6f8_p4.json",
+    "data/snapshots/shareholding_filings/filing_213789_bcd804d20d04bfcb_p4.json",
+    "data/snapshots/shareholding_filings/filing_213786_573a6d50c73fa72b_p4.json",
+    "data/snapshots/shareholding_filings/filing_213752_cacb6166c702b302_p4.json",
+    "data/snapshots/shareholding_filings/filing_213745_89171b34eaab472d_p4.json",
+    "data/snapshots/shareholding_filings/filing_213718_cd5cfd79392cb778_p4.json",
+    "data/snapshots/shareholding_filings/filing_213708_d301ff15be51abb5_p4.json",
+    "data/snapshots/shareholding_filings/filing_213704_cf8cf47f44e8ca5b_p4.json",
+    "data/snapshots/shareholding_filings/filing_213702_470e9eff3045d730_p4.json",
+    "data/snapshots/shareholding_filings/filing_213656_893042d2a5775dc2_p4.json",
+    "data/snapshots/shareholding_filings/filing_213655_12802cdf837851f4_p4.json",
+    "data/snapshots/shareholding_filings/filing_213650_d44c37b0c9c6a37f_p4.json",
+    "data/snapshots/shareholding_filings/filing_213640_d52ed569854e87ee_p4.json",
+    "data/snapshots/shareholding_filings/filing_213604_be6ef4eb9bf73470_p4.json",
+    "data/snapshots/shareholding_filings/filing_213596_5d1ee7dc37d740a7_p4.json",
+    "data/snapshots/shareholding_filings/filing_213587_bce3d42b6ef33077_p4.json",
+    "data/snapshots/shareholding_filings/filing_213554_86283cbf22e2b3eb_p4.json",
+    "data/snapshots/shareholding_filings/filing_213539_1b1a1b056132b8ba_p4.json",
+    "data/snapshots/shareholding_filings/filing_213420_0f05e05d52c2cfa5_p4.json",
+    "data/snapshots/shareholding_filings/filing_213527_a3ae8e3e4bd297c1_p4.json",
+    "data/snapshots/shareholding_filings/filing_213522_c030c2a6400c472c_p4.json",
+    "data/snapshots/shareholding_filings/filing_213503_0e5c6fd5c7a97e78_p4.json",
+    "data/snapshots/shareholding_filings/filing_213493_e972e2b72e75c02b_p4.json",
+    "data/snapshots/shareholding_filings/filing_213485_eb9e905699146630_p4.json",
+    "data/snapshots/shareholding_filings/filing_213483_5a8299fe7b679ef8_p4.json",
+    "data/snapshots/shareholding_filings/filing_213480_09db0b3f35c8e893_p4.json",
+    "data/snapshots/shareholding_filings/filing_213475_bfd509d3bc1453d6_p4.json",
+    "data/snapshots/shareholding_filings/filing_213473_dd92d6cf1a793640_p4.json",
+    "data/snapshots/shareholding_filings/filing_213472_6d7322952a8dc72b_p4.json",
+    "data/snapshots/shareholding_filings/filing_213468_f67fcb9eff3e5896_p4.json",
+    "data/snapshots/shareholding_filings/filing_213466_b424ced0bbc69126_p4.json",
+    "data/snapshots/shareholding_filings/filing_213445_4e2ed186bf00ecc2_p4.json",
+    "data/snapshots/shareholding_filings/filing_213435_66c27aa674dfedc8_p4.json",
+    "data/snapshots/shareholding_filings/filing_213429_359a168b35e0108f_p4.json",
+    "data/snapshots/shareholding_filings/filing_213414_8c922e3a733e6ffd_p4.json",
+    "data/snapshots/shareholding_filings/filing_213405_4317273f507dea98_p4.json",
+    "data/snapshots/shareholding_filings/filing_213378_bd5708bbaf827b73_p4.json",
+    "data/snapshots/shareholding_filings/filing_213371_cf05f46c6a891cf2_p4.json",
+    "data/snapshots/shareholding_filings/filing_213366_75bbfe235c192f79_p4.json",
+    "data/snapshots/shareholding_filings/filing_213332_e604972b7647b1f0_p4.json",
+    "data/snapshots/shareholding_filings/filing_213292_369ecfc7b159344b_p4.json",
+    "data/snapshots/shareholding_filings/filing_213283_98dcdf275b13d4ea_p4.json",
+    "data/snapshots/shareholding_filings/filing_213281_c60efde2475ee538_p4.json",
+    "data/snapshots/shareholding_filings/filing_213277_9d4fd9cc44d7464d_p4.json",
+    "data/snapshots/shareholding_filings/filing_213275_407c6c498dca0e67_p4.json",
+    "data/snapshots/shareholding_filings/filing_213264_cac1afd15e8f1c79_p4.json",
+    "data/snapshots/shareholding_filings/filing_213263_257e95b4c0a437d9_p4.json",
+    "data/snapshots/shareholding_filings/filing_213249_6bac28f40c546e5f_p4.json"
+  ],
+  "parsed_ownership_row_count": 349,
   "ownership_row_count": 501,
   "latest_reporting_date": "2026-09-30",
-  "latest_quarter_parsed_count": 0,
-  "latest_quarter_coverage_pct": 0.0,
+  "latest_quarter_parsed_count": 349,
+  "latest_quarter_coverage_pct": 69.66,
   "ownership_current_path": "data/raw/shareholding/shareholding_ownership_current.csv",
-  "ownership_snapshot_path": "data/snapshots/shareholding_ownership/shareholding_ownership_2026-09-30_3270609309aebcd4.csv",
-  "ownership_snapshot_sha256": "3270609309aebcd4f2c5037e87ec79be38311ff26f5eb03b95651672c58942d7",
-  "ownership_current_sha256": "3270609309aebcd4f2c5037e87ec79be38311ff26f5eb03b95651672c58942d7",
-  "master_snapshot_path": "data/snapshots/shareholding_master/shareholding_master_2026-09-30_4397e2e9f633a615.json",
-  "master_snapshot_sha256": "4397e2e9f633a615bb5199b936eaa4499a661a6e6adcf3fe05f6b0b7ac76bf26",
+  "ownership_snapshot_path": "data/snapshots/shareholding_ownership/shareholding_ownership_2026-09-30_350c397c567e6e8f.csv",
+  "ownership_snapshot_sha256": "350c397c567e6e8f88ac0bfab12cd8e62deab69ef34be01037ea0758aa5540e2",
+  "ownership_current_sha256": "350c397c567e6e8f88ac0bfab12cd8e62deab69ef34be01037ea0758aa5540e2",
+  "master_snapshot_path": "data/snapshots/shareholding_master/shareholding_master_2026-09-30_3a478e7134701072.json",
+  "master_snapshot_sha256": "3a478e7134701072a5eba37158c55269b5fe1be4e2e6215a17a5e416881dbd78",
   "parser_version": 4,
   "source_boundaries": [
     "Only current Nifty 500 symbols are included in the current ownership view.",
