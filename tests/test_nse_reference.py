@@ -128,3 +128,10 @@ def test_fo_master_accepts_non_test_future_tradable_stock_contract():
     result = inspect_fo_quality(payload, "06-Nov-2026")
     assert result["stock_contract_rows_expiring_on_or_after_catalogue_date"] == 1
     assert result["issues"] == []
+
+
+def test_accepts_current_nse_archive_in_hostname():
+    selected = select_fo_contract_master(_catalog(_record(
+        filePath="https://nsearchives.nseindia.in/content/fo/"
+    )))
+    assert selected["download_url"].startswith("https://nsearchives.nseindia.in/")
