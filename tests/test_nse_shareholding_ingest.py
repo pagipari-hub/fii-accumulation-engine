@@ -211,3 +211,27 @@ def test_company_name_fallback_normalizes_only_common_legal_suffix_variants():
     assert module._normal_name("ABC Limited") != module._normal_name(
         "ABC Holdings Limited"
     )
+
+
+@pytest.mark.parametrize(
+    "url",
+    [
+        "https://nsearchives.nseindia.com/corporate/xbrl/filing.xml",
+        "https://nsearchives.nseindia.in/corporate/xbrl/filing.xml",
+    ],
+)
+def test_trusts_official_nse_archive_hosts_for_xbrl(url):
+    assert module._trusted_xbrl_url(url)
+
+
+@pytest.mark.parametrize(
+    "url",
+    [
+        "http://nsearchives.nseindia.in/corporate/xbrl/filing.xml",
+        "https://nsearchives.nseindia.in.evil.example/corporate/xbrl/filing.xml",
+        "https://nsearchives.nseindia.in/other/filing.xml",
+        "https://example.invalid/corporate/xbrl/filing.xml",
+    ],
+)
+def test_rejects_non_official_or_unsafe_xbrl_urls(url):
+    assert not module._trusted_xbrl_url(url)
