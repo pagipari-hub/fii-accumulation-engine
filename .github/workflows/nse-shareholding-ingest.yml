@@ -27,6 +27,7 @@ on:
   workflow_dispatch:
   schedule:
     # 21:00 IST, Monday; captures newly filed quarterly reports and revisions.
+    # Fix branch push trigger exercises the current archive-host allowlist against live filings.
     - cron: "30 15 * * 1"
 
 permissions:
