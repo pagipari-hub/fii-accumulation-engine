@@ -2,7 +2,7 @@ name: Official NSE quarterly FPI ownership ingestion
 
 on:
   push:
-    branches: [main]
+    branches: [main, fix/nse-archive-host-allowlist]
     paths:
       - "src/fii_engine/nse_shareholding_xbrl.py"
       - "src/fii_engine/nse_shareholding_ingest.py"
