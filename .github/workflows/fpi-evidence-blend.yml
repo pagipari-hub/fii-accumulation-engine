@@ -2,7 +2,7 @@ name: Build blended Nifty 500 FPI evidence matrix
 
 on:
   push:
-    branches: [main]
+    branches: [main, "fix/resolve-verified-daily-snapshot-revision"]
     paths:
       - "src/fii_engine/fpi_evidence_blend.py"
       - "tests/test_fpi_evidence_blend.py"
