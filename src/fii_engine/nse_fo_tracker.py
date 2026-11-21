@@ -5,6 +5,7 @@ import argparse
 import hashlib
 import json
 import re
+import time
 from datetime import date, datetime, timezone
 from zoneinfo import ZoneInfo
 from html.parser import HTMLParser
@@ -226,24 +227,56 @@ def _get(url: str, referer: str, accept: str, timeout: int = 45) -> bytes:
         raise RuntimeError(f"NSE request failed for {url}: {exc}") from exc
 
 
+def _get_tracker_workbook(
+    tracker_url: str,
+    referer: str,
+    attempts: int = 3,
+    retry_delay_seconds: float = 2.0,
+) -> tuple[bytes, str | None]:
+    """Retry transient NSE service pages without treating HTML as a workbook."""
+    if attempts < 1:
+        raise ValueError("tracker download attempts must be at least one")
+    last_payload = b""
+    last_error: Exception | None = None
+    for attempt in range(attempts):
+        try:
+            payload = _get(
+                tracker_url,
+                referer,
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,*/*",
+            )
+        except RuntimeError as exc:
+            last_error = exc
+        else:
+            if payload.startswith(b"PK"):
+                return payload, None
+            last_payload = payload
+            last_error = ValueError(
+                "NSE tracker endpoint returned non-XLSX content"
+            )
+        if attempt + 1 < attempts:
+            time.sleep(retry_delay_seconds * (attempt + 1))
+    return last_payload, str(last_error or "NSE tracker download failed")
+
+
 def capture(output_dir: Path = Path("artifacts/nse-fo-tracker"), repo_root: Path | None = None) -> dict:
     page = _get(SOURCE_PAGE, "https://www.nseindia.com/", "text/html,*/*")
     tracker_url = find_tracker_url(page.decode("utf-8", errors="replace"))
-    payload = _get(
-        tracker_url,
-        SOURCE_PAGE,
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,*/*",
-    )
+    payload, download_error = _get_tracker_workbook(tracker_url, SOURCE_PAGE)
     if not payload:
-        raise ValueError("NSE F&O tracker download is empty")
+        raise ValueError(download_error or "NSE F&O tracker download is empty")
     digest = hashlib.sha256(payload).hexdigest()
+    is_xlsx = payload.startswith(b"PK")
+    suffix = ".xlsx" if is_xlsx else ".html" if b"<html" in payload[:1024].lower() else ".bin"
     raw_dir = output_dir / "raw"
     raw_dir.mkdir(parents=True, exist_ok=True)
-    raw_path = raw_dir / f"fo_stock_introduction_exclusion_{digest[:16]}.xlsx"
+    raw_path = raw_dir / f"fo_stock_introduction_exclusion_{digest[:16]}{suffix}"
     raw_path.write_bytes(payload)
     as_of_date = datetime.now(ZoneInfo("Asia/Kolkata")).date()
     parse_error = None
     try:
+        if download_error:
+            raise ValueError(download_error)
         workbook_info = inspect_workbook(payload)
         event_history = parse_tracker_events(payload, as_of_date)
         interpretation_status = "effective_dated_change_history_parsed_baseline_required"
@@ -276,8 +309,8 @@ def capture(output_dir: Path = Path("artifacts/nse-fo-tracker"), repo_root: Path
         persistent_snapshot_dir = repo_root / "data/snapshots/fno_tracker"
         persistent_raw_dir.mkdir(parents=True, exist_ok=True)
         persistent_snapshot_dir.mkdir(parents=True, exist_ok=True)
-        persistent_raw = persistent_raw_dir / f"fno_tracker_source_{digest[:16]}.xlsx"
-        current_raw = persistent_raw_dir / "fno_tracker_current.xlsx"
+        persistent_raw = persistent_raw_dir / f"fno_tracker_source_{digest[:16]}{suffix}"
+        current_raw = persistent_raw_dir / f"fno_tracker_current{suffix}"
         if persistent_raw.exists() and hashlib.sha256(persistent_raw.read_bytes()).hexdigest() != digest:
             raise RuntimeError("immutable F&O tracker source path collision")
         if not persistent_raw.exists():
