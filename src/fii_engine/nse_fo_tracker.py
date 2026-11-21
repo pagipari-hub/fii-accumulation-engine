@@ -267,7 +267,12 @@ def capture(output_dir: Path = Path("artifacts/nse-fo-tracker"), repo_root: Path
         raise ValueError(download_error or "NSE F&O tracker download is empty")
     digest = hashlib.sha256(payload).hexdigest()
     is_xlsx = payload.startswith(b"PK")
-    suffix = ".xlsx" if is_xlsx else ".html" if b"<html" in payload[:1024].lower() else ".bin"
+    if is_xlsx:
+        suffix = ".xlsx"
+    elif b"<html" in payload[:1024].lower() or b"<!doctype html" in payload[:1024].lower():
+        suffix = ".html"
+    else:
+        suffix = ".bin"
     raw_dir = output_dir / "raw"
     raw_dir.mkdir(parents=True, exist_ok=True)
     raw_path = raw_dir / f"fo_stock_introduction_exclusion_{digest[:16]}{suffix}"
