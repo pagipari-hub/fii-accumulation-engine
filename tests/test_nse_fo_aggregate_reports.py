@@ -348,3 +348,10 @@ def test_capture_dataset_persists_content_addressed_normalized_history(tmp_path,
         rows = list(csv.DictReader(handle))
     assert len(rows) == 48
     assert {row["participant_category"] for row in rows} == {"Client", "DII", "FII", "Pro"}
+
+
+def test_accepts_current_nse_archive_in_hostname():
+    catalogue = _catalogue()
+    catalogue["CurrentDay"][0]["filePath"] = "https://nsearchives.nseindia.in/content/nsccl/"
+    selected = select_report(catalogue, "participant_oi")
+    assert selected["download_url"].startswith("https://nsearchives.nseindia.in/")

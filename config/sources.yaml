@@ -101,7 +101,7 @@ sources:
     finality: "final"
     catalogue_api: "https://www.nseindia.com/api/daily-reports?key=FO"
     report_key: "FO-UDIFF-BHAVCOPY-CSV"
-    archive_host: "nsearchives.nseindia.com"
+    archive_hosts: ["nsearchives.nseindia.com", "nsearchives.nseindia.in"]
     archive_policy: "raw_zip_and_parsed_csv_as_90_day_workflow_artifact; content_addressed_sha256_manifest_committed"
     last_live_validated_trade_date: "2026-11-06"
   nse_fo_contract_master:
