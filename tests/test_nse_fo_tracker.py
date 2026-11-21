@@ -81,3 +81,38 @@ def test_parse_tracker_events_propagates_merged_effective_dates_and_circulars():
     assert result["events"][1]["effective_date"] == "2024-11-29"
     assert result["events"][1]["circular_links"] == ["https://nsearchives.nseindia.com/a.pdf"]
     assert result["baseline_required"] is True
+
+
+from fii_engine.nse_fo_tracker import _get_tracker_workbook
+
+
+def test_tracker_download_retries_transient_html_response(monkeypatch):
+    responses = iter([
+        b"<!doctype html><title>Service Temporarily Unavailable</title>",
+        b"PK\\x03\\x04workbook",
+    ])
+    calls = []
+
+    def fake_get(*args, **kwargs):
+        calls.append(args[0])
+        return next(responses)
+
+    monkeypatch.setattr("fii_engine.nse_fo_tracker._get", fake_get)
+    monkeypatch.setattr("fii_engine.nse_fo_tracker.time.sleep", lambda _: None)
+
+    payload, error = _get_tracker_workbook("https://nsearchives.nseindia.com/tracker.xlsx", "https://www.nseindia.com", attempts=3)
+
+    assert payload.startswith(b"PK")
+    assert error is None
+    assert len(calls) == 2
+
+
+def test_tracker_download_preserves_last_transient_html_response(monkeypatch):
+    payload = b"<!doctype html><title>Service Temporarily Unavailable</title>"
+    monkeypatch.setattr("fii_engine.nse_fo_tracker._get", lambda *args, **kwargs: payload)
+    monkeypatch.setattr("fii_engine.nse_fo_tracker.time.sleep", lambda _: None)
+
+    captured, error = _get_tracker_workbook("https://nsearchives.nseindia.com/tracker.xlsx", "https://www.nseindia.com", attempts=2)
+
+    assert captured == payload
+    assert error == "NSE tracker endpoint returned non-XLSX content"
