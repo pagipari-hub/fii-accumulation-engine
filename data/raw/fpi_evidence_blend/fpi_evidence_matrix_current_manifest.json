@@ -1,40 +1,39 @@
 {
   "dataset": "nifty500_blended_fpi_accumulation_evidence_matrix",
   "parser_version": 1,
-  "as_of_trade_date": "2026-11-09",
-  "output_csv_sha256": "4373cf62c494db1dbb21486ae085553c628e3eb2d4e7c2e0d5151e736ab707e9",
+  "as_of_trade_date": "2026-11-13",
+  "output_csv_sha256": "2a1c866aa5dbb205c01f42811a74bd83cc318cc6553aa83d0c7a9696348ddc2f",
   "source_hashes": {
     "universe": "68e2eac52f778cb8b1b63c2dd5617386a942b6313553f58ef2ef7f4260dfa469",
-    "daily_stock_features": "2d9b201f31100ec5b5f2b6409e93e377e70b49c2e51f72fc65d80430570f245f",
-    "historical_stock_features": "cef668963bd5658c80df6fc5367c781e1d25093a5ab93dfb3a475939d3bbd26c",
-    "fpi_deal_stock_summary": "547ce6f5bd428fbc669cc345466723c0e027710d94834a6c802ed3d50f16e34a",
-    "cdsl_registry_snapshot": "ed003b061a033b6ba26c7b8b2238aec8ab2d1682edd0b2688277aefcfd66dcb4",
-    "shareholding_ownership": "5629c60cebfd90a2d885c9a757b9c9934af96153bd520e1fdf56b5a1612c29df",
-    "market_flow_history": "8d962a06ddff5208d376f0e88aa7561e7960fce56edac17937c3888ea2f093cb",
-    "participant_derivatives_history": "8b7dfc0e2c1dcc140e09a25ff8b0a951642a0f7604fee8d49624aa65993a821f"
+    "daily_stock_features": "16132c7957880458df4cfca9bdc6c24b871620741fe47e9f7b08e595027e8fe7",
+    "historical_stock_features": "0291bca4f77737c97f5042c724df6d4e9e82efe04773376f8c14b7f1b8cb8977",
+    "fpi_deal_stock_summary": "2c360ef6fe54bc78911567ba87fc3784d9de186d62599bfeac74f368de4a8635",
+    "cdsl_registry_snapshot": "7b57bb7d5b0eb4ce7a5c5ea1479143cbcb906c12a15b511867260f18793ff9c5",
+    "shareholding_ownership": "3270609309aebcd4f2c5037e87ec79be38311ff26f5eb03b95651672c58942d7",
+    "market_flow_history": "32a88a7d7c545962eafb874a00409bdd4bf979d45ae4dc1dd188f971a525ddb7",
+    "participant_derivatives_history": "d1c7fb8d086b22f655f7bcd6a38d27865acbcbff40856d07854b47cd1012df4c"
   },
   "deal_trade_date_window": [
-    "2026-11-02",
-    "2026-11-09"
+    "2026-11-13",
+    "2026-11-20"
   ],
-  "registry_snapshot_date": "2026-11-11",
-  "registry_snapshot_sha256": "ed003b061a033b6ba26c7b8b2238aec8ab2d1682edd0b2688277aefcfd66dcb4",
+  "registry_snapshot_date": "2026-11-21",
+  "registry_snapshot_sha256": "7b57bb7d5b0eb4ce7a5c5ea1479143cbcb906c12a15b511867260f18793ff9c5",
   "ownership_reporting_date": "2026-09-30",
   "universe_snapshot_manifest_path": "data/snapshots/universe/nifty500_68e2eac52f778cb8.json",
-  "snapshot_identity_sha256": "8ce0ae4bdd9f32f4b946e2b2afa431af72aaed220a5e865c2f98c6d847e448c8",
+  "snapshot_identity_sha256": "a73122018eac468876263b7a2f0cb0fae5e26ca4daf8c749d6463eb5218d8edf",
   "status": "complete",
-  "generated_at_utc": "2026-11-10T23:50:55.126467+00:00",
+  "generated_at_utc": "2026-11-21T10:34:58.274205+00:00",
   "stock_count": 501,
   "direct_fpi_client_gross_buy_candidate_count": 1,
   "grade_1_count": 0,
   "grade_2_count": 1,
-  "ownership_parsed_verified_count": 348,
-  "ownership_coverage_pct": 69.46,
+  "ownership_parsed_verified_count": 0,
+  "ownership_coverage_pct": 0.0,
   "ownership_status_counts": {
-    "isin_mismatch": 143,
-    "parsed_verified_identity": 348,
-    "not_found_in_current_master": 7,
-    "identity_unverified": 3
+    "isin_mismatch": 109,
+    "verified_identity_filing_not_parsed": 385,
+    "not_found_in_current_master": 7
   },
   "daily_join_status_counts": {
     "isin_exact": 501
@@ -43,57 +42,57 @@
     "isin_exact": 501
   },
   "deal_status_counts": {
-    "no_disclosed_deal_in_available_snapshots": 494,
-    "observed_disclosed_deals": 5,
-    "deal_records_present_but_universe_join_unverified": 2
+    "no_disclosed_deal_in_available_snapshots": 490,
+    "observed_disclosed_deals": 8,
+    "deal_records_present_but_universe_join_unverified": 3
   },
   "registry_temporal_boundary": "CDSL registry snapshot is after the deal window; registration start dates are not published, so earlier trade-date registration is unverified.",
   "universe_snapshot_retrieved_at_utc": "2026-11-07T06:34:22.913676+00:00",
   "universe_snapshot_freshness_statement": "Data as on last trading day of the previous month",
   "universe_effective_date_status": "monthly page statement; exact constituent effective date not supplied here",
-  "daily_stock_history_sessions": 61,
-  "daily_stock_history_as_of": "2026-11-09",
-  "market_flow_session_count": 2,
+  "daily_stock_history_sessions": 64,
+  "daily_stock_history_as_of": "2026-11-13",
+  "market_flow_session_count": 10,
   "market_flow_window_statuses": [
     {
       "category": "FII/FPI",
       "window_sessions": 5,
-      "sessions_available": 2,
-      "status": "insufficient_history"
+      "sessions_available": 5,
+      "status": "complete"
     },
     {
       "category": "DII",
       "window_sessions": 5,
-      "sessions_available": 2,
-      "status": "insufficient_history"
+      "sessions_available": 5,
+      "status": "complete"
     },
     {
       "category": "FII/FPI",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 10,
       "status": "insufficient_history"
     },
     {
       "category": "DII",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 10,
       "status": "insufficient_history"
     },
     {
       "category": "FII/FPI",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 10,
       "status": "insufficient_history"
     },
     {
       "category": "DII",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 10,
       "status": "insufficient_history"
     }
   ],
-  "participant_oi_session_count": 2,
-  "participant_volume_session_count": 2,
+  "participant_oi_session_count": 5,
+  "participant_volume_session_count": 5,
   "participant_derivatives_window_statuses": [
     {
       "dataset": "participant_oi",
@@ -102,7 +101,535 @@
       "option_type": "",
       "source_side": "long",
       "window_sessions": 5,
-      "sessions_available": 2,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "Client",
+      "instrument_group": "index_futures",
+      "option_type": "",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "Client",
+      "instrument_group": "index_options",
+      "option_type": "call",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "Client",
+      "instrument_group": "index_options",
+      "option_type": "call",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "Client",
+      "instrument_group": "index_options",
+      "option_type": "put",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "Client",
+      "instrument_group": "index_options",
+      "option_type": "put",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "Client",
+      "instrument_group": "stock_futures",
+      "option_type": "",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "Client",
+      "instrument_group": "stock_futures",
+      "option_type": "",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "Client",
+      "instrument_group": "stock_options",
+      "option_type": "call",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "Client",
+      "instrument_group": "stock_options",
+      "option_type": "call",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "Client",
+      "instrument_group": "stock_options",
+      "option_type": "put",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "Client",
+      "instrument_group": "stock_options",
+      "option_type": "put",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "DII",
+      "instrument_group": "index_futures",
+      "option_type": "",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "DII",
+      "instrument_group": "index_futures",
+      "option_type": "",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "DII",
+      "instrument_group": "index_options",
+      "option_type": "call",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "DII",
+      "instrument_group": "index_options",
+      "option_type": "call",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "DII",
+      "instrument_group": "index_options",
+      "option_type": "put",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "DII",
+      "instrument_group": "index_options",
+      "option_type": "put",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "DII",
+      "instrument_group": "stock_futures",
+      "option_type": "",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "DII",
+      "instrument_group": "stock_futures",
+      "option_type": "",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "DII",
+      "instrument_group": "stock_options",
+      "option_type": "call",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "DII",
+      "instrument_group": "stock_options",
+      "option_type": "call",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "DII",
+      "instrument_group": "stock_options",
+      "option_type": "put",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "DII",
+      "instrument_group": "stock_options",
+      "option_type": "put",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "FII",
+      "instrument_group": "index_futures",
+      "option_type": "",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "FII",
+      "instrument_group": "index_futures",
+      "option_type": "",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "FII",
+      "instrument_group": "index_options",
+      "option_type": "call",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "FII",
+      "instrument_group": "index_options",
+      "option_type": "call",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "FII",
+      "instrument_group": "index_options",
+      "option_type": "put",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "FII",
+      "instrument_group": "index_options",
+      "option_type": "put",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "FII",
+      "instrument_group": "stock_futures",
+      "option_type": "",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "FII",
+      "instrument_group": "stock_futures",
+      "option_type": "",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "FII",
+      "instrument_group": "stock_options",
+      "option_type": "call",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "FII",
+      "instrument_group": "stock_options",
+      "option_type": "call",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "FII",
+      "instrument_group": "stock_options",
+      "option_type": "put",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "FII",
+      "instrument_group": "stock_options",
+      "option_type": "put",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "Pro",
+      "instrument_group": "index_futures",
+      "option_type": "",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "Pro",
+      "instrument_group": "index_futures",
+      "option_type": "",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "Pro",
+      "instrument_group": "index_options",
+      "option_type": "call",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "Pro",
+      "instrument_group": "index_options",
+      "option_type": "call",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "Pro",
+      "instrument_group": "index_options",
+      "option_type": "put",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "Pro",
+      "instrument_group": "index_options",
+      "option_type": "put",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "Pro",
+      "instrument_group": "stock_futures",
+      "option_type": "",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "Pro",
+      "instrument_group": "stock_futures",
+      "option_type": "",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "Pro",
+      "instrument_group": "stock_options",
+      "option_type": "call",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "Pro",
+      "instrument_group": "stock_options",
+      "option_type": "call",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "Pro",
+      "instrument_group": "stock_options",
+      "option_type": "put",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "Pro",
+      "instrument_group": "stock_options",
+      "option_type": "put",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_oi",
+      "participant_category": "Client",
+      "instrument_group": "index_futures",
+      "option_type": "",
+      "source_side": "long",
+      "window_sessions": 20,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -112,536 +639,8 @@
       "instrument_group": "index_futures",
       "option_type": "",
       "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "Client",
-      "instrument_group": "index_options",
-      "option_type": "call",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "Client",
-      "instrument_group": "index_options",
-      "option_type": "call",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "Client",
-      "instrument_group": "index_options",
-      "option_type": "put",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "Client",
-      "instrument_group": "index_options",
-      "option_type": "put",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "Client",
-      "instrument_group": "stock_futures",
-      "option_type": "",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "Client",
-      "instrument_group": "stock_futures",
-      "option_type": "",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "Client",
-      "instrument_group": "stock_options",
-      "option_type": "call",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "Client",
-      "instrument_group": "stock_options",
-      "option_type": "call",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "Client",
-      "instrument_group": "stock_options",
-      "option_type": "put",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "Client",
-      "instrument_group": "stock_options",
-      "option_type": "put",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "DII",
-      "instrument_group": "index_futures",
-      "option_type": "",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "DII",
-      "instrument_group": "index_futures",
-      "option_type": "",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "DII",
-      "instrument_group": "index_options",
-      "option_type": "call",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "DII",
-      "instrument_group": "index_options",
-      "option_type": "call",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "DII",
-      "instrument_group": "index_options",
-      "option_type": "put",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "DII",
-      "instrument_group": "index_options",
-      "option_type": "put",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "DII",
-      "instrument_group": "stock_futures",
-      "option_type": "",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "DII",
-      "instrument_group": "stock_futures",
-      "option_type": "",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "DII",
-      "instrument_group": "stock_options",
-      "option_type": "call",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "DII",
-      "instrument_group": "stock_options",
-      "option_type": "call",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "DII",
-      "instrument_group": "stock_options",
-      "option_type": "put",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "DII",
-      "instrument_group": "stock_options",
-      "option_type": "put",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "FII",
-      "instrument_group": "index_futures",
-      "option_type": "",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "FII",
-      "instrument_group": "index_futures",
-      "option_type": "",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "FII",
-      "instrument_group": "index_options",
-      "option_type": "call",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "FII",
-      "instrument_group": "index_options",
-      "option_type": "call",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "FII",
-      "instrument_group": "index_options",
-      "option_type": "put",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "FII",
-      "instrument_group": "index_options",
-      "option_type": "put",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "FII",
-      "instrument_group": "stock_futures",
-      "option_type": "",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "FII",
-      "instrument_group": "stock_futures",
-      "option_type": "",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "FII",
-      "instrument_group": "stock_options",
-      "option_type": "call",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "FII",
-      "instrument_group": "stock_options",
-      "option_type": "call",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "FII",
-      "instrument_group": "stock_options",
-      "option_type": "put",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "FII",
-      "instrument_group": "stock_options",
-      "option_type": "put",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "Pro",
-      "instrument_group": "index_futures",
-      "option_type": "",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "Pro",
-      "instrument_group": "index_futures",
-      "option_type": "",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "Pro",
-      "instrument_group": "index_options",
-      "option_type": "call",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "Pro",
-      "instrument_group": "index_options",
-      "option_type": "call",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "Pro",
-      "instrument_group": "index_options",
-      "option_type": "put",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "Pro",
-      "instrument_group": "index_options",
-      "option_type": "put",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "Pro",
-      "instrument_group": "stock_futures",
-      "option_type": "",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "Pro",
-      "instrument_group": "stock_futures",
-      "option_type": "",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "Pro",
-      "instrument_group": "stock_options",
-      "option_type": "call",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "Pro",
-      "instrument_group": "stock_options",
-      "option_type": "call",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "Pro",
-      "instrument_group": "stock_options",
-      "option_type": "put",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "Pro",
-      "instrument_group": "stock_options",
-      "option_type": "put",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "Client",
-      "instrument_group": "index_futures",
-      "option_type": "",
-      "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_oi",
-      "participant_category": "Client",
-      "instrument_group": "index_futures",
-      "option_type": "",
-      "source_side": "short",
-      "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -652,7 +651,7 @@
       "option_type": "call",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -663,7 +662,7 @@
       "option_type": "call",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -674,7 +673,7 @@
       "option_type": "put",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -685,7 +684,7 @@
       "option_type": "put",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -696,7 +695,7 @@
       "option_type": "",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -707,7 +706,7 @@
       "option_type": "",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -718,7 +717,7 @@
       "option_type": "call",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -729,7 +728,7 @@
       "option_type": "call",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -740,7 +739,7 @@
       "option_type": "put",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -751,7 +750,7 @@
       "option_type": "put",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -762,7 +761,7 @@
       "option_type": "",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -773,7 +772,7 @@
       "option_type": "",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -784,7 +783,7 @@
       "option_type": "call",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -795,7 +794,7 @@
       "option_type": "call",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -806,7 +805,7 @@
       "option_type": "put",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -817,7 +816,7 @@
       "option_type": "put",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -828,7 +827,7 @@
       "option_type": "",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -839,7 +838,7 @@
       "option_type": "",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -850,7 +849,7 @@
       "option_type": "call",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -861,7 +860,7 @@
       "option_type": "call",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -872,7 +871,7 @@
       "option_type": "put",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -883,7 +882,7 @@
       "option_type": "put",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -894,7 +893,7 @@
       "option_type": "",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -905,7 +904,7 @@
       "option_type": "",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -916,7 +915,7 @@
       "option_type": "call",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -927,7 +926,7 @@
       "option_type": "call",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -938,7 +937,7 @@
       "option_type": "put",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -949,7 +948,7 @@
       "option_type": "put",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -960,7 +959,7 @@
       "option_type": "",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -971,7 +970,7 @@
       "option_type": "",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -982,7 +981,7 @@
       "option_type": "call",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -993,7 +992,7 @@
       "option_type": "call",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1004,7 +1003,7 @@
       "option_type": "put",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1015,7 +1014,7 @@
       "option_type": "put",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1026,7 +1025,7 @@
       "option_type": "",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1037,7 +1036,7 @@
       "option_type": "",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1048,7 +1047,7 @@
       "option_type": "call",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1059,7 +1058,7 @@
       "option_type": "call",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1070,7 +1069,7 @@
       "option_type": "put",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1081,7 +1080,7 @@
       "option_type": "put",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1092,7 +1091,7 @@
       "option_type": "",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1103,7 +1102,7 @@
       "option_type": "",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1114,7 +1113,7 @@
       "option_type": "call",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1125,7 +1124,7 @@
       "option_type": "call",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1136,7 +1135,7 @@
       "option_type": "put",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1147,7 +1146,7 @@
       "option_type": "put",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1158,7 +1157,7 @@
       "option_type": "",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1169,7 +1168,7 @@
       "option_type": "",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1180,7 +1179,7 @@
       "option_type": "call",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1191,7 +1190,7 @@
       "option_type": "call",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1202,7 +1201,7 @@
       "option_type": "put",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1213,7 +1212,7 @@
       "option_type": "put",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1224,7 +1223,7 @@
       "option_type": "",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1235,7 +1234,7 @@
       "option_type": "",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1246,7 +1245,7 @@
       "option_type": "call",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1257,7 +1256,7 @@
       "option_type": "call",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1268,7 +1267,7 @@
       "option_type": "put",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1279,7 +1278,7 @@
       "option_type": "put",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1290,7 +1289,7 @@
       "option_type": "",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1301,7 +1300,7 @@
       "option_type": "",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1312,7 +1311,7 @@
       "option_type": "call",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1323,7 +1322,7 @@
       "option_type": "call",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1334,7 +1333,7 @@
       "option_type": "put",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1345,7 +1344,7 @@
       "option_type": "put",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1356,7 +1355,7 @@
       "option_type": "",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1367,7 +1366,7 @@
       "option_type": "",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1378,7 +1377,7 @@
       "option_type": "call",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1389,7 +1388,7 @@
       "option_type": "call",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1400,7 +1399,7 @@
       "option_type": "put",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1411,7 +1410,7 @@
       "option_type": "put",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1422,7 +1421,7 @@
       "option_type": "",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1433,7 +1432,7 @@
       "option_type": "",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1444,7 +1443,7 @@
       "option_type": "call",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1455,7 +1454,7 @@
       "option_type": "call",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1466,7 +1465,7 @@
       "option_type": "put",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1477,7 +1476,7 @@
       "option_type": "put",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1488,7 +1487,7 @@
       "option_type": "",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1499,7 +1498,7 @@
       "option_type": "",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1510,7 +1509,7 @@
       "option_type": "call",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1521,7 +1520,7 @@
       "option_type": "call",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1532,7 +1531,7 @@
       "option_type": "put",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1543,7 +1542,7 @@
       "option_type": "put",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1554,7 +1553,7 @@
       "option_type": "",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1565,7 +1564,7 @@
       "option_type": "",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1576,7 +1575,7 @@
       "option_type": "call",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1587,7 +1586,7 @@
       "option_type": "call",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1598,7 +1597,7 @@
       "option_type": "put",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1609,7 +1608,7 @@
       "option_type": "put",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1620,7 +1619,7 @@
       "option_type": "",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1631,7 +1630,7 @@
       "option_type": "",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1642,7 +1641,7 @@
       "option_type": "call",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1653,7 +1652,7 @@
       "option_type": "call",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1664,7 +1663,7 @@
       "option_type": "put",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1675,7 +1674,7 @@
       "option_type": "put",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1686,7 +1685,535 @@
       "option_type": "",
       "source_side": "long",
       "window_sessions": 5,
-      "sessions_available": 2,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "Client",
+      "instrument_group": "index_futures",
+      "option_type": "",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "Client",
+      "instrument_group": "index_options",
+      "option_type": "call",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "Client",
+      "instrument_group": "index_options",
+      "option_type": "call",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "Client",
+      "instrument_group": "index_options",
+      "option_type": "put",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "Client",
+      "instrument_group": "index_options",
+      "option_type": "put",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "Client",
+      "instrument_group": "stock_futures",
+      "option_type": "",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "Client",
+      "instrument_group": "stock_futures",
+      "option_type": "",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "Client",
+      "instrument_group": "stock_options",
+      "option_type": "call",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "Client",
+      "instrument_group": "stock_options",
+      "option_type": "call",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "Client",
+      "instrument_group": "stock_options",
+      "option_type": "put",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "Client",
+      "instrument_group": "stock_options",
+      "option_type": "put",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "DII",
+      "instrument_group": "index_futures",
+      "option_type": "",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "DII",
+      "instrument_group": "index_futures",
+      "option_type": "",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "DII",
+      "instrument_group": "index_options",
+      "option_type": "call",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "DII",
+      "instrument_group": "index_options",
+      "option_type": "call",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "DII",
+      "instrument_group": "index_options",
+      "option_type": "put",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "DII",
+      "instrument_group": "index_options",
+      "option_type": "put",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "DII",
+      "instrument_group": "stock_futures",
+      "option_type": "",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "DII",
+      "instrument_group": "stock_futures",
+      "option_type": "",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "DII",
+      "instrument_group": "stock_options",
+      "option_type": "call",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "DII",
+      "instrument_group": "stock_options",
+      "option_type": "call",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "DII",
+      "instrument_group": "stock_options",
+      "option_type": "put",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "DII",
+      "instrument_group": "stock_options",
+      "option_type": "put",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "FII",
+      "instrument_group": "index_futures",
+      "option_type": "",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "FII",
+      "instrument_group": "index_futures",
+      "option_type": "",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "FII",
+      "instrument_group": "index_options",
+      "option_type": "call",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "FII",
+      "instrument_group": "index_options",
+      "option_type": "call",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "FII",
+      "instrument_group": "index_options",
+      "option_type": "put",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "FII",
+      "instrument_group": "index_options",
+      "option_type": "put",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "FII",
+      "instrument_group": "stock_futures",
+      "option_type": "",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "FII",
+      "instrument_group": "stock_futures",
+      "option_type": "",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "FII",
+      "instrument_group": "stock_options",
+      "option_type": "call",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "FII",
+      "instrument_group": "stock_options",
+      "option_type": "call",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "FII",
+      "instrument_group": "stock_options",
+      "option_type": "put",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "FII",
+      "instrument_group": "stock_options",
+      "option_type": "put",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "Pro",
+      "instrument_group": "index_futures",
+      "option_type": "",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "Pro",
+      "instrument_group": "index_futures",
+      "option_type": "",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "Pro",
+      "instrument_group": "index_options",
+      "option_type": "call",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "Pro",
+      "instrument_group": "index_options",
+      "option_type": "call",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "Pro",
+      "instrument_group": "index_options",
+      "option_type": "put",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "Pro",
+      "instrument_group": "index_options",
+      "option_type": "put",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "Pro",
+      "instrument_group": "stock_futures",
+      "option_type": "",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "Pro",
+      "instrument_group": "stock_futures",
+      "option_type": "",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "Pro",
+      "instrument_group": "stock_options",
+      "option_type": "call",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "Pro",
+      "instrument_group": "stock_options",
+      "option_type": "call",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "Pro",
+      "instrument_group": "stock_options",
+      "option_type": "put",
+      "source_side": "long",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "Pro",
+      "instrument_group": "stock_options",
+      "option_type": "put",
+      "source_side": "short",
+      "window_sessions": 5,
+      "sessions_available": 5,
+      "scope": "participant_category_aggregate_not_stock_specific",
+      "status": "complete"
+    },
+    {
+      "dataset": "participant_volume",
+      "participant_category": "Client",
+      "instrument_group": "index_futures",
+      "option_type": "",
+      "source_side": "long",
+      "window_sessions": 20,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -1696,536 +2223,8 @@
       "instrument_group": "index_futures",
       "option_type": "",
       "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "Client",
-      "instrument_group": "index_options",
-      "option_type": "call",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "Client",
-      "instrument_group": "index_options",
-      "option_type": "call",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "Client",
-      "instrument_group": "index_options",
-      "option_type": "put",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "Client",
-      "instrument_group": "index_options",
-      "option_type": "put",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "Client",
-      "instrument_group": "stock_futures",
-      "option_type": "",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "Client",
-      "instrument_group": "stock_futures",
-      "option_type": "",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "Client",
-      "instrument_group": "stock_options",
-      "option_type": "call",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "Client",
-      "instrument_group": "stock_options",
-      "option_type": "call",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "Client",
-      "instrument_group": "stock_options",
-      "option_type": "put",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "Client",
-      "instrument_group": "stock_options",
-      "option_type": "put",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "DII",
-      "instrument_group": "index_futures",
-      "option_type": "",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "DII",
-      "instrument_group": "index_futures",
-      "option_type": "",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "DII",
-      "instrument_group": "index_options",
-      "option_type": "call",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "DII",
-      "instrument_group": "index_options",
-      "option_type": "call",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "DII",
-      "instrument_group": "index_options",
-      "option_type": "put",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "DII",
-      "instrument_group": "index_options",
-      "option_type": "put",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "DII",
-      "instrument_group": "stock_futures",
-      "option_type": "",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "DII",
-      "instrument_group": "stock_futures",
-      "option_type": "",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "DII",
-      "instrument_group": "stock_options",
-      "option_type": "call",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "DII",
-      "instrument_group": "stock_options",
-      "option_type": "call",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "DII",
-      "instrument_group": "stock_options",
-      "option_type": "put",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "DII",
-      "instrument_group": "stock_options",
-      "option_type": "put",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "FII",
-      "instrument_group": "index_futures",
-      "option_type": "",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "FII",
-      "instrument_group": "index_futures",
-      "option_type": "",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "FII",
-      "instrument_group": "index_options",
-      "option_type": "call",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "FII",
-      "instrument_group": "index_options",
-      "option_type": "call",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "FII",
-      "instrument_group": "index_options",
-      "option_type": "put",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "FII",
-      "instrument_group": "index_options",
-      "option_type": "put",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "FII",
-      "instrument_group": "stock_futures",
-      "option_type": "",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "FII",
-      "instrument_group": "stock_futures",
-      "option_type": "",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "FII",
-      "instrument_group": "stock_options",
-      "option_type": "call",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "FII",
-      "instrument_group": "stock_options",
-      "option_type": "call",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "FII",
-      "instrument_group": "stock_options",
-      "option_type": "put",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "FII",
-      "instrument_group": "stock_options",
-      "option_type": "put",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "Pro",
-      "instrument_group": "index_futures",
-      "option_type": "",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "Pro",
-      "instrument_group": "index_futures",
-      "option_type": "",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "Pro",
-      "instrument_group": "index_options",
-      "option_type": "call",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "Pro",
-      "instrument_group": "index_options",
-      "option_type": "call",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "Pro",
-      "instrument_group": "index_options",
-      "option_type": "put",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "Pro",
-      "instrument_group": "index_options",
-      "option_type": "put",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "Pro",
-      "instrument_group": "stock_futures",
-      "option_type": "",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "Pro",
-      "instrument_group": "stock_futures",
-      "option_type": "",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "Pro",
-      "instrument_group": "stock_options",
-      "option_type": "call",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "Pro",
-      "instrument_group": "stock_options",
-      "option_type": "call",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "Pro",
-      "instrument_group": "stock_options",
-      "option_type": "put",
-      "source_side": "long",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "Pro",
-      "instrument_group": "stock_options",
-      "option_type": "put",
-      "source_side": "short",
-      "window_sessions": 5,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "Client",
-      "instrument_group": "index_futures",
-      "option_type": "",
-      "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
-      "scope": "participant_category_aggregate_not_stock_specific",
-      "status": "insufficient_history"
-    },
-    {
-      "dataset": "participant_volume",
-      "participant_category": "Client",
-      "instrument_group": "index_futures",
-      "option_type": "",
-      "source_side": "short",
-      "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2236,7 +2235,7 @@
       "option_type": "call",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2247,7 +2246,7 @@
       "option_type": "call",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2258,7 +2257,7 @@
       "option_type": "put",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2269,7 +2268,7 @@
       "option_type": "put",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2280,7 +2279,7 @@
       "option_type": "",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2291,7 +2290,7 @@
       "option_type": "",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2302,7 +2301,7 @@
       "option_type": "call",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2313,7 +2312,7 @@
       "option_type": "call",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2324,7 +2323,7 @@
       "option_type": "put",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2335,7 +2334,7 @@
       "option_type": "put",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2346,7 +2345,7 @@
       "option_type": "",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2357,7 +2356,7 @@
       "option_type": "",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2368,7 +2367,7 @@
       "option_type": "call",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2379,7 +2378,7 @@
       "option_type": "call",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2390,7 +2389,7 @@
       "option_type": "put",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2401,7 +2400,7 @@
       "option_type": "put",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2412,7 +2411,7 @@
       "option_type": "",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2423,7 +2422,7 @@
       "option_type": "",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2434,7 +2433,7 @@
       "option_type": "call",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2445,7 +2444,7 @@
       "option_type": "call",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2456,7 +2455,7 @@
       "option_type": "put",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2467,7 +2466,7 @@
       "option_type": "put",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2478,7 +2477,7 @@
       "option_type": "",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2489,7 +2488,7 @@
       "option_type": "",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2500,7 +2499,7 @@
       "option_type": "call",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2511,7 +2510,7 @@
       "option_type": "call",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2522,7 +2521,7 @@
       "option_type": "put",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2533,7 +2532,7 @@
       "option_type": "put",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2544,7 +2543,7 @@
       "option_type": "",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2555,7 +2554,7 @@
       "option_type": "",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2566,7 +2565,7 @@
       "option_type": "call",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2577,7 +2576,7 @@
       "option_type": "call",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2588,7 +2587,7 @@
       "option_type": "put",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2599,7 +2598,7 @@
       "option_type": "put",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2610,7 +2609,7 @@
       "option_type": "",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2621,7 +2620,7 @@
       "option_type": "",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2632,7 +2631,7 @@
       "option_type": "call",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2643,7 +2642,7 @@
       "option_type": "call",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2654,7 +2653,7 @@
       "option_type": "put",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2665,7 +2664,7 @@
       "option_type": "put",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2676,7 +2675,7 @@
       "option_type": "",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2687,7 +2686,7 @@
       "option_type": "",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2698,7 +2697,7 @@
       "option_type": "call",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2709,7 +2708,7 @@
       "option_type": "call",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2720,7 +2719,7 @@
       "option_type": "put",
       "source_side": "long",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2731,7 +2730,7 @@
       "option_type": "put",
       "source_side": "short",
       "window_sessions": 20,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2742,7 +2741,7 @@
       "option_type": "",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2753,7 +2752,7 @@
       "option_type": "",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2764,7 +2763,7 @@
       "option_type": "call",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2775,7 +2774,7 @@
       "option_type": "call",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2786,7 +2785,7 @@
       "option_type": "put",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2797,7 +2796,7 @@
       "option_type": "put",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2808,7 +2807,7 @@
       "option_type": "",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2819,7 +2818,7 @@
       "option_type": "",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2830,7 +2829,7 @@
       "option_type": "call",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2841,7 +2840,7 @@
       "option_type": "call",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2852,7 +2851,7 @@
       "option_type": "put",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2863,7 +2862,7 @@
       "option_type": "put",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2874,7 +2873,7 @@
       "option_type": "",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2885,7 +2884,7 @@
       "option_type": "",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2896,7 +2895,7 @@
       "option_type": "call",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2907,7 +2906,7 @@
       "option_type": "call",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2918,7 +2917,7 @@
       "option_type": "put",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2929,7 +2928,7 @@
       "option_type": "put",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2940,7 +2939,7 @@
       "option_type": "",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2951,7 +2950,7 @@
       "option_type": "",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2962,7 +2961,7 @@
       "option_type": "call",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2973,7 +2972,7 @@
       "option_type": "call",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2984,7 +2983,7 @@
       "option_type": "put",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -2995,7 +2994,7 @@
       "option_type": "put",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -3006,7 +3005,7 @@
       "option_type": "",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -3017,7 +3016,7 @@
       "option_type": "",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -3028,7 +3027,7 @@
       "option_type": "call",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -3039,7 +3038,7 @@
       "option_type": "call",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -3050,7 +3049,7 @@
       "option_type": "put",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -3061,7 +3060,7 @@
       "option_type": "put",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -3072,7 +3071,7 @@
       "option_type": "",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -3083,7 +3082,7 @@
       "option_type": "",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -3094,7 +3093,7 @@
       "option_type": "call",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -3105,7 +3104,7 @@
       "option_type": "call",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -3116,7 +3115,7 @@
       "option_type": "put",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -3127,7 +3126,7 @@
       "option_type": "put",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -3138,7 +3137,7 @@
       "option_type": "",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -3149,7 +3148,7 @@
       "option_type": "",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -3160,7 +3159,7 @@
       "option_type": "call",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -3171,7 +3170,7 @@
       "option_type": "call",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -3182,7 +3181,7 @@
       "option_type": "put",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -3193,7 +3192,7 @@
       "option_type": "put",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -3204,7 +3203,7 @@
       "option_type": "",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -3215,7 +3214,7 @@
       "option_type": "",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -3226,7 +3225,7 @@
       "option_type": "call",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -3237,7 +3236,7 @@
       "option_type": "call",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -3248,7 +3247,7 @@
       "option_type": "put",
       "source_side": "long",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     },
@@ -3259,14 +3258,14 @@
       "option_type": "put",
       "source_side": "short",
       "window_sessions": 60,
-      "sessions_available": 2,
+      "sessions_available": 5,
       "scope": "participant_category_aggregate_not_stock_specific",
       "status": "insufficient_history"
     }
   ],
   "composite_score_status": "not_scored_independent_evidence_dimensions_only",
-  "snapshot_path": "data/snapshots/fpi_evidence_blend/fpi_evidence_matrix_20261109_4373cf62c494db1d.csv",
-  "snapshot_manifest_path": "data/snapshots/fpi_evidence_blend/fpi_evidence_matrix_20261109_4373cf62c494_8ce0ae4bdd9f.json",
+  "snapshot_path": "data/snapshots/fpi_evidence_blend/fpi_evidence_matrix_20261113_2a1c866aa5dbb205.csv",
+  "snapshot_manifest_path": "data/snapshots/fpi_evidence_blend/fpi_evidence_matrix_20261113_2a1c866aa5db_a73122018eac.json",
   "limitations": [
     "No composite score is issued; independent evidence dimensions are preserved without arbitrary weights.",
     "A named bulk/block client match is not complete FPI trading flow and does not establish beneficial ownership.",
