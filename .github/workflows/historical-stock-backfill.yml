@@ -2,7 +2,7 @@ name: Backfill official NSE stock evidence history
 
 on:
   push:
-    branches: [main, fix/nse-archive-host-allowlist]
+    branches: [main, fix/nse-archive-host-allowlist] # keep branch validation reproducible
     paths:
       - "src/fii_engine/nse_historical_backfill.py"
       - "tests/test_nse_historical_backfill.py"
