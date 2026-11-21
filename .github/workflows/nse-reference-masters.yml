@@ -8,6 +8,12 @@ on:
       - "tests/test_nse_reference.py"
       - "config/sources.yaml"
       - ".github/workflows/nse-reference-masters.yml"
+  pull_request:
+    paths:
+      - "src/fii_engine/nse_reference.py"
+      - "tests/test_nse_reference.py"
+      - "config/sources.yaml"
+      - ".github/workflows/nse-reference-masters.yml"
   workflow_dispatch:
   schedule:
     # 20:05 IST, Monday to Friday, after the daily report catalogue is published.
@@ -42,7 +48,127 @@ jobs:
       - name: Capture official NSE MII security and contract masters
         run: python -m fii_engine.nse_reference --output-dir artifacts/nse-reference
 
+      - name: Print captured official NSE MII catalogue records
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          directory = Path("artifacts/nse-reference/catalogue")
+          for path in sorted(directory.glob("*.json")):
+              if path.name == "probe_manifest.json":
+                  continue
+              payload = json.loads(path.read_text(encoding="utf-8"))
+              print(f"CATALOGUE FILE: {path}")
+              print("TOP LEVEL:", sorted(payload))
+              print("CURRENT DATE:", payload.get("currentDate"))
+              for group in ("CurrentDay", "PreviousDay"):
+                  records = payload.get(group, [])
+                  selected = [
+                      {
+                          key: item.get(key)
+                          for key in (
+                              "fileKey", "fileActlName", "filePath",
+                              "tradingDate", "displayName", "filePosition", "fileSize"
+                          )
+                      }
+                      for item in records
+                      if isinstance(item, dict)
+                      and (
+                          "mii" in str(item.get("displayName", "")).casefold()
+                          or "security" in str(item.get("displayName", "")).casefold()
+                          or "contract" in str(item.get("displayName", "")).casefold()
+                      )
+                  ]
+                  print(f"{group} MII/SECURITY/CONTRACT RECORDS:")
+                  print(json.dumps(selected, indent=2, ensure_ascii=False))
+          manifest_path = Path("artifacts/nse-reference/manifest.json")
+          if manifest_path.is_file():
+              manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+              fo = next(
+                  (item for item in manifest.get("captures", [])
+                   if item.get("dataset") == "nse_fo_contract_master"),
+                  None,
+              )
+              if fo:
+                  import csv
+                  import gzip
+                  import hashlib
+                  import io
+                  from urllib.request import Request, urlopen
+
+                  raw_path = Path(fo["raw_artifact_path"])
+                  with gzip.open(raw_path, "rt", encoding="utf-8-sig", newline="") as handle:
+                      reader = csv.DictReader(handle)
+                      samples = []
+                      active_stock_rows = []
+                      for row in reader:
+                          if len(samples) < 8:
+                              samples.append({
+                                  key: row.get(key)
+                                  for key in (
+                                      "FinInstrmNm", "TckrSymb", "XpryDt",
+                                      "StockNm", "UndrlygInstrm", "FinInstrmTp"
+                                  )
+                              })
+                          if (
+                              row.get("FinInstrmNm") in {"FUTSTK", "OPTSTK"}
+                              and row.get("DelFlg", "").strip().upper() != "Y"
+                              and "NSETEST" not in row.get("TckrSymb", "").upper()
+                          ):
+                              active_stock_rows.append(row)
+                  active_stock_rows.sort(
+                      key=lambda row: int(row.get("XpryDt", "0"))
+                      if row.get("XpryDt", "").isdigit() else 0,
+                      reverse=True,
+                  )
+                  print("FO CONTRACT MASTER SAMPLE ROWS:")
+                  print(json.dumps(samples, indent=2, ensure_ascii=False))
+                  print("FO ACTIVE NON-TEST STOCK CONTRACT SUMMARY:", {
+                      "rows": len(active_stock_rows),
+                      "symbols": len({row.get("TckrSymb") for row in active_stock_rows}),
+                      "latest_rows": [
+                          {
+                              key: row.get(key)
+                              for key in (
+                                  "FinInstrmNm", "TckrSymb", "XpryDt", "StockNm",
+                                  "DelFlg", "PrtdToTrad", "TradgStsNrmlMkt",
+                                  "ElgbltyNrmlMkt"
+                              )
+                          }
+                          for row in active_stock_rows[:10]
+                      ],
+                  })
+
+                  alternate_url = fo["download_url"].replace(
+                      "nsearchives.nseindia.in", "nsearchives.nseindia.com"
+                  )
+                  try:
+                      request = Request(
+                          alternate_url,
+                          headers={
+                              "User-Agent": "Mozilla/5.0",
+                              "Accept": "application/octet-stream,*/*",
+                          },
+                      )
+                      with urlopen(request, timeout=30) as response:
+                          alternate_payload = response.read()
+                          print("FO .COM HOST COMPARISON:", {
+                              "status": response.status,
+                              "bytes": len(alternate_payload),
+                              "sha256": hashlib.sha256(alternate_payload).hexdigest(),
+                              "matches_catalogue_host_payload": (
+                                  hashlib.sha256(alternate_payload).hexdigest()
+                                  == fo["raw_sha256"]
+                              ),
+                          })
+                  except Exception as exc:
+                      print("FO .COM HOST COMPARISON FAILED:", repr(exc))
+          PY
+
       - name: Validate capture manifest and source files
+        if: success()
         run: |
           python - <<'PY'
           import json

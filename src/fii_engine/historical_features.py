@@ -67,7 +67,16 @@ def _load_daily_snapshots(root: Path) -> tuple[list[dict], list[str]]:
     paths = sorted(directory.glob("daily_stock_features_*.csv"))
     if not paths:
         raise FileNotFoundError("no immutable daily stock feature snapshots found")
-    by_date: dict[str, dict] = {}
+    selection_path = directory / "revision_selection.json"
+    selections = {}
+    if selection_path.exists():
+        try:
+            selections = json.loads(selection_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            raise ValueError(f"invalid daily snapshot revision selection: {selection_path}") from exc
+        if not isinstance(selections, dict):
+            raise ValueError("daily snapshot revision selection must be a JSON object")
+    candidates_by_date: dict[str, list[dict]] = defaultdict(list)
     for path in paths:
         match = re.fullmatch(
             r"daily_stock_features_(\d{4}-\d{2}-\d{2})_([0-9a-f]{16})\.csv",
@@ -95,20 +104,31 @@ def _load_daily_snapshots(root: Path) -> tuple[list[dict], list[str]]:
         isins = {row["symbol"]: row["isin"] for row in rows}
         if any(not value for value in isins.values()):
             raise ValueError(f"blank ISIN in daily stock snapshot: {path}")
-        if snapshot_date in by_date:
-            raise ValueError(
-                f"multiple immutable stock snapshots exist for {snapshot_date}; "
-                "resolve the corrected/revised snapshot explicitly before rolling analysis"
-            )
-        by_date[snapshot_date] = {
+        candidates_by_date[snapshot_date].append({
             "date": snapshot_date,
             "rows": {row["symbol"]: row for row in rows},
             "symbols": set(symbols),
             "isins": isins,
             "path": str(path.relative_to(root)),
+            "filename": path.name,
             "sha256": digest,
             "row_count": len(rows),
-        }
+        })
+    by_date: dict[str, dict] = {}
+    for snapshot_date, candidates in sorted(candidates_by_date.items()):
+        if len(candidates) == 1:
+            by_date[snapshot_date] = candidates[0]
+            continue
+        selection = selections.get(snapshot_date)
+        selected_name = selection.get("selected_filename") if isinstance(selection, dict) else None
+        matches = [item for item in candidates if item["filename"] == selected_name]
+        if len(matches) != 1 or not selection.get("selection_basis"):
+            raise ValueError(
+                f"multiple immutable stock snapshots exist for {snapshot_date}; "
+                "add an explicit revision_selection.json entry with selected_filename "
+                "and selection_basis"
+            )
+        by_date[snapshot_date] = matches[0]
     dates = sorted(by_date)
     return [by_date[item] for item in dates], dates
 
