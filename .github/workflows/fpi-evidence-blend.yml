@@ -5,6 +5,11 @@ on:
     branches: [main, fix/nse-archive-host-allowlist]
     paths:
       - "src/fii_engine/fpi_evidence_blend.py"
+      - "src/fii_engine/daily_pipeline.py"
+      - "src/fii_engine/historical_features.py"
+      - "config/daily_stock_snapshot_resolutions.json"
+      - "tests/test_daily_pipeline.py"
+      - "tests/test_historical_features.py"
       - "tests/test_fpi_evidence_blend.py"
       - "config/sources.yaml"
       - "docs/fpi-evidence-blend.md"
@@ -21,6 +26,11 @@ on:
   pull_request:
     paths:
       - "src/fii_engine/fpi_evidence_blend.py"
+      - "src/fii_engine/daily_pipeline.py"
+      - "src/fii_engine/historical_features.py"
+      - "config/daily_stock_snapshot_resolutions.json"
+      - "tests/test_daily_pipeline.py"
+      - "tests/test_historical_features.py"
       - "tests/test_fpi_evidence_blend.py"
       - "config/sources.yaml"
       - "docs/fpi-evidence-blend.md"
