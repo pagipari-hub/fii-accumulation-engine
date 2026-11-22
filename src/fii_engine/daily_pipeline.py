@@ -24,6 +24,17 @@ def _utc_now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
+def _require_aligned_history(matrix: dict, history: dict) -> None:
+    daily_date = matrix.get("trade_date")
+    historical_date = history.get("as_of_trade_date")
+    if not daily_date or historical_date != daily_date:
+        raise ValueError(
+            "daily/historical as-of mismatch: "
+            f"daily matrix={daily_date!r}, historical features={historical_date!r}; "
+            "refusing to publish stale rolling history"
+        )
+
+
 def _portable(value, root: Path):
     if isinstance(value, dict):
         return {key: _portable(item, root) for key, item in value.items()}
@@ -123,6 +134,7 @@ def run_pipeline(root: Path) -> dict:
 
     try:
         history = build_historical_features(root)
+        _require_aligned_history(matrix, history)
         history_status = {
             "status": "success",
             "as_of_trade_date": history["as_of_trade_date"],
