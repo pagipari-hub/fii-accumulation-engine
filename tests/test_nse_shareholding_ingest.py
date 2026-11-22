@@ -149,6 +149,11 @@ def test_ingests_fpi_categories_and_selects_latest_revision(tmp_path, monkeypatc
     assert rows["XYZ"]["filing_status"] == "parsed"
     assert rows["DEF"]["identity_status"] == "isin_mismatch"
     assert rows["DEF"]["filing_status"] == "isin_mismatch"
+    assert rows["DEF"]["source_symbol"] == "DEF"
+    assert rows["DEF"]["source_company_name"] == "DEF Limited"
+    assert rows["DEF"]["source_isin"] == "WRONGISIN"
+    assert rows["DEF"]["universe_isin"] == "INE000C01001"
+    assert rows["DEF"]["isin"] == rows["DEF"]["universe_isin"]
     assert len(list((tmp_path / "data/snapshots/shareholding_filings").glob("filing_*.json"))) == 3
     assert len(list((tmp_path / "data/raw/shareholding/xbrl").glob("*.xml"))) == 3
 
