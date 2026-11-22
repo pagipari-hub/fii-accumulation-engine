@@ -53,6 +53,12 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Refresh to the latest branch commit before rebuilding history
+        if: github.event_name != 'pull_request'
+        run: |
+          git fetch origin "$GITHUB_REF_NAME"
+          git reset --hard "origin/$GITHUB_REF_NAME"
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
