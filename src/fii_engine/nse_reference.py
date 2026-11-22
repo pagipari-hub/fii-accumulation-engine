@@ -23,7 +23,7 @@ BASE_URL = "https://www.nseindia.com"
 CM_REPORT_PAGE = f"{BASE_URL}/all-reports"
 FO_REPORT_PAGE = f"{BASE_URL}/all-reports-derivatives"
 REPORT_API = f"{BASE_URL}/api/daily-reports"
-ARCHIVE_HOST = "nsearchives.nseindia.com"
+ARCHIVE_HOSTS = frozenset({"nsearchives.nseindia.com", "nsearchives.nseindia.in"})
 USER_AGENT = (
     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
     "(KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36"
@@ -84,7 +84,7 @@ def _validate_report_record(record: dict, dataset: str, current_date: str) -> di
     if Path(filename).name != filename or not filename.lower().endswith(".csv.gz"):
         raise ValueError(f"{dataset}: unexpected report filename {filename!r}")
     parsed = urlparse(record["filePath"])
-    if parsed.scheme != "https" or parsed.hostname != ARCHIVE_HOST or parsed.query or parsed.fragment:
+    if parsed.scheme != "https" or parsed.hostname not in ARCHIVE_HOSTS or parsed.query or parsed.fragment:
         raise ValueError(f"{dataset}: untrusted archive path {record['filePath']!r}")
     return {
         "dataset": dataset,

@@ -2,7 +2,7 @@ name: Official NSE quarterly FPI ownership ingestion
 
 on:
   push:
-    branches: [main]
+    branches: [main, fix/nse-archive-host-allowlist]
     paths:
       - "src/fii_engine/nse_shareholding_xbrl.py"
       - "src/fii_engine/nse_shareholding_ingest.py"
@@ -27,13 +27,14 @@ on:
   workflow_dispatch:
   schedule:
     # 21:00 IST, Monday; captures newly filed quarterly reports and revisions.
+    # Fix branch push trigger exercises the current archive-host allowlist against live filings.
     - cron: "30 15 * * 1"
 
 permissions:
   contents: write
 
 concurrency:
-  group: nse-shareholding-ownership
+  group: nse-shareholding-ownership-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:

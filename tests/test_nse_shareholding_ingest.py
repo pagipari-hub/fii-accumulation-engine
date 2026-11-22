@@ -1,3 +1,4 @@
+import pytest
 import csv
 import json
 from pathlib import Path
@@ -148,6 +149,11 @@ def test_ingests_fpi_categories_and_selects_latest_revision(tmp_path, monkeypatc
     assert rows["XYZ"]["filing_status"] == "parsed"
     assert rows["DEF"]["identity_status"] == "isin_mismatch"
     assert rows["DEF"]["filing_status"] == "isin_mismatch"
+    assert rows["DEF"]["source_symbol"] == "DEF"
+    assert rows["DEF"]["source_company_name"] == "DEF Limited"
+    assert rows["DEF"]["source_isin"] == "WRONGISIN"
+    assert rows["DEF"]["universe_isin"] == "INE000C01001"
+    assert rows["DEF"]["isin"] == rows["DEF"]["universe_isin"]
     assert len(list((tmp_path / "data/snapshots/shareholding_filings").glob("filing_*.json"))) == 3
     assert len(list((tmp_path / "data/raw/shareholding/xbrl").glob("*.xml"))) == 3
 
@@ -211,3 +217,27 @@ def test_company_name_fallback_normalizes_only_common_legal_suffix_variants():
     assert module._normal_name("ABC Limited") != module._normal_name(
         "ABC Holdings Limited"
     )
+
+
+@pytest.mark.parametrize(
+    "url",
+    [
+        "https://nsearchives.nseindia.com/corporate/xbrl/filing.xml",
+        "https://nsearchives.nseindia.in/corporate/xbrl/filing.xml",
+    ],
+)
+def test_trusts_official_nse_archive_hosts_for_xbrl(url):
+    assert module._trusted_xbrl_url(url)
+
+
+@pytest.mark.parametrize(
+    "url",
+    [
+        "http://nsearchives.nseindia.in/corporate/xbrl/filing.xml",
+        "https://nsearchives.nseindia.in.evil.example/corporate/xbrl/filing.xml",
+        "https://nsearchives.nseindia.in/other/filing.xml",
+        "https://example.invalid/corporate/xbrl/filing.xml",
+    ],
+)
+def test_rejects_non_official_or_unsafe_xbrl_urls(url):
+    assert not module._trusted_xbrl_url(url)

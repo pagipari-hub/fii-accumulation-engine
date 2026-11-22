@@ -20,6 +20,7 @@ from urllib.request import HTTPCookieProcessor, Request, build_opener
 BASE_URL = "https://www.nseindia.com"
 REPORT_PAGE = f"{BASE_URL}/all-reports-derivatives"
 CATALOGUE_URL = f"{BASE_URL}/api/daily-reports?key=FO"
+ARCHIVE_HOSTS = frozenset({"nsearchives.nseindia.com", "nsearchives.nseindia.in"})
 ARCHIVE_HOST = "nsearchives.nseindia.com"
 REPORT_KEY = "FO-UDIFF-BHAVCOPY-CSV"
 FILENAME_RE = re.compile(
@@ -145,7 +146,7 @@ def select_final_bhavcopy(catalogue: dict) -> dict:
     parsed = urlparse(file_path or "")
     if (
         parsed.scheme != "https"
-        or parsed.hostname != ARCHIVE_HOST
+        or parsed.hostname not in ARCHIVE_HOSTS
         or parsed.query
         or parsed.fragment
     ):
