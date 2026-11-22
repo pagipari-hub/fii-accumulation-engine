@@ -5,7 +5,10 @@ on:
     branches: [main, fix/nse-archive-host-allowlist] # keep branch validation reproducible
     paths:
       - "src/fii_engine/nse_historical_backfill.py"
+      - "src/fii_engine/historical_features.py"
+      - "config/daily_stock_snapshot_resolutions.json"
       - "tests/test_nse_historical_backfill.py"
+      - "tests/test_historical_features.py"
       - ".github/workflows/historical-stock-backfill.yml"
       - "scripts/retry_git_push.sh"
       - "tests/test_nse_shareholding_ingest.py"
@@ -105,6 +108,16 @@ jobs:
               assert hashlib.sha256(raw.read_bytes()).hexdigest() == source["raw_sha256"]
           history_path = Path("data/raw/historical_features/historical_features_current_manifest.json")
           history = json.loads(history_path.read_text(encoding="utf-8"))
+          daily_manifest_path = Path("data/raw/daily_stock_features/daily_stock_features_current_manifest.json")
+          daily_manifest = json.loads(daily_manifest_path.read_text(encoding="utf-8"))
+          daily_trade_date = daily_manifest["trade_date"]
+          assert manifest["as_of_date"] == daily_trade_date, (
+              f"backfill as-of date {manifest['as_of_date']} != daily matrix {daily_trade_date}"
+          )
+          assert history["as_of_trade_date"] == daily_trade_date, (
+              f"historical features as-of date {history['as_of_trade_date']} != daily matrix {daily_trade_date}"
+          )
+          assert history["daily_stock_trade_dates"][-1] == daily_trade_date
           assert history["daily_stock_session_count"] >= manifest["target_sessions"]
           stock_path = Path("data/raw/historical_features/stock_historical_features_current.csv")
           with stock_path.open(newline="", encoding="utf-8") as handle:
