@@ -2,7 +2,7 @@ name: Daily Nifty 500 stock evidence matrix
 
 on:
   push:
-    branches: [main]
+    branches: [main, fix/nse-archive-host-allowlist]
     paths:
       - "src/fii_engine/daily_stock_features.py"
       - "src/fii_engine/daily_pipeline.py"
@@ -48,7 +48,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: daily-nifty500-stock-evidence
+  group: daily-nifty500-stock-evidence-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -76,6 +76,29 @@ jobs:
       - name: Collect official sources and build daily matrix
         if: github.event_name != 'pull_request'
         run: python -m fii_engine.daily_pipeline --repo-root .
+
+      - name: Require daily and historical evidence to share the same trade date
+        if: github.event_name != 'pull_request'
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path("data/raw/daily_stock_features/collector_run_status.json")
+          report = json.loads(path.read_text(encoding="utf-8"))
+          matrix_date = report.get("matrix", {}).get("trade_date")
+          history = report.get("historical_features", {})
+          history_date = history.get("as_of_trade_date")
+          if history.get("status") != "success" or history_date != matrix_date:
+              raise SystemExit(
+                  "Refusing to commit stale/misaligned history: "
+                  f"daily={matrix_date!r}, historical={history_date!r}, "
+                  f"history_status={history.get('status')!r}, "
+                  f"error={history.get('error')!r}"
+              )
+          print(f"Daily and historical evidence aligned at {matrix_date}; "
+                f"{history.get('daily_stock_session_count')} stock sessions.")
+          PY
 
       - name: Summarize source coverage
         if: always() && github.event_name != 'pull_request'
@@ -120,7 +143,7 @@ jobs:
           retention-days: 90
 
       - name: Commit daily evidence matrix only
-        if: always() && github.event_name != 'pull_request'
+        if: success() && github.event_name != 'pull_request'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
