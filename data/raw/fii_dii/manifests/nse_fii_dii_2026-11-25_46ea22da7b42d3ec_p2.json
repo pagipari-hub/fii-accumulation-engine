@@ -1,0 +1,26 @@
+{
+  "dataset": "nse_fii_dii_cash_activity",
+  "publisher": "National Stock Exchange of India",
+  "reference_url": "https://www.nseindia.com/reports/fii-dii",
+  "api_url": "https://www.nseindia.com/api/fiidiiTradeReact",
+  "trade_date": "2026-11-25",
+  "scope": "NSE_only",
+  "segment": "capital_market",
+  "retrieved_at_utc": "2026-11-25T23:05:09Z",
+  "publication_status": {
+    "DII": "exchange_reported",
+    "FII/FPI": "provisional"
+  },
+  "raw_response_path": "data/raw/fii_dii/nse_fii_dii_a04600c75117c185.json",
+  "raw_response_sha256": "a04600c75117c1855de930f006c59e8dc6b5f7e85bbea882f76ab1dd6015d62f",
+  "snapshot_path": "data/snapshots/fii_dii/nse_fii_dii_2026-11-25_46ea22da7b42d3ec_p2.csv",
+  "snapshot_sha256": "46ea22da7b42d3ec973159ae7aef2f8a31f4be7e73fabb822d14944a0a6aab92",
+  "row_count": 2,
+  "parser_version": 2,
+  "source_notes": [
+    "NSE-only capital-market segment; do not mix with the combined NSE/BSE/MSEI series.",
+    "FII/FPI data is provisional and may change after custodial confirmation and modifications.",
+    "Expiry-day physical-settlement obligations may be included in FII/FPI data.",
+    "Final FPI data must be sourced separately from NSDL/CDSL."
+  ]
+}
