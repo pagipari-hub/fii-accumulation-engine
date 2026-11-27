@@ -21,7 +21,7 @@ SOURCE_PAGE = (
     "https://www.nseindia.com/static/products-services/"
     "equity-derivatives-contract-information"
 )
-ARCHIVE_HOST = "nsearchives.nseindia.com"
+ARCHIVE_HOSTS = frozenset({"nsearchives.nseindia.com", "nsearchives.nseindia.in"})
 USER_AGENT = (
     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
     "(KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36"
@@ -72,7 +72,7 @@ def find_tracker_url(html: str, page_url: str = SOURCE_PAGE) -> str:
     parsed = urlparse(url)
     if (
         parsed.scheme != "https"
-        or parsed.hostname != ARCHIVE_HOST
+        or parsed.hostname not in ARCHIVE_HOSTS
         or not parsed.path.lower().endswith(".xlsx")
         or parsed.query
         or parsed.fragment
