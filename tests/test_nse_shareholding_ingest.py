@@ -215,5 +215,5 @@ def test_company_name_fallback_normalizes_only_common_legal_suffix_variants():
 
 def test_trusted_xbrl_url_accepts_official_nseindia_in_host():
     assert module._trusted_xbrl_url(
-        "https://nsearchives.nseindia.in/content/equities/shareholding/xbrl/example.xml"
+        "https://nsearchives.nseindia.in/corporate/xbrl/example.xml"
     )
