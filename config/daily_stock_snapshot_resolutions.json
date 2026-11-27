@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "resolutions": {
+    "2026-11-09": {
+      "candidate_sha256_prefixes": [
+        "2d9b201f31100ec5",
+        "997d7402492ccada"
+      ],
+      "selected_sha256_prefix": "2d9b201f31100ec5",
+      "selected_snapshot": "data/snapshots/daily_stock_features/daily_stock_features_2026-11-09_2d9b201f31100ec5.csv",
+      "excluded_snapshot": "data/snapshots/daily_stock_features/daily_stock_features_2026-11-09_997d7402492ccada.csv",
+      "decision_reason": "The selected snapshot came from the later 2026-11-10 22:28 UTC daily-matrix run (42914837274), whose pipeline and matrix were complete and whose Nifty 500 universe collector succeeded. The excluded snapshot came from the earlier 2026-11-10 00:48 UTC run (42731085005), whose pipeline and matrix were partial and whose Nifty 500 universe collector failed. Both immutable files are retained; only the complete run is admitted to rolling history.",
+      "evidence": {
+        "selected_run": {
+          "workflow_run_id": 42914837274,
+          "created_at_utc": "2026-11-10T22:28:12Z",
+          "pipeline_status": "complete",
+          "matrix_status": "complete",
+          "nifty500_universe_status": "success",
+          "nse_fo_underlyings_status": "success",
+          "nifty500_fno_status": "success"
+        },
+        "excluded_run": {
+          "workflow_run_id": 42731085005,
+          "created_at_utc": "2026-11-10T00:48:18Z",
+          "pipeline_status": "partial",
+          "matrix_status": "partial",
+          "nifty500_universe_status": "failure",
+          "nse_fo_underlyings_status": "success",
+          "nifty500_fno_status": "success"
+        }
+      }
+    }
+  }
+}
