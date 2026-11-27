@@ -21,7 +21,7 @@ from urllib.request import HTTPCookieProcessor, Request, build_opener
 BASE = "https://www.nseindia.com"
 PAGE = f"{BASE}/all-reports"
 API = f"{BASE}/api/daily-reports?key=CM"
-ARCHIVE_HOST = "nsearchives.nseindia.com"
+ARCHIVE_HOSTS = frozenset({"nsearchives.nseindia.com", "nsearchives.nseindia.in"})
 UA = ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36")
 HEADERS = {"User-Agent": UA, "Accept-Language": "en-US,en;q=0.9",
@@ -111,7 +111,7 @@ def _select(catalogue: dict, kind: str) -> dict:
             if not isinstance(filename, str) or not pattern.fullmatch(filename):
                 continue
             parsed = urlparse(item.get("filePath", ""))
-            if (parsed.scheme != "https" or parsed.hostname != ARCHIVE_HOST
+            if (parsed.scheme != "https" or parsed.hostname not in ARCHIVE_HOSTS
                     or parsed.query or parsed.fragment):
                 raise ValueError(f"untrusted NSE {kind} archive directory")
             date_match = pattern.fullmatch(filename)

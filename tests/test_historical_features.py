@@ -1,5 +1,6 @@
 import csv
 import hashlib
+import json
 from pathlib import Path
 
 import pytest
@@ -145,6 +146,48 @@ def test_rejects_multiple_daily_snapshots_for_same_trade_date(tmp_path):
     temporary.rename(duplicate)
     with pytest.raises(ValueError, match="multiple immutable stock snapshots"):
         build_historical_features(tmp_path)
+
+
+def test_uses_only_explicitly_adjudicated_daily_snapshot(tmp_path):
+    _build_history(tmp_path)
+    directory = tmp_path / "data/snapshots/daily_stock_features"
+    original = sorted(directory.glob("*.csv"))[0]
+    original_prefix = original.stem.rsplit("_", 1)[1]
+    with original.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    rows[0]["cash_close"] = "999"
+    temporary = original.with_name("temporary.csv")
+    duplicate_digest = _write_snapshot(temporary, rows)
+    duplicate = original.with_name(
+        original.name.rsplit("_", 1)[0] + f"_{duplicate_digest[:16]}.csv"
+    )
+    temporary.rename(duplicate)
+
+    config = tmp_path / "config"
+    config.mkdir()
+    (config / "daily_stock_snapshot_resolutions.json").write_text(
+        json.dumps({
+            "schema_version": 1,
+            "resolutions": {
+                "2026-11-02": {
+                    "candidate_sha256_prefixes": sorted([
+                        original_prefix,
+                        duplicate_digest[:16],
+                    ]),
+                    "selected_sha256_prefix": original_prefix,
+                    "decision_reason": "Selected the complete run; excluded the partial run.",
+                    "evidence": {"selected_workflow_run_id": 2, "excluded_workflow_run_id": 1},
+                }
+            },
+        }),
+        encoding="utf-8",
+    )
+
+    result = build_historical_features(tmp_path)
+
+    assert result["daily_stock_session_count"] == 5
+    assert result["daily_stock_snapshot_resolutions"][0]["trade_date"] == "2026-11-02"
+    assert result["daily_stock_snapshot_resolutions"][0]["selected_sha256_prefix"] == original_prefix
 
 
 def test_rejects_fii_snapshot_hash_mismatch(tmp_path):

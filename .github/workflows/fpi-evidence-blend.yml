@@ -5,7 +5,10 @@ on:
     branches: [main]
     paths:
       - "src/fii_engine/fpi_evidence_blend.py"
+      - "src/fii_engine/historical_features.py"
       - "tests/test_fpi_evidence_blend.py"
+      - "tests/test_historical_features.py"
+      - "config/daily_stock_snapshot_resolutions.json"
       - "config/sources.yaml"
       - "docs/fpi-evidence-blend.md"
       - ".github/workflows/fpi-evidence-blend.yml"
@@ -20,7 +23,10 @@ on:
   pull_request:
     paths:
       - "src/fii_engine/fpi_evidence_blend.py"
+      - "src/fii_engine/historical_features.py"
       - "tests/test_fpi_evidence_blend.py"
+      - "tests/test_historical_features.py"
+      - "config/daily_stock_snapshot_resolutions.json"
       - "config/sources.yaml"
       - "docs/fpi-evidence-blend.md"
       - ".github/workflows/fpi-evidence-blend.yml"

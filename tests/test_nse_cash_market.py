@@ -204,3 +204,11 @@ def test_positive_traded_quantity_with_both_delivery_fields_unavailable_is_retai
     assert result["delivery_observation_counts"]["not_reported_with_trades"] == 1
     assert result["delivery_observation_counts"]["reported"] == 0
     assert result["delivery_unreported_by_series"] == {"EQ": 1}
+
+
+def test_accepts_official_nseindia_in_archive_host():
+    catalogue = _catalogue()
+    catalogue["CurrentDay"][0]["filePath"] = "https://nsearchives.nseindia.in/content/cm"
+    assert _select(catalogue, "udiff")["download_url"].startswith(
+        "https://nsearchives.nseindia.in/"
+    )

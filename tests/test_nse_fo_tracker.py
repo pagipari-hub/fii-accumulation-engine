@@ -81,3 +81,11 @@ def test_parse_tracker_events_propagates_merged_effective_dates_and_circulars():
     assert result["events"][1]["effective_date"] == "2024-11-29"
     assert result["events"][1]["circular_links"] == ["https://nsearchives.nseindia.com/a.pdf"]
     assert result["baseline_required"] is True
+
+
+def test_find_tracker_url_accepts_official_nseindia_in_host():
+    html = (
+        '<a href="https://nsearchives.nseindia.in/files/tracker.xlsx">'
+        "F&amp;O Stock Introduction and Exclusion Tracker</a>"
+    )
+    assert find_tracker_url(html).startswith("https://nsearchives.nseindia.in/")
