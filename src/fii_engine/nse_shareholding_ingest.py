@@ -16,7 +16,7 @@ from urllib.parse import urlparse
 from fii_engine.nse_shareholding_probe import BASE, MASTER_URL, PAGE, _get
 from fii_engine.nse_shareholding_xbrl import parse_xbrl
 
-TRUSTED_XBRL_HOST = "nsearchives.nseindia.com"
+TRUSTED_XBRL_HOSTS = frozenset({"nsearchives.nseindia.com", "nsearchives.nseindia.in"})
 TRUSTED_XBRL_PATH = "/corporate/xbrl/"
 UNIVERSE_PATH = "data/raw/universe/nifty500_current.csv"
 PARSER_VERSION = 4
@@ -148,7 +148,7 @@ def _trusted_xbrl_url(url: str) -> bool:
     parsed = urlparse(url)
     return (
         parsed.scheme == "https"
-        and parsed.hostname == TRUSTED_XBRL_HOST
+        and parsed.hostname in TRUSTED_XBRL_HOSTS
         and parsed.path.startswith(TRUSTED_XBRL_PATH)
     )
 
