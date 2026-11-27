@@ -167,3 +167,17 @@ def test_rejects_zip_with_multiple_files():
 def test_rejects_empty_csv():
     with pytest.raises(ValueError, match="no data rows"):
         validate_udiff_csv((",".join(HEADERS) + "\n").encode(), "2026-11-06")
+
+
+def test_accepts_official_nseindia_in_archive_host():
+    catalogue = {
+        "currentDate": "06-Nov-2026",
+        "CurrentDay": [_catalogue_record(
+            "06-Nov-2026", "BhavCopy_NSE_FO_0_0_0_20261106_F_0000.csv.zip"
+        )],
+        "PreviousDay": [],
+    }
+    catalogue["CurrentDay"][0]["filePath"] = "https://nsearchives.nseindia.in/content/fo/"
+    assert select_final_bhavcopy(catalogue)["download_url"].startswith(
+        "https://nsearchives.nseindia.in/"
+    )
