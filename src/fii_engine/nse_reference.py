@@ -11,7 +11,7 @@ import gzip
 import hashlib
 import json
 import re
-from datetime import datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from html import unescape
 from pathlib import Path
 from urllib.error import HTTPError, URLError
@@ -23,7 +23,7 @@ BASE_URL = "https://www.nseindia.com"
 CM_REPORT_PAGE = f"{BASE_URL}/all-reports"
 FO_REPORT_PAGE = f"{BASE_URL}/all-reports-derivatives"
 REPORT_API = f"{BASE_URL}/api/daily-reports"
-ARCHIVE_HOST = "nsearchives.nseindia.com"
+ARCHIVE_HOSTS = frozenset({"nsearchives.nseindia.com", "nsearchives.nseindia.in"})
 USER_AGENT = (
     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
     "(KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36"
@@ -55,6 +55,46 @@ def _clean_text(value: str) -> str:
     return " ".join(unescape(re.sub(r"<[^>]*>", " ", value)).split())
 
 
+_MII_EPOCH = datetime(1980, 1, 1, tzinfo=timezone.utc)
+
+
+def _mii_timestamp_date(value: str | int) -> date:
+    """Convert NSE MII LONG time fields using Master Data Specification v1.6 (1980 epoch)."""
+    try:
+        seconds = int(value)
+    except (TypeError, ValueError) as exc:
+        raise ValueError(f"invalid NSE MII timestamp: {value!r}") from exc
+    if seconds <= 0:
+        raise ValueError(f"invalid NSE MII timestamp: {value!r}")
+    try:
+        return (_MII_EPOCH + timedelta(seconds=seconds)).date()
+    except OverflowError as exc:
+        raise ValueError(f"NSE MII timestamp is out of range: {value!r}") from exc
+
+
+def _save_catalogue_payload(
+    output_dir: Path, dataset: str, url: str, payload: bytes
+) -> dict:
+    """Persist the exact catalogue response before any selector can fail."""
+    if not payload:
+        raise ValueError(f"{dataset}: NSE catalogue returned an empty payload")
+    digest = hashlib.sha256(payload).hexdigest()
+    directory = output_dir / "catalogue"
+    directory.mkdir(parents=True, exist_ok=True)
+    path = directory / f"{dataset}_{digest[:16]}.json"
+    if path.exists() and hashlib.sha256(path.read_bytes()).hexdigest() != digest:
+        raise RuntimeError(f"immutable NSE catalogue payload mismatch: {path}")
+    if not path.exists():
+        path.write_bytes(payload)
+    return {
+        "dataset": dataset,
+        "url": url,
+        "raw_path": str(path),
+        "raw_sha256": digest,
+        "raw_bytes": len(payload),
+    }
+
+
 def parse_catalog(payload: bytes) -> dict:
     try:
         data = json.loads(payload.decode("utf-8-sig"))
@@ -83,8 +123,18 @@ def _validate_report_record(record: dict, dataset: str, current_date: str) -> di
     filename = record["fileActlName"].strip()
     if Path(filename).name != filename or not filename.lower().endswith(".csv.gz"):
         raise ValueError(f"{dataset}: unexpected report filename {filename!r}")
+    filename_match = re.search(r"_(\d{8})\.csv\.gz$", filename, re.IGNORECASE)
+    if not filename_match:
+        raise ValueError(f"{dataset}: report filename has no dated MII suffix: {filename!r}")
+    filename_date = datetime.strptime(filename_match.group(1), "%d%m%Y").date()
+    metadata_date = datetime.strptime(record["tradingDate"], "%d-%b-%Y").date()
+    if filename_date != metadata_date:
+        raise ValueError(
+            f"{dataset}: catalogue/filename date mismatch "
+            f"{metadata_date} vs {filename_date}"
+        )
     parsed = urlparse(record["filePath"])
-    if parsed.scheme != "https" or parsed.hostname != ARCHIVE_HOST or parsed.query or parsed.fragment:
+    if parsed.scheme != "https" or parsed.hostname not in ARCHIVE_HOSTS or parsed.query or parsed.fragment:
         raise ValueError(f"{dataset}: untrusted archive path {record['filePath']!r}")
     return {
         "dataset": dataset,
@@ -96,42 +146,93 @@ def _validate_report_record(record: dict, dataset: str, current_date: str) -> di
         "file_size_reported": record.get("fileSize"),
         "file_position": record.get("filePosition"),
         "file_hash_key": record.get("fileHashKey"),
+        "catalogue_group": record.get("_catalogue_group"),
     }
 
 
 def select_cm_security_master(catalog: dict) -> dict:
-    current_date = catalog["currentDate"]
+    # The daily CM MII master is commonly published in PreviousDay, with its
+    # own tradingDate. currentDate is the catalogue date, not the report date.
     matches = []
-    for record in catalog["CurrentDay"]:
-        if not isinstance(record, dict):
-            continue
-        label = _clean_text(str(record.get("displayName", ""))).casefold()
-        if (
-            "mii" in label
-            and "security file" in label
-            and "nse listed securities" in label
-            and "nse and bse" not in label
-        ):
-            matches.append(record)
-    if len(matches) != 1:
+    for group_name in ("CurrentDay", "PreviousDay"):
+        for record in catalog.get(group_name, []):
+            if (
+                isinstance(record, dict)
+                and str(record.get("fileKey", "")).upper() == "NSE-CM-SECURITY-CSV"
+            ):
+                matches.append({**record, "_catalogue_group": group_name})
+
+    if not matches:
         raise ValueError(
-            f"expected exactly one NSE-listed CM MII security master; found {len(matches)}"
+            "NSE catalogue has no NSE-CM-SECURITY-CSV record in CurrentDay or PreviousDay"
         )
-    return _validate_report_record(matches[0], "nse_cm_security_master", current_date)
+
+    try:
+        latest_date = max(
+            datetime.strptime(item["tradingDate"], "%d-%b-%Y").date()
+            for item in matches
+        )
+    except (KeyError, TypeError, ValueError) as exc:
+        raise ValueError("NSE CM MII catalogue record has an invalid tradingDate") from exc
+
+    latest = [
+        item for item in matches
+        if datetime.strptime(item["tradingDate"], "%d-%b-%Y").date() == latest_date
+    ]
+    if len(latest) != 1:
+        raise ValueError(
+            "expected exactly one latest NSE-CM-SECURITY-CSV record; "
+            f"found {len(latest)} for {latest_date.isoformat()}"
+        )
+
+    selected = latest[0]
+    label = _clean_text(str(selected.get("displayName", ""))).casefold()
+    if "nse listed securities" not in label or "bse exclusive" in label:
+        raise ValueError(
+            "NSE-CM-SECURITY-CSV record does not identify the NSE-listed-only security master"
+        )
+    return _validate_report_record(
+        selected, "nse_cm_security_master", selected["tradingDate"]
+    )
 
 
 def select_fo_contract_master(catalog: dict) -> dict:
-    current_date = catalog["currentDate"]
-    matches = [
-        record for record in catalog["CurrentDay"]
-        if isinstance(record, dict)
-        and str(record.get("fileKey", "")).upper() == "NSE-FO-CONTRACT-CSV"
-    ]
-    if len(matches) != 1:
+    # As with the CM security master, the latest FO MII contract file can be
+    # listed under PreviousDay while the catalogue currentDate is the next day.
+    matches = []
+    for group_name in ("CurrentDay", "PreviousDay"):
+        for record in catalog.get(group_name, []):
+            if (
+                isinstance(record, dict)
+                and str(record.get("fileKey", "")).upper() == "NSE-FO-CONTRACT-CSV"
+            ):
+                matches.append({**record, "_catalogue_group": group_name})
+
+    if not matches:
         raise ValueError(
-            f"expected exactly one NSE-exclusive FO MII contract master; found {len(matches)}"
+            "NSE catalogue has no NSE-FO-CONTRACT-CSV record in CurrentDay or PreviousDay"
         )
-    selected = _validate_report_record(matches[0], "nse_fo_contract_master", current_date)
+    try:
+        latest_date = max(
+            datetime.strptime(item["tradingDate"], "%d-%b-%Y").date()
+            for item in matches
+        )
+    except (KeyError, TypeError, ValueError) as exc:
+        raise ValueError("NSE FO MII catalogue record has an invalid tradingDate") from exc
+
+    latest = [
+        item for item in matches
+        if datetime.strptime(item["tradingDate"], "%d-%b-%Y").date() == latest_date
+    ]
+    if len(latest) != 1:
+        raise ValueError(
+            "expected exactly one latest NSE-FO-CONTRACT-CSV record; "
+            f"found {len(latest)} for {latest_date.isoformat()}"
+        )
+
+    selected = _validate_report_record(
+        latest[0], "nse_fo_contract_master", latest[0]["tradingDate"]
+    )
     label = selected["display_name"].casefold()
     if "nse exclusive contract" not in label:
         raise ValueError("FO contract record is not explicitly the NSE-exclusive contract file")
@@ -158,33 +259,58 @@ def _csv_rows(expanded: bytes, required: set[str], dataset: str) -> list[dict[st
 def inspect_cm_quality(expanded: bytes, trading_date: str) -> dict:
     required = {"TckrSymb", "SctySrs", "ISIN", "DelFlg", "UpdDt"}
     rows = _csv_rows(expanded, required, "CM security master")
-    updates = [
-        int(row["UpdDt"]) for row in rows
-        if row.get("UpdDt", "").isdigit() and int(row["UpdDt"]) > 0
-    ]
-    if not updates:
-        raise ValueError("CM security master has no parseable UpdDt values")
-    latest_update = datetime.fromtimestamp(max(updates), tz=timezone.utc).date()
     report_date = datetime.strptime(trading_date, "%d-%b-%Y").date()
+
+    # UpdDt is a per-security local database update timestamp, not the
+    # publication timestamp of the downloaded daily master file. Old values
+    # are therefore expected for unchanged securities and must not quarantine
+    # an otherwise current catalogue capture.
+    updates = []
+    for row in rows:
+        raw_update = row.get("UpdDt", "").strip()
+        if raw_update.isdigit() and int(raw_update) > 0:
+            try:
+                updates.append(_mii_timestamp_date(int(raw_update)))
+            except (OverflowError, OSError, ValueError):
+                continue
+
+    active_rows = [row for row in rows if row.get("DelFlg", "").strip().upper() == "N"]
+    invalid_delete_flags = sum(
+        row.get("DelFlg", "").strip().upper() not in {"N", "Y"} for row in rows
+    )
+    missing_identity_rows = sum(
+        not all(row.get(field, "").strip() for field in ("TckrSymb", "SctySrs", "ISIN"))
+        for row in active_rows
+    )
     test_rows = sum(
         "NSETEST" in row.get("TckrSymb", "").upper()
         or row.get("ISIN", "").upper().startswith("DUMMY")
         for row in rows
     )
+
     issues = []
-    if (report_date - latest_update).days > 365:
+    if not active_rows:
+        issues.append("CM security master contains no non-deleted securities")
+    if invalid_delete_flags:
+        issues.append(f"CM security master contains {invalid_delete_flags} invalid delete flags")
+    if missing_identity_rows:
         issues.append(
-            f"latest CM UpdDt {latest_update.isoformat()} is more than one year "
-            f"older than catalogue date {report_date.isoformat()}"
+            f"CM security master contains {missing_identity_rows} active rows with missing identity fields"
         )
+
     return {
         "row_count": len(rows),
-        "distinct_symbols": len({row["TckrSymb"] for row in rows if row.get("TckrSymb")}),
-        "latest_update_date_utc": latest_update.isoformat(),
+        "active_row_count": len(active_rows),
+        "distinct_symbols": len({row["TckrSymb"] for row in active_rows if row.get("TckrSymb")}),
+        "distinct_isins": len({row["ISIN"] for row in active_rows if row.get("ISIN")}),
+        "latest_record_update_date_utc": max(updates).isoformat() if updates else None,
+        "record_update_timestamp_semantics": "row_level_local_database_update_not_file_publication_time",
+        "catalogue_trading_date": report_date.isoformat(),
+        "invalid_delete_flag_rows": invalid_delete_flags,
+        "active_rows_missing_identity": missing_identity_rows,
         "test_or_dummy_rows": test_rows,
         "issues": issues,
     }
-
 
 def inspect_fo_quality(expanded: bytes, trading_date: str) -> dict:
     required = {
@@ -206,9 +332,7 @@ def inspect_fo_quality(expanded: bytes, trading_date: str) -> dict:
         raw_expiry = row.get("XpryDt", "")
         if not raw_expiry.isdigit() or int(raw_expiry) <= 0:
             continue
-        expiry = datetime.fromtimestamp(
-            int(raw_expiry), tz=timezone.utc
-        ).date()
+        expiry = _mii_timestamp_date(int(raw_expiry))
         expiries.append(expiry)
         if expiry >= report_date and row.get("PrtdToTrad") == "1":
             future_rows += 1
@@ -280,8 +404,27 @@ def ingest(output_dir: Path = Path("artifacts/nse-reference")) -> dict:
 
     cm_url = REPORT_API + "?" + urlencode({"key": "CM"})
     fo_url = REPORT_API + "?" + urlencode({"key": "FO"})
-    cm_catalog = parse_catalog(_get(cm_url, CM_REPORT_PAGE, "application/json,*/*"))
-    fo_catalog = parse_catalog(_get(fo_url, FO_REPORT_PAGE, "application/json,*/*"))
+    cm_payload = _get(cm_url, CM_REPORT_PAGE, "application/json,*/*")
+    fo_payload = _get(fo_url, FO_REPORT_PAGE, "application/json,*/*")
+
+    # Preserve the exact official catalogue responses before parsing or
+    # selecting. A selector failure must still leave inspectable evidence.
+    output_dir.mkdir(parents=True, exist_ok=True)
+    catalogue_refs = [
+        _save_catalogue_payload(output_dir, "cm", cm_url, cm_payload),
+        _save_catalogue_payload(output_dir, "fo", fo_url, fo_payload),
+    ]
+    (output_dir / "catalogue" / "probe_manifest.json").write_text(
+        json.dumps({
+            "publisher": "National Stock Exchange of India",
+            "retrieved_at_utc": datetime.now(timezone.utc).isoformat(),
+            "catalogue_responses": catalogue_refs,
+        }, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+    cm_catalog = parse_catalog(cm_payload)
+    fo_catalog = parse_catalog(fo_payload)
 
     cm_record = select_cm_security_master(cm_catalog)
     fo_record = select_fo_contract_master(fo_catalog)

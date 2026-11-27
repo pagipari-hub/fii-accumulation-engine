@@ -104,14 +104,33 @@ sources:
     archive_host: "nsearchives.nseindia.com"
     archive_policy: "raw_zip_and_parsed_csv_as_90_day_workflow_artifact; content_addressed_sha256_manifest_committed"
     last_live_validated_trade_date: "2026-11-06"
+  nse_cm_security_master:
+    description: "NSE-listed Capital Market MII security master"
+    publisher: "National Stock Exchange of India"
+    reference_url: "https://www.nseindia.com/all-reports"
+    frequency: "daily"
+    required_fields: [TckrSymb, SctySrs, ISIN, DelFlg, UpdDt]
+    status: "live_validated_current_capture"
+    catalogue_api: "https://www.nseindia.com/api/daily-reports?key=CM"
+    report_key: "NSE-CM-SECURITY-CSV"
+    archive_hosts: ["nsearchives.nseindia.com", "nsearchives.nseindia.in"]
+    timestamp_epoch: "1980-01-01 UTC; seconds"
+    last_live_validated_trade_date: "2026-11-17"
+    identity_scope: "NSE-listed CM symbol-series-ISIN reference; not proof of issuer ownership"
+
   nse_fo_contract_master:
-    description: "F&O MII contract master"
+    description: "NSE-exclusive F&O MII contract master"
     publisher: "National Stock Exchange of India"
     reference_url: "https://www.nseindia.com/all-reports-derivatives"
-    frequency: "daily_or_on_change"
-    required_fields: [instrument_identifier, symbol, expiry]
-    status: "captured_quarantined_freshness_mismatch"
-    download_catalogue_api: "https://www.nseindia.com/api/daily-reports?key=FO"
+    frequency: "daily"
+    required_fields: [FinInstrmId, TckrSymb, FinInstrmNm, XpryDt, DelFlg, PrtdToTrad]
+    status: "live_validated_current_capture"
+    catalogue_api: "https://www.nseindia.com/api/daily-reports?key=FO"
+    report_key: "NSE-FO-CONTRACT-CSV"
+    archive_hosts: ["nsearchives.nseindia.com", "nsearchives.nseindia.in"]
+    timestamp_epoch: "1980-01-01 UTC; seconds"
+    last_live_validated_trade_date: "2026-11-17"
+    scope: "NSE-exclusive F&O contract eligibility and expiry metadata; not FII positioning"
   nse_fo_participant_oi:
     description: "Participant-category aggregate derivatives open interest"
     publisher: "National Stock Exchange of India"
